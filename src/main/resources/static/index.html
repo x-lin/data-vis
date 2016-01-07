@@ -1,1 +1,65 @@
-Test, test, test
+<html ng-app="datavisApp">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Data Visualizations</title>
+    </head>
+
+    <body>
+        <div class="navbar navbar-inverse navbar-xs navbar-static-top" role="navigation">
+            <div class="container">
+                <!--<div class="navbar-header">-->
+                    <!--<a class="navbar-brand" href="#/">OGD App Observatory</a>-->
+                    <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
+                        <!--<span class="sr-only">Toggle navigation</span>-->
+                        <!--<span class="icon-bar"></span>-->
+                        <!--<span class="icon-bar"></span>-->
+                        <!--<span class="icon-bar"></span>-->
+                    <!--</button>-->
+                <!--</div>-->
+
+                <div class="navbar-collapse collapse" bs-active-link>
+                    <ul class="nav navbar-nav">
+                        <!--<li><a href="#/">Home</a></li>-->
+                        <li><a href="#/relationships">Relationships</a></li>
+                        <li><a href="#/timeline">Timeline</a></li>
+                    </ul>
+
+                    <!--<ul class="nav navbar-nav navbar-right hidden-md hidden-sm hidden-xs">-->
+                        <!--<li><a href="http://www.tuwien.ac.at/"><img src="logo-tu.png" alt="Technische Universit&auml;t Wien" height="30px"></a></li>-->
+                        <!--<li><a href="http://cdl.ifs.tuwien.ac.at/de"><img src="logo-cdl.jpg" alt="CDL Flex" height="30px"></a></li>-->
+                        <!--<li><a href="http://www.modul.ac.at/"> <img src="logo-modul.png" alt="Modul Universit&auml;t Wien" height="30px"></a></li>-->
+                        <!--<li><a href="http://www.wko.at/"><img src="logo-wko.png" alt="Wirtschaftskammer &Ouml;sterreich" height="30px"></a></li>-->
+                    <!--</ul>-->
+                </div>
+            </div>
+        </div>
+        <!--<div ng-controller="TestCtrl"></div>-->
+        <div ng-view></div>
+
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.css"/>
+        <link rel="stylesheet" href="layout/style.css" />
+
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-route.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-sanitize.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-resource.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+
+        <!--D3-->
+        <script type="text/javascript" src="d3/d3-service.js"></script>
+        <script type="text/javascript" src="d3/force-graph.js"></script>
+        <link rel="stylesheet" href="d3/force-graph.css"/>
+
+        <!--REST-->
+        <script type="text/javascript" src="rest/rest-service.js"></script>
+
+        <script type="text/javascript" src="app/app.js"></script>
+        <script type="text/javascript" src="layout/styling.js"></script>
+    </body>
+</html>

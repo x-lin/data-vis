@@ -1,0 +1,9 @@
+.force-graph .node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.force-graph .link {
+    stroke: #999;
+    stroke-opacity: .6;
+}

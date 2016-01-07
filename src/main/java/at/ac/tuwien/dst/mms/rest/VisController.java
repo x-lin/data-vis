@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by xlin on 04.01.2016.
  */
 @RestController
-@RequestMapping("/vis")
+@RequestMapping("/data-vis")
 public class VisController {
 
 	//@RequestMapping( method=RequestMethod.GET)
 	@RequestMapping( method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String query(
+	public TestJson query(
 			@RequestParam String name
 	) {
-
-		return null;
+		System.out.println("processing request");
+		return new TestJson(name);
 	}
 }
