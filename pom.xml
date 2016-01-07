@@ -22,6 +22,14 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <!--For JIRA REST Client-->
+        <repository>
+            <id>spring-milestones</id>
+            <url>http://repo.spring.io/libs-milestone/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -36,11 +44,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.atlassian.jira</groupId>-->
-            <!--<artifactId>jira-rest-java-client-core</artifactId>-->
-            <!--<version>3.0.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-rest-java-client-core</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
