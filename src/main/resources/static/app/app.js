@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('datavisApp',
-    ['ngRoute', 'd3Service', 'rest']);
+    ['ngRoute', 'd3Service', 'rest', 'ngAnimate', 'ui.bootstrap']);
 
 /**
  defines routing patterns
@@ -22,11 +22,15 @@ app.config(function ($routeProvider) {
 
 app.factory('RelationshipsFactory', function () {
     var items = ["Ticket", "Project", "Requirement"];
+    var tickets = ["TIC1", "TEST2", "ABC", "DFD", "FGGF8", "ASDG4"];
 
     return {
         getDataItems: function() {
             return items;
         },
+        getTickets: function() {
+            return tickets;
+        }
     }
 });
 
@@ -35,6 +39,7 @@ app.controller('RelationshipsCtrl', function (
     $sce,
     $timeout,
     $window,
+    $http,
     RelationshipsFactory,
     ForceGraph,
     RestService
@@ -46,6 +51,31 @@ app.controller('RelationshipsCtrl', function (
     $scope.dropdownActive = function (item) {
         $scope.selectedItem = item;
     }
+
+    $scope.searchText = "";
+    $scope.search = function() {
+        console.log($scope.selectedItem + " " + $scope.searchText);
+    }
+
+    var input = document.getElementById("search");
+    //new Awesomplete(input);
+
+    $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+
+    $scope.tickets = RelationshipsFactory.getTickets();
+
+    $scope.getLocation = function(val) {
+        return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
+            params: {
+                address: val,
+                sensor: false
+            }
+        }).then(function(response){
+            return response.data.results.map(function(item){
+                return item.formatted_address;
+            });
+        });
+    };
 
     //for D3
     $scope.d3Width = document.getElementById("d3box").clientWidth;

@@ -1,20 +1,32 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{selectedItem}}<span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="item in items"><a ng-click="dropdownActive(item)" href="">{{item}}</a></li>
-                    </ul>
-                </div><!-- /btn-group -->
-                <input type="text" class="form-control" aria-label="..."/>
-                <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Go!</button>
-              </span>
-            </div><!-- /input-group -->
+            <form ng-submit="search()">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{selectedItem}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="item in items"><a ng-click="dropdownActive(item)" href="">{{item}}</a></li>
+                        </ul>
+                    </div><!-- /btn-group -->
+                    <!--<input type="text" class="form-control" id="search" aria-label="..." ng-model="searchText" placeholder="Enter text..." uib-typeahead="ticket for ticket in tickets | filter:$viewValue" typeahead-loading="loadingLocations" typeahead-no-results="noResults" autocomplete="off">-->
+                    <input type="text" class="form-control" id="search" aria-label="..." ng-model="searchText" placeholder="Enter text..." uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" autocomplete="off">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-show="loadingLocations">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;
+                        </button>
+                        <button class="btn btn-default" type="submit">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;
+                        </button>
+                    </span>
+
+                </div><!-- /input-group -->
+                <div ng-show="noResults">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                </div>
+            </form>
         </div><!-- /.col-lg-6 -->
     </div><!-- /.row -->
 </div>

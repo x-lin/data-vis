@@ -9,15 +9,16 @@
     <body>
         <div class="navbar navbar-inverse navbar-xs navbar-static-top" role="navigation">
             <div class="container">
-                <!--<div class="navbar-header">-->
-                    <!--<a class="navbar-brand" href="#/">OGD App Observatory</a>-->
-                    <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">-->
-                        <!--<span class="sr-only">Toggle navigation</span>-->
-                        <!--<span class="icon-bar"></span>-->
-                        <!--<span class="icon-bar"></span>-->
-                        <!--<span class="icon-bar"></span>-->
-                    <!--</button>-->
-                <!--</div>-->
+                <div class="navbar-header">
+                    <!--<a class="navbar-brand" href="#/"></a>-->
+                    <!-- for dropdown menu on passing under a width threshold -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
 
                 <div class="navbar-collapse collapse" bs-active-link>
                     <ul class="nav navbar-nav">
@@ -26,11 +27,8 @@
                         <li><a href="#/timeline">Timeline</a></li>
                     </ul>
 
+                    <!--Right side links-->
                     <!--<ul class="nav navbar-nav navbar-right hidden-md hidden-sm hidden-xs">-->
-                        <!--<li><a href="http://www.tuwien.ac.at/"><img src="logo-tu.png" alt="Technische Universit&auml;t Wien" height="30px"></a></li>-->
-                        <!--<li><a href="http://cdl.ifs.tuwien.ac.at/de"><img src="logo-cdl.jpg" alt="CDL Flex" height="30px"></a></li>-->
-                        <!--<li><a href="http://www.modul.ac.at/"> <img src="logo-modul.png" alt="Modul Universit&auml;t Wien" height="30px"></a></li>-->
-                        <!--<li><a href="http://www.wko.at/"><img src="logo-wko.png" alt="Wirtschaftskammer &Ouml;sterreich" height="30px"></a></li>-->
                     <!--</ul>-->
                 </div>
             </div>
@@ -40,6 +38,7 @@
 
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.css"/>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/awesomplete/1.0.0/awesomplete.min.css"/>
         <link rel="stylesheet" href="layout/style.css" />
 
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -48,8 +47,10 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-route.min.js"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-sanitize.min.js"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-resource.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-animate.min.js"></script>
+        <script type="text/javascript" src="ui-bootstrap-tpls-0.14.3.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
+        <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.0/bootstrap3-typeahead.min.js" async></script>-->
 
         <!--D3-->
         <script type="text/javascript" src="d3/d3-service.js"></script>
