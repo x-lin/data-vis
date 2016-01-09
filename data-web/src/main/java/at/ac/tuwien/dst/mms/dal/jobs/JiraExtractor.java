@@ -27,8 +27,9 @@ public class JiraExtractor {
 	@Autowired(required = false)
 	Logger logger;
 
-	public void extractAll() throws IOException {
-		try (Writer output = new BufferedWriter(new FileWriter("targeterrors.log"))) {
+	//TODO remove persistent error logging
+	public void extractAll() {
+		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
 
 			long start = System.nanoTime();
 
@@ -39,12 +40,14 @@ public class JiraExtractor {
 				try {
 					jiraRestClient.getIssuesWebhook(project.getKey());
 				} catch (Exception e) {
-					logger.error("Exception occurrred: ", e);
+					logger.error("Exception occurred: ", e);
 					output.append(project.getKey());
 				}
 			}
 
 			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
 
 
