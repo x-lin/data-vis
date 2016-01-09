@@ -97,3 +97,5 @@ crashlytics-build.properties
 fabric.properties
 
 target/
+
+app.db

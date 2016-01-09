@@ -1,4 +1,4 @@
-package at.ac.tuwien.dst.mms.rest;
+package at.ac.tuwien.dst.mms.client.rest;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
