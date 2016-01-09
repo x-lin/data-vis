@@ -1,4 +1,4 @@
-var rest = angular.module('rest', ['ngResource']);
+
 
 rest.factory('RestService', function (
     $resource
@@ -17,9 +17,14 @@ rest.factory('RestService', function (
                     get: {method: "GET", params: {name: "1234"}, isArray:false}
                 });
 
-            resource.get(function(response) {
-                console.log(response.name + " : " + response.mail + " : " + response.link);
-            });
+            console.log("before return")
+
+            return resource;
+            //
+            //return resource.get(function(response) {
+            //    console.log(response.name + " : " + response.mail + " : " + response.link);
+            //    return response.name;
+            //});
 
 
         }

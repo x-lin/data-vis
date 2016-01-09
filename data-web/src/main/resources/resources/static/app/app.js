@@ -1,7 +1,6 @@
 'use strict';
 
-var app = angular.module('datavisApp',
-    ['ngRoute', 'd3Service', 'rest', 'ngAnimate', 'ui.bootstrap']);
+
 
 /**
  defines routing patterns
@@ -91,6 +90,7 @@ app.controller('RelationshipsCtrl', function (
     });
 
     //for REST
-    RestService.getTestData();
-
+    RestService.getTestData().get(function(response) {
+        console.log("name: "+response.name);
+    });
 });
