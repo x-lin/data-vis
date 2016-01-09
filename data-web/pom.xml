@@ -8,6 +8,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <name>Web Data</name>
+
     <!--<parent>-->
         <!--<groupId>org.springframework.boot</groupId>-->
         <!--<artifactId>spring-boot-starter-parent</artifactId>-->

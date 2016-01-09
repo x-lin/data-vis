@@ -13,7 +13,7 @@
     </modules>
     <packaging>pom</packaging>
 
-    <name>Data Visualization</name>
+    <name>Data Visualization Project</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
