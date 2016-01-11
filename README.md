@@ -1,5 +1,5 @@
 # About this project
-This project is aimed at visualizing relationships between multiple models and thus providing the means to quickly browse through the interconnections between different resources. At present time, the project will focus on providing visualizations on data attained through JIRA and JAMA interfaces. The project is currently under development.
+This project is aimed at visualizing relationships between multiple models and thus providing the means to quickly browse through the interconnections between different resources. At present time, the project will focus on providing visualizations on data attained through JIRA and Jama interfaces. This project is currently under development.
 
 # Modules
 Currently, the project consists of two modules:
