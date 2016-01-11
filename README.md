@@ -3,12 +3,11 @@ This project is aimed at visualizing relationships between multiple models and t
 
 # Modules
 Currently, the project consists of two modules:
-- data-web: A Springboot application containing the main logic.
-- jira-rest: A wrapper REST interface for the JIRA Rest Java Client.
+- `data-web`: A Springboot application containing the main logic.
+- `jira-rest`: A wrapper REST interface for the JIRA Rest Java Client.
 
 # Starting the application
 - Adjust the properties in the `config.properties` files in the `data-web` and in the `jira-rest` modules.
-- `mvn clean install` on the parent module will produce `war` files on both modules. 
-- Deploy the `war` file from `jira-rest` on an application server (TODO will be replaced with embedded jetty server).
+- Run `mvn clean install` on the `jira-rest` module and put the resulting `war` file on an application server (TODO will be replaced with embedded jetty server).
 - Run `mvn spring-boot:run` in the `data-web` directory.
 - Open `localhost:8080` in the browser.
