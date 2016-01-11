@@ -4,6 +4,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Data Visualizations</title>
+
+
     </head>
 
     <body>
@@ -36,21 +38,24 @@
         <!--<div ng-controller="TestCtrl"></div>-->
         <div ng-view></div>
 
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.css"/>
+        <!-- bower:css -->
+        <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" />
+        <!-- endbower -->
+		
+		<!-- bower:js -->
+		<script src="lib/jquery/dist/jquery.js"></script>
+		<script src="lib/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="lib/angular/angular.js"></script>
+		<script src="lib/angular-route/angular-route.js"></script>
+		<script src="lib/angular-sanitize/angular-sanitize.js"></script>
+		<script src="lib/angular-resource/angular-resource.js"></script>
+		<script src="lib/angular-animate/angular-animate.js"></script>
+		<script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+		<script src="lib/d3/d3.js"></script>
+		<!-- endbower -->
+
         <link rel="stylesheet" href="layout/style.css" />
-
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-route.min.js"></script>
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-sanitize.min.js"></script>
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-resource.min.js"></script>
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-animate.min.js"></script>
-        <script type="text/javascript" src="ui-bootstrap-tpls-0.14.3.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.min.js"></script>
-        <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.0/bootstrap3-typeahead.min.js" async></script>-->
-
+		
         <script type="text/javascript" src="app/modules.js"></script>
 
         <!--D3-->
