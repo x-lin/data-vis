@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by xlin on 08.01.2016.
  */
 @RestController
-@RequestMapping("/jira")
+@RequestMapping("/extract")
 public class JiraController {
 	@Autowired
 	JiraExtractor extractor;
