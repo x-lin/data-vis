@@ -1,6 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.jobs;
 
-import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
+import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
 import at.ac.tuwien.dst.mms.dal.model.Project;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class JiraExtractor {
 	JiraRestClient jiraRestClient;
 
 	@Autowired
-	NeoRepositoryWriter neoWriter;
+	DataWriter neoWriter;
 
 	@Autowired(required = false)
 	Logger logger;
