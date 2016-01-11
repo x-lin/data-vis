@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
+import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryReader;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
@@ -22,7 +23,7 @@ public class Application {
 	}
 
 	@Bean
-	public NeoRepositoryWriter neoWriter() {
+	public DataWriter neoWriter() {
 		return new NeoRepositoryWriter();
 	}
 

@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
+import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.dal.repo.RequirementRepository;
@@ -17,7 +18,7 @@ import java.util.Collection;
 /**
  * Writes data to the neo4j database.
  */
-public class NeoRepositoryWriter {
+public class NeoRepositoryWriter implements DataWriter {
 	@Autowired
 	private IssueRepository issueRepository;
 
@@ -33,6 +34,7 @@ public class NeoRepositoryWriter {
 	@Autowired(required = false)
 	private Logger logger;
 
+	@Override
 	public void storeIssues(Collection<Issue> issues) {
 		try (Transaction tx = graphDatabase.beginTx()) {
 			issueRepository.save(issues);
@@ -43,6 +45,7 @@ public class NeoRepositoryWriter {
 		}
 	}
 
+	@Override
 	public void storeIssue(Issue issue) {
 		try(Transaction tx = graphDatabase.beginTx()) {
 			issueRepository.save(issue);
@@ -53,6 +56,7 @@ public class NeoRepositoryWriter {
 		}
 	}
 
+	@Override
 	public void storeProjects(Collection<Project> projects) {
 		try (Transaction tx = graphDatabase.beginTx()) {
 			projectRepository.save(projects);
@@ -63,6 +67,7 @@ public class NeoRepositoryWriter {
 		}
 	}
 
+	@Override
 	public void storeProjects(Project[] projects) {
 		try (Transaction tx = graphDatabase.beginTx()) {
 			for(int i = 0; i < projects.length; i++) {
@@ -75,14 +80,17 @@ public class NeoRepositoryWriter {
 		}
 	}
 
+	@Override
 	public void storeProject(Project project) {
 		projectRepository.save(project);
 	}
 
+	@Override
 	public void storeRequirements(Collection<Requirement> requirements) {
 		requirementRepository.save(requirements);
 	}
 
+	@Override
 	public void storeRequirement(Requirement requirement) {
 		requirementRepository.save(requirement);
 	}

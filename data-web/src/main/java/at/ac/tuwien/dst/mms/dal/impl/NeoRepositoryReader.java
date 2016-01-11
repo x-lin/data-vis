@@ -25,13 +25,6 @@ public class NeoRepositoryReader implements DataReader {
 	@Override
 	@Transactional
 	public List<Project> getAllProjects() {
-		long start = System.nanoTime();
-		System.out.println(issueRepository.findByProjectKey("MNG").size());
-		System.out.println((System.nanoTime()-start)/1000000.0);
-		start = System.nanoTime();
-		System.out.println(issueRepository.countByProject("MNG"));
-		System.out.println((System.nanoTime()-start)/1000000.0);
-
 		return projectRepository.findAll().as(List.class);
 	}
 

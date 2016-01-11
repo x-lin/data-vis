@@ -1,6 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.extract.rest;
 
-import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
+import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.model.Issue;
 import at.ac.tuwien.dst.mms.dal.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/jira/webhook")
 public class JiraWebhook {
 	@Autowired
-	NeoRepositoryWriter neoWriter;
+	DataWriter neoWriter;
 
 	@RequestMapping(path="/projects", method=RequestMethod.POST)
 	public void projects(

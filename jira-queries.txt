@@ -1,0 +1,5 @@
+http://localhost:8070/rest/api/latest/search?jql=project=TES&maxResults=-1
+http://localhost:8070/rest/api/latest/project
+
+https://issues.apache.org/jira/rest/api/2/project
+https://issues.apache.org/jira/rest/api/2/search?jql=project=MNG&maxResults=-1&startAt=4748
