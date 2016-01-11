@@ -3,30 +3,33 @@
 rest.factory('RestService', function (
     $resource
 ) {
-    //var testUrl = '/data-vis?name="sdfsd"';
-    //
-    //var sendRequest = function(url, callbackFunc) {
-    //    $resource .get(url).then(callbackFunc);
-    //};
-
     return {
-        getTestData : function() {
-            var resource = $resource("/data-vis",
+        getProjects : function() {
+            console.log("abc");
+            var resource = $resource("/search/projects",
                 {},
                 {
-                    get: {method: "GET", params: {name: "1234"}, isArray:false}
+                    get: {method: "GET", isArray: true}
                 });
-
-            console.log("before return")
-
             return resource;
-            //
-            //return resource.get(function(response) {
-            //    console.log(response.name + " : " + response.mail + " : " + response.link);
-            //    return response.name;
-            //});
-
-
+        },
+        getIssues : function() {
+            console.log("fetching issues");
+            var resource = $resource("/search/issues/:projectKey",
+                {projectKey:'@id'},
+                {
+                    get: {method: "GET", isArray:true}
+                }
+            );
+            return resource;
+        },
+        getProject : function() {
+            return $resource("/search/projects/:key",
+                {key:'@id'},
+                {
+                    get: {method: "GET"}
+                }
+            );
         }
     }
 });

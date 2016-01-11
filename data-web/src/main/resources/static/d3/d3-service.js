@@ -21,6 +21,51 @@ d3Service.factory('D3Utility', function() {
                 .classed("svg-content-responsive", true);
 
             return svg;
+        },
+        /**
+         * Connects the data between each entry of a data group and returns it in a
+         * format suitable for force graphs. The function expects each entry to
+         * contain a "key" attribute.
+         *
+         * @param dataGroups
+         * @returns {{}}
+         */
+        createD3ForGroupPair : function(group1, group2) {
+            var nodes = [],
+                edges = [],
+                graph = {};
+
+            for(var i = 0 ; i < group1.length; i++) {
+                var node = {};
+                node.key = group1[i].key;
+                node.group = 1;
+                nodes.push(node);
+            }
+
+            for(var j = 0; j < group2.length; j++) {
+                var node = {};
+                node.key = group2[j].key;
+                node.group = 2;
+                nodes.push(node);
+            }
+
+            for(i = 0; i < group1.length; i++) {
+                for(j = 0; j < group2.length; j++) {
+                    var edge = {};
+                    //we know that group1 was initialized before group2, therefore we can use the length of the
+                    //group1 array to determine the placement of the element of group2
+                    edge.source = i;
+                    edge.target = j + group1.length;
+                    edges.push(edge);
+                }
+            }
+
+            graph.edges = edges;
+            graph.nodes = nodes;
+
+            console.log(edges);
+console.log(nodes);
+            return graph;
         }
     }
 });

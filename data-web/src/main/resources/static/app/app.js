@@ -1,15 +1,14 @@
 'use strict';
 
-
-
 /**
  defines routing patterns
  */
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'relationships.html',
-            controller: 'RelationshipsCtrl'
+            //templateUrl: 'relationships.html',
+            //controller: 'RelationshipsCtrl',
+            redirectTo: '/relationships'
         })
         .when('/relationships', {
             templateUrl: 'relationships.html',
@@ -19,9 +18,19 @@ app.config(function ($routeProvider) {
         .otherwise({ redirectTo: '/' });
 });
 
-app.factory('RelationshipsFactory', function () {
+app.factory('RelationshipsFactory', function (
+    RestService,
+    $q
+) {
     var items = ["Ticket", "Project", "Requirement"];
     var tickets = ["TIC1", "TEST2", "ABC", "DFD", "FGGF8", "ASDG4"];
+
+    var projects = [];
+    var issues = [];
+
+    RestService.getProjects().get(function(response) {
+        projects = response;
+    });
 
     return {
         getDataItems: function() {
@@ -29,9 +38,46 @@ app.factory('RelationshipsFactory', function () {
         },
         getTickets: function() {
             return tickets;
+        },
+        getProjects: function() {
+            return projects;
+        },
+        getIssues: function(projectKey) {
+            var deferred = $q.defer();
+
+            RestService.getIssues().get({projectKey: projectKey}, function(response) {
+                return deferred.resolve(response);
+            });
+
+            return deferred.promise;
+        },
+        getProject: function(key){
+            var deferred = $q.defer();
+
+            RestService.getProject().get({key: key}, function(response) {
+                return deferred.resolve(response);
+            });
+
+            return deferred.promise;
+        },
+        reset: function() {
+            projects = [];
+            issues = [];
         }
     }
 });
+
+app.factory('BrowserCache', function() {
+    var graph,
+        selectedItem,
+        searchText;
+
+    return {
+        graph: graph,
+        selectedItem: selectedItem,
+        searchText: searchText
+    }
+})
 
 app.controller('RelationshipsCtrl', function (
     $scope,
@@ -39,9 +85,10 @@ app.controller('RelationshipsCtrl', function (
     $timeout,
     $window,
     $http,
+    $q,
     RelationshipsFactory,
     ForceGraph,
-    RestService
+    D3Utility
 ) {
     //for the search box
     $scope.items = RelationshipsFactory.getDataItems();
@@ -52,27 +99,54 @@ app.controller('RelationshipsCtrl', function (
     }
 
     $scope.searchText = "";
+
     $scope.search = function() {
-        console.log($scope.selectedItem + " " + $scope.searchText);
+        $timeout(function() {
+            if($scope.selectedItem === $scope.items[1]) {
+                RelationshipsFactory.getProject($scope.searchText).then(function(data) {
+                    var project = data;
+                    RelationshipsFactory.getIssues($scope.searchText).then(function(data1) {
+                        var issues = data1;
+                        var d3graph = D3Utility.createD3ForGroupPair([project], issues);
+                        ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height);
+                    });
+                });
+            }
+        });
     }
 
     var input = document.getElementById("search");
-    //new Awesomplete(input);
 
-    $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+    $scope.searchData = function(searchString) {
+        return $timeout(function () {
+            if($scope.selectedItem === $scope.items[0]) {
 
-    $scope.tickets = RelationshipsFactory.getTickets();
+            } else if($scope.selectedItem === $scope.items[1]) {
+                var size = 0;
+                var hits = [];
+                var projects = RelationshipsFactory.getProjects();
+                for (var i = 0; i < projects.length; i++) {
+                    var project = projects[i];
 
-    $scope.getLocation = function(val) {
-        return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-            params: {
-                address: val,
-                sensor: false
+                    if(project.key.length >= searchString.length) {
+                        if(project.key.substring(0, searchString.toUpperCase().length).toUpperCase() === searchString.toUpperCase()) {
+                            hits.push(project.key);
+
+                            if(size > 20) {
+                                return ["Too many results"];
+                            } else {
+                                size++;
+                            }
+                        }
+                    }
+                }
+
+                if(hits.length === 0) {
+                    hits.push("No results found");
+                }
+
+                return hits;
             }
-        }).then(function(response){
-            return response.data.results.map(function(item){
-                return item.formatted_address;
-            });
         });
     };
 
@@ -80,17 +154,12 @@ app.controller('RelationshipsCtrl', function (
     $scope.d3Width = document.getElementById("d3box").clientWidth;
     $scope.d3Height = document.getElementById("d3box").clientHeight;
 
-    ForceGraph.renderForceGraph($scope.d3Width, $scope.d3Height);
+    //ForceGraph.renderForceGraph($scope.d3Width, $scope.d3Height);
 
     angular.element($window).bind('resize', function() {
         $scope.d3Width = document.getElementById("d3box").clientWidth;
         $scope.d3Height = document.getElementById("d3box").clientHeight;
         ForceGraph.updateSize($scope.d3Width, $scope.d3Height);
         $scope.$apply();
-    });
-
-    //for REST
-    RestService.getTestData().get(function(response) {
-        console.log("name: "+response.name);
     });
 });

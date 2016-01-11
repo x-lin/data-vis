@@ -1,4 +1,7 @@
 <div class="container">
+    <p>
+        <button uib-popover="I appeared on mouse enter!" popover-trigger="mouseenter" class="btn btn-default">Mouseenter</button>
+    </p>
     <div class="row search-container">
             <form ng-submit="search()">
                 <div class="input-group">
@@ -10,8 +13,7 @@
                             <li ng-repeat="item in items"><a ng-click="dropdownActive(item)" href="">{{item}}</a></li>
                         </ul>
                     </div><!-- /btn-group -->
-                    <!--<input type="text" class="form-control" id="search" aria-label="..." ng-model="searchText" placeholder="Enter text..." uib-typeahead="ticket for ticket in tickets | filter:$viewValue" typeahead-loading="loadingLocations" typeahead-no-results="noResults" autocomplete="off">-->
-                    <input type="text" class="form-control" id="search" aria-label="..." ng-model="searchText" placeholder="Enter text..." uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" autocomplete="off">
+                    <input type="text" class="form-control" id="search" aria-label="..." ng-model="searchText" placeholder="Enter text..." uib-typeahead="project for project in searchData($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" autocomplete="off">
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-show="loadingLocations">
                             <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;

@@ -4,11 +4,11 @@ body {
 }
 
 #d3box {
-    height: -webkit-calc(100vh - 170px);
-    height: -moz-calc(100vh - 170px);
-    height: calc(100vh - 170px);
+    height: -webkit-calc(100vh - 180px);
+    height: -moz-calc(100vh - 180px);
+    height: calc(100vh - 180px);
     background-color: #FFF;
-    margin: 10px 0px;
+    /*margin: 10px 0px;*/
     border: 1px solid #CCC;
     overflow: hidden;
 }
