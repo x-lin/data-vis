@@ -7,7 +7,7 @@ Currently, the project consists of two modules:
 - `jira-rest`: A wrapper REST interface for the JIRA Rest Java Client.
 
 # Starting the application
-- Install the web dependencies via `bower install` in the folder `data-web/src/resources/static`.
+- Install the web dependencies via `bower install` in the folder `data-web/src/main/resources/static`.
 - Adjust the properties in the `config.properties` files in the `data-web` and in the `jira-rest` modules.
 - Run `mvn clean install` on the `jira-rest` module and put the resulting `war` file on an application server (TODO will be replaced with embedded jetty server).
 - Run `mvn spring-boot:run` in the `data-web` directory.
