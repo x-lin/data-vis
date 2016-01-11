@@ -86,6 +86,7 @@ app.controller('RelationshipsCtrl', function (
     $window,
     $http,
     $q,
+    $compile,
     RelationshipsFactory,
     ForceGraph,
     D3Utility
@@ -108,7 +109,8 @@ app.controller('RelationshipsCtrl', function (
                     RelationshipsFactory.getIssues($scope.searchText).then(function(data1) {
                         var issues = data1;
                         var d3graph = D3Utility.createD3ForGroupPair([project], issues);
-                        ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height);
+                        ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height, $scope);
+                        $compile(document.getElementById("d3box"))($scope);
                     });
                 });
             }

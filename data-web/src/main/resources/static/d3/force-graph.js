@@ -1,5 +1,6 @@
 d3Service.factory('ForceGraph',
     function (
+        $compile,
         D3Utility
     ) {
 
@@ -17,7 +18,7 @@ d3Service.factory('ForceGraph',
                     .each(function(d){d.fixed = false;})
                     .classed("fixed", false);
             },
-            renderForceGraph: function(graph, width, height) {
+            renderForceGraph: function(graph, width, height, scope) {
                 console.log("rendering force graph");
 
                 //var svg = D3Utility.getResponsiveSvg("#d3box", width, height).
@@ -33,8 +34,8 @@ d3Service.factory('ForceGraph',
                 var color = d3.scale.category20();
 
                 var force = d3.layout.force()
-                    .charge(-120)
-                    .linkDistance(100)
+                    .charge(-700)
+                    .linkDistance(50)
                     .size([width, height])
                     .nodes(graph.nodes)
                     .links(graph.edges)
@@ -55,21 +56,37 @@ d3Service.factory('ForceGraph',
                 var node = svg.selectAll(".node")
                     .data(graph.nodes)
                     .enter().append("g")
+                    .attr("class", "g")
                     .style("fill", function(d) { return color(d.group); })
+                    .attr("uib-popover", function(d) {
+                        return d.key;
+                    })
+                    .attr("popover-trigger", "outsideClick")
+                    .attr("popover-append-to-body", "true")
                     .on("click", mouseclick)
-                    .call(drag);
+                    .on("contextmenu", rightclick)
+                    .on("dblclick", doubleclick)
+                    .call(drag)
+                    ;
 
                 node.append("circle")
                     .attr("class", "circle")
                     .attr("r", 20)
-                    //.attr("tooltip", function(d){
-                    //    return d.key;
-                    //})
+                    //.attr("uib-popover", "some test test test")
+                    //.attr("popover-trigger", "focus")
+                    //.attr("popover-append-to-body", "true")
+
                 //uib-popover="I appeared on mouse enter!" popover-trigger="mouseenter"
                 ;
+
+
                 node.append("text")
                     .attr("class", "force-text")
-                    .text(function(d) { return d.key; });
+                    .text(function(d) { return d.key; })
+                    .call(function(){
+                        console.log("doing something")
+                        $compile(svg)(scope);
+                    });
 
                 force.on("tick", function() {
                     link.attr("x1", function(d) { return d.source.x; })
@@ -98,9 +115,18 @@ d3Service.factory('ForceGraph',
                 }
 
                 function mouseclick(d) {
-                    //
-                    //uib-popover-template="dynamicPopover.templateUrl" popover-title="{{dynamicPopover.title}}"
                     console.log("clicked on me");
+                }
+
+                function rightclick(d) {
+                    console.log(d);
+                    //return false;
+                    d3.event.preventDefault();
+                }
+
+                function doubleclick(d) {
+                    console.log("double clicked");
+                    d3.event.preventDefault();
                 }
 
                 currentGraph = force;

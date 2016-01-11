@@ -15,3 +15,7 @@
     text-anchor: middle;
     cursor: pointer
 }
+
+.force-graph .g {
+    outline: 0;
+}
