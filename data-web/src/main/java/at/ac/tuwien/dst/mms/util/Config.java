@@ -15,6 +15,8 @@ import java.util.Properties;
  * //TODO inject values from rest controllers with config values.
  */
 public class Config {
+	public static int REPO_LIMIT = 100;
+
 	/**
 	 * Init with properties file.
 	 */

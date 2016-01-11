@@ -42,8 +42,12 @@ public class JiraRestClient {
 		return projects;
 	}
 
+	@Async
 	public void getProjectsWebhook() {
-		URI uri = URI.create(projectsUri + "?webhook="+Config.JIRA_WEBHOOK_PROJECTS);
+		URI uri = UriComponentsBuilder
+				.fromHttpUrl(projectsUri)
+				.queryParam("webhook", Config.JIRA_WEBHOOK_PROJECTS)
+				.build().encode().toUri();
 
 		logger.info("Requesting all projects. Results will be directed to specified webhook.");
 

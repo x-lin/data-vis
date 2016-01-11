@@ -1,11 +1,10 @@
 package at.ac.tuwien.dst.mms.dal.jobs;
 
-import at.ac.tuwien.dst.mms.dal.repo.NeoWriter;
+import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
 import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
 import at.ac.tuwien.dst.mms.dal.model.Project;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -22,7 +21,7 @@ public class JiraExtractor {
 	JiraRestClient jiraRestClient;
 
 	@Autowired
-	NeoWriter neoWriter;
+	NeoRepositoryWriter neoWriter;
 
 	@Autowired(required = false)
 	Logger logger;

@@ -1,10 +1,9 @@
 package at.ac.tuwien.dst.mms.dal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.GraphProperty;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+import org.springframework.data.neo4j.annotation.*;
 
 /**
  * Entity representing a project.
@@ -12,6 +11,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 @NodeEntity
 public class Project {
 	@GraphId
+	@JsonIgnore			//id is only for graph intern representation is therefore ignored on JSON serialization
 	private Long id;
 
 	@GraphProperty

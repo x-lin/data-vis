@@ -1,4 +1,4 @@
-package at.ac.tuwien.dst.mms.dal.repo;
+package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
@@ -17,7 +17,7 @@ import java.util.Collection;
 /**
  * Writes data to the neo4j database.
  */
-public class NeoWriter {
+public class NeoRepositoryWriter {
 	@Autowired
 	private IssueRepository issueRepository;
 
