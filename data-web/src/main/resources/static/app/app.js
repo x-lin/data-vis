@@ -153,9 +153,14 @@ app.controller('RelationshipsCtrl', function (
             if($scope.selectedItem === $scope.items[0]) {
                 return RelationshipsFactory.getIssue(searchString).then(function(issue) {
                     $scope.loadedData = true;
-                    console.log(issue.length);
                     if(typeof issue.key === 'undefined' || issue.key === null) {
-                        return ["No results found"];
+                        return RelationshipsFactory.getIssue(searchString.toUpperCase()).then(function(issue) {
+                            if(typeof issue.key === 'undefined' || issue.key === null) {
+                                return ["No results found"];
+                            } else {
+                                return [issue.key];
+                            }
+                        });
                     } else {
                         return [issue.key];
                     }
