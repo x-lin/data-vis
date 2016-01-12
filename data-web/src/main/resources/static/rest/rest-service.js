@@ -5,7 +5,6 @@ rest.factory('RestService', function (
 ) {
     return {
         getProjects : function() {
-            console.log("abc");
             var resource = $resource("/search/projects",
                 {},
                 {
@@ -14,7 +13,6 @@ rest.factory('RestService', function (
             return resource;
         },
         getIssues : function() {
-            console.log("fetching issues");
             var resource = $resource("/search/issues/:projectKey",
                 {projectKey:'@id'},
                 {
@@ -30,6 +28,24 @@ rest.factory('RestService', function (
                     get: {method: "GET"}
                 }
             );
-        }
+        },
+        getIssuesStartingWith : function() {
+            var resource = $resource("/search/issues/like/:string",
+                {string:'@id'},
+                {
+                    get: {method: "GET", isArray:true}
+                }
+            );
+            return resource;
+        },
+        getIssue : function() {
+            var resource = $resource("/search/issue/:key",
+                {key:'@id'},
+                {
+                    get: {method: "GET"}
+                }
+            );
+            return resource;
+        },
     }
 });

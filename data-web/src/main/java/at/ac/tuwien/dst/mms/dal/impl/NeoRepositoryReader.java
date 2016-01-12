@@ -5,6 +5,7 @@ import at.ac.tuwien.dst.mms.dal.model.Issue;
 import at.ac.tuwien.dst.mms.dal.model.Project;
 import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
+import at.ac.tuwien.dst.mms.dal.util.CypherWrapper;
 import at.ac.tuwien.dst.mms.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,16 +41,24 @@ public class NeoRepositoryReader implements DataReader {
 
 	@Override
 	public List<Issue> getIssues(String projectKey) {
-		return issueRepository.findByProjectKeyLimit(projectKey);
+		return issueRepository.findByProjectKeyLimit(projectKey, Config.REPO_LIMIT);
 	}
 
 	@Override
 	public List<Issue> getIssues(Project project) {
-		return issueRepository.findByProjectKeyLimit(project.getKey());
+		return issueRepository.findByProjectKeyLimit(project.getKey(), Config.REPO_LIMIT);
 	}
 
 	@Override
 	public Issue getIssue(String key) {
 		return issueRepository.findByKey(key);
+	}
+
+	@Override
+	public List<Issue> getIssuesStartingWith(String string) {
+		System.out.println(CypherWrapper.wrapLike(string));
+		List<Issue> issues = issueRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
+		System.out.println("issues: "+ (issues == null ? null : issues.size()));
+		return issueRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
 	}
 }

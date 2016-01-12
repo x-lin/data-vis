@@ -29,7 +29,6 @@ public class Issue {
 
 	@RelatedTo(type = "PROJECT", direction = Direction.OUTGOING)
 	@Fetch
-	@JsonIgnore
 	private Project project;
 
 	public Issue() {
@@ -59,12 +58,10 @@ public class Issue {
 		this.self = self;
 	}
 
-	@JsonIgnore
 	public Project getProject() {
 		return project;
 	}
 
-	@JsonProperty("project")
 	public void setProject(Project project) {
 		this.project = project;
 	}

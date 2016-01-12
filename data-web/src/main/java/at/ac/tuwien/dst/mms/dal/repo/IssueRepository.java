@@ -19,14 +19,14 @@ public interface IssueRepository extends GraphRepository<Issue> {
 	@Query("MATCH (a:Issue)-[:PROJECT]->(b:Project {key: {0}}) RETURN a")
 	public List<Issue> findByProjectKey(String project);
 
-	@Query("MATCH (a:Issue)-[:PROJECT]->(b:Project {key: {0}}) RETURN a LIMIT 100")
-	public List<Issue> findByProjectKeyLimit(String project);
+	@Query("MATCH (a:Issue)-[:PROJECT]->(b:Project {key: {0}}) RETURN a LIMIT {1}")
+	public List<Issue> findByProjectKeyLimit(String project, Integer limit);
 
 	@Query("MATCH (a:Issue)-[:PROJECT]->(b:Project {key: {0}}) RETURN COUNT(a)")
 	public Integer countByProject(String projectKey);
 
-	//@Query("MATCH (n:Issue) WHERE n.key =~ {0} RETURN n")
+	@Query("MATCH (n:Issue) WHERE n.key =~ {0} RETURN n LIMIT {1}")
 	//@Query("START n=node:label({0}) return n")
 	//@Query("START node_auto_index(\"key:MNG-1*\") MATCH (n:Issue) RETURN n")
-	//public List<Issue> findByLikeKey(String key1);
+	public List<Issue> findByLikeKey(String key, Integer limit);
 }
