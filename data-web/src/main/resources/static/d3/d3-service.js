@@ -63,8 +63,6 @@ d3Service.factory('D3Utility', function() {
             graph.edges = edges;
             graph.nodes = nodes;
 
-            console.log(edges);
-console.log(nodes);
             return graph;
         }
     }

@@ -20,4 +20,6 @@ public interface DataReader {
 	Project getProject(String key);
 
 	Integer countIssues(String projectKey);
+
+	List<Issue> getIssuesStartingWith(String string);
 }

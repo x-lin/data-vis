@@ -33,13 +33,27 @@ public class SearchController {
 		return reader.getIssues(reader.getProject(projectKey));
 	}
 
+	@RequestMapping(value = "/issues/like/{string}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Issue> getIssuesStartingWith(
+			@PathVariable String string) {
+		return reader.getIssuesStartingWith(string);
+	}
+
 	@RequestMapping(value = "/projects", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Iterable<Project> getAllProjects() {
 		return reader.getAllProjects();
 	}
 
 	@RequestMapping(value ="/issues/count/{projectKey}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public int countNrIssues(String projectKey) {
+	public int countNrIssues(
+			@PathVariable String projectKey) {
 		return reader.countIssues(projectKey);
 	}
+
+	@RequestMapping(value ="/issue/{key}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Issue getIssue(
+			@PathVariable String key) {
+		return reader.getIssue(key);
+	}
+
 }

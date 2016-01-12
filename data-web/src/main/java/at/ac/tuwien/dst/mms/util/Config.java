@@ -17,6 +17,8 @@ import java.util.Properties;
 public class Config {
 	public static int REPO_LIMIT = 100;
 
+	public static int SEARCH_LIMIT = 11;
+
 	/**
 	 * Init with properties file.
 	 */

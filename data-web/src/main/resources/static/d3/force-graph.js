@@ -71,13 +71,7 @@ d3Service.factory('ForceGraph',
 
                 node.append("circle")
                     .attr("class", "circle")
-                    .attr("r", 20)
-                    //.attr("uib-popover", "some test test test")
-                    //.attr("popover-trigger", "focus")
-                    //.attr("popover-append-to-body", "true")
-
-                //uib-popover="I appeared on mouse enter!" popover-trigger="mouseenter"
-                ;
+                    .attr("r", 20);
 
 
                 node.append("text")
@@ -85,7 +79,7 @@ d3Service.factory('ForceGraph',
                     .text(function(d) { return d.key; })
                     .call(function(){
                         console.log("doing something")
-                        $compile(svg)(scope);
+                        $compile($("#d3box"))(scope);
                     });
 
                 force.on("tick", function() {
@@ -95,9 +89,6 @@ d3Service.factory('ForceGraph',
                         .attr("y2", function(d) { return d.target.y; });
 
                     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"});
-
-                        //.attr("cx", function(d) { return d.x; })
-                        //.attr("cy", function(d) { return d.y; });
                 });
 
                 //fix position of node after dragged by user
@@ -119,14 +110,13 @@ d3Service.factory('ForceGraph',
                 }
 
                 function rightclick(d) {
-                    console.log(d);
                     //return false;
-                    d3.event.preventDefault();
+                    //d3.event.preventDefault();
                 }
 
                 function doubleclick(d) {
                     console.log("double clicked");
-                    d3.event.preventDefault();
+                    //d3.event.preventDefault();
                 }
 
                 currentGraph = force;
