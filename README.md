@@ -18,5 +18,5 @@ Currently, the project consists of two modules:
 
 ### Installing and starting the client application
 - Install the web dependencies via `bower install` in the folder `data-web/src/main/resources/static`.
-- Run `mvn spring-boot:run` in the `data-web` directory.
+- Run `mvn spring-boot:run` in the `data-web` directory, if not done already.
 - Open `localhost:8080` in the browser.
