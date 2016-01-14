@@ -1,7 +1,7 @@
 package at.ac.tuwien.dst.mms.dal;
 
-import at.ac.tuwien.dst.mms.dal.model.Issue;
-import at.ac.tuwien.dst.mms.dal.model.Project;
+import at.ac.tuwien.dst.mms.model.Issue;
+import at.ac.tuwien.dst.mms.model.Project;
 
 import java.util.List;
 
@@ -18,6 +18,8 @@ public interface DataReader {
 	List<Project> getAllProjects();
 
 	Project getProject(String key);
+
+	List<Project> getProjectsStartingWith(String string);
 
 	Integer countIssues(String projectKey);
 

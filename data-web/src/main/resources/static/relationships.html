@@ -17,7 +17,7 @@
                             <li ng-repeat="item in items"><a ng-click="dropdownActive(item)" href="">{{item}}</a></li>
                         </ul>
                     </div><!-- /btn-group -->
-                    <input type="text" class="form-control" id="search" aria-label="..." ng-model="searchText" placeholder="Enter text..." uib-typeahead="data for data in searchData($viewValue)" typeahead-no-results="noResults" autocomplete="off">
+                    <input type="text" class="form-control" id="search" aria-label="..." ng-model="searchText" placeholder="Enter text..." uib-typeahead="data.key for data in searchForField($viewValue)" typeahead-no-results="noResults" autocomplete="off">
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-hide="loadedData">
                             <span class="glyphicon glyphicon-refresh glyphicon-spin" aria-hidden="true"></span>&nbsp;
@@ -36,5 +36,6 @@
 </div>
 
 <div class="container">
+    <div id="d3legend"></div>
     <div id="d3box"></div>
 </div>

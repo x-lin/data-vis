@@ -20,67 +20,52 @@ app.config(function ($routeProvider) {
         .otherwise({ redirectTo: '/' });
 });
 
-app.factory('RelationshipsFactory', function (
-    RestService,
-    $q
+app.factory('AppFactory', function (
+    RestService
 ) {
+    //private variables
     var items = ["Ticket", "Project", "Requirement"];
-
     var projects = [];
     var issues = [];
 
-    RestService.getProjects().get(function(response) {
-        projects = response;
-    });
+    //variable to be returned
+    var factory = {};
 
-    return {
-        getDataItems: function() {
-            return items;
-        },
-        getProjects: function() {
-            return projects;
-        },
-        getIssues: function(projectKey) {
-            var deferred = $q.defer();
+    factory.getDataItems = function() {
+        return items;
+    };
 
-            RestService.getIssues().get({projectKey: projectKey}, function(response) {
-                return deferred.resolve(response);
-            });
+    factory.getProjects = function() {
+        return projects;
+    };
 
-            return deferred.promise;
-        },
-        getIssuesStartingWith: function(string) {
-            var deferred = $q.defer();
+    factory.getProjectsStartingWith = function(string) {
+        return RestService.getProjectsStartingWith(string);
+    };
 
-            RestService.getIssuesStartingWith().get({string: string}, function(response) {
-                return deferred.resolve(response);
-            });
+    factory.getIssues = function(projectKey) {
+        return RestService.getIssues(projectKey);
+    };
 
-            return deferred.promise;
-        },
-        getProject: function(key){
-            var deferred = $q.defer();
+    factory.getIssuesStartingWith = function(string) {
+        console.log(string)
+        return RestService.getIssuesStartingWith(string);
+    };
 
-            RestService.getProject().get({key: key}, function(response) {
-                return deferred.resolve(response);
-            });
+    factory.getProject = function(key){
+        return RestService.getProject(key);
+    };
 
-            return deferred.promise;
-        },
-        getIssue: function(key){
-            var deferred = $q.defer();
+    factory.getIssue = function(key){
+        return RestService.getIssue(key);
+    };
 
-            RestService.getIssue().get({key: key}, function(response) {
-                return deferred.resolve(response);
-            });
+    factory.reset = function() {
+        projects = [];
+        issues = [];
+    };
 
-            return deferred.promise;
-        },
-        reset: function() {
-            projects = [];
-            issues = [];
-        }
-    }
+    return factory;
 });
 
 app.factory('BrowserCache', function() {
@@ -98,17 +83,15 @@ app.factory('BrowserCache', function() {
 app.controller('RelationshipsCtrl', function (
     $scope,
     $sce,
-    $timeout,
     $window,
     $http,
-    $q,
     $compile,
-    RelationshipsFactory,
+    AppFactory,
     ForceGraph,
     D3Utility
 ) {
     //for the search box
-    $scope.items = RelationshipsFactory.getDataItems();
+    $scope.items = AppFactory.getDataItems();
     $scope.selectedItem = $scope.items[0];
 
     $scope.dropdownActive = function (item) {
@@ -117,83 +100,58 @@ app.controller('RelationshipsCtrl', function (
 
     $scope.searchText = "";
 
-
     $scope.search = function() {
-        $timeout(function() {
-            if($scope.selectedItem === $scope.items[0]) {
-                RelationshipsFactory.getIssue($scope.searchText).then(function(data) {
-                    var issue = data;
-                    var project = data.project;
-                    var d3graph = D3Utility.createD3ForGroupPair([project], [issue]);
+        if($scope.selectedItem === $scope.items[0]) {
+            AppFactory.getIssue($scope.searchText).then(function(data) {
+                var issue = data;
+                var project = data.project;
+                var d3graph = D3Utility.createD3ForGroupPair({data: [project], group:"project"}, {data: [issue], group:"issue"});
+                ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height, $scope);
+            });
+        } else if($scope.selectedItem === $scope.items[1]) {
+            AppFactory.getProject($scope.searchText).then(function(data) {
+                var project = data;
+
+                AppFactory.getIssues($scope.searchText).then(function(data1) {
+                    var issues = data1;
+                    var d3graph = D3Utility.createD3ForGroupPair({data: [project], group:"project"}, {data: issues, group:"issue"});
                     ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height, $scope);
                 });
-            } else if($scope.selectedItem === $scope.items[1]) {
-                console.log("here")
-                RelationshipsFactory.getProject($scope.searchText).then(function(data) {
-                    var project = data;
-                    console.log("here")
-                    RelationshipsFactory.getIssues($scope.searchText).then(function(data1) {
-                        var issues = data1;
-                        var d3graph = D3Utility.createD3ForGroupPair([project], issues);
-                        console.log("here")
-                        ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height, $scope);
-                    });
-                });
-            }
-        });
+            });
+        }
     }
 
-    var input = document.getElementById("search");
-
     $scope.loadedData = true;
-    $scope.searchData = function(searchString) {
-        return $timeout(function () {
-            $scope.loadedData = false;
 
-            if($scope.selectedItem === $scope.items[0]) {
-                return RelationshipsFactory.getIssue(searchString).then(function(issue) {
-                    $scope.loadedData = true;
-                    if(typeof issue.key === 'undefined' || issue.key === null) {
-                        return RelationshipsFactory.getIssue(searchString.toUpperCase()).then(function(issue) {
-                            if(typeof issue.key === 'undefined' || issue.key === null) {
-                                return ["No results found"];
-                            } else {
-                                return [issue.key];
-                            }
-                        });
-                    } else {
-                        return [issue.key];
-                    }
-                });
-            } else if($scope.selectedItem === $scope.items[1]) {
-                var size = 0;
-                var hits = [];
-                var projects = RelationshipsFactory.getProjects();
-                for (var i = 0; i < projects.length; i++) {
-                    var project = projects[i];
+    var getStartingWith = function(factoryFunc, searchString) {
+        return factoryFunc(searchString).then(function(results) {
+            var hits = [];
 
-                    if(project.key.length >= searchString.length) {
-                        if(project.key.substring(0, searchString.toUpperCase().length).toUpperCase() === searchString.toUpperCase()) {
-                            hits.push(project.key);
-
-                            if(size > 20) {
-                                hits = ["Too many results"];
-                            } else {
-                                size++;
-                            }
-                        }
-                    }
-                }
-
-                if(hits.length === 0) {
-                    hits.push("No results found");
-                }
-
-                $scope.loadedData = true;
-
-                return hits;
+            if(results.length > 10) {
+                hits = results.splice(0, 10);
+            } else {
+                hits = results;
+                console.log(hits);
             }
+
+            if(hits.length === 0) {
+                hits = [{key: "No results found"}];
+            }
+
+            $scope.loadedData = true;
+
+            return hits;
         });
+    };
+
+    $scope.searchForField = function(searchString) {
+        $scope.loadedData = false;
+
+        if($scope.selectedItem === $scope.items[0]) {
+            return getStartingWith(AppFactory.getIssuesStartingWith, searchString);
+        } else if($scope.selectedItem === $scope.items[1]) {
+            return getStartingWith(AppFactory.getProjectsStartingWith, searchString);
+        }
     };
 
     //for D3
@@ -206,4 +164,10 @@ app.controller('RelationshipsCtrl', function (
         ForceGraph.updateSize($scope.d3Width, $scope.d3Height);
         $scope.$apply();
     });
+
+    $scope.dynamicPopover = {
+        content: 'Hello, World!',
+        templateUrl: 'd3/popoverTemplate.html',
+        title: 'Title'
+    };
 });

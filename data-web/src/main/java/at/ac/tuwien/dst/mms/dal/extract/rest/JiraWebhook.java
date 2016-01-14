@@ -1,8 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.extract.rest;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.model.Issue;
-import at.ac.tuwien.dst.mms.dal.model.Project;
+import at.ac.tuwien.dst.mms.model.Issue;
+import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

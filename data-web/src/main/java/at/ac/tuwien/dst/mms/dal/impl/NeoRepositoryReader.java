@@ -1,8 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
-import at.ac.tuwien.dst.mms.dal.model.Issue;
-import at.ac.tuwien.dst.mms.dal.model.Project;
+import at.ac.tuwien.dst.mms.model.Issue;
+import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.dal.util.CypherWrapper;
@@ -60,5 +60,13 @@ public class NeoRepositoryReader implements DataReader {
 		List<Issue> issues = issueRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
 		System.out.println("issues: "+ (issues == null ? null : issues.size()));
 		return issueRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
+	}
+
+	@Override
+	public List<Project> getProjectsStartingWith(String string) {
+		System.out.println(CypherWrapper.wrapLike(string));
+		List<Project> projects = projectRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
+		System.out.println("projects: "+ (projects == null ? null : projects.size()));
+		return projectRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
 	}
 }

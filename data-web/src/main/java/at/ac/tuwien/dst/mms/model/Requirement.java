@@ -1,8 +1,10 @@
-package at.ac.tuwien.dst.mms.dal.model;
+package at.ac.tuwien.dst.mms.model;
 
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.GraphProperty;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+
+import java.util.List;
 
 /**
  * //TODO implement
@@ -17,10 +19,9 @@ public class Requirement {
 	public String key;
 
 	@GraphProperty
-	public String name;
-
-	@GraphProperty
 	public String self;
+
+	public List<Issue> issues;
 
 	public Requirement() {
 	}

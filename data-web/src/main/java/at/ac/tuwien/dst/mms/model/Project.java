@@ -1,4 +1,4 @@
-package at.ac.tuwien.dst.mms.dal.model;
+package at.ac.tuwien.dst.mms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

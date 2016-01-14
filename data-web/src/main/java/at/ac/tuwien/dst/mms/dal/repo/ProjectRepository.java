@@ -1,11 +1,11 @@
 package at.ac.tuwien.dst.mms.dal.repo;
 
-import at.ac.tuwien.dst.mms.dal.model.Issue;
+import at.ac.tuwien.dst.mms.model.Issue;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
-import org.springframework.data.repository.CrudRepository;
 
-import at.ac.tuwien.dst.mms.dal.model.Project;
+import at.ac.tuwien.dst.mms.model.Project;
+
 import java.util.List;
 
 /**
@@ -16,7 +16,10 @@ public interface ProjectRepository extends GraphRepository<Project> {
 
 	public Project findByName(String name);
 
-
+	@Query("MATCH (n:Project) WHERE n.key =~ {0} RETURN n LIMIT {1}")
+	//@Query("START n=node:label({0}) return n")
+	//@Query("START node_auto_index(\"key:MNG-1*\") MATCH (n:Issue) RETURN n")
+	public List<Project> findByLikeKey(String key, Integer limit);
 
 //	@Query("{" +
 //			"day:{$gte:?0, $lte:?1}," +
