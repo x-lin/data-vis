@@ -8,19 +8,17 @@ import java.util.Properties;
  * Contains the configuration for some customizable values.
  */
 public class Config {
-
-	public static String JIRA_URI;
-
 	static {
 		String propertiesFile = "config.properties";
 
 		Properties properties = new Properties();
 		try (InputStream in = Config.class.getResourceAsStream("/"+propertiesFile)) {
 			properties.load(in);
-
 			JIRA_URI = properties.getProperty("jira");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
+	public static String JIRA_URI;
 }

@@ -3,6 +3,7 @@ package at.ac.tuwien.dst.mms.dal;
 import at.ac.tuwien.dst.mms.model.Issue;
 import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.model.Requirement;
+import at.ac.tuwien.dst.mms.model.User;
 
 import java.util.Collection;
 
@@ -21,4 +22,8 @@ public interface DataWriter {
 	void storeRequirements(Collection<Requirement> requirements);
 
 	void storeRequirement(Requirement requirement);
+
+	void storeUser(User user);
+
+	void storeUsers(User[] users);
 }

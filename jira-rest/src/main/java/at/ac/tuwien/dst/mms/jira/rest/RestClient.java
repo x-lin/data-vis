@@ -1,6 +1,8 @@
 package at.ac.tuwien.dst.mms.jira.rest;
 
 import at.ac.tuwien.dst.mms.jira.util.Config;
+import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import org.apache.http.HttpResponse;
@@ -10,8 +12,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -64,17 +68,5 @@ public class RestClient {
 		WebResource resource = c.resource(url);
 
 		resource.post(requestEntity);
-	}
-
-	public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
-		long start = System.nanoTime();
-		RestClient.sendGet(Config.JIRA_URI+"/projects");
-		logger.debug("Requested by hand in: " + (double)(System.nanoTime() - start)/1000000000.0 + ".");
-
-		JiraRestExtractor extract = new JiraRestExtractor();
-
-		start = System.nanoTime();
-		extract.getProjects();
-		logger.debug("Requested with wrapper and already stored in POJO in: " + (double)(System.nanoTime() - start)/1000000000.0 + ".");
 	}
 }

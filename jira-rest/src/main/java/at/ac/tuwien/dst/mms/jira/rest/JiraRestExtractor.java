@@ -47,7 +47,7 @@ public class JiraRestExtractor {
 	public SearchResult getIssues(String projectKey, int startAt, int resultsSize) throws ExecutionException, InterruptedException {
 		String jqlQuery = "project="+projectKey;
 
-		Set<String> fields = new HashSet<>(Arrays.asList("summary", "issuetype", "created", "updated", "project", "status"));
+		Set<String> fields = new HashSet<>(Arrays.asList("summary", "issuetype", "created", "updated", "project", "status", "reporter"));
 
 		Promise<SearchResult> result = restClient.getSearchClient().searchJql(jqlQuery, resultsSize, startAt, fields);
 
