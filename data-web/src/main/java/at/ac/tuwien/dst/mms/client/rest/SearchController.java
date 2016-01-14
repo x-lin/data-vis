@@ -1,8 +1,8 @@
 package at.ac.tuwien.dst.mms.client.rest;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
-import at.ac.tuwien.dst.mms.dal.model.Issue;
-import at.ac.tuwien.dst.mms.dal.model.Project;
+import at.ac.tuwien.dst.mms.model.Issue;
+import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +37,12 @@ public class SearchController {
 	public List<Issue> getIssuesStartingWith(
 			@PathVariable String string) {
 		return reader.getIssuesStartingWith(string);
+	}
+
+	@RequestMapping(value = "/projects/like/{string}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Project> getProjectsStartingWith(
+			@PathVariable String string) {
+		return reader.getProjectsStartingWith(string);
 	}
 
 	@RequestMapping(value = "/projects", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

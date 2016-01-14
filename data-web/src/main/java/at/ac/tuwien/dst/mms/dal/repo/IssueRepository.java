@@ -1,8 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.repo;
 
-import at.ac.tuwien.dst.mms.dal.model.Issue;
-import at.ac.tuwien.dst.mms.dal.model.Project;
-import at.ac.tuwien.dst.mms.util.Config;
+import at.ac.tuwien.dst.mms.model.Issue;
+import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 

@@ -18,7 +18,7 @@ import java.io.IOException;
 public class Neo4jConfig extends Neo4jConfiguration {
 
 	public Neo4jConfig() {
-		setBasePackage("at.ac.tuwien.dst.mms.dal.model");
+		setBasePackage("at.ac.tuwien.dst.mms.model");
 	}
 
 	@Bean(destroyMethod = "shutdown")

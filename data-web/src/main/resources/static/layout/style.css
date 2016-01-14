@@ -7,7 +7,7 @@ body {
     height: -webkit-calc(100vh - 150px);
     height: -moz-calc(100vh - 150px);
     height: calc(100vh - 150px);
-    background-color: #FFF;
+    /*background-color: #FFF;*/
     /*margin: 10px 0px;*/
     border: 1px solid #CCC;
     overflow: hidden;
@@ -66,4 +66,15 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+#d3legend {
+    z-index: -1;
+    position: absolute;
+    padding: 10px;
+    margin: 10px;
+    /*background-color: #999;*/
+    border: 1px solid #CCC;
+    /*width: 100px;*/
+    /*height: 100px;*/
 }

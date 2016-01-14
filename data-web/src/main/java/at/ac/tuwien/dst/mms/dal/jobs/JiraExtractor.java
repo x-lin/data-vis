@@ -2,7 +2,7 @@ package at.ac.tuwien.dst.mms.dal.jobs;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
-import at.ac.tuwien.dst.mms.dal.model.Project;
+import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
