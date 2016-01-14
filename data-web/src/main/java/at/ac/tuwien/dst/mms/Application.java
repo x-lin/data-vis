@@ -2,6 +2,7 @@ package at.ac.tuwien.dst.mms;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
 import at.ac.tuwien.dst.mms.dal.DataWriter;
+import at.ac.tuwien.dst.mms.dal.extract.mock.RequirementRandomGenerator;
 import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryReader;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
@@ -13,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-@EnableAsync
+//@EnableAsync
 @EnableTransactionManagement
 @SpringBootApplication
 public class Application {

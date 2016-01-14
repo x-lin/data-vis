@@ -46,7 +46,7 @@ public class NeoRepositoryReader implements DataReader {
 
 	@Override
 	public List<Issue> getIssues(Project project) {
-		return issueRepository.findByProjectKeyLimit(project.getKey(), Config.REPO_LIMIT);
+		return project != null ? issueRepository.findByProjectKeyLimit(project.getKey(), Config.REPO_LIMIT) : null;
 	}
 
 	@Override
@@ -56,17 +56,11 @@ public class NeoRepositoryReader implements DataReader {
 
 	@Override
 	public List<Issue> getIssuesStartingWith(String string) {
-		System.out.println(CypherWrapper.wrapLike(string));
-		List<Issue> issues = issueRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
-		System.out.println("issues: "+ (issues == null ? null : issues.size()));
 		return issueRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
 	}
 
 	@Override
 	public List<Project> getProjectsStartingWith(String string) {
-		System.out.println(CypherWrapper.wrapLike(string));
-		List<Project> projects = projectRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
-		System.out.println("projects: "+ (projects == null ? null : projects.size()));
 		return projectRepository.findByLikeKey(CypherWrapper.wrapLike(string), Config.SEARCH_LIMIT);
 	}
 }

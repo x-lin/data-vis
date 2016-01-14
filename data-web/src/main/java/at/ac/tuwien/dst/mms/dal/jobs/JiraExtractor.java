@@ -48,7 +48,23 @@ public class JiraExtractor {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public void testing() {
+		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
 
+			long start = System.nanoTime();
+
+			try {
+				jiraRestClient.getIssuesWebhook("MNG");
+			} catch (Exception e) {
+				logger.error("Exception occurred: ", e);
+				output.append("MNG");
+			}
+
+			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

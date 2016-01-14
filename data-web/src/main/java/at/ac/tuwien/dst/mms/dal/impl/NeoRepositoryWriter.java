@@ -4,6 +4,8 @@ import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.dal.repo.RequirementRepository;
+import at.ac.tuwien.dst.mms.dal.repo.UserRepository;
+import at.ac.tuwien.dst.mms.model.User;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import at.ac.tuwien.dst.mms.model.Requirement;
 import org.springframework.data.neo4j.core.GraphDatabase;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Writes data to the neo4j database.
@@ -27,6 +31,9 @@ public class NeoRepositoryWriter implements DataWriter {
 
 	@Autowired
 	private RequirementRepository requirementRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	GraphDatabase graphDatabase;
@@ -87,11 +94,43 @@ public class NeoRepositoryWriter implements DataWriter {
 
 	@Override
 	public void storeRequirements(Collection<Requirement> requirements) {
-		requirementRepository.save(requirements);
+		try (Transaction tx = graphDatabase.beginTx()) {
+			requirementRepository.save(requirements);
+
+			tx.success();
+
+			logger.info(requirements.size() + " requirements saved.");
+		}
+
 	}
 
 	@Override
 	public void storeRequirement(Requirement requirement) {
 		requirementRepository.save(requirement);
+	}
+
+	@Override
+	public void storeUser(User user) {
+		userRepository.save(user);
+	}
+
+	@Override
+	public void storeUsers(User[] users) {
+		Set<String> processed = new HashSet<>();
+
+		for (int i = 0; i < users.length; i++) {
+			User user = users[i];
+
+			if (!processed.contains(user.getName())) {
+				try (Transaction tx = graphDatabase.beginTx()) {
+					userRepository.save(user);
+					tx.success();
+					processed.add(user.getName());
+				}
+			}
+		}
+
+		logger.info(processed + " users saved.");
+
 	}
 }

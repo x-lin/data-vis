@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.springframework.data.neo4j.annotation.*;
+import org.springframework.data.neo4j.support.index.IndexType;
 
 /**
  * Entity representing a project.
@@ -15,12 +16,7 @@ public class Project {
 	private Long id;
 
 	@GraphProperty
-	@JsonProperty("id") //for JSON deserialization
-	private
-	Integer projectId;
-
-	@GraphProperty
-	@Indexed(unique = true)
+	@Indexed(unique = true, indexName="projectKeyIndex", indexType = IndexType.FULLTEXT)
 	private String key;
 
 	@GraphProperty
@@ -34,14 +30,6 @@ public class Project {
 
 	public Long getId() {
 		return id;
-	}
-
-	public Integer getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
 	}
 
 	public String getKey() {
