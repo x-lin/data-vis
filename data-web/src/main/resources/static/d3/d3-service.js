@@ -30,7 +30,9 @@ d3Service.factory('D3Utility', function() {
          * @param dataGroups
          * @returns {{}}
          */
-        createD3ForGroupPair : function(group1, group2) {
+        createD3ForGroupPair : function(data1, data2) {
+            var group1 = data1.data;
+            var group2 = data2.data;
             var nodes = [],
                 edges = [],
                 graph = {};
@@ -38,14 +40,14 @@ d3Service.factory('D3Utility', function() {
             for(var i = 0 ; i < group1.length; i++) {
                 var node = {};
                 node.key = group1[i].key;
-                node.group = 1;
+                node.group = data1.group;
                 nodes.push(node);
             }
 
             for(var j = 0; j < group2.length; j++) {
                 var node = {};
                 node.key = group2[j].key;
-                node.group = 2;
+                node.group = data2.group;
                 nodes.push(node);
             }
 
