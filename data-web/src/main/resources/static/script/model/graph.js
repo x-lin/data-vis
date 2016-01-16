@@ -2,6 +2,7 @@ var Graph = function() {
 
 }
 
+
 Graph.renderGraph = function() {
 
 }
