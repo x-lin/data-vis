@@ -1,7 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.extract.rest;
 
 import at.ac.tuwien.dst.mms.dal.jobs.JiraExtractor;
-import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

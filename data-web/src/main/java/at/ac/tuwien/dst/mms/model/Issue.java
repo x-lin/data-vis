@@ -1,57 +1,57 @@
 package at.ac.tuwien.dst.mms.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.annotation.GraphProperty;
+import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.support.index.IndexType;
+import org.springframework.data.neo4j.template.Neo4jOperations;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * Entity representing an issue.
  */
-@NodeEntity
-public class Issue {
-	@GraphId
-	@JsonIgnore
-	private Long id;
+public class Issue extends ModelEntity {
+	public static final String ISSUE_KEY_INDEX = "issueKeyIndex";
 
 	@GraphProperty
 	@Indexed(unique = true, indexName="issueKeyIndex", indexType = IndexType.FULLTEXT)
 	private String key;
 
+	@JsonIgnore
 	@GraphProperty
 	private String self;
 
+	//TODO reset property value for next pull
+	@JsonProperty("created")
 	@GraphProperty
 	private Long created;
 
+	@JsonIgnore
 	@RelatedTo(type = "PROJECT", direction = Direction.OUTGOING)
-	@Fetch
 	private Project project;
 
-	@JsonProperty("reporter")
+	@JsonIgnore
 	@RelatedTo(type = "REPORTER", direction = Direction.OUTGOING)
-	@Fetch
 	private User user;
 
+	@JsonIgnore
 	@RelatedTo(type = "REQUIREMENT", direction = Direction.OUTGOING)
-	private @Fetch Set<Requirement> requirements;
+	private Set<Requirement> requirements;
+//
+//	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor) RETURN neighbor")
+//	protected Iterable<Map<String, Object>> neighbors;
 
 	public Issue() {
 	}
 
 	public Issue(String key) {
 		this.setKey(key);
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public String getKey() {
@@ -70,38 +70,49 @@ public class Issue {
 		this.self = self;
 	}
 
+	@JsonIgnore
 	public Project getProject() {
 		return project;
 	}
 
+	@JsonProperty
 	public void setProject(Project project) {
 		this.project = project;
 	}
 
+	@JsonIgnore
 	public User getUser() {
 		return user;
 	}
 
+	@JsonProperty("reporter")
 	public void setUser(User user) {
 		this.user = user;
 	}
 
 	//fetches the "created" field; we have to extract it that way, because the JRJC stores dates in
 	//org.joda.time.DateTime format
-	@JsonProperty("creationDate")
+	@JsonProperty
 	public void setCreated(Map<String, Object> creationDate) {
-		created = (Long) creationDate.get("millis");
+		this.created = (Long) creationDate.get("millis");
 	}
 
+	@JsonProperty
+	public Long getCreated() {
+		return created;
+	}
+
+	@JsonIgnore
 	public Set<Requirement> getRequirements() {
 		return requirements;
 	}
 
+	@JsonProperty
 	public void setRequirements(Set<Requirement> requirements) {
 		this.requirements = requirements;
 	}
 
-	public void addRequirement(Requirement req) {
-		this.requirements.add(req);
-	}
+	@JsonIgnore
+	@Autowired
+	protected Neo4jOperations neo4jOperations;
 }

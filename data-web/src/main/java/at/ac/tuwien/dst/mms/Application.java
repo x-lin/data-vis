@@ -1,16 +1,13 @@
 package at.ac.tuwien.dst.mms;
 
-import at.ac.tuwien.dst.mms.dal.DataReader;
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.extract.mock.RequirementRandomGenerator;
 import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
-import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryReader;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
 import at.ac.tuwien.dst.mms.dal.jobs.JiraExtractor;
+import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,11 +26,6 @@ public class Application {
 	}
 
 	@Bean
-	public DataReader dataReader() {
-		return new NeoRepositoryReader();
-	}
-
-	@Bean
 	public JiraExtractor jiraExtractor() {
 		return new JiraExtractor();
 	}
@@ -46,5 +38,10 @@ public class Application {
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
+	}
+
+	@Bean
+	public RepositoryService repositoryService() {
+		return new RepositoryService();
 	}
 }
