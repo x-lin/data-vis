@@ -5,14 +5,13 @@ import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.dal.repo.RequirementRepository;
 import at.ac.tuwien.dst.mms.dal.repo.UserRepository;
+import at.ac.tuwien.dst.mms.model.Issue;
+import at.ac.tuwien.dst.mms.model.Project;
+import at.ac.tuwien.dst.mms.model.Requirement;
 import at.ac.tuwien.dst.mms.model.User;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import at.ac.tuwien.dst.mms.model.Issue;
-import at.ac.tuwien.dst.mms.model.Project;
-import at.ac.tuwien.dst.mms.model.Requirement;
 import org.springframework.data.neo4j.core.GraphDatabase;
 
 import java.util.Collection;
