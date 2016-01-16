@@ -23,11 +23,11 @@ d3Service.factory('ForceGraph',
             },
             renderForceGraph: function(data, width, height, scope) {
                 var colorMap = {
-                    project : "rgb(31, 119, 180)",
-                    issue : "rgb(174, 199, 232)",
-                    requirement : "rgb(44, 160, 44)",
-                    user : "rgb(255, 127, 14)",
-                    other : "rgb(150, 150, 150)"
+                    Project : "rgb(31, 119, 180)",
+                    Issue : "rgb(174, 199, 232)",
+                    Requirement : "rgb(44, 160, 44)",
+                    User : "rgb(255, 127, 14)",
+                    Other : "rgb(150, 150, 150)"
                 };
 
                 //var svg = D3Utility.getResponsiveSvg("#d3box", width, height).
@@ -69,7 +69,7 @@ d3Service.factory('ForceGraph',
                     node = node.data(data.nodes);
                     var g = node.enter().append("g")
                     .attr("class", "g")
-                    .style("fill", function(d) { return colorMap[d.group]; })
+                    .style("fill", function(d) { return colorMap[d.group] ? colorMap[d.group] : colorMap["Other"]; })
                     //.attr("uib-popover", function(d) {
                     //    return d.key;
                     //})
@@ -86,7 +86,7 @@ d3Service.factory('ForceGraph',
 
                     g.append("text")
                         .attr("class", "force-text unselectable")
-                        .text(function(d) { return d.key; })
+                        .text(function(d) {return d.key;})
                         .call(function(){
                             $compile($("#d3box"))(scope);
                         });
@@ -167,28 +167,13 @@ d3Service.factory('ForceGraph',
                 }
 
                 function doubleclick(d) {
-                    var nr = 5;
+                    scope.getNeighbors(d.group, d.key).then(function(d1) {
+                        data = D3Utility.updateDataWithNodes(data, d1, d.index);
 
-                    for(var i = 0; i<nr; i++) {
-                        var n = {};
-                        n.key = "testing node";
-                        n.group = "requirement";
-                        var point = d3.mouse(this);
-                        n.x = point[0];
-                        n.y = point[1];
+                        restart(data);
 
-                        data.nodes.push(n);
-
-                        var e = {
-                            source: d.index,
-                            target: data.nodes.length - 1
-                        };
-                        data.edges.push(e);
-                    }
-
-                    restart(data);
-
-                    force.start();
+                        force.start();
+                    });
                 }
 
                 //speed up animation by 10

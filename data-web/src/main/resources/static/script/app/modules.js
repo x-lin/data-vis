@@ -3,4 +3,3 @@ var app = angular.module('datavisApp',
 
 var d3Service = angular.module('d3Service', []);
 
-var rest = angular.module('rest', ['ngResource']);

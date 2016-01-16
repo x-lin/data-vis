@@ -1,16 +1,28 @@
 body {
-    background: #F9F9F9;
+    background: white;
     overflow: hidden;
 }
 
 #d3box {
-    height: -webkit-calc(100vh - 150px);
-    height: -moz-calc(100vh - 150px);
-    height: calc(100vh - 150px);
+    height: -webkit-calc(100vh - 140px);
+    height: -moz-calc(100vh - 140px);
+    height: calc(100vh - 140px);
     /*background-color: #FFF;*/
     /*margin: 10px 0px;*/
     border: 1px solid #CCC;
     overflow: hidden;
+    /*cursor: progress;*/
+}
+
+#d3legend {
+    z-index: -1;
+    position: absolute;
+    padding: 15px;
+    font-size: 11px;
+    /*background-color: #999;*/
+    /*border: 1px solid #CCC;*/
+    /*width: 100px;*/
+    /*height: 100px;*/
 }
 
 .search-container {
@@ -68,13 +80,7 @@ body {
     user-select: none;
 }
 
-#d3legend {
-    z-index: -1;
-    position: absolute;
-    padding: 10px;
-    margin: 10px;
-    /*background-color: #999;*/
-    border: 1px solid #CCC;
-    /*width: 100px;*/
-    /*height: 100px;*/
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover{
+    background-color: #efefef;
 }
