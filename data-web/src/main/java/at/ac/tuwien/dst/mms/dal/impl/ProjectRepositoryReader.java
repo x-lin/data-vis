@@ -25,10 +25,10 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 	}
 
 	@Override
-	public List<Project> findMatchingByNeighborKey(String neighbor, String keyValue, int limit) {
+	public List<Project> findMatchingByNeighborKey(String key, String keyValue, int limit) {
 		List<Project> projectWrapper = null;
 
-		if(neighbor.equals("issue")) {
+		if(key.equals("issue")) {
 			Project project = repositoryService.getIssueRepository().findByKey(keyValue).getProject();
 			projectWrapper = new ArrayList<>();
 			projectWrapper.add(project);
@@ -44,9 +44,6 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 
 	@Override
 	public Project find(String key) {
-		logger.info("in find");
-		logger.info(key);
-		logger.info(" result from find: " + ((ProjectRepository)this.getRepository()).findByKey(key));
 		return ((ProjectRepository)this.getRepository()).findByKey(key);
 	}
 }

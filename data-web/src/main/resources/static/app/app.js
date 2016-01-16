@@ -52,6 +52,10 @@ app.factory('AppFactory', function (
         return RestService.getIssuesStartingWith(string);
     };
 
+    factory.getProjectsByIssue = function(value) {
+        return RestService.getProjectsThroughIssue(value);
+    };
+
     factory.getProject = function(key){
         return RestService.getProject(key);
     };
@@ -104,9 +108,13 @@ app.controller('RelationshipsCtrl', function (
         if($scope.selectedItem === $scope.items[0]) {
             AppFactory.getIssue($scope.searchText).then(function(data) {
                 var issue = data;
-                var project = data.project;
-                var d3graph = D3Utility.createD3ForGroupPair({data: [project], group:"project"}, {data: [issue], group:"issue"});
-                ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height, $scope);
+
+                AppFactory.getProjectsByIssue(issue.key).then(function(data) {
+                    console.log(data);
+                    var project = data;
+                    var d3graph = D3Utility.createD3ForGroupPair({data: project, group:"project"}, {data: [issue], group:"issue"});
+                    ForceGraph.renderForceGraph(d3graph, $scope.d3Width, $scope.d3Height, $scope);
+                });
             });
         } else if($scope.selectedItem === $scope.items[1]) {
             AppFactory.getProject($scope.searchText).then(function(data) {

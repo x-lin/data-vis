@@ -93,11 +93,6 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 		Map<String, List<Object>> result = new HashMap<>();
 
 		if(neighbors != null) {
-			//System.out.println("has next? "+neighbors1.iterator().hasNext());
-			//System.out.println("neighbors1: " + neighbors1);
-
-			int i = 0;
-
 			for(Map<String, Object> entry : neighbors) {
 				//we know that each return entry is only one object (neighbor node), thus take the first key
 				String key = entry.keySet().iterator().next();
