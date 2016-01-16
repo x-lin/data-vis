@@ -27,7 +27,7 @@ d3Service.factory('ForceGraph',
                     Issue : "rgb(174, 199, 232)",
                     Requirement : "rgb(44, 160, 44)",
                     User : "rgb(255, 127, 14)",
-                    Other : "rgb(150, 150, 150)"
+                    //Other : "rgb(150, 150, 150)"
                 };
 
                 //var svg = D3Utility.getResponsiveSvg("#d3box", width, height).
@@ -111,7 +111,6 @@ d3Service.factory('ForceGraph',
                     //.attr("class", "force-graph");
 
                 var dataset = [ 0, 5, 10, 15, 20, 25 ];
-
 
                 var colorArray = [];
                 var i = 0;

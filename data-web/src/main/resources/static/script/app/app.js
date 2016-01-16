@@ -38,6 +38,8 @@ app.factory('AppFactory', function (
         return items;
     };
 
+    //search box has some issues handling a functions for autocomplete, thus either keep the keys as key and name
+    //or, if you want an entity to have another attribute as key, add it in the html file
     factory.keyMap = {
         Project : "key",
         Issue : "key",
