@@ -24,14 +24,14 @@ public abstract class ModelEntity {
 	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor) RETURN neighbor")
 	protected Iterable<Map<String, Object>> neighbors;
 
+	@JsonIgnore
+	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor) RETURN neighbor LIMIT 20")
+	protected Iterable<Map<String, Object>> neighborsLimited;
+
 	//TODO find out how to specify limit dynamically
 	@JsonIgnore
 	@Query(value = "START n=node({self}) MATCH (n)-[r]->(neighbor) RETURN neighbor LIMIT " + Config.SEARCH_LIMIT)
 	private Iterable<Map<String, Object>> limitedNeighbors;
-
-	@JsonIgnore
-	@Autowired
-	private Neo4jOperations neo4jOperations;
 
 	public Long getId() {
 		return id;
@@ -39,5 +39,9 @@ public abstract class ModelEntity {
 
 	public Iterable<Map<String, Object>> getNeighbors() {
 		return neighbors;
+	}
+
+	public Iterable<Map<String, Object>> getNeighborsLimited() {
+		return neighborsLimited;
 	}
 }

@@ -65,20 +65,14 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 
 	@Override
 	public Map<String, List<Object>> getNeighbors(String key) {
-		logger.info("in getNeighbors");
-		logger.info(key);
-		logger.info(find(key).toString());
-
-		return null;
-//		logger.info(find(key).getNeighbors().size()+"");
-//		return this.find(key).getNeighbors();
+		return this.getNeighbors(this.find(key).getNeighbors());
 	}
 
-	//TODO limit not factored in yet -> map is based on Config.SEARCH_LIMIT value
+	//TODO limit not factored in yet -> map is by default restricted to 20
 	@Override
 	@Transactional
 	public Map<String, List<Object>> getNeighbors(String key, int limit) {
-		return this.getNeighbors(this.find(key).getNeighbors());
+		return this.getNeighbors(this.find(key).getNeighborsLimited());
 	}
 
 	public GraphRepository<T> getRepository() {
