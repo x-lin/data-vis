@@ -27,7 +27,7 @@ app.factory('AppFactory', function (
     RestService
 ) {
     //private variables
-    var items = ["Ticket", "Project", "Requirement"];
+    var items = ["Ticket", "Project", "Requirement", "User"];
     var projects = [];
     var issues = [];
 
@@ -93,6 +93,10 @@ app.controller('RelationshipsCtrl', function (
     $scope.searchText = "";
 
     $scope.getNeighbors = AppFactory.getNeighbors;
+
+    $scope.keyField = function(data) {
+        return data[AppFactory.keyMap[AppFactory.propertyMap[$scope.selectedItem]]];
+    }
 
     $scope.search = function() {
         var dbProperty = AppFactory.propertyMap[$scope.selectedItem];
