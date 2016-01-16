@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.extract.rest;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
+import at.ac.tuwien.dst.mms.dal.extract.mock.RequirementRandomGenerator;
 import at.ac.tuwien.dst.mms.model.Issue;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class JiraWebhook {
 	@Autowired
 	DataWriter neoWriter;
 
+	@Autowired
+	RequirementRandomGenerator generator;
+
 	@Autowired(required=false)
 	Logger logger;
 
@@ -42,6 +46,9 @@ public class JiraWebhook {
 			try {
 				//NOTE: Users don't need to be stored separately as saving an issue will store the corresponding
 				//user automatically
+				for(Issue issue : issues) {
+					issue.setRequirements(generator.generateRequirements());
+				}
 				neoWriter.storeIssues(issues);
 			} catch (Exception e) {
 				logger.error("Exception occurred: ", e);

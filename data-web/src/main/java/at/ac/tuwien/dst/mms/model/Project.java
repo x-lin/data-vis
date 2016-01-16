@@ -1,41 +1,40 @@
 package at.ac.tuwien.dst.mms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-import org.springframework.data.neo4j.annotation.*;
+import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.GraphProperty;
+import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.support.index.IndexType;
+
+import java.util.Set;
 
 /**
  * Entity representing a project.
  */
-@NodeEntity
-public class Project {
-	@GraphId
-	@JsonIgnore			//id is only for graph intern representation is therefore ignored on JSON serialization
-	private Long id;
+public class Project extends ModelEntity {
+	public static final String PROJECT_KEY_INDEX = "projectKeyIndex";
 
 	@GraphProperty
-	@Indexed(unique = true, indexName="projectKeyIndex", indexType = IndexType.FULLTEXT)
+	@Indexed(unique = true, indexName=PROJECT_KEY_INDEX, indexType = IndexType.FULLTEXT)
 	private String key;
 
 	@GraphProperty
 	private String name;
 
-	@GraphProperty
-	private String self;
+	@JsonIgnore
+	@RelatedTo(type = "PROJECT", direction = Direction.INCOMING)
+	private Set<Issue> issues;
 
 	public Project() {
 	}
 
-	public Long getId() {
-		return id;
-	}
-
+	@JsonIgnore
 	public String getKey() {
 		return key;
 	}
 
+	@JsonIgnore
 	public void setKey(String key) {
 		this.key = key;
 	}
@@ -48,28 +47,11 @@ public class Project {
 		this.name = name;
 	}
 
-	public String getSelf() {
-		return self;
+	public Set<Issue> getIssues() {
+		return issues;
 	}
 
-	public void setSelf(String self) {
-		this.self = self;
+	public void setIssues(Set<Issue> issues) {
+		this.issues = issues;
 	}
-
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if(this == obj) {
-//			return true;
-//		} else if(obj == null) {
-//			return false;
-//		}
-//
-//		Project project = (Project) obj;
-//		if(project.key.equals(this.key) && project.self.equals(this.self)) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
 }

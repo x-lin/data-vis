@@ -1,27 +1,29 @@
 package at.ac.tuwien.dst.mms.dal;
 
-import at.ac.tuwien.dst.mms.model.Issue;
-import at.ac.tuwien.dst.mms.model.Project;
-
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xlin on 10.01.2016.
  */
-public interface DataReader {
-	List<Issue> getIssues(String projectKey);
+public interface DataReader<T> {
+	List<T> findAll();
 
-	List<Issue> getIssues(Project project);
+	List<T> findAll(Integer limit);
 
-	Issue getIssue(String key);
+	List<T> findMatchingByNeighborKey(String property, String value);
 
-	List<Project> getAllProjects();
+	List<T> findMatchingByNeighborKey(String property, String value, int limit);
 
-	Project getProject(String key);
+	List<T> findAllMatching(String key, int limit);
 
-	List<Project> getProjectsStartingWith(String string);
+	List<T> findAllMatching(String key);
 
-	Integer countIssues(String projectKey);
+	T find(String indexAttribute);
 
-	List<Issue> getIssuesStartingWith(String string);
+	Long count();
+
+	Map<String, List<Object>> getNeighbors(String indexAttribute);
+
+	Map<String, List<Object>> getNeighbors(String indexAttribute, int limit);
 }

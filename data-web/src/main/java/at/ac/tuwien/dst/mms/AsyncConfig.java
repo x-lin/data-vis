@@ -16,16 +16,16 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
 
-		@Override
-		public Executor getAsyncExecutor() {
-			ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-			executor.setCorePoolSize(10);
-			executor.setMaxPoolSize(20);
-			executor.setQueueCapacity(1000);
-			executor.setThreadNamePrefix("AsyncExecutor-");
-			executor.initialize();
-			return executor;
-		}
+	@Override
+	public Executor getAsyncExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(50);
+		executor.setMaxPoolSize(100);
+		executor.setQueueCapacity(1000);
+		executor.setThreadNamePrefix("AsyncExecutor-");
+		executor.initialize();
+		return executor;
+	}
 
 	@Override
 	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {

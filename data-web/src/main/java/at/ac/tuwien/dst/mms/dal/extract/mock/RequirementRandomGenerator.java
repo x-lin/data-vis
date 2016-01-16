@@ -1,9 +1,9 @@
 package at.ac.tuwien.dst.mms.dal.extract.mock;
 
-import at.ac.tuwien.dst.mms.dal.DataReader;
 import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.repo.RequirementRepository;
+import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
 import at.ac.tuwien.dst.mms.model.Issue;
 import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.model.Requirement;
@@ -23,13 +23,13 @@ import java.util.Set;
 @Service
 public class RequirementRandomGenerator {
 	@Autowired
+	RepositoryService repositoryService;
+
+	@Autowired
 	RequirementRepository requirementRepository;
 
 	@Autowired
 	DataWriter writer;
-
-	@Autowired
-	DataReader reader;
 
 	@Autowired
 	IssueRepository issueRepository;
@@ -85,7 +85,7 @@ public class RequirementRandomGenerator {
 
 	@Async
 	public void generate(Project project) {
-		List<Issue> issues = issueRepository.findByProjectKey(project.getKey());
+		List<Issue> issues = repositoryService.getProjectRepository().findIssues(project.getKey());
 		logger.info("Found " + issues.size() + " issues for project " + project.getKey());
 
 		//keep track of changed issues, so we don't have to save all issues

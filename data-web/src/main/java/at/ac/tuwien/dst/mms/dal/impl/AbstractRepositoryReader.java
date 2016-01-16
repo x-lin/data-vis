@@ -1,0 +1,133 @@
+package at.ac.tuwien.dst.mms.dal.impl;
+
+import at.ac.tuwien.dst.mms.dal.DataReader;
+import at.ac.tuwien.dst.mms.model.ModelEntity;
+import at.ac.tuwien.dst.mms.model.NodeType;
+import at.ac.tuwien.dst.mms.util.Config;
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.neo4j.template.Neo4jOperations;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by xlin on 15.01.2016.
+ */
+public abstract class AbstractRepositoryReader<T extends ModelEntity> implements DataReader {
+	@Autowired
+	protected GraphRepository<T> repository;
+
+	@Autowired(required = false)
+	protected Logger logger;
+
+	@Override
+	@Transactional
+	public List<T> findAll() {
+		List<T> list = new ArrayList<>();
+
+		for(T entry : repository.findAll()) {
+			list.add(entry);
+		}
+
+		return list;
+	}
+
+	@Override
+	public abstract List<T> findAll(Integer limit);
+
+	@Override
+	public List<T> findMatchingByNeighborKey(String property, String keyValue) {
+		return this.findMatchingByNeighborKey(property, keyValue, Config.REPO_LIMIT);
+	}
+
+	@Override
+	public abstract List<T> findMatchingByNeighborKey(String property, String keyValue, int limit);
+
+	@Override
+	public List<T> findAllMatching(String key) {
+		return findAllMatching(key, Config.REPO_LIMIT);
+	}
+
+	@Override
+	public abstract T find(String key);
+
+	@Override
+	public Long count() {
+		return repository.count();
+	}
+
+	@Override
+	public Map<String, List<Object>> getNeighbors(String key) {
+		logger.info("in getNeighbors");
+		logger.info(key);
+		logger.info(find(key).toString());
+
+		return null;
+//		logger.info(find(key).getNeighbors().size()+"");
+//		return this.find(key).getNeighbors();
+	}
+
+	//TODO limit not factored in yet -> map is based on Config.SEARCH_LIMIT value
+	@Override
+	@Transactional
+	public Map<String, List<Object>> getNeighbors(String key, int limit) {
+		return this.getNeighbors(this.find(key).getNeighbors());
+	}
+
+	public GraphRepository<T> getRepository() {
+		return repository;
+	}
+
+	@Autowired
+	protected Neo4jOperations neo4jOperations;
+
+	@Transactional
+	protected Map<String, List<Object>> getNeighbors(Iterable<Map<String, Object>> neighbors) {
+		Map<String, List<Object>> result = new HashMap<>();
+
+		if(neighbors != null) {
+			//System.out.println("has next? "+neighbors1.iterator().hasNext());
+			//System.out.println("neighbors1: " + neighbors1);
+
+			int i = 0;
+
+			for(Map<String, Object> entry : neighbors) {
+				//we know that each return entry is only one object (neighbor node), thus take the first key
+				String key = entry.keySet().iterator().next();
+				Node node = neo4jOperations.convert(entry.get(key), Node.class);
+
+				//a node may have multiple labels: check one for one, if the label is mapped to a type
+				//until the object was mapped
+				for(Label label : node.getLabels()) {
+					if(NodeType.getClass(label.name()) != null) {
+						Object o = neo4jOperations.convert(node, NodeType.getClass(label.name()));
+
+						if(o != null) {
+							List<Object> objects;
+
+							if (result.containsKey(label.name())) {
+								objects = result.get(label.name());
+							} else {
+								objects = new ArrayList<>();
+								result.put(label.name(), objects);
+							}
+
+							objects.add(o);
+							break;
+						}
+					}
+				}
+			}
+		}
+
+
+		return result;
+	}
+}

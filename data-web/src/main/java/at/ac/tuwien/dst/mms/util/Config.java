@@ -1,12 +1,7 @@
 package at.ac.tuwien.dst.mms.util;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Properties;
 
 /**
@@ -15,18 +10,16 @@ import java.util.Properties;
  * //TODO inject values from rest controllers with config values.
  */
 public class Config {
-	public static int REPO_LIMIT = 100;
-
-	public static int SEARCH_LIMIT = 11;
 
 	/**
 	 * Init with properties file.
 	 */
 	static {
 		String propertiesFile = "config.properties";
-
-		Properties properties = new Properties();
 		try (InputStream in = Config.class.getResourceAsStream("/"+propertiesFile)) {
+
+			Properties properties = new Properties();
+
 			properties.load(in);
 
 			HOST = properties.getProperty("host");
@@ -36,19 +29,31 @@ public class Config {
 		}
 	}
 
+	public static final int REPO_LIMIT = 100;
+	public static final String REPO_LIMIT_STRING = "100";
+
+	public static final int SEARCH_LIMIT = 11;
+	public static final String SEARCH_LIMIT_STRING = "11";
+
 	public static String HOST;
 
-	public static String JIRA_WEBHOOK_REL = "/jira/webhook";
-
-	public static String JIRA_WEBHOOK_URI = HOST + JIRA_WEBHOOK_REL;
-
-	public static String PROJECTS_PATH = "/projects";
-
-	public static String ISSUES_PATH = "/issues";
-
-	public static String JIRA_WEBHOOK_PROJECTS = JIRA_WEBHOOK_URI + PROJECTS_PATH;
-
-	public static String JIRA_WEBHOOK_ISSUES = JIRA_WEBHOOK_URI + ISSUES_PATH;
-
 	public static String JIRA_WRAPPER_HOST;
+
+	public final static String JIRA_WEBHOOK_REL = "/jira/webhook";
+
+	public final static String JIRA_WEBHOOK_URI = HOST + JIRA_WEBHOOK_REL;
+
+	public final static String PROJECTS_PATH = "/projects";
+
+	public final static String ISSUES_PATH = "/issues";
+
+	public final static String USERS_PATH = "/users";
+
+	public final static String REQUIREMENTS_PATH = "/reqs";
+
+	public final static String JIRA_WEBHOOK_PROJECTS = JIRA_WEBHOOK_URI + PROJECTS_PATH;
+
+	public final static String JIRA_WEBHOOK_ISSUES = JIRA_WEBHOOK_URI + ISSUES_PATH;
+
+	public final static String SEARCH_REST_PATH = "/search";
 }
