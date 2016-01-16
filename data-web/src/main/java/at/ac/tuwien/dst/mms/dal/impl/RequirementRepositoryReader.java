@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.repo.RequirementRepository;
+import at.ac.tuwien.dst.mms.dal.util.RepositoryUtils;
 import at.ac.tuwien.dst.mms.model.Requirement;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class RequirementRepositoryReader extends AbstractRepositoryReader<Requir
 
 	@Override
 	public List<Requirement> findAllMatching(String key, int limit) {
-		return ((RequirementRepository)this.getRepository()).findAllByKey(key);
+		return ((RequirementRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
 	}
 
 	@Override

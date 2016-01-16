@@ -29,12 +29,10 @@ public class Project extends ModelEntity {
 	public Project() {
 	}
 
-	@JsonIgnore
 	public String getKey() {
 		return key;
 	}
 
-	@JsonIgnore
 	public void setKey(String key) {
 		this.key = key;
 	}

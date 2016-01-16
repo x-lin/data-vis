@@ -2,6 +2,7 @@ package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
 import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
+import at.ac.tuwien.dst.mms.dal.util.RepositoryUtils;
 import at.ac.tuwien.dst.mms.model.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class IssueRepositoryReader extends AbstractRepositoryReader<Issue> {
 
 	@Override
 	public List<Issue> findAllMatching(String key, int limit) {
-		return ((IssueRepository)this.getRepository()).findAllByKey(key);
+		return ((IssueRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
 	}
 
 	@Override

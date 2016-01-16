@@ -4,11 +4,13 @@ var rest = angular.module('rest', ['ngResource'])
         var service = {};
 
         service.Project = $resource("/search/projects/:key", {key:'@id'});
-        service.Projects = $resource("/search/projects", {});
-        service.ProjectsLike = $resource("/search/projects/like/:string", {string:'@id'});
-        service.Issue = $resource("/search/issue/:key", {key:'@id'});
-        service.Issues = $resource("/search/issues/:projectKey", {projectKey:'@id'});
-        service.IssuesLike = $resource("/search/issues/like/:string", {string:'@id'});
+        service.Projects = $resource("/search/projects/all", {});
+        service.ProjectsLike = $resource("/search/projects/startLike/:string", {string:'@id'});
+        service.ProjectsByIssue = $resource("/search/projects/indirect", {value:'@id', key: 'issue', limit: 10});
+
+        service.Issue = $resource("/search/issues/:key", {key:'@id'});
+        service.Issues = $resource("/search/issues/indirect", {value:'@id', key: 'project', limit: 10});
+        service.IssuesLike = $resource("/search/issues/startLike/:string", {string:'@id', limit: 10});
 
         return service;
     })
@@ -27,11 +29,14 @@ var rest = angular.module('rest', ['ngResource'])
             getProjectsStartingWith: function(string) {
                 return DeferredWrapper.deferredQuery(RestResources.ProjectsLike, {string: string});
             },
+            getProjectsThroughIssue: function(issue) {
+                return DeferredWrapper.deferredQuery(RestResources.ProjectsByIssue, {value: issue});
+            },
             getIssue: function(key){
                 return DeferredWrapper.deferredGet(RestResources.Issue, {key: key});
             },
             getIssues: function(projectKey) {
-                return DeferredWrapper.deferredQuery(RestResources.Issues, {projectKey: projectKey});
+                return DeferredWrapper.deferredQuery(RestResources.Issues, {value: projectKey});
             },
             getIssuesStartingWith: function(string) {
                 return DeferredWrapper.deferredQuery(RestResources.IssuesLike, {string: string});
