@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.neo4j.graphdb.Direction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphProperty;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -34,10 +35,12 @@ public class Issue extends ModelEntity {
 
 	@JsonIgnore
 	@RelatedTo(type = "PROJECT", direction = Direction.OUTGOING)
+	@Fetch
 	private Project project;
 
 	@JsonIgnore
 	@RelatedTo(type = "REPORTER", direction = Direction.OUTGOING)
+	@Fetch
 	private User user;
 
 	@JsonIgnore
