@@ -16,10 +16,10 @@ d3Service.factory('ForceGraph',
 
                 currentGraph.size([width, height]).resume();
 
-                //TODO improve
-                d3.selectAll("g")
-                    .each(function(d){d.fixed = false;})
-                    .classed("fixed", false);
+                ////TODO improve
+                //d3.selectAll("g")
+                //    .each(function(d){d.fixed = false;})
+                //    .classed("fixed", false);
             },
             renderForceGraph: function(data, width, height, scope) {
                 var colorMap = {
@@ -33,12 +33,25 @@ d3Service.factory('ForceGraph',
                 //var svg = D3Utility.getResponsiveSvg("#d3box", width, height).
                 //    attr("class", "force-graph");
                 d3.select("#d3box").select("svg").remove();
+
                 var svg = d3.select("#d3box").append("svg")
                     .attr("width", width)
                     .attr("height", height)
-                    .attr("class", "force-graph");
+                    .attr("class", "force-graph")
+                    .attr("cursor", "move")
+                    .call(d3.behavior.zoom().scaleExtent([0.3, 8]).on("zoom", zoom));
+
+                var vis = svg
+                    .append('svg:g');
+
+                function zoom() {
+                    vis.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+                }
 
                 currentSvg = svg;
+
+
+
 
                 var color = d3.scale.category20();
 
@@ -49,15 +62,19 @@ d3Service.factory('ForceGraph',
                     .size([width, height])
                     .nodes(data.nodes)
                     .links(data.edges)
-                    .on('start', animation);
+                    .on('start', animation)
+                    ;
 
                 //define drag events
                 var drag = force.drag()
                     .on("dragstart", dragstart)
-                    .on("drag", dragmove);
+                    //.on("drag", dragmove)
+                    ;
 
-                var link = svg.selectAll(".link");
-                var node = svg.selectAll(".node");
+
+
+                var link = vis.selectAll(".link");
+                var node = vis.selectAll(".node");
 
                 var restart = function(data){
                     link = link.data(data.edges);
@@ -91,7 +108,8 @@ d3Service.factory('ForceGraph',
                             $compile($("#d3box"))(scope);
                         });
 
-                    node.on("click", mouseclick)
+                    node
+                        .on("click", mouseclick)
                         .on("contextmenu", rightclick)
                         .on("dblclick", doubleclick)
                         .call(drag)
@@ -109,8 +127,6 @@ d3Service.factory('ForceGraph',
                     .attr("width", "100%")
                     .attr("height", "100%")
                     //.attr("class", "force-graph");
-
-                var dataset = [ 0, 5, 10, 15, 20, 25 ];
 
                 var colorArray = [];
                 var i = 0;
@@ -145,11 +161,13 @@ d3Service.factory('ForceGraph',
 
                 //fix position of node after dragged by user
                 function dragstart(d) {
+                    d3.event.sourceEvent.stopPropagation();
                     d3.select(this).classed("fixed", d.fixed = true);
                 }
 
                 //limit draggable area to canvas
                 function dragmove(d) {
+                    d3.event.sourceEvent.stopPropagation();
                     if (d.py > height) d.py = height;
                     if (d.py < 0) d.py = 0;
 
@@ -158,7 +176,7 @@ d3Service.factory('ForceGraph',
                 }
 
                 function mouseclick(d) {
-
+                    d3.event.stopPropagation();
                 }
 
                 function rightclick(d) {
@@ -166,6 +184,7 @@ d3Service.factory('ForceGraph',
                 }
 
                 function doubleclick(d) {
+                    d3.event.stopPropagation();
                     scope.getNeighbors(d.group, d.key).then(function(d1) {
                         data = D3Utility.updateDataWithNodes(data, d1, d.index);
 
