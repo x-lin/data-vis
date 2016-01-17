@@ -133,6 +133,14 @@ app.controller('RelationshipsCtrl', function (
         });
     };
 
+    $scope.colorMap = {
+        Project : "rgb(31, 119, 180)",
+        Issue : "rgb(174, 199, 232)",
+        Requirement : "rgb(44, 160, 44)",
+        User : "rgb(255, 127, 14)",
+        //Other : "rgb(150, 150, 150)"
+    };
+
     //for D3
     $scope.d3Width = document.getElementById("d3box").clientWidth;
     $scope.d3Height = document.getElementById("d3box").clientHeight;
