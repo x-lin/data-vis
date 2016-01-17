@@ -61,7 +61,7 @@ d3Service.factory('ForceGraph',
 
                 var restart = function(data){
                     link = link.data(data.edges);
-                    link.enter().append("line")
+                    link.enter().insert("line", "g")
                     .attr("class", "link")
                     //.style("stroke-width", function(d) { return Math.sqrt(d.value); })
                     ;
