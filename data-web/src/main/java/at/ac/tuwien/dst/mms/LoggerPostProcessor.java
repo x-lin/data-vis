@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 /**
- *
+ * Dependency injection for a flexible logger. To inject a logger, simply use @Autowired(required=false) annotation.
+ * Defining class name for the logger is not required, as this info is injected automatically.
  */
 @Component
 public class LoggerPostProcessor implements BeanPostProcessor{

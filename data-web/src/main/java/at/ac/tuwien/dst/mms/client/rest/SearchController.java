@@ -16,24 +16,20 @@ public interface SearchController<T> {
 			@RequestParam Integer limit
 	);
 
-	//passed
 	@RequestMapping(value = "/{key}", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	T getOne(
 			@PathVariable String key);
 
-	//passed
 	@RequestMapping(value = "/like/{string}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	List<T> getAllMatching(
 			@PathVariable String string,
 			@RequestParam Integer limit);
 
-	//passed
 	@RequestMapping(value = "/startLike/{string}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	List<T> getAllStartingWith(
 			@PathVariable String string,
 			@RequestParam Integer limit);
 
-	//passed
 	@RequestMapping(value ="/count", method = RequestMethod.GET)
 	Long countAll();
 
@@ -43,7 +39,6 @@ public interface SearchController<T> {
 			@PathVariable String key,
 			@RequestParam Integer limit);
 
-	//passed
 	@RequestMapping(value = "/indirect", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	List<T> getByNeighborKey(
 			@RequestParam String key,
