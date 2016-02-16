@@ -9,7 +9,7 @@ class D3Panel extends React.Component {
     render() {
         return (
             <div>
-                <D3Legend />
+                <D3Legend divId={"d3legend"}/>
                 <D3ForceGraph divId={"d3box"} />
             </div>
         );
