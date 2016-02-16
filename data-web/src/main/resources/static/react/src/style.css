@@ -1,0 +1,95 @@
+body {
+    background: white;
+    overflow: hidden;
+}
+
+.testme-result {
+    background: #FFF;
+    border: 1px solid;
+    position: absolute;
+    z-index: 9999;
+    top: 33px;
+    display:block;
+}
+
+#d3box {
+    height: -webkit-calc(100vh - 140px);
+    height: -moz-calc(100vh - 140px);
+    height: calc(100vh - 140px);
+    /*background-color: #FFF;*/
+    /*margin: 10px 0px;*/
+    border: 1px solid #CCC;
+    overflow: hidden;
+    /*cursor: progress;*/
+}
+
+#d3legend {
+    z-index: -1;
+    position: absolute;
+    padding: 15px;
+    font-size: 11px;
+    /*background-color: #999;*/
+    /*border: 1px solid #CCC;*/
+    /*width: 100px;*/
+    /*height: 100px;*/
+}
+
+.search-container {
+    padding: 0px 15px;
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+    /*background-color: #333;*/
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    /*background-color: #33F;*/
+}
+
+.glyphicon-spin {
+    -webkit-animation: spin 1000ms infinite linear;
+    animation: spin 1000ms infinite linear;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover{
+    background-color: #efefef;
+}
