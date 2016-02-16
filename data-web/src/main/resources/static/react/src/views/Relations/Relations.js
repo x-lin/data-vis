@@ -1,6 +1,6 @@
 import React from "react";
 
-import Search from "./Search";
+import Search from "./SearchBar";
 import D3Panel from "./D3Panel";
 
 class Relations extends React.Component {

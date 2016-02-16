@@ -6,9 +6,9 @@ import d3 from "d3";
 import { colorMap, reversePropertyMap } from "../../config/Constants";
 
 class D3Legend extends React.Component {
-    renderD3Legend() {
-        d3.select("#d3legend").select("svg").remove();
-        var svg1 = d3.select("#d3legend").append("svg")
+    renderD3Legend(divId) {
+        d3.select("#" + divId).select("svg").remove();
+        var svg1 = d3.select("#" + divId).append("svg")
             .attr("width", "100%")
             .attr("height", "100%")
         //.attr("class", "force-graph");
@@ -51,14 +51,12 @@ class D3Legend extends React.Component {
     }
 
     componentDidMount() {
-        this.renderD3Legend();
+        this.renderD3Legend(this.props.divId);
     }
 
     render() {
         return (
-            <div>
-                <div id="d3legend"></div>
-            </div>
+            <div id={this.props.divId}></div>
         );
     };
 }
