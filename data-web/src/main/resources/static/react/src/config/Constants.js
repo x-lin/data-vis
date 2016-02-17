@@ -12,3 +12,17 @@ export const reversePropertyMap = {
     User : "User",
     Requirement : "Requirement"
 };
+
+export const endpoints = {
+    Ticket: "issues",
+    Project: "projects",
+    User: "users",
+    Requirement: "reqs"
+};
+
+export const keyMap = {
+    Project : "key",
+    Issue : "key",
+    User : "name",
+    Requirement : "key"
+};
