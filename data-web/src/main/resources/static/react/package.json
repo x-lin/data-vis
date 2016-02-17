@@ -12,13 +12,16 @@
   "author": "Xiashuo Lin <x.lin@gmx.net>",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.9.1",
     "d3": "^3.5.15",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
+    "react-search-bar": "^1.1.4",
     "react-typeahead": "^1.1.5",
-    "redux": "^3.3.1"
+    "redux": "^3.3.1",
+    "redux-thunk": "^1.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.5.2",
@@ -30,6 +33,8 @@
     "mocha": "^2.4.5",
     "react-addons-test-utils": "^0.14.7",
     "react-hot-loader": "^1.3.0",
+    "redux-logger": "^2.5.2",
+    "redux-mock-store": "0.0.6",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"

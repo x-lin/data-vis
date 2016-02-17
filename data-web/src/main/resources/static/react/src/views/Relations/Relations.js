@@ -1,13 +1,13 @@
 import React from "react";
 
-import Search from "./SearchBar";
+import SearchBar from "./SearchBar";
 import D3Panel from "./D3Panel";
 
 class Relations extends React.Component {
     render() {
         return (
             <div>
-                <Search />
+                <SearchBar />
                 <D3Panel />
             </div>
         );

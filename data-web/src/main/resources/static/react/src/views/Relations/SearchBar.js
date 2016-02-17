@@ -1,10 +1,17 @@
 import React from "react";
-
-import { Typeahead } from "react-typeahead";
+import { connect } from "react-redux";
+import { Tokenizer } from "react-typeahead";
+import { getItem } from "../../actions/AJAXActions/GETItem";
+import { getNeighbors } from "../../actions/AJAXActions/GETNeighbors";
 
 class Search extends React.Component {
+    setRef(ref) {
+        this.it = ref;
+    }
+
     search() {
-        console.log("search clicked");
+        console.log("search value ", this.it.value);
+        this.props.onSearchSubmit(this.it.value);
     };
 
     render() {
@@ -23,17 +30,9 @@ class Search extends React.Component {
                             </ul>
                         </div>
 
-                        <Typeahead
-                            options={["das", "ADSDG", "OLDASDF", "DGAHA", "SDGAh", "asdf"]}
-                            maxVisible={2}
-                            placeholder={"Enter search text..."}
-                            customClasses={{
-                              input: "form-control",
-                              results: "testme-result"
-                            }}
-                        />
+                        <input type="text" className="form-control" id="search" ref={(ref) => this.setRef(ref)}/>
 
-                        <span className="input-group-btn">
+                        <span className="input-group-btn ">
                             <button className="btn btn-default" ng-hide="loadedData">
                                 <span className="glyphicon glyphicon-refresh glyphicon-spin" aria-hidden="true"></span>&nbsp;
                             </button>
@@ -48,4 +47,24 @@ class Search extends React.Component {
     };
 }
 
-export default Search;
+const mapStateToProps = (state) => {
+    return {
+        items: state.items
+    };
+};
+
+const mapDispatchProps = (dispatch) => {
+    return {
+        onSearchSubmit: (key) => {
+            //TODO test with UNOMI-1
+            dispatch(getNeighbors("Project", "UNOMI-2"));
+        }
+    };
+};
+
+const SearchConnect = connect(
+    mapStateToProps,
+    mapDispatchProps
+)(Search);
+
+export default SearchConnect;

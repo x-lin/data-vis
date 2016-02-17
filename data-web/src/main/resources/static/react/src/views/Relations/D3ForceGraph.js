@@ -1,29 +1,39 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import d3 from "d3";
-
 import { colorMap } from "../../config/Constants";
 import "./D3ForceGraph.css";
 
 class D3ForceGraph extends React.Component {
     componentDidMount() {
-        this.renderD3(null, null, null, this.props.divId);
+        this.renderD3(this.props.graph, null, null, this.props.divId);
     }
 
-    renderD3(data, width, height, divId) {
+    componentDidUpdate() {
+        //console.log("component updated")
+    }
+
+    renderD3(graph, width, height, divId) {
+        const data = Object.assign({}, graph);
+        //console.log("rendering", data);
+        if(!document.getElementById(divId)) {
+            return;
+        }
+
         var width = document.getElementById(divId).clientWidth;
         var height = document.getElementById(divId).clientHeight;
-
-        var data = {
-            nodes: [{key: "ACE-1", group: "Project"}],
-            edges: []
-        }
+        //
+        //var data = {
+        //    nodes: [{key: "ACE-1", category: "User"}],
+        //    edges: []
+        //}
 
         /////////////////////////////////////////////////////////////////
 
         d3.select("#" + divId).select("svg").remove();
 
-        var svg = d3.select("#d3box").append("svg")
+        var svg = d3.select("#" + divId).append("svg")
             .attr("width", width)
             .attr("height", height)
             .attr("class", "force-graph")
@@ -65,7 +75,7 @@ class D3ForceGraph extends React.Component {
             var g = node.enter().append("g")
                 .attr("class", "g")
                 .style("fill", function (d) {
-                    return colorMap[d.group] ? colorMap[d.group] : colorMap["Other"];
+                    return colorMap[d.category] ? colorMap[d.category] : colorMap["Other"];
                 })
             //.attr("uib-popover", function(d) {
             //    return d.key;
@@ -78,7 +88,7 @@ class D3ForceGraph extends React.Component {
 
             g.append("circle")
                 .attr("class", "circle")
-                .attr("r", 10);
+                .attr("r", 20);
 
             g.append("text")
                 .attr("class", "force-text unselectable")
@@ -164,10 +174,31 @@ class D3ForceGraph extends React.Component {
     };
 
     render() {
+        this.renderD3(this.props.graph, null, null, this.props.divId);
+
         return (
             <div id={this.props.divId}></div>
         );
     };
 }
 
-export default D3ForceGraph;
+const mapStateToProps = (state) => {
+    return {
+        graph: state.graph
+    };
+};
+
+const mapDispatchProps = (dispatch) => {
+    return {
+        searchNeighbors: (key) => {
+            dispatch(getNeighbors("Ticket", key));
+        }
+    };
+};
+
+const D3ForceGraphConnect = connect(
+    mapStateToProps,
+    mapDispatchProps
+)(D3ForceGraph);
+
+export default D3ForceGraphConnect;
