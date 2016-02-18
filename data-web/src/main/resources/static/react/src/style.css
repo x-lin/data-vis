@@ -13,9 +13,9 @@ body {
 }
 
 #d3box {
-    height: -webkit-calc(100vh - 140px);
-    height: -moz-calc(100vh - 140px);
-    height: calc(100vh - 140px);
+    height: -webkit-calc(100vh);
+    height: -moz-calc(100vh);
+    height: calc(100vh);
     /*background-color: #FFF;*/
     /*margin: 10px 0px;*/
     border: 1px solid #CCC;
