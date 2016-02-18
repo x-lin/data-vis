@@ -7,6 +7,7 @@ import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from
 import { keyMap } from "../config/Constants";
 
 //TODO avoid saving item to graph until a NEIGHBORS_FETCH_SUCCESS was fetched
+//TODO add another flag clearing the graph (e.g. when new search is started)
 export const nodeReducer = (state = {nodes: [], edges: []}, action) => {
     const index = indexOfObjectInArrayByProperty(state.nodes, action.key, "key");
 

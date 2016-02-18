@@ -3,13 +3,13 @@ body {
     overflow: hidden;
 }
 
-.testme-result {
+.autocomplete {
     background: #FFF;
     border: 1px solid;
     position: absolute;
     z-index: 9999;
-    top: 33px;
     display:block;
+    top: 33px;
 }
 
 #d3box {
