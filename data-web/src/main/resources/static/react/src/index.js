@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, hashHistory, Route, IndexRoute } from "react-router";
 
-import Routes from "./config/Routes";
 import { createStore } from "./stores/ReduxStore";
 //import Provider from "./views/Provider";
 import { Provider, connect } from "react-redux";

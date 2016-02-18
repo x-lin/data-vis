@@ -3,9 +3,13 @@ body {
     overflow: hidden;
 }
 
+.navbar {
+    margin-bottom: 0;
+}
+
 .autocomplete {
     background: #FFF;
-    border: 1px solid;
+    /*border: 1px solid;*/
     position: absolute;
     z-index: 9999;
     display:block;
