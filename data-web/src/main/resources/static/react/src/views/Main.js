@@ -10,7 +10,7 @@ class Main extends React.Component{ //creates react component
     render() {
         return (
             <div>
-                <div className="navbar navbar-default navbar-xs navbar-static-top" role="navigation">
+                <div className="navbar navbar-default navbar-xs  navbar-static-top" role="navigation">
                     <div className="container">
                         <div className="navbar-header">
                             {/*<a className="navbar-brand" href="#/"></a>
@@ -38,8 +38,9 @@ class Main extends React.Component{ //creates react component
                         </div>
                     </div>
                 </div>
-
-                <div className="container">{this.props.children}</div>
+                <div className="nopadding">
+                    {this.props.children}
+                </div>
             </div>
         )
     }
