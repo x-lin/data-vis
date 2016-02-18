@@ -6,6 +6,7 @@ import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
 import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from "../utils/SearchHelpers";
 import { keyMap } from "../config/Constants";
 
+//TODO avoid saving item to graph until a NEIGHBORS_FETCH_SUCCESS was fetched
 export const nodeReducer = (state = {nodes: [], edges: []}, action) => {
     const index = indexOfObjectInArrayByProperty(state.nodes, action.key, "key");
 
