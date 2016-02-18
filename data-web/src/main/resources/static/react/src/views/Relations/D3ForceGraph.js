@@ -5,31 +5,37 @@ import d3 from "d3";
 import { colorMap } from "../../config/Constants";
 import "./D3ForceGraph.css";
 
+import { getNeighbors } from "../../actions/AJAXActions/GETNeighbors";
+
 class D3ForceGraph extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            force: {},
+            node: {},
+            link: {}
+        }
+    };
+
     componentDidMount() {
         this.renderD3(this.props.graph, null, null, this.props.divId);
     }
 
     componentDidUpdate() {
-        //console.log("component updated")
+        this.restart(this.props.graph);
+        this.state.force.start();
     }
 
     renderD3(graph, width, height, divId) {
-        const data = Object.assign({}, graph);
-        //console.log("rendering", data);
         if(!document.getElementById(divId)) {
             return;
         }
 
         var width = document.getElementById(divId).clientWidth;
         var height = document.getElementById(divId).clientHeight;
-        //
-        //var data = {
-        //    nodes: [{key: "ACE-1", category: "User"}],
-        //    edges: []
-        //}
 
-        /////////////////////////////////////////////////////////////////
+        const data = Object.assign({}, graph);
 
         d3.select("#" + divId).select("svg").remove();
 
@@ -38,144 +44,97 @@ class D3ForceGraph extends React.Component {
             .attr("height", height)
             .attr("class", "force-graph")
             .attr("cursor", "move")
-            .call(d3.behavior.zoom().scaleExtent([0.3, 8]).on("zoom", zoom));
+            .call(d3.behavior.zoom().scaleExtent([0.3, 8])
+                .on("zoom", () => {
+                    vis.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+                }));
 
         var vis = svg
             .append('svg:g');
 
-        function zoom() {
-            vis.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
-        }
+        this.state.link = vis.selectAll(".link");
+        this.state.node = vis.selectAll(".node");
 
-        //currentSvg = svg;
-
-        var force = d3.layout.force()
+        var thiz = this.state;
+        this.state.force = d3.layout.force()
             .charge(-500)
             .linkDistance(50)
             //.gravity(0.2)
             .size([width, height])
             .nodes(data.nodes)
             .links(data.edges)
-            .on('start', animation);
+            .on('start', () => {
+                var ticksPerRender = 10;
+                var that = thiz;
 
-        //define drag events
-        var drag = force.drag()
-            .on("dragstart", dragstart)
-        //.on("drag", dragmove);
+                requestAnimationFrame(function render() {
+                    for (var i = 0; i < ticksPerRender; i++) {
+                        that.force.tick();
+                    }
 
-        var link = vis.selectAll(".link");
-        var node = vis.selectAll(".node");
+                    that.link
+                        .attr('x1', function (d) {
+                            return d.source.x;
+                        })
+                        .attr('y1', function (d) {
+                            return d.source.y;
+                        })
+                        .attr('x2', function (d) {
+                            return d.target.x;
+                        })
+                        .attr('y2', function (d) {
+                            return d.target.y;
+                        });
 
-        var restart = function (data) {
-            link = link.data(data.edges);
-            link.enter().insert("line", "g")
-                .attr("class", "link");
-
-            node = node.data(data.nodes);
-            var g = node.enter().append("g")
-                .attr("class", "g")
-                .style("fill", function (d) {
-                    return colorMap[d.category] ? colorMap[d.category] : colorMap["Other"];
-                })
-            //.attr("uib-popover", function(d) {
-            //    return d.key;
-            //})
-            //.attr("popover-trigger", "outsideClick")
-            //.attr("popover-append-to-body", "true")
-            //.attr("uib-popover-template", "dynamicPopover.templateUrl")
-            //.attr("popover-title", "{{dynamicPopover.title}}")
-                ;
-
-            g.append("circle")
-                .attr("class", "circle")
-                .attr("r", 20);
-
-            g.append("text")
-                .attr("class", "force-text unselectable")
-                .text(function (d) {
-                    return d.key;
-                })
-                //.call(function () {
-                //    $compile($("#d3box"))(scope);
-                //});
-
-            node
-                .on("click", mouseclick)
-                .on("contextmenu", rightclick)
-                .on("dblclick", doubleclick)
-                .call(drag)
-
-            node.exit().remove();
-
-            force.start();
-        }
-
-        restart(data);
-
-        //fix position of node after dragged by user
-        function dragstart(d) {
-            d3.event.sourceEvent.stopPropagation();
-            d3.select(this).classed("fixed", d.fixed = true);
-        }
-
-        function mouseclick(d) {
-            d3.event.stopPropagation();
-        }
-
-        function rightclick(d) {
-            //d3.event.preventDefault();
-        }
-
-        function doubleclick(d) {
-            d3.event.stopPropagation();
-            //TODO to re-implement
-            //scope.getNeighbors(d.group, d.key).then(function (d1) {
-            //    data = D3Utility.updateDataWithNodes(data, d1, d.index);
-            //
-            //    restart(data);
-            //
-            //    force.start();
-            //});
-        }
-
-        //speed up animation by 10
-        function animation() {
-            var ticksPerRender = 10;
-            requestAnimationFrame(function render() {
-                for (var i = 0; i < ticksPerRender; i++) {
-                    force.tick();
-                }
-
-                link
-                    .attr('x1', function (d) {
-                        return d.source.x;
-                    })
-                    .attr('y1', function (d) {
-                        return d.source.y;
-                    })
-                    .attr('x2', function (d) {
-                        return d.target.x;
-                    })
-                    .attr('y2', function (d) {
-                        return d.target.y;
+                    that.node.attr("transform", function (d) {
+                        return "translate(" + d.x + "," + d.y + ")"
                     });
 
-                node.attr("transform", function (d) {
-                    return "translate(" + d.x + "," + d.y + ")"
-                });
+                    if (that.force.alpha() > 0) {
+                        requestAnimationFrame(render);
+                    }
+                })
+            });
 
-                if (force.alpha() > 0) {
-                    requestAnimationFrame(render);
-                }
+        this.restart(data);
+    };
+
+    restart(data) {
+        const thiz = this.state;
+
+        thiz.link = thiz.link.data(data.edges);
+        thiz.link.enter().insert("line", "g")
+            .attr("class", "link");
+
+        thiz.node = thiz.node.data(data.nodes);
+        var g = thiz.node.enter().append("g")
+            .attr("class", "g")
+            .style("fill", function (d) {return colorMap[d.category] ? colorMap[d.category] : colorMap["Other"];});
+
+        g.append("circle")
+            .attr("class", "circle")
+            .attr("r", 20);
+
+        g.append("text")
+            .attr("class", "force-text unselectable")
+            .text(function (d) {return d.key;});
+
+        thiz.node
+            .on("dblclick", (d) => {
+                d3.event.stopPropagation();
+                this.props.searchNeighbors(d.category, d.key);
             })
-        }
+            .call(thiz.force.drag()
+                .on("dragstart", function(d) {
+                    d3.event.sourceEvent.stopPropagation();
+                    d3.select(this).classed("fixed", d.fixed = true);
+                }));
 
-        //currentGraph = force;
+        thiz.node.exit().remove();
+        thiz.force.start();
     };
 
     render() {
-        this.renderD3(this.props.graph, null, null, this.props.divId);
-
         return (
             <div id={this.props.divId}></div>
         );
@@ -190,8 +149,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        searchNeighbors: (key) => {
-            dispatch(getNeighbors("Ticket", key));
+        searchNeighbors: (category, key) => {
+            dispatch(getNeighbors(category, key));
         }
     };
 };
