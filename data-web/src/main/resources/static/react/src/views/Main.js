@@ -25,11 +25,11 @@ class Main extends React.Component{ //creates react component
 
                         <div className="navbar-collapse collapse" bs-active-link>
                             <ul className="nav navbar-nav">
-                                <li><a href="#/">Home</a></li>
-                                <li><Link to="relationships" params={{}}>Relationships</Link></li>
-                                <li><a href="#">Timeline</a></li>
-                                <li><a href="#">Graph Editor</a></li>
-                                <li><a href="#">Statistics</a></li>
+                                <li><Link to="/">Home</Link></li>
+                                <li><Link to="/relationships">Relationships</Link></li>
+                                <li><Link to="/">Timeline</Link></li>
+                                <li><Link to="/">Graph Editor</Link></li>
+                                <li><Link to="/">Statistics</Link></li>
                             </ul>
 
                             {/*Right side links

@@ -6,46 +6,56 @@ import { getNeighbors } from "../../actions/AJAXActions/GETNeighbors";
 
 import { reversePropertyMap } from "../../config/Constants";
 
+//TODO autocomplete
 class Search extends React.Component {
     constructor(props) {
         super(props);
-    
+
         this.state = {
             category: Object.keys(reversePropertyMap)[0]
         }
     };
 
     setRef(ref) {
+        console.log("setting ref");
         this.it = ref;
     }
 
-    search() {
-        this.props.onSearchSubmit(this.state.category, this.it.value);
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.searchNeighbors(this.state.category, this.it.value);
     };
 
-    handleClick(category) {
-        console.log("setting ", category);
-        //this.state.category = category;
+    handleDropdownClick(category) {
         this.setState({category: category});
-    }
+    };
+
+    handleChange(event) {
+        this.props.searchItem(this.state.category, event.target.value);
+        console.log("change", event.target.value);
+    };
 
     renderCategories() {
         const array = [];
 
         for(let category in reversePropertyMap) {
-            array.push((<li key={category} onClick={() => this.handleClick(category)}><a href="#">{category}</a></li>));
+            array.push((<li key={category} onClick={() => this.handleDropdownClick(category)}><a href="#">{category}</a></li>));
         }
 
         return array;
     }
 
     render() {
+        var itemsList = this.props.items.map(function(item, index) {
+            return <li className="list-group-item" key={index}> {item.key} </li>;
+        });
+
         return (
             <div className="row search-container">
-                <form onSubmit={() => this.search()}>
+                <form autoComplete="off" onSubmit={(event) => this.handleSubmit(event)} method="post" action="">
                     <div className="input-group">
-                        <div className="input-group-btn search-panel">
-                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <div className="input-group-btn search-panel ">
+                            <button type="button" className="btn  btn-default dropdown-toggle" data-toggle="dropdown">
                                 <span id="search_concept">{this.state.category}</span> <span className="caret"></span>
                             </button>
                             <ul className="dropdown-menu" role="menu">
@@ -53,7 +63,22 @@ class Search extends React.Component {
                             </ul>
                         </div>
 
-                        <input type="text" className="form-control" id="search" ref={(ref) => this.setRef(ref)}/>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="search"
+                            ref={(ref) => this.setRef(ref)}
+                            onChange={(event) => this.handleChange(event)}
+
+                            autoComplete="off"/>
+
+                        {this.props.items.length > 0 ?
+                            <div className="autocomplete ">
+                                <ul className="list-group">
+                                    {itemsList}
+                                </ul>
+                            </div> : <span/>
+                        }
 
                         <span className="input-group-btn">
                             {/*<button className="btn btn-default" ng-hide="loadedData">
@@ -65,6 +90,8 @@ class Search extends React.Component {
                         </span>
                     </div>
                 </form>
+
+
             </div>
         );
     };
@@ -72,14 +99,17 @@ class Search extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        items: state.items
+        items: state.items.data
     };
 };
 
 const mapDispatchProps = (dispatch) => {
     return {
-        onSearchSubmit: (category, key) => {
+        searchNeighbors: (category, key) => {
             dispatch(getNeighbors(category, key));
+        },
+        searchItem: (category, key) => {
+            dispatch(getItem(category, key));
         }
     };
 };
