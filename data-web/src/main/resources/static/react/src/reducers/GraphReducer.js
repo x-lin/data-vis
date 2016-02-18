@@ -36,7 +36,7 @@ export const nodeReducer = (state = {nodes: [], edges: []}, action) => {
                     const neighborIndex = indexOfObjectInArrayByProperty(state.nodes, neighborNode[keyName], "key");
 
                     if(index >= 0 && neighborIndex === -1) {
-                        console.log("keys ", neighborNode[keyName], keyMap[neighborCategory]);
+                        //console.log("keys ", neighborNode[keyName], keyMap[neighborCategory]);
                         //console.log("pusing", neighborNode[keyName]);
                         //neighbor node not in graph -> create neighbor node and connect nodes with edge
                         const edge = createEdge(index, copiedState.nodes.length);
@@ -45,13 +45,10 @@ export const nodeReducer = (state = {nodes: [], edges: []}, action) => {
 
                         copiedState.edges.push(edge);
                     } else if(neighborIndex > -1 && neighborIndex !== index ) {
-                        //TODO relevant for loading more neighbor nodes
-                        //console.log("pusing2", neighborNode[keyName]);
-
                         const edge = createEdge(index, neighborIndex);
-                        const isEdgeInGraph = indexOfObjectInArrayByProperties(state.edges, edge);
 
-                        if(!isEdgeInGraph) {
+                        if(indexOfObjectInArrayByProperties(state.edges, edge) === -1) {
+                            console.log("indices");
                             copiedState.edges.push(edge);
                         }
                     }
@@ -73,7 +70,7 @@ export const graphReducer = (state = {nodes: [], edges: []}, action) => {
         case NEIGHBORS_FETCH_START:
             return nodeReducer(state, action);
         case NEIGHBORS_FETCH_SUCCESS:
-            console.log("state", state);
+            //console.log("state", state);
             //add nodes to graph through .data and create edges through .key
             return nodeReducer(state, action);
         case NEIGHBORS_FETCH_ERROR:

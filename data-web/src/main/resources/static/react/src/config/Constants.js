@@ -7,14 +7,14 @@ export const colorMap = {
 };
 
 export const reversePropertyMap = {
-    Issue : "Ticket",
+    Issue : "Issue",
     Project : "Project",
     User : "User",
     Requirement : "Requirement"
 };
 
 export const endpoints = {
-    Ticket: "issues",
+    Issue: "issues",
     Project: "projects",
     User: "users",
     Requirement: "reqs"
