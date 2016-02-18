@@ -7,24 +7,33 @@ import { getNeighbors } from "../../actions/AJAXActions/GETNeighbors";
 import { reversePropertyMap } from "../../config/Constants";
 
 class Search extends React.Component {
-    componentWillMount() {
-        this.category = Object.keys(reversePropertyMap)[0];
-    }
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+            category: Object.keys(reversePropertyMap)[0]
+        }
+    };
 
     setRef(ref) {
         this.it = ref;
     }
 
     search() {
-        this.props.onSearchSubmit(this.category, this.it.value);
+        this.props.onSearchSubmit(this.state.category, this.it.value);
     };
+
+    handleClick(category) {
+        console.log("setting ", category);
+        //this.state.category = category;
+        this.setState({category: category});
+    }
 
     renderCategories() {
         const array = [];
 
         for(let category in reversePropertyMap) {
-            console.log("rendering categor", category);
-            array.push((<li key={category}><a href="#">{category}</a></li>));
+            array.push((<li key={category} onClick={() => this.handleClick(category)}><a href="#">{category}</a></li>));
         }
 
         return array;
@@ -37,7 +46,7 @@ class Search extends React.Component {
                     <div className="input-group">
                         <div className="input-group-btn search-panel">
                             <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span id="search_concept">{this.category}</span> <span className="caret"></span>
+                                <span id="search_concept">{this.state.category}</span> <span className="caret"></span>
                             </button>
                             <ul className="dropdown-menu" role="menu">
                                 {this.renderCategories()}
