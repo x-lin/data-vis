@@ -17,6 +17,6 @@ Currently, the project consists of two modules:
 - In order to fetch data, `localhost:8080/extract/all` can be entered in the browser. This will start the extraction process, assembling data from the REST endpoints and storing them into an embedded Neo4j database. The database folder `app.db` will be created in the main directory of the `data-web` module.
 
 ### Installing and starting the client application
-- Install the web dependencies via `bower install` in the folder `data-web/src/main/resources/static`.
+- Assuming `npm` is installed, execute `npm install` in the folder `data-web/src/main/resources/static/react`.
 - Run `mvn spring-boot:run` in the `data-web` directory, if not done already.
-- Open `localhost:8080` in the browser.
+- Open `localhost:8080/react` in the browser.
