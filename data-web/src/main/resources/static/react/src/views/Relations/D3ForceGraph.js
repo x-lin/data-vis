@@ -20,11 +20,27 @@ class D3ForceGraph extends React.Component {
 
     componentDidMount() {
         this.renderD3(this.props.graph, null, null, this.props.divId);
+        window.addEventListener('resize', this.handleResize.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.handleResize);
     }
 
     componentDidUpdate() {
         this.restart(this.props.graph);
         this.state.force.start();
+    }
+
+    handleResize(e) {
+        if (document.getElementById(this.props.divId)) {
+            const width = document.getElementById(this.props.divId).clientWidth;
+            const height = document.getElementById(this.props.divId).clientHeight;
+            this.state.force.size([width, height]).resume();
+            d3.select("#" + this.props.divId).select("svg")
+                .attr("width", width)
+                .attr("height", height);
+        }
     }
 
     renderD3(graph, width, height, divId) {
@@ -136,7 +152,8 @@ class D3ForceGraph extends React.Component {
 
     render() {
         return (
-            <div id={this.props.divId}></div>
+            <div id={this.props.divId}>
+            </div>
         );
     };
 }
