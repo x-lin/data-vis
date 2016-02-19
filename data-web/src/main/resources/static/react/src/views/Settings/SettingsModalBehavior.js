@@ -1,7 +1,7 @@
 import React from "react";
 
 import { toggleSetting } from "../../actions/UserActions/SettingsActions"
-import SettingsModalPresView from "./SettingsModalPresView";
+import SettingsModalPresView from "./SettingsModalPresent";
 
 export default class extends React.Component {
     handleToggle(event) {
@@ -27,6 +27,7 @@ export default class extends React.Component {
     render() {
         return (
             <SettingsModalPresView
+                title={"Settings"}
                 checkboxes={this.renderCheckboxes()}
                 modalId={this.props.modalId}
             />
