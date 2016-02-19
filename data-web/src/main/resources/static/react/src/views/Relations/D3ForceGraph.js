@@ -6,6 +6,11 @@ import { colorMap } from "../../config/Constants";
 import "./D3ForceGraph.css";
 
 import { getNeighbors } from "../../actions/AJAXActions/GETNeighbors";
+import { updateGraph } from "../../actions/GraphActions/GraphActionCreators";
+
+import Settings from "../../config/Settings";
+import { indexOfObjectInArrayByProperty } from "../../utils/SearchHelpers";
+import { RENDER_NEW_GRAPH_ON_SEARCH } from "../../actions/UserActions/SettingsActions"
 
 class D3ForceGraph extends React.Component {
     constructor(props) {
@@ -28,8 +33,15 @@ class D3ForceGraph extends React.Component {
     }
 
     componentDidUpdate() {
-        this.restart(this.props.graph);
-        this.state.force.start();
+        const index = indexOfObjectInArrayByProperty(this.props.settings, RENDER_NEW_GRAPH_ON_SEARCH, "name");
+        if(this.props.settings[index].value) {
+            this.renderD3(this.props.graph, null, null, this.props.divId);
+        } else {
+            this.restart(this.props.graph);
+            this.state.force.start();
+        }
+
+
     }
 
     handleResize(e) {
@@ -58,7 +70,7 @@ class D3ForceGraph extends React.Component {
         var svg = d3.select("#" + divId).append("svg")
             .attr("width", width)
             .attr("height", height)
-            .attr("class", "force-graph")
+            .attr("class", "force-graph ")
             .attr("cursor", "move")
             .call(d3.behavior.zoom().scaleExtent([0.3, 8])
                 .on("zoom", () => {
@@ -75,6 +87,8 @@ class D3ForceGraph extends React.Component {
         this.state.force = d3.layout.force()
             .charge(-500)
             .linkDistance(50)
+            //.chargeDistance(300)
+            //.friction(0.5)
             //.gravity(0.2)
             .size([width, height])
             .nodes(data.nodes)
@@ -120,7 +134,7 @@ class D3ForceGraph extends React.Component {
 
         thiz.link = thiz.link.data(data.edges);
         thiz.link.enter().insert("line", "g")
-            .attr("class", "link");
+            .attr("class", "link ");
 
         thiz.node = thiz.node.data(data.nodes);
         var g = thiz.node.enter().append("g")
@@ -160,7 +174,8 @@ class D3ForceGraph extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        graph: state.graph
+        graph: state.graph,
+        settings: state.settings
     };
 };
 
@@ -168,6 +183,9 @@ const mapDispatchProps = (dispatch) => {
     return {
         searchNeighbors: (category, key) => {
             dispatch(getNeighbors(category, key));
+        },
+        clearGraph: () => {
+            dispatch(updateGraph({nodes: [], edges: []}));
         }
     };
 };

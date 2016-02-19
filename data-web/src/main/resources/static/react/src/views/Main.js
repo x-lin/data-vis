@@ -2,6 +2,8 @@ var React = require("react");
 import Router from "react-router";
 import { Link } from "react-router";
 
+import SettingsModal from "./Settings/SettingsModal";
+
 class Main extends React.Component{ //creates react component
     //pushState() {
     //    this.props.history.pushState(null, "/relationships/");
@@ -23,7 +25,7 @@ class Main extends React.Component{ //creates react component
                             </button>
                         </div>
 
-                        <div className="navbar-collapse collapse" bs-active-link>
+                        <div className="navbar-collapse collapse">
                             <ul className="nav navbar-nav">
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/relationships">Relationships</Link></li>
@@ -32,12 +34,14 @@ class Main extends React.Component{ //creates react component
                                 <li><Link to="/">Statistics</Link></li>
                             </ul>
 
-                            {/*Right side links
-                            <ul className="nav navbar-nav navbar-right hidden-md hidden-sm hidden-xs">-->
-                            </ul>*/}
+                            <ul className="nav navbar-nav navbar-right">
+                                <li><a href="#" data-toggle="modal" data-target="#settingsModal"><span className="glyphicon glyphicon-wrench"/>&nbsp; Settings</a></li>
+
+                            </ul>
                         </div>
                     </div>
                 </div>
+                <SettingsModal modalId={"settingsModal"} />
                 <div className="nopadding">
                     {this.props.children}
                 </div>

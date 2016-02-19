@@ -12,6 +12,7 @@ export const indexOfObjectInArrayByProperties = (array, properties) => {
 
         for(let propertyKey in properties) {
             const propertyValue = properties[propertyKey];
+
             if(object[propertyKey] !== propertyValue) {
                 doesExist = false;
                 break;

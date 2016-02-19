@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, hashHistory, Route, IndexRoute } from "react-router";
 
-import { createStore } from "./stores/ReduxStore";
+import { store } from "./stores/ReduxStore";
 //import Provider from "./views/Provider";
 import { Provider, connect } from "react-redux";
 
@@ -16,7 +16,7 @@ import Relations from "./views/Relations/Relations";
 //);
 
 ReactDOM.render (
-    <Provider store={createStore()}>
+    <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/" component={Main}>
                 <Route path="/relationships" component={Relations} />
