@@ -107,21 +107,6 @@ class Search extends React.Component {
                         </ul>
                     </div>
 
-                    {/*<div onKeyPress={(event) => this.handleKeyPress(event)}>
-                        <Typeahead
-                            options={this.props.items.map((item, index) => {
-                                return item[keyMap[this.state.category]];
-                            })}
-                            onChange={(event) => this.handleChange(event)}
-                            customClasses={{
-                                input: "form-control",
-                                results: "list-group list-z",
-                                hover: "list-group-item list-group-item-info",
-                                listItem: "list-group-item"
-                            }}
-                        />
-                    </div>*/}
-
                     <input
                         value={this.state.value}
                         type="text"

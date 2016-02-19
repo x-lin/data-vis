@@ -40,8 +40,6 @@ class D3ForceGraph extends React.Component {
             this.restart(this.props.graph);
             this.state.force.start();
         }
-
-
     }
 
     handleResize(e) {
