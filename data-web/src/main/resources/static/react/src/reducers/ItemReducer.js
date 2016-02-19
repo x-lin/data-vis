@@ -28,7 +28,6 @@ export const itemReducer = (state = {data: [], error: {}}, action) => {
                 error: {},
                 status: ITEMS_CLEAR
             });
-        //TODO use custom action for item clearing
         case NEIGHBORS_FETCH_START:
             return Object.assign({}, state, {
                 data: [],

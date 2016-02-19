@@ -11,7 +11,6 @@ class D3Legend extends React.Component {
         var svg1 = d3.select("#" + divId).append("svg")
             .attr("width", "100%")
             .attr("height", "100%")
-        //.attr("class", "force-graph");
 
         var colorArray = [];
         var i = 0;
