@@ -2,19 +2,21 @@ import { ADD_TO_GRAPH, REMOVE_FROM_GRAPH, UPDATE_GRAPH }
     from "../actions/GraphActions/GraphActionCreators";
 import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
     from "../actions/ItemActions/FetchNeighborsActionCreators";
+import { RENDER_NEW_GRAPH_ON_SEARCH } from "../actions/UserActions/SettingsActions";
 
 import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from "../utils/SearchHelpers";
 import { keyMap } from "../config/Constants";
+import { updateGraph } from "../actions/GraphActions/GraphActionCreators";
+import { store } from "../stores/ReduxStore";
 
 //TODO avoid saving item to graph until a NEIGHBORS_FETCH_SUCCESS was fetched
-//TODO add another flag clearing the graph (e.g. when new search is started)
 export const nodeReducer = (state = {nodes: [], edges: []}, action) => {
     const index = indexOfObjectInArrayByProperty(state.nodes, action.key, "key");
 
     switch (action.type) {
         case NEIGHBORS_FETCH_START:
             if(index === -1) {
-                const copiedState = Object.assign({}, state);
+                const copiedState = state;
                 copiedState.nodes.push(createNode(action.key, action.category));
 
                 return copiedState;
@@ -59,10 +61,23 @@ export const nodeReducer = (state = {nodes: [], edges: []}, action) => {
 export const graphReducer = (state = {nodes: [], edges: []}, action) => {
     switch (action.type) {
         case NEIGHBORS_FETCH_START:
+            const settings = store.getState().settings;
+
             return nodeReducer(state, action);
         case NEIGHBORS_FETCH_SUCCESS:
             return nodeReducer(state, action);
         case NEIGHBORS_FETCH_ERROR:
+            return;
+        case UPDATE_GRAPH:
+            console.log("reset graph");
+            console.log("state ", state);
+            console.log("action ", action);
+            const copy = Object.assign({}, state);
+            console.log("copy", copy);
+            state.nodes.length = 0;
+            state.edges.length = 0;
+            console.log("copy", state);
+            return state;
         default:
             return state;
     }

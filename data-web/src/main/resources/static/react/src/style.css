@@ -3,6 +3,21 @@ body {
     overflow: hidden;
 }
 
+.cursor {
+    cursor: pointer;
+}
+
+.hover {
+    background-color: #666;
+    color: #666;
+}
+
+.list-z {
+    z-index: 9999;
+    position: absolute;
+    top: 33px;
+}
+
 .navbar {
     margin-bottom: 0;
 }
@@ -36,10 +51,6 @@ body {
     /*border: 1px solid #CCC;*/
     /*width: 100px;*/
     /*height: 100px;*/
-}
-
-.search-container {
-    padding: 0px 15px;
 }
 
 .svg-container {
