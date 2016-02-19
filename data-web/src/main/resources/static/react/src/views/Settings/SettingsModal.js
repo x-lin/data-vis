@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { toggleSetting } from "../../actions/UserActions/SettingsActions"
-import SettingsModalBehView from "./SettingsModalBehView";
+import SettingsModalBehView from "./SettingsModalBehavior";
 
 const mapStateToProps = (state) => {
     return {
