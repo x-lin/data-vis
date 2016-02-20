@@ -1,0 +1,10 @@
+#force-graph-component {
+    height: -webkit-calc(100vh);
+    height: -moz-calc(100vh);
+    height: calc(100vh);
+    /*background-color: #FFF;*/
+    /*margin: 10px 0px;*/
+    border: 1px solid #CCC;
+    overflow: hidden;
+    /*cursor: progress;*/
+}
