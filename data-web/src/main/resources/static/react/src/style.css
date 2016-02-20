@@ -33,28 +33,6 @@ body {
 
 }
 
-#d3box {
-    height: -webkit-calc(100vh);
-    height: -moz-calc(100vh);
-    height: calc(100vh);
-    /*background-color: #FFF;*/
-    /*margin: 10px 0px;*/
-    border: 1px solid #CCC;
-    overflow: hidden;
-    /*cursor: progress;*/
-}
-
-#d3legend {
-    z-index: -1;
-    position: absolute;
-    padding: 15px;
-    font-size: 11px;
-    /*background-color: #999;*/
-    /*border: 1px solid #CCC;*/
-    /*width: 100px;*/
-    /*height: 100px;*/
-}
-
 .svg-container {
     display: inline-block;
     position: relative;

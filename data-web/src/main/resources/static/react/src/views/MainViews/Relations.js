@@ -1,9 +1,9 @@
 import React from "react";
 
 import SearchBarComponent from "./../SearchBar/SearchBarComponent";
-import D3Panel from "./GraphPanel";
+import GraphPanel from "./../GraphPanel/GraphPanel";
 
-import ExportToImage from "./ExportToImage";
+import ExportToImage from "./../GraphPanel/ExportToImage";
 
 class Relations extends React.Component {
     render() {
@@ -11,7 +11,7 @@ class Relations extends React.Component {
             <div>
                 <SearchBarComponent />
                 {/*<ExportToImage />*/}
-                <D3Panel />
+                <GraphPanel />
             </div>
         );
     };
