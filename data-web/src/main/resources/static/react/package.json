@@ -16,6 +16,7 @@
     "d3": "^3.5.15",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-motion": "^0.4.2",
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
     "redux": "^3.3.1",
