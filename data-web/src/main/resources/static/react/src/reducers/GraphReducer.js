@@ -1,9 +1,7 @@
-import { ADD_TO_GRAPH, REMOVE_FROM_GRAPH, UPDATE_GRAPH, IS_RERENDER }
+import { ADD_TO_GRAPH, REMOVE_FROM_GRAPH, UPDATE_GRAPH, CLEAR_GRAPH }
     from "../actions/action-creators/GraphActionCreators";
 import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
     from "../actions/action-creators/FetchNeighborsActionCreators";
-import { ADD_TO_GRAPH_ON_SEARCH } from "../actions/action-creators/SettingsActions";
-import { SEARCH_NEIGHBORS_START } from "../actions/action-creators/SearchActions";
 
 import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from "../utils/SearchHelpers";
 import Constants from "../config/Constants";
@@ -12,10 +10,6 @@ import { store } from "../stores/ReduxStore";
 
 export const nodeReducer = (state = {nodes: [], edges: [], pending: []}, action) => {
     switch (action.type) {
-        case NEIGHBORS_FETCH_START:
-            //const copiedState = state;
-            //copiedState.pending.push(action);
-            return state;
         case NEIGHBORS_FETCH_SUCCESS:
             const copiedState = Object.assign({}, state);
             let index = indexOfObjectInArrayByProperty(state.nodes, action.key, "key");
@@ -55,35 +49,18 @@ export const nodeReducer = (state = {nodes: [], edges: [], pending: []}, action)
     }
 };
 
-const handleRerenderFlag = (state, action) => {
-    if(action.hasOwnProperty("rerender")) {
-        if(action.rerender === !state.rerender) {
-            state = Object.assign({}, state, {
-                rerender: action.rerender
-            });
-        }
-
-        if(action.rerender === true) {
-            state.nodes.length = 0;
-            state.edges.length = 0;
-        }
-    }
-
-    return state;
-}
-
 export const graphReducer = (
     state = {nodes: [], edges: [], pending: [], rerender: false},
     action) => {
 
-    state = handleRerenderFlag(state, action);
-
     switch (action.type) {
-        case NEIGHBORS_FETCH_START:
-            return nodeReducer(state, action);
+        case CLEAR_GRAPH:
+            state.nodes.length = 0;
+            state.edges.length = 0;
+
+            return state;
         case NEIGHBORS_FETCH_SUCCESS:
             return nodeReducer(state, action);
-        case NEIGHBORS_FETCH_ERROR:
         default:
             return state;
     }
