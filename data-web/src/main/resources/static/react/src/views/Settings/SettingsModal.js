@@ -1,25 +1,20 @@
 import React from "react";
-import { connect } from "react-redux";
 
-import { toggleSetting } from "../../actions/action-creators/SettingsActions"
+import SettingsModalPresentation from "./SettingsModalPresentation";
 
-import SettingsModalBehavior from "./SettingsModalBehavior";
+export default class extends React.Component {
+    handleToggle(event) {
+        this.props.toggle(event.target.value);
+    }
 
-const mapStateToProps = (state) => {
-    return {
-        settings: state.settings
-    };
-};
-
-const mapDispatchProps = (dispatch) => {
-    return {
-        toggle: (name) => {
-            dispatch(toggleSetting(name));
-        }
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchProps
-)(SettingsModalBehavior);
+    render() {
+        return (
+            <SettingsModalPresentation
+                title={"Settings"}
+                modalId={this.props.modalId}
+                toggleHandler={(event) => this.handleToggle(event)}
+                settings={this.props.settings}
+            />
+        )
+    }
+}
