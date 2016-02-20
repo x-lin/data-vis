@@ -3,17 +3,10 @@ import ReactDOM from "react-dom";
 import { Router, hashHistory, Route, IndexRoute } from "react-router";
 
 import { store } from "./stores/ReduxStore";
-//import Provider from "./views/Provider";
 import { Provider, connect } from "react-redux";
 
 import Main from "./views/Main";
-import Home from "./views/Home/Home";
-import Relations from "./views/Relations/Relations";
-//
-//ReactDOM.render (
-//<Router history={hashHistory} store={createStore()}>{Routes}</Router>,
-//    document.getElementById("root")
-//);
+import Relations from "./views/MainViews/Relations";
 
 ReactDOM.render (
     <Provider store={store}>
