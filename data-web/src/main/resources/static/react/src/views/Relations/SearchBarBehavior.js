@@ -61,15 +61,21 @@ export default class extends React.Component {
     }
 
     handleKeyDown(event) {
+        //down key
         if(event.keyCode === 40) {
             if(this.state.selectedIndex+1 < this.props.items.length) {
                 this.setState({selectedIndex: this.state.selectedIndex+1});
             }
         }
+        //up key
         if(event.keyCode === 38) {
             if(this.state.selectedIndex > 0) {
                 this.setState({selectedIndex: this.state.selectedIndex-1});
             }
+        }
+        //ESC key
+        if(event.keyCode === 27) {
+            this.props.clearAllItems();
         }
     }
 
