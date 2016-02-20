@@ -1,7 +1,7 @@
 import { ITEM_FETCH_START, ITEM_FETCH_SUCCESS, ITEM_FETCH_ERROR, ITEMS_CLEAR }
-    from "../actions/ItemActions/FetchActionCreators";
+    from "../actions/action-creators/FetchActionCreators";
 import { NEIGHBORS_FETCH_START }
-    from "../actions/ItemActions/FetchNeighborsActionCreators";
+    from "../actions/action-creators/FetchNeighborsActionCreators";
 
 export const itemReducer = (state = {data: [], error: {}}, action) => {
     switch (action.type) {

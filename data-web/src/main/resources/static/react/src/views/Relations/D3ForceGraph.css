@@ -9,6 +9,10 @@
     stroke-opacity: .6;
 }
 
+.force-graph {
+    cursor: move;
+}
+
 .force-text {
     font: 9px sans-serif;
     fill: black;

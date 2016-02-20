@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 import { settingsReducer } from "../SettingsReducer";
 import Settings from "../../config/Settings";
-import { toggleSetting } from "../../actions/UserActions/SettingsActions";
+import { toggleSetting } from "../../actions/action-creators/SettingsActions";
 
 import { createStore } from "../../stores/ReduxStore";
 

@@ -1,11 +1,25 @@
 import React from "react";
-import { connect } from "react-redux";
 
 export default ( {
     modalId,
-    checkboxes,
-    title
+    title,
+    toggleHandler,
+    settings
 } ) => {
+    const renderCheckboxes = () => {
+        return settings.map((setting, index) => {
+            return (
+                <div className="checkbox " key={index}>
+                    <label>
+                        <input type="checkbox" value={setting.name} checked={setting.value}
+                               onChange={toggleHandler}/>
+                        {setting.description}
+                    </label>
+                </div>
+            );
+        });
+    };
+
     return (
         <div className="modal fade" id={modalId} role="dialog">
             <div className="modal-dialog">
@@ -16,7 +30,7 @@ export default ( {
                     </div>
 
                     <div className="modal-body">
-                        {checkboxes}
+                        {renderCheckboxes()}
                     </div>
 
                     <div className="modal-footer">
