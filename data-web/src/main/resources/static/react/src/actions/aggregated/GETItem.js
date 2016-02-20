@@ -1,10 +1,10 @@
 import axios from "axios";
 
-import { fetchSuccess, fetchError, fetchStart } from "../ItemActions/FetchActionCreators";
-import { endpoints } from "../../config/Constants";
+import { fetchSuccess, fetchError, fetchStart } from "../action-creators/FetchActionCreators";
+import Constants from "../../config/Constants";
 
 export const getItem = (category, key) => {
-    const endpoint = endpoints[category];
+    const endpoint = Constants.endpoints[category];
     return dispatch => {
         dispatch(fetchStart(category, key));
         return axios.get(`http://localhost:8080/search/${endpoint}/startLike/${key}?limit=10`)

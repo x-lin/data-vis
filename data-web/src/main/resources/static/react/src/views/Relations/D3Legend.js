@@ -3,7 +3,7 @@ import React from "react";
 
 import d3 from "d3";
 
-import { colorMap, reversePropertyMap } from "../../config/Constants";
+import Constants from "../../config/Constants";
 
 class D3Legend extends React.Component {
     renderD3Legend(divId) {
@@ -14,10 +14,10 @@ class D3Legend extends React.Component {
 
         var colorArray = [];
         var i = 0;
-        for (var color in colorMap) {
+        for (var color in Constants.colorMap) {
             colorArray.push({
-                name: reversePropertyMap[color],
-                color: colorMap[color],
+                name: Constants.reversePropertyMap[color],
+                color: Constants.colorMap[color],
                 index: i++
             })
         }

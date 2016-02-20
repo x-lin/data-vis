@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { toggleSetting } from "../../actions/UserActions/SettingsActions"
-import SettingsModalBehView from "./SettingsModalBehavior";
+import { toggleSetting } from "../../actions/action-creators/SettingsActions"
+
+import SettingsModalBehavior from "./SettingsModalBehavior";
 
 const mapStateToProps = (state) => {
     return {
@@ -21,4 +22,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(SettingsModalBehView);
+)(SettingsModalBehavior);

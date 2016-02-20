@@ -1,6 +1,7 @@
 body {
     background: white;
     overflow: hidden;
+    z-index:0;
 }
 
 .cursor {
@@ -15,7 +16,7 @@ body {
 .list-z {
     z-index: 9999;
     position: absolute;
-    top: 33px;
+    top: 34px;
 }
 
 .navbar {
@@ -29,6 +30,7 @@ body {
     z-index: 9999;
     display:block;
     top: 33px;
+
 }
 
 #d3box {
