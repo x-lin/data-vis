@@ -1,7 +1,7 @@
 import React from "react";
 
 import SearchBar from "./../SearchBar/SearchBar";
-import D3Panel from "./D3Panel";
+import D3Panel from "./GraphPanel";
 
 import ExportToImage from "./ExportToImage";
 
