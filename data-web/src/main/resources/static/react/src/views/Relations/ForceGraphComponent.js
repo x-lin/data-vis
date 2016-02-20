@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { getNeighbors } from "../../actions/aggregated/GETNeighbors";
 
-import D3ForceGraphBehavior from "./D3ForceGraphBehavior";
+import ForceGraph from "./ForceGraph";
 
 const mapStateToProps = (state) => {
     return {
@@ -14,8 +14,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        searchNeighbors: (category, key, rerenderFlag) => {
-            dispatch(getNeighbors(category, key, rerenderFlag));
+        searchNeighbors: (category, key) => {
+            dispatch(getNeighbors(category, key));
         }
     };
 };
@@ -23,4 +23,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(D3ForceGraphBehavior);
+)(ForceGraph);
