@@ -2,7 +2,7 @@ var React = require("react");
 import Router from "react-router";
 import { Link } from "react-router";
 
-import SettingsModal from "./Settings/SettingsModal";
+import SettingsModal from "./Settings/SettingsModalComponent";
 
 class Main extends React.Component{ //creates react component
     //pushState() {
