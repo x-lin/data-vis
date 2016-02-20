@@ -2,16 +2,20 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { getItem } from "../../actions/aggregated/GETItem";
-import { getNeighbors } from "../../actions/aggregated/GETNeighbors";
 import { searchNeighbors } from "../../actions/aggregated/SearchNeighbors";
 import { clearItems } from "../../actions/action-creators/FetchActionCreators";
-import { updateGraph } from "../../actions/action-creators/GraphActionCreators";
+import { setSearchCategory, setSearchInputValue, setSearchSelectedIndex}
+    from "../../actions/action-creators/SearchBarActions";
 
 import SearchBarBehavior from "./SearchBarBehavior";
 
 const mapStateToProps = (state) => {
     return {
-        items: state.items.data
+        items: state.items.data,
+        selectedIndex: state.items.selectedIndex,
+        category: state.items.category,
+        value: state.items.value,
+        categories: state.items.categories
     };
 };
 
@@ -25,7 +29,16 @@ const mapDispatchProps = (dispatch) => {
         },
         clearAllItems: () => {
             dispatch(clearItems());
-        }
+        },
+        setSearchCategory: (value) => {
+            dispatch(setSearchCategory(value));
+        },
+        setSearchInputValue: (value) => {
+            dispatch(setSearchInputValue(value));
+        },
+        setSearchSelectedIndex: (value) => {
+            dispatch(setSearchSelectedIndex(value));
+        },
     };
 };
 
