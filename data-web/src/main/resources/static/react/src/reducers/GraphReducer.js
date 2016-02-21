@@ -38,7 +38,10 @@ const nodeReducer = (state, action) => {
                     } else if(neighborIndex > -1 && neighborIndex !== index ) {
                         const edge = createEdge(index, neighborIndex);
 
-                        if(indexOfObjectInArrayByProperties(state.edges, edge) === -1) {
+                        //TODO issue here, as D3 updates the source/edge values, so comparing indices doesn't work
+                        //TODO add check for reverse edge
+                        if(indexOfObjectInArrayByProperties(state.edges, edge) === -1
+                            ) {
                             copiedState.edges.push(edge);
                         }
                     }
@@ -57,7 +60,6 @@ const graphFilterReducer = (filterState, action) => {
     if(action.type === TOGGLE_FILTER_ITEM_CATEGORY) {
         if(filterState.hasOwnProperty(action.category)) {
             filterState[action.category] = !filterState[action.category];
-            console.log("toggling", action.category);
         }
     }
 

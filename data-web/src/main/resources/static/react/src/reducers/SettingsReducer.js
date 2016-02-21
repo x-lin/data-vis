@@ -1,7 +1,8 @@
-import { TOGGLE_SETTING, ADD_TO_GRAPH_ON_SEARCH }
+import { TOGGLE_SETTING }
     from "../actions/action-creators/SettingsActions";
 
 import Settings from "../config/Settings";
+import { ADD_TO_GRAPH_ON_SEARCH } from "../config/Settings";
 import { indexOfObjectInArrayByProperty } from "../utils/SearchHelpers";
 
 import { SEARCH_NEIGHBORS_START } from "../actions/action-creators/SearchActions";
