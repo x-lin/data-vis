@@ -8,7 +8,7 @@ import ForceGraph from "./ForceGraph";
 const mapStateToProps = (state) => {
     return {
         graph: state.graph,
-        settings: state.settings
+        visibilityFilters: state.visibilityFilters
     };
 };
 

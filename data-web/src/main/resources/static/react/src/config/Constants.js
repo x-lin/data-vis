@@ -1,9 +1,9 @@
 export default {
     colorMap: {
-        Project: "rgb(31, 119, 180)",
-        Issue : "rgb(174, 199, 232)",
-        Requirement : "rgb(44, 160, 44)",
-        User : "rgb(255, 127, 14)",
+        Project: "rgb(163, 85, 143)",
+        Issue : "rgb(140, 160, 255)",
+        Requirement : "rgb(92, 200, 80)",
+        User : "rgb(255, 170, 30)",
         //Other : "rgb(150, 150, 150)"
     },
     reversePropertyMap: {
@@ -15,7 +15,7 @@ export default {
     endpoints: {
         Issue: "issues",
         Project: "projects",
-        User: "users",
+        User: "users ",
         Requirement: "reqs"
     },
     keyMap: {

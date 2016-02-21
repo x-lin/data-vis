@@ -2,6 +2,7 @@ import React from "react";
 import d3 from "d3";
 
 import Constants from "../../config/Constants";
+import FilterHelpers from "../../utils/FilterHelpers";
 import "./ForceGraph.css";
 
 export default class extends React.Component {
@@ -10,8 +11,8 @@ export default class extends React.Component {
 
         this.state = {
             force: {},
-            node: {},
-            link: {}
+            nodes: {},
+            links: {}
         }
     };
 
@@ -23,7 +24,8 @@ export default class extends React.Component {
     };
 
     componentDidMount() {
-        this.renderGraph(this.props.graph);
+        //const data = this.filterGraph(this.props.graph);
+        this.renderGraph(Object.assign({}, this.props.graph));
         window.addEventListener('resize', (event) => this.resizePanel(event));
     }
 
@@ -32,7 +34,7 @@ export default class extends React.Component {
     }
 
     componentDidUpdate() {
-        this.updateGraph(this.props.graph);
+        this.updateGraph(Object.assign({}, this.props.graph));
     }
 
     renderGraph(data) {
@@ -58,8 +60,8 @@ export default class extends React.Component {
 
         svg.call(this.createOnZoomBehavior(vis));
 
-        this.state.link = vis.selectAll(".link");
-        this.state.node = vis.selectAll(".node");
+        this.state.links = vis.selectAll(".link");
+        this.state.nodes = vis.selectAll(".node");
 
         return svg;
     }
@@ -78,6 +80,7 @@ export default class extends React.Component {
     }
 
     updateGraph(data) {
+        this.setVisibilityByFilter(data);
         this.updateGraphData(data);
         this.addLinks();
         this.addNodes();
@@ -109,17 +112,40 @@ export default class extends React.Component {
     }
 
     updateGraphData(data) {
-        this.state.link = this.state.link.data(data.edges);
-        this.state.node = this.state.node.data(data.nodes);
+        this.state.nodes = this.state.nodes.data(data.nodes);
+        this.state.links = this.state.links.data(data.edges);
     }
 
     addLinks() {
-        this.state.link.enter().insert("line", "g")
-            .attr("class", "link");
+        this.state.links.enter().insert("line", "g")
+            .attr("class", "link ")
+
+        this.state.links
+            .attr("opacity", (d) => { return d.visible ? "1" : "0.1"});
+    }
+
+    setVisibilityByFilter(data) {
+        const filters = FilterHelpers.getKeysMatching(this.props.visibilityFilters, false);
+        const filterIndexValues = FilterHelpers.getIndicesByProperty(data.nodes, "category", filters);
+
+        //TODO performance can be improved
+        data.nodes = data.nodes.map((node, index) => {
+            node.visible = (filterIndexValues.indexOf(index) === -1);
+
+            return node;
+        });
+
+        data.edges = data.edges.map((edge, index) => {
+            const connectedToFilter =  (filterIndexValues.indexOf(edge.source.index) > -1) ||
+                (filterIndexValues.indexOf(edge.target.index) > -1);
+            edge.visible = !connectedToFilter;
+
+            return edge;
+        });
     }
 
     addNodes() {
-        const g = this.state.node.enter().append("g")
+        const g = this.state.nodes.enter().append("g")
             .attr("class", "g")
             .attr("id", (d) => { return "g" + d.key;})
             .style("fill", (d) => this.determineNodeColor(d));
@@ -129,6 +155,9 @@ export default class extends React.Component {
             .attr("r", 20);
 
         this.addNodeText(g);
+
+        this.state.nodes
+                    .attr("opacity", (d) => { return d.visible ? "1" : "0.4"});
     }
 
     addNodeText(g) {
@@ -138,7 +167,7 @@ export default class extends React.Component {
     }
 
     setNodeBehavior() {
-        this.state.node
+        this.state.nodes
             .on("dblclick", (d) => this.searchForNeighbors(d))
             .on("contextmenu", function(d) {
                 d3.event.preventDefault();
@@ -150,8 +179,8 @@ export default class extends React.Component {
     }
 
     cleanUpAndRestartLayout() {
-        this.state.node.exit().remove();
-        this.state.link.exit().remove();
+        this.state.nodes.exit().remove();
+        this.state.links.exit().remove();
         this.state.force.start();
     }
 
@@ -203,10 +232,11 @@ export default class extends React.Component {
     }
 
     passOverTicks(ticksPerRender) {
-        for (var i = 0; i < ticksPerRender; i++) {
-            if(this.state.force.alpha() > 0) {
+        for (var i = 0; i < ticksPerRender/10; i++) {
+            for(var j = 0; j < 10; j++) {
                 this.state.force.tick();
-            } else {
+            }
+            if(!(this.state.force.alpha() > 0)) {
                 break;
             }
         }
@@ -221,7 +251,7 @@ export default class extends React.Component {
     }
 
     moveLinks() {
-        this.state.link
+        this.state.links
             .attr('x1', function (d) {
                 return d.source.x;
             })
@@ -237,7 +267,7 @@ export default class extends React.Component {
     }
 
     moveNodes() {
-        this.state.node.attr("transform", function (d) {
+        this.state.nodes.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")"
         });
     }
