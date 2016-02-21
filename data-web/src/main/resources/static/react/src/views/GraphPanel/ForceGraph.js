@@ -217,7 +217,7 @@ export default class extends React.Component {
     }
 
     createSpeededUpAnimation() {
-        var ticksPerRender = 50;
+        var ticksPerRender = 20;
 
         requestAnimationFrame(() => {
             this.createAnimation(requestAnimationFrame, ticksPerRender);
