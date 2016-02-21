@@ -23,5 +23,11 @@ export default {
         Issue : "key",
         User : "name",
         Requirement : "key"
-    }
+    },
+    defaultVisible: {
+        Project : true,
+        Issue : true,
+        User : true,
+        Requirement : true
+    },
 };

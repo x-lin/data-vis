@@ -3,9 +3,12 @@ import ReactDOM from "react-dom";
 import d3 from "d3";
 
 import { spring, Motion } from "react-motion";
+import { Popover, OverlayTrigger } from "react-bootstrap";
 
 import Constants from "../../config/Constants";
 import "./ForceGraph.css";
+
+const i=0;
 
 export default class extends React.Component {
     constructor(props) {
@@ -24,8 +27,11 @@ export default class extends React.Component {
         return (
             <div id={this.props.divId}>
 
-                <svg width={this.state.width} height={this.state.height} className="force-graph" style={{background: "grey"}}>
+                <svg width={this.state.width} height={this.state.height}
+                     className="force-graph" style={{background: "grey"}}
+                >
                     <g>
+
                         {/*<Motion defaultStyle={{x: 0}} style={{x: spring(360)}}>
                             {val => {
                                 let style = {
@@ -40,6 +46,7 @@ export default class extends React.Component {
                                 return <div style={style}>{val.x}</div>
                             }}
                         </Motion>*/}
+
                         {this.renderLinks()}
                         {this.renderNodes()}
                     </g>
@@ -58,20 +65,32 @@ export default class extends React.Component {
         });
     }
 
+    renderPopups() {
+
+    }
+
     renderNodes() {
         return this.props.graph.nodes.map((node, index) => {
             const transform = `transform=(${node.x},${node.y})`;
             return <g key={index} className="g"
                       transform={node.x ? `translate(${node.x},${node.y})` : "translate(0,0)"}
-                      fill={this.determineNodeColor(node)} key={node.key}>
-                <circle className="circle" r="20"
-                        visibility="visible"
-                        onClick={() => {console.log("clicked me")}}
-                        onDragOver={() => console.log("dragged over")}
-                        onDrag={() => console.log("drag")}
-                        onDragEnter={() => console.log("onDragEnter")}
-                />
-                <text className="force-text unselectable">{node.key}</text>
+                      fill={this.determineNodeColor(node)} key={node.key}
+                      id={"g"+index} title="the svg canvas" data-content="my test">
+                     <circle className="circle" r="20"
+                            visibility="visible"
+                            onClick={(e) => {
+                            console.log(e)
+                            return <div style={{ height: 120 }}>
+    <Popover placement="right" positionLeft={200} positionTop={50} title="Popover right" id={"pop"+id++}>
+      And here's some <strong>amazing</strong> content. It's very engaging. right?
+    </Popover>
+  </div>
+                            }}
+                            onDragOver={() => console.log("dragged over")}
+                            onDrag={() => console.log("drag")}
+                            onDragEnter={() => console.log("onDragEnter")}
+                    />
+                    <text className="force-text unselectable">{node.key}</text>
             </g>
         });
     }
@@ -125,6 +144,14 @@ export default class extends React.Component {
             this.state.isStarted = true;
             this.state.force.start();
         }
+
+        //$('#g0').popover({
+        //    'trigger':'click'
+        //    ,'container': 'body'
+        //    ,'placement': 'top'
+        //    ,'white-space': 'nowrap'
+        //    ,'html':'true'
+        //});
     }
 
     setElementToFixed(d) {
