@@ -2,13 +2,16 @@ import { ADD_TO_GRAPH, REMOVE_FROM_GRAPH, UPDATE_GRAPH, CLEAR_GRAPH }
     from "../actions/action-creators/GraphActionCreators";
 import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
     from "../actions/action-creators/FetchNeighborsActionCreators";
+import { TOGGLE_FILTER_ITEM_CATEGORY } from "../actions/action-creators/GraphFilterActionCreators";
 
 import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from "../utils/SearchHelpers";
 import Constants from "../config/Constants";
 import { updateGraph } from "../actions/action-creators/GraphActionCreators";
 import { store } from "../stores/ReduxStore";
 
-export const nodeReducer = (state = {nodes: [], edges: [], pending: []}, action) => {
+import { combineReducers } from "redux";
+
+const nodeReducer = (state, action) => {
     switch (action.type) {
         case NEIGHBORS_FETCH_SUCCESS:
             const copiedState = Object.assign({}, state);
@@ -44,14 +47,26 @@ export const nodeReducer = (state = {nodes: [], edges: [], pending: []}, action)
 
             return copiedState;
         case NEIGHBORS_FETCH_ERROR:
+            return state;
         default:
             return state;
     }
 };
 
+const graphFilterReducer = (filterState, action) => {
+    if(action.type === TOGGLE_FILTER_ITEM_CATEGORY) {
+        if(filterState.hasOwnProperty(action.category)) {
+            filterState[action.category] = !filterState[action.category];
+            console.log("toggling", action.category);
+        }
+    }
+
+    return filterState;
+};
+
 export const graphReducer = (
-    state = {nodes: [], edges: [], pending: [], rerender: false},
-    action) => {
+state = {nodes: [], edges: []},
+action) => {
 
     switch (action.type) {
         case CLEAR_GRAPH:

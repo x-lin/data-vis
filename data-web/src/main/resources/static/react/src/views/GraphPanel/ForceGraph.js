@@ -24,7 +24,7 @@ export default class extends React.Component {
 
     componentDidMount() {
         this.renderGraph(this.props.graph);
-        window.addEventListener('resize', this.resizePanel.bind(this));
+        window.addEventListener('resize', (event) => this.resizePanel(event));
     }
 
     componentWillUnmount() {
@@ -37,10 +37,8 @@ export default class extends React.Component {
 
     renderGraph(data) {
         this.dismissOldSvg();
-
         this.createSvg();
         this.createForceLayout(data);
-
         this.updateGraph(data);
     };
 
@@ -55,7 +53,8 @@ export default class extends React.Component {
             .attr("class", "force-graph");
 
         const vis = svg
-            .append('svg:g');
+            .append('svg:g')
+            .attr("id", "gAll");
 
         svg.call(this.createOnZoomBehavior(vis));
 
@@ -83,7 +82,30 @@ export default class extends React.Component {
         this.addLinks();
         this.addNodes();
         this.setNodeBehavior();
+
+        //d3.selectAll(".g")
+        //    .attr("title", function(d) {console.log("my title " + d.key); return d.key})
+        //    .attr("data-content", function(d) {return "Some content to " + d.key})
+        //    .attr("data-toggle", "popover");
+        //
+        //$(".g").popover({
+        //    'trigger':'hover'
+        //    ,'container': 'body'
+        //    ,'placement': 'right'
+        //    ,'white-space': 'nowrap'
+        //    ,'html':'true'
+        //    ,'viewport': "#gAll"
+        //});
+
         this.cleanUpAndRestartLayout();
+    }
+
+    setViewport(e) {
+        console.log("e", e);
+        console.log(e[0].id);
+        console.log("this", this);
+
+        return e[0];
     }
 
     updateGraphData(data) {
@@ -99,6 +121,7 @@ export default class extends React.Component {
     addNodes() {
         const g = this.state.node.enter().append("g")
             .attr("class", "g")
+            .attr("id", (d) => { return "g" + d.key;})
             .style("fill", (d) => this.determineNodeColor(d));
 
         g.append("circle")
@@ -117,6 +140,10 @@ export default class extends React.Component {
     setNodeBehavior() {
         this.state.node
             .on("dblclick", (d) => this.searchForNeighbors(d))
+            .on("contextmenu", function(d) {
+                d3.event.preventDefault();
+                console.log("contextmenu triggered");
+            })
             .call(
                 this.state.force.drag().on("dragstart", this.setElementToFixed)
             );
@@ -161,7 +188,7 @@ export default class extends React.Component {
     }
 
     createSpeededUpAnimation() {
-        var ticksPerRender = 10;
+        var ticksPerRender = 50;
 
         requestAnimationFrame(() => {
             this.createAnimation(requestAnimationFrame, ticksPerRender);
@@ -177,7 +204,19 @@ export default class extends React.Component {
 
     passOverTicks(ticksPerRender) {
         for (var i = 0; i < ticksPerRender; i++) {
-            this.state.force.tick();
+            if(this.state.force.alpha() > 0) {
+                this.state.force.tick();
+            } else {
+                break;
+            }
+        }
+    }
+
+    animateIfNotFinished(requestAnimationFrame, ticksPerRender) {
+        if (this.state.force.alpha() > 0) {
+            requestAnimationFrame(() => {
+                this.createAnimation(requestAnimationFrame, ticksPerRender);
+            });
         }
     }
 
@@ -201,14 +240,6 @@ export default class extends React.Component {
         this.state.node.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")"
         });
-    }
-
-    animateIfNotFinished(requestAnimationFrame, ticksPerRender) {
-        if (this.state.force.alpha() > 0) {
-            requestAnimationFrame(() => {
-                this.createAnimation(requestAnimationFrame, ticksPerRender);
-            });
-        }
     }
     
     determineNodeColor(d){

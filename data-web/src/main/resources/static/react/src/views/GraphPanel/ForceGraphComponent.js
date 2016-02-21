@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { getNeighbors } from "../../actions/aggregated/GETNeighbors";
 
-import ForceGraph from "./ForceGraph_Ref";
+import ForceGraph from "./ForceGraph";
 
 const mapStateToProps = (state) => {
     return {
