@@ -159,7 +159,7 @@ export default class extends React.Component {
         this.state.nodes
             .on("dblclick", (d) => this.searchForNeighbors(d))
             .on("contextmenu", function(d) {
-                //d3.event.preventDefault();
+                d3.event.preventDefault();
                 console.log("contextmenu triggered");
             })
             .call(
@@ -212,7 +212,7 @@ export default class extends React.Component {
     }
 
     createSpeededUpAnimation() {
-        var ticksPerRender = 20;
+        var ticksPerRender = 10;
 
         requestAnimationFrame(() => {
             this.createAnimation(requestAnimationFrame, ticksPerRender);
@@ -227,21 +227,18 @@ export default class extends React.Component {
     }
 
     passOverTicks(ticksPerRender) {
-        for (var i = 0; i < ticksPerRender/10; i++) {
-            for(var j = 0; j < 10; j++) {
-                this.state.force.tick();
-            }
-            if(!(this.state.force.alpha() > 0)) {
-                break;
-            }
+        for(var j = 0; j < ticksPerRender; j++) {
+            this.state.force.tick();
         }
     }
 
     animateIfNotFinished(requestAnimationFrame, ticksPerRender) {
-        if (this.state.force.alpha() > 0) {
+        if (this.state.force.alpha() > 0.05) {
             requestAnimationFrame(() => {
                 this.createAnimation(requestAnimationFrame, ticksPerRender);
             });
+        } else {
+            this.state.force.stop();
         }
     }
 
