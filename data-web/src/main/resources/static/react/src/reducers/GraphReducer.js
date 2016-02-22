@@ -72,16 +72,13 @@ action) => {
         case CLEAR_GRAPH:
             state.nodes.length = 0;
             state.edges.length = 0;
-            console.log("clearing graph : ", state);
 
             return state;
         case UPDATE_GRAPH:
-            console.log("updating graph: ", state);
             state.nodes.length = 0;
             state.edges.length = 0;
             Array.prototype.push.apply(state.nodes, action.data.nodes);
             Array.prototype.push.apply(state.edges, action.data.edges);
-            console.log("state", state);
 
             return Object.assign({}, state);
         case NEIGHBORS_FETCH_SUCCESS:
