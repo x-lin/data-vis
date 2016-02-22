@@ -36,10 +36,26 @@ const nodeReducer = (state, action) => {
                     } else if(neighborIndex > -1 && neighborIndex !== index ) {
                         const edge = createEdge(index, neighborIndex);
 
-                        //TODO issue here, as D3 updates the source/edge values, so comparing indices doesn't work
-                        //TODO add check for reverse edge
-                        if(indexOfObjectInArrayByProperties(state.edges, edge) === -1
-                            ) {
+                        let doesExist = false;
+
+                        for(let j = 0; j < state.edges.length; j++) {
+                            let object = state.edges[j];
+
+                            if(edge.source === object.target.index) {
+                                if(edge.target === object.source.index) {
+                                    doesExist = true;
+                                    break;
+                                }
+                            } else if(edge.source === object.source.index) {
+                                if(edge.target === object.target.index) {
+                                    doesExist = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(!doesExist) {
+                            console.log("added edge");
                             state.edges.push(edge);
                         }
                     }
