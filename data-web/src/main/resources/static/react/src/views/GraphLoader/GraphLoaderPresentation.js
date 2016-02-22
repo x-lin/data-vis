@@ -10,10 +10,11 @@ export default ( {
                 <span className="glyphicon glyphicon-floppy-disk"/>
                 Save Graph as File
             </button>
-            <button type="button" className="btn btn-default btn-file">
-                <span className="glyphicon glyphicon-open"/>
-                Load Graph File<input type="file" onChange={(event) => onLoad(event)} />
-            </button>
+            <div className="btn btn-default btn-file">
+                <span className="glyphicon glyphicon-open "/>
+                <input type="file" onChange={(event) => onLoad(event)} />
+                Load Graph File
+            </div>
         </div>
     );
 };
