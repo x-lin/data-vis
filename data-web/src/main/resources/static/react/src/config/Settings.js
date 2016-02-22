@@ -5,7 +5,7 @@ export default [
     {
         name: ADD_TO_GRAPH_ON_SEARCH,
         description: "Add to current graph on new search",
-        value: true
+        value: false
     },
     //{
     //    name: DISABLED_OPACITY_VALUE,
