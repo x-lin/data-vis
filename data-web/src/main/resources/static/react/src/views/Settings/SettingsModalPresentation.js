@@ -1,5 +1,7 @@
 import React from "react";
 
+import GraphLoaderComponent from "../GraphLoader/GraphLoaderComponent";
+
 export default ( {
     modalId,
     title,
@@ -29,8 +31,11 @@ export default ( {
                         <h4 className="modal-title">{title}</h4>
                     </div>
 
-                    <div className="modal-body">
-                        {renderCheckboxes()}
+                    <div className="container">
+                        <div className="modal-body">
+                            {renderCheckboxes()}
+                            <GraphLoaderComponent />
+                        </div>
                     </div>
 
                     <div className="modal-footer">
