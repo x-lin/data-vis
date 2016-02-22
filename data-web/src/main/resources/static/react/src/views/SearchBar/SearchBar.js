@@ -58,6 +58,7 @@ export default class extends React.Component {
             this.resetOnOptionSelection(items[selectedIndex]);
         } else {
             this.props.searchNeighborsStart(category, value);
+            this.props.setSearchInputValue("")
         }
     };
 
