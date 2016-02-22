@@ -108,7 +108,7 @@ export default class extends React.Component {
             .attr("class", "link");
 
         this.state.links
-            .attr("opacity", (d) => { return d.visible ? "1" : "0.1"});
+            .attr("opacity", (d) => { return d.visible ? "1" : "0.3"});
     }
 
     setVisibilityByFilter(data) {
