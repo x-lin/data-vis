@@ -19,8 +19,9 @@ EventHandlers.onContextMenuNode = (d) => {
     ContextMenuBuilder.show(popoverEl);
 };
 
-EventHandlers.onDoubleClickNode = (d) => {
-
+EventHandlers.onDoubleClickNode = (d, props) => {
+    d3.event.stopPropagation();
+    props.searchNeighbors(d.category, d.key);
 };
 
 EventHandlers.onDragStartNode = (d) => {
