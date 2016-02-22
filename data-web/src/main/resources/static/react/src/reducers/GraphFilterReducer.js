@@ -6,7 +6,6 @@ import { TOGGLE_FILTER_ITEM_CATEGORY } from "../actions/action-creators/GraphFil
 
 import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from "../utils/SearchHelpers";
 import Constants from "../config/Constants";
-import { updateGraph } from "../actions/action-creators/GraphActionCreators";
 import { store } from "../stores/ReduxStore";
 
 export const graphFilterReducer = (state = Constants.defaultVisible, action) => {
