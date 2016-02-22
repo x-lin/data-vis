@@ -1,5 +1,5 @@
 import { getNeighbors } from "../aggregated/GETNeighbors";
-import { updateGraph, clearGraph } from "../../actions/action-creators/GraphActionCreators";
+import { clearGraph } from "../../actions/action-creators/GraphActionCreators";
 
 import { ADD_TO_GRAPH_ON_SEARCH } from "../../config/Settings";
 import { indexOfObjectInArrayByProperty } from "../../utils/SearchHelpers";
