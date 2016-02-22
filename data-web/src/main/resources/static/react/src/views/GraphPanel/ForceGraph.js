@@ -12,7 +12,10 @@ export default class extends React.Component {
         this.state = {
             force: {},
             nodes: {},
-            links: {}
+            links: {},
+            g: {},
+            translate: [0,0],
+            scale: 1
         }
     };
 
@@ -39,13 +42,13 @@ export default class extends React.Component {
     }
 
     renderGraph(data) {
-        this.dismissOldSvg();
-        this.createSvg();
         this.createForceLayout(data);
         this.updateGraph(data);
     };
 
     updateGraph(data) {
+        this.dismissOldSvg();
+        this.createSvg();
         this.updateGraphData(data);
         this.setVisibilityByFilter(data);
         this.addLinks();
@@ -67,6 +70,7 @@ export default class extends React.Component {
             .append('svg:g')
             .attr("id", "gAll");
 
+        this.state.g = vis;
         svg.call(this.createOnZoomBehavior(vis));
 
         this.state.links = vis.selectAll(".link");
@@ -78,20 +82,18 @@ export default class extends React.Component {
     updateForceLayout(data) {
         this.state.nodes.exit().remove();
         this.state.links.exit().remove();
-
-        this.state.force
-            .linkDistance(50)
-            .nodes(data.nodes)
-            .links(data.edges)
-            .start();
+        this.state.force.start();
     }
 
-    createForceLayout() {
+    createForceLayout(data) {
         this.state.force = d3.layout.force()
             .charge(-500)
             //.chargeDistance(300)
             //.friction(0.5)
             //.gravity(0.2)
+            .linkDistance(50)
+            .nodes(data.nodes)
+            .links(data.edges)
             .size([this.getWidth(), this.getHeight()])
             .on("start", () => this.createSpeededUpAnimation());
     }
@@ -149,7 +151,7 @@ export default class extends React.Component {
 
     addNodeText(g) {
         g.append("text")
-            .attr("class", "force-text  unselectable")
+            .attr("class", "force-text unselectable")
             .text(function (d) {return d.key;});
     }
 
@@ -166,10 +168,22 @@ export default class extends React.Component {
     }
 
     createOnZoomBehavior(panelElement) {
-        return d3.behavior.zoom().scaleExtent([0.3, 8])
+        const zoom = d3.behavior
+            .zoom()
+            .scaleExtent([0.3, 8])
+            .scale(this.state.scale)
+            .translate(this.state.translate)
             .on("zoom", () => {
                 panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+                // TODO maybe call that only when new graph is about to be rendered?
+                // TODO Explore that, when rendering starts to get inefficient
+                this.state.translate = d3.event.translate;
+                this.state.scale = d3.event.scale;
             });
+
+        this.state.g.transition().duration(0).attr('transform', 'translate(' + zoom.translate() + ') scale(' + zoom.scale() + ')')
+
+        return zoom;
     }
 
     setElementToFixed(d) {
@@ -188,7 +202,7 @@ export default class extends React.Component {
                 .attr("height", height);
         }
     }
-    
+
     getWidth() {
         return document.getElementById(this.props.divId).clientWidth;
     }

@@ -13,12 +13,11 @@ import { combineReducers } from "redux";
 const nodeReducer = (state, action) => {
     switch (action.type) {
         case NEIGHBORS_FETCH_SUCCESS:
-            const copiedState = Object.assign({}, state);
             let index = indexOfObjectInArrayByProperty(state.nodes, action.key, "key");
 
             if(index === -1) {
-                copiedState.nodes.push(createNode(action.key, action.category));
-                index = copiedState.nodes.length - 1;
+                state.nodes.push(createNode(action.key, action.category));
+                index = state.nodes.length - 1;
             }
 
             for(const neighborCategory in action.neighbors) {
@@ -30,10 +29,10 @@ const nodeReducer = (state, action) => {
                     const neighborIndex = indexOfObjectInArrayByProperty(state.nodes, neighborNode[keyName], "key");
 
                     if(index >= 0 && neighborIndex === -1) {
-                        const edge = createEdge(index, copiedState.nodes.length);
-                        copiedState.edges.push(edge);
+                        const edge = createEdge(index, state.nodes.length);
+                        state.edges.push(edge);
 
-                        copiedState.nodes.push(createNode(neighborNode[keyName], neighborCategory));
+                        state.nodes.push(createNode(neighborNode[keyName], neighborCategory));
                     } else if(neighborIndex > -1 && neighborIndex !== index ) {
                         const edge = createEdge(index, neighborIndex);
 
@@ -41,13 +40,13 @@ const nodeReducer = (state, action) => {
                         //TODO add check for reverse edge
                         if(indexOfObjectInArrayByProperties(state.edges, edge) === -1
                             ) {
-                            copiedState.edges.push(edge);
+                            state.edges.push(edge);
                         }
                     }
                 }
             }
 
-            return copiedState;
+            return Object.assign({}, state);
         case NEIGHBORS_FETCH_ERROR:
             return state;
         default:
@@ -73,10 +72,18 @@ action) => {
         case CLEAR_GRAPH:
             state.nodes.length = 0;
             state.edges.length = 0;
+            console.log("clearing graph : ", state);
 
             return state;
         case UPDATE_GRAPH:
-            state = action.data;
+            console.log("updating graph: ", state);
+            state.nodes.length = 0;
+            state.edges.length = 0;
+            Array.prototype.push.apply(state.nodes, action.data.nodes);
+            Array.prototype.push.apply(state.edges, action.data.edges);
+            console.log("state", state);
+
+            return Object.assign({}, state);
         case NEIGHBORS_FETCH_SUCCESS:
             return nodeReducer(state, action);
         default:
