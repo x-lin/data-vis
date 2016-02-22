@@ -143,7 +143,10 @@ export default class extends React.Component {
             .attr("class", "circle")
             .attr("r", 20)
             .attr("id", (d) => { return this.buildIdName(d.key, d.category);})
-            .attr("title", "the svg canvas")
+            .attr("title", (d) => {
+                return `<span style="background:${Constants.colorMap[d.category]}; width: 15px; height: 15px; border-radius: 50%; display: inline-block;"></span>
+                    <span style="top: -2px; position: relative; ">${d.key}</span>`
+            })
             .attr("data-toggle", "popover")
             .attr("data-content", d => d.key);
 
