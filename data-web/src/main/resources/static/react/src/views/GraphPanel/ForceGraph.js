@@ -34,6 +34,7 @@ export default class extends React.Component {
     }
 
     componentDidUpdate() {
+        //this.renderGraph(Object.assign({}, this.props.graph));
         this.updateGraph(Object.assign({}, this.props.graph));
     }
 
@@ -44,6 +45,14 @@ export default class extends React.Component {
         this.updateGraph(data);
     };
 
+    updateGraph(data) {
+        this.updateGraphData(data);
+        this.setVisibilityByFilter(data);
+        this.addLinks();
+        this.addNodes();
+        this.updateForceLayout(data);
+    }
+
     dismissOldSvg() {
         d3.select("#" + this.props.divId).select("svg").remove();
     };
@@ -52,7 +61,7 @@ export default class extends React.Component {
         const svg = d3.select("#" + this.props.divId).append("svg")
             .attr("width", this.getWidth())
             .attr("height", this.getHeight())
-            .attr("class", "force-graph");
+            .attr("class", "force-graph ");
 
         const vis = svg
             .append('svg:g')
@@ -66,49 +75,25 @@ export default class extends React.Component {
         return svg;
     }
 
-    createForceLayout(data) {
+    updateForceLayout(data) {
+        this.state.nodes.exit().remove();
+        this.state.links.exit().remove();
+
+        this.state.force
+            .linkDistance(50)
+            .nodes(data.nodes)
+            .links(data.edges)
+            .start();
+    }
+
+    createForceLayout() {
         this.state.force = d3.layout.force()
             .charge(-500)
-            .linkDistance(50)
             //.chargeDistance(300)
             //.friction(0.5)
             //.gravity(0.2)
             .size([this.getWidth(), this.getHeight()])
-            .nodes(data.nodes)
-            .links(data.edges)
-            .on('start', () => this.createSpeededUpAnimation());
-    }
-
-    updateGraph(data) {
-        this.setVisibilityByFilter(data);
-        this.updateGraphData(data);
-        this.addLinks();
-        this.addNodes();
-        this.setNodeBehavior();
-
-        //d3.selectAll(".g")
-        //    .attr("title", function(d) {console.log("my title " + d.key); return d.key})
-        //    .attr("data-content", function(d) {return "Some content to " + d.key})
-        //    .attr("data-toggle", "popover");
-        //
-        //$(".g").popover({
-        //    'trigger':'hover'
-        //    ,'container': 'body'
-        //    ,'placement': 'right'
-        //    ,'white-space': 'nowrap'
-        //    ,'html':'true'
-        //    ,'viewport': "#gAll"
-        //});
-
-        this.cleanUpAndRestartLayout();
-    }
-
-    setViewport(e) {
-        console.log("e", e);
-        console.log(e[0].id);
-        console.log("this", this);
-
-        return e[0];
+            .on("start", () => this.createSpeededUpAnimation());
     }
 
     updateGraphData(data) {
@@ -118,7 +103,7 @@ export default class extends React.Component {
 
     addLinks() {
         this.state.links.enter().insert("line", "g")
-            .attr("class", "link ")
+            .attr("class", "link");
 
         this.state.links
             .attr("opacity", (d) => { return d.visible ? "1" : "0.1"});
@@ -157,7 +142,9 @@ export default class extends React.Component {
         this.addNodeText(g);
 
         this.state.nodes
-                    .attr("opacity", (d) => { return d.visible ? "1" : "0.4"});
+            .attr("opacity", (d) => { return d.visible ? "1" : "0.4"});
+
+        this.setNodeBehavior();
     }
 
     addNodeText(g) {
@@ -170,18 +157,12 @@ export default class extends React.Component {
         this.state.nodes
             .on("dblclick", (d) => this.searchForNeighbors(d))
             .on("contextmenu", function(d) {
-                d3.event.preventDefault();
+                //d3.event.preventDefault();
                 console.log("contextmenu triggered");
             })
             .call(
                 this.state.force.drag().on("dragstart", this.setElementToFixed)
             );
-    }
-
-    cleanUpAndRestartLayout() {
-        this.state.nodes.exit().remove();
-        this.state.links.exit().remove();
-        this.state.force.start();
     }
 
     createOnZoomBehavior(panelElement) {
@@ -268,6 +249,7 @@ export default class extends React.Component {
 
     moveNodes() {
         this.state.nodes.attr("transform", function (d) {
+
             return "translate(" + d.x + "," + d.y + ")"
         });
     }
