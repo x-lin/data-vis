@@ -64,7 +64,10 @@ export default class extends React.Component {
         const svg = d3.select("#" + this.props.divId).append("svg")
             .attr("width", this.getWidth())
             .attr("height", this.getHeight())
-            .attr("class", "force-graph ");
+            .attr("class", "force-graph ")
+            .on("click", (d) => {
+                $('.popover').remove();
+            });
 
         const vis = svg
             .append('svg:g')
@@ -79,7 +82,7 @@ export default class extends React.Component {
         return svg;
     }
 
-    updateForceLayout(data) {
+    updateForceLayout() {
         this.state.nodes.exit().remove();
         this.state.links.exit().remove();
         this.state.force.start();
@@ -134,12 +137,15 @@ export default class extends React.Component {
     addNodes() {
         const g = this.state.nodes.enter().append("g")
             .attr("class", "g")
-            .attr("id", (d) => { return "g" + d.key;})
             .style("fill", (d) => this.determineNodeColor(d));
 
         g.append("circle")
             .attr("class", "circle")
-            .attr("r", 20);
+            .attr("r", 20)
+            .attr("id", (d) => { return this.buildIdName(d.key, d.category);})
+            .attr("title", "the svg canvas")
+            .attr("data-toggle", "popover")
+            .attr("data-content", d => d.key);
 
         this.addNodeText(g);
 
@@ -155,11 +161,26 @@ export default class extends React.Component {
             .text(function (d) {return d.key;});
     }
 
+    buildIdName(key, category) {
+        return "g" + key.replace(/^[^a-z]+|[^\w-]+/gi, "") + category;
+    }
+
     setNodeBehavior() {
         this.state.nodes
             .on("dblclick", (d) => this.searchForNeighbors(d))
-            .on("contextmenu", function(d) {
+            .on("contextmenu", (d) => {
                 d3.event.preventDefault();
+
+                $("#" + this.buildIdName(d.key, d.category)).popover({
+                    'trigger':'manual'
+                    ,'container': 'body'
+                    ,'placement': 'right'
+                    ,'white-space': 'nowrap'
+                    ,'html':'true'
+                });
+
+                $("#" + this.buildIdName(d.key, d.category)).popover("show");
+
                 console.log("contextmenu triggered");
             })
             .call(
@@ -174,6 +195,7 @@ export default class extends React.Component {
             .scale(this.state.scale)
             .translate(this.state.translate)
             .on("zoom", () => {
+                $('.popover').remove();
                 panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
                 // TODO maybe call that only when new graph is about to be rendered?
                 // TODO Explore that, when rendering starts to get inefficient
@@ -188,6 +210,7 @@ export default class extends React.Component {
 
     setElementToFixed(d) {
         d3.event.sourceEvent.stopPropagation();
+        $('.popover').remove();
         d3.select(this).classed("fixed", d.fixed = true);
     }
 
