@@ -17,5 +17,5 @@ ReactDOM.render (
             </Route>
         </Router>
     </Provider>,
-    document.getElementById("root")
+    $("#root")[0]
 );
