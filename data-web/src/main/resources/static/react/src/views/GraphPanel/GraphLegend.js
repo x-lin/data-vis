@@ -14,7 +14,7 @@ export default class extends React.Component {
     }
 
     componentDidMount(){
-        const bbox = document.getElementById(this.props.divId).getBBox();
+        const bbox = $("#"+ this.props.divId)[0].getBBox();
         if (bbox) {
             const padding = 15;
             const extra = 10;

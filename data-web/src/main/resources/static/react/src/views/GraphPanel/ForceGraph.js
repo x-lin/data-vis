@@ -183,8 +183,6 @@ export default class extends React.Component {
                 });
 
                 $("#" + this.buildIdName(d.key, d.category)).popover("show");
-
-                console.log("contextmenu triggered");
             })
             .call(
                 this.state.force.drag().on("dragstart", this.setElementToFixed)
@@ -218,7 +216,7 @@ export default class extends React.Component {
     }
 
     resizePanel(e) {
-        if (document.getElementById(this.props.divId)) {
+        if ($("#" + this.props.divId)) {
             const width = this.getWidth(this.props.divId);
             const height = this.getHeight(this.props.divId);
 
@@ -230,11 +228,11 @@ export default class extends React.Component {
     }
 
     getWidth() {
-        return document.getElementById(this.props.divId).clientWidth;
+        return $("#"+this.props.divId).width();
     }
 
     getHeight() {
-        return document.getElementById(this.props.divId).clientHeight;
+        return $("#"+this.props.divId).height();
     }
 
     createSpeededUpAnimation() {
@@ -259,7 +257,7 @@ export default class extends React.Component {
     }
 
     animateIfNotFinished(requestAnimationFrame, ticksPerRender) {
-        if (this.state.force.alpha() > 0.05) {
+        if (this.state.force.alpha() > 0.03) {
             requestAnimationFrame(() => {
                 this.createAnimation(requestAnimationFrame, ticksPerRender);
             });
