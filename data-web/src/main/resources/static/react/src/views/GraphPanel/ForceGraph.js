@@ -2,9 +2,14 @@ import React from "react";
 import d3 from "d3";
 
 import Constants from "../../config/Constants";
+import ContextMenuBuilder from "./ContextMenu/ContextMenuBuilder";
+import EventHandlers from "./ForceGraphEventHandlers";
 import FilterHelpers from "../../utils/FilterHelpers";
 import "./ForceGraph.css";
 
+//Note: This class is mostly a wrapper around the D3 force graph implementation enriched with some customized behaviors.
+//A refactoring of the force graph was started to apply to the React way (check out ForceGraph_Ref.js), it was however
+//abandoned due to apparent performance losses in graph rendering and the lack of reusability of D3 behaviors in React.
 export default class extends React.Component {
     constructor(props) {
         super(props);
@@ -15,19 +20,19 @@ export default class extends React.Component {
             links: {},
             g: {},
             translate: [0,0],
-            scale: 1
+            scale: 1,
+            zoom: {}
         }
-    };
+    }
 
     render() {
         return (
             <div id={this.props.divId}>
             </div>
         );
-    };
+    }
 
     componentDidMount() {
-        //const data = this.filterGraph(this.props.graph);
         this.renderGraph(Object.assign({}, this.props.graph));
         window.addEventListener('resize', (event) => this.resizePanel(event));
     }
@@ -37,16 +42,18 @@ export default class extends React.Component {
     }
 
     componentDidUpdate() {
-        //this.renderGraph(Object.assign({}, this.props.graph));
         this.updateGraph(Object.assign({}, this.props.graph));
     }
 
     renderGraph(data) {
         this.createForceLayout(data);
+        this.state.zoom = this.createZoom();
+
         this.updateGraph(data);
-    };
+    }
 
     updateGraph(data) {
+        this.saveZoom();
         this.dismissOldSvg();
         this.createSvg();
         this.updateGraphData(data);
@@ -54,6 +61,32 @@ export default class extends React.Component {
         this.addLinks();
         this.addNodes();
         this.updateForceLayout(data);
+    }
+
+    createZoom() {
+        return d3.behavior
+            .zoom()
+            .scaleExtent([0.3, 8])
+            .scale(this.state.scale)
+            .translate(this.state.translate);
+    }
+
+    saveZoom() {
+        if(typeof this.state.zoom.scale == 'function') {
+            this.state.scale = this.state.zoom.scale();
+            this.state.translate = this.state.zoom.translate();
+        }
+    }
+
+    createOnZoomBehavior(panelElement) {
+        //assign panelElement to be the element responsible for zooming
+        this.state.zoom
+            .on("zoom", () => {EventHandlers.onZoomSvg(panelElement)});
+
+        //set zoom level to saved zoom level
+        this.state.g.transition().duration(0).attr('transform', 'translate(' + this.state.zoom.translate() + ') scale(' + this.state.zoom.scale() + ')');
+
+        return this.state.zoom;
     }
 
     dismissOldSvg() {
@@ -65,9 +98,7 @@ export default class extends React.Component {
             .attr("width", this.getWidth())
             .attr("height", this.getHeight())
             .attr("class", "force-graph ")
-            .on("click", (d) => {
-                $('.popover').remove();
-            });
+            .on("click", (d) => EventHandlers.onClickSvg(d));
 
         const vis = svg
             .append('svg:g')
@@ -127,7 +158,9 @@ export default class extends React.Component {
 
         data.edges = data.edges.map((edge, index) => {
             const connectedToFilter =  (filterIndexValues.indexOf(edge.source.index) > -1) ||
-                (filterIndexValues.indexOf(edge.target.index) > -1);
+                (filterIndexValues.indexOf(edge.target.index) > -1) ||
+                (filterIndexValues.indexOf(edge.source) > -1) ||
+                (filterIndexValues.indexOf(edge.target) > -1);
             edge.visible = !connectedToFilter;
 
             return edge;
@@ -142,7 +175,7 @@ export default class extends React.Component {
         g.append("circle")
             .attr("class", "circle")
             .attr("r", 20)
-            .attr("id", (d) => { return this.buildIdName(d.key, d.category);})
+            .attr("id", (d) => { return ContextMenuBuilder.buildElementId(d.key, d.category);})
             .attr("title", (d) => {
                 return `<span style="background:${Constants.colorMap[d.category]}; width: 15px; height: 15px; border-radius: 50%; display: inline-block;"></span>
                     <span style="top: -2px; position: relative; ">${d.key}</span>`
@@ -164,55 +197,13 @@ export default class extends React.Component {
             .text(function (d) {return d.key;});
     }
 
-    buildIdName(key, category) {
-        return "g" + key.replace(/^[^a-z]+|[^\w-]+/gi, "") + category;
-    }
-
     setNodeBehavior() {
         this.state.nodes
             .on("dblclick", (d) => this.searchForNeighbors(d))
-            .on("contextmenu", (d) => {
-                d3.event.preventDefault();
-
-                $("#" + this.buildIdName(d.key, d.category)).popover({
-                    'trigger':'manual'
-                    ,'container': 'body'
-                    ,'placement': 'right'
-                    ,'white-space': 'nowrap'
-                    ,'html':'true'
-                });
-
-                $("#" + this.buildIdName(d.key, d.category)).popover("show");
-            })
+            .on("contextmenu", (d) => EventHandlers.onContextMenuNode(d))
             .call(
-                this.state.force.drag().on("dragstart", this.setElementToFixed)
+                this.state.force.drag().on("dragstart", (d) => EventHandlers.onDragStartNode(d))
             );
-    }
-
-    createOnZoomBehavior(panelElement) {
-        const zoom = d3.behavior
-            .zoom()
-            .scaleExtent([0.3, 8])
-            .scale(this.state.scale)
-            .translate(this.state.translate)
-            .on("zoom", () => {
-                $('.popover').remove();
-                panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
-                // TODO maybe call that only when new graph is about to be rendered?
-                // TODO Explore that, when rendering starts to get inefficient
-                this.state.translate = d3.event.translate;
-                this.state.scale = d3.event.scale;
-            });
-
-        this.state.g.transition().duration(0).attr('transform', 'translate(' + zoom.translate() + ') scale(' + zoom.scale() + ')')
-
-        return zoom;
-    }
-
-    setElementToFixed(d) {
-        d3.event.sourceEvent.stopPropagation();
-        $('.popover').remove();
-        d3.select(this).classed("fixed", d.fixed = true);
     }
 
     resizePanel(e) {
@@ -284,7 +275,6 @@ export default class extends React.Component {
 
     moveNodes() {
         this.state.nodes.attr("transform", function (d) {
-
             return "translate(" + d.x + "," + d.y + ")"
         });
     }
