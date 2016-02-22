@@ -37,6 +37,7 @@ body {
     z-index: 9999;
     position: absolute;
     top: 34px;
+    min-width: 200px;
 }
 
 .navbar {
