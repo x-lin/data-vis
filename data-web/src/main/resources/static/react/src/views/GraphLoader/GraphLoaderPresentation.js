@@ -11,7 +11,7 @@ export default ( {
                 Save Graph as File
             </button>
             <div className="btn btn-default btn-file">
-                <span className="glyphicon glyphicon-open "/>
+                <span className="glyphicon glyphicon-open"/>
                 <input type="file" onChange={(event) => onLoad(event)} />
                 Load Graph File
             </div>
