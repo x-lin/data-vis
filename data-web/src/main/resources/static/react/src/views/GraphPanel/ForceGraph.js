@@ -47,8 +47,7 @@ export default class extends React.Component {
 
     renderGraph(data) {
         this.createForceLayout(data);
-        this.state.zoom = this.createZoom();
-
+        this.createZoom();
         this.updateGraph(data);
     }
 
@@ -64,7 +63,7 @@ export default class extends React.Component {
     }
 
     createZoom() {
-        return d3.behavior
+        this.state.zoom = d3.behavior
             .zoom()
             .scaleExtent([0.3, 8])
             .scale(this.state.scale)
@@ -81,10 +80,13 @@ export default class extends React.Component {
     createOnZoomBehavior(panelElement) {
         //assign panelElement to be the element responsible for zooming
         this.state.zoom
-            .on("zoom", () => {EventHandlers.onZoomSvg(panelElement)});
+            .on("zoom", (element) => EventHandlers.onZoomSvg(panelElement));
 
         //set zoom level to saved zoom level
-        this.state.g.transition().duration(0).attr('transform', 'translate(' + this.state.zoom.translate() + ') scale(' + this.state.zoom.scale() + ')');
+        this.state.g
+            .transition()
+            .duration(0)
+            .attr('transform', 'translate(' + this.state.zoom.translate() + ') scale(' + this.state.zoom.scale() + ')');
 
         return this.state.zoom;
     }
@@ -170,7 +172,7 @@ export default class extends React.Component {
     addNodes() {
         const g = this.state.nodes.enter().append("g")
             .attr("class", "g")
-            .style("fill", (d) => this.determineNodeColor(d));
+            .style("fill", (d) => Constants.getColor(d.category));
 
         g.append("circle")
             .attr("class", "circle")
@@ -193,23 +195,24 @@ export default class extends React.Component {
 
     addNodeText(g) {
         g.append("text")
-            .attr("class", "force-text unselectable")
-            .text(function (d) {return d.key;});
+            .attr("class", "force-text  unselectable")
+            .text(d => d.key);
     }
 
     setNodeBehavior() {
         this.state.nodes
-            .on("dblclick", (d) => this.searchForNeighbors(d))
+            .on("dblclick", (d, props) => EventHandlers.onDoubleClickNode(d, this.props))
             .on("contextmenu", (d) => EventHandlers.onContextMenuNode(d))
             .call(
-                this.state.force.drag().on("dragstart", (d) => EventHandlers.onDragStartNode(d))
+                this.state.force.drag()
+                    .on("dragstart", (d) => EventHandlers.onDragStartNode(d))
             );
     }
 
     resizePanel(e) {
         if ($("#" + this.props.divId)) {
-            const width = this.getWidth(this.props.divId);
-            const height = this.getHeight(this.props.divId);
+            const width = this.getWidth();
+            const height = this.getHeight();
 
             this.state.force.size([width, height]).resume();
             d3.select("#" + this.props.divId).select("svg")
@@ -227,18 +230,19 @@ export default class extends React.Component {
     }
 
     createSpeededUpAnimation() {
-        var ticksPerRender = 10;
-
         requestAnimationFrame(() => {
-            this.createAnimation(requestAnimationFrame, ticksPerRender);
+            this.createAnimation();
         });
     }
 
-    createAnimation(requestAnimationFrame, ticksPerRender) {
-        this.passOverTicks(ticksPerRender);
+    createAnimation() {
+        const TICKS_PER_RENDER = 10;
+        const ALPHA_THRESHOLD = 0.03;
+
+        this.passOverTicks(TICKS_PER_RENDER);
         this.moveLinks();
         this.moveNodes();
-        this.animateIfNotFinished(requestAnimationFrame, ticksPerRender);
+        this.animateIfNotFinished(ALPHA_THRESHOLD);
     }
 
     passOverTicks(ticksPerRender) {
@@ -247,11 +251,9 @@ export default class extends React.Component {
         }
     }
 
-    animateIfNotFinished(requestAnimationFrame, ticksPerRender) {
-        if (this.state.force.alpha() > 0.03) {
-            requestAnimationFrame(() => {
-                this.createAnimation(requestAnimationFrame, ticksPerRender);
-            });
+    animateIfNotFinished(alphaThreshold) {
+        if (this.state.force.alpha() > alphaThreshold) {
+            this.createSpeededUpAnimation();
         } else {
             this.state.force.stop();
         }
@@ -259,33 +261,14 @@ export default class extends React.Component {
 
     moveLinks() {
         this.state.links
-            .attr('x1', function (d) {
-                return d.source.x;
-            })
-            .attr('y1', function (d) {
-                return d.source.y;
-            })
-            .attr('x2', function (d) {
-                return d.target.x;
-            })
-            .attr('y2', function (d) {
-                return d.target.y;
-            });
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
     }
 
     moveNodes() {
-        this.state.nodes.attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")"
-        });
+        this.state.nodes
+            .attr("transform", d => `translate(${d.x},${d.y})`);
     }
-    
-    determineNodeColor(d){
-        const { colorMap } = Constants;
-        return colorMap[d.category] ? colorMap[d.category] : colorMap["Other"];
-    }
-
-    searchForNeighbors(d) {
-        d3.event.stopPropagation();
-        this.props.searchNeighbors(d.category, d.key, false);
-    };
 }
