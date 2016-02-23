@@ -1,6 +1,0 @@
-{
-  "scripts": {
-    "postinstall": "wiredep -s index.html"
-  },
-  "directory" : "lib"
-}
