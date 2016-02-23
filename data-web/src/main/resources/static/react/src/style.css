@@ -4,6 +4,14 @@ body {
     z-index:0;
 }
 
+.panel-heading:hover {
+    background-color: #dfdfdf !important;
+}
+
+.inpadding {
+    padding: 0px 16px 8px 16px;
+}
+
 .btn-file {
     position: relative;
     overflow: hidden;
