@@ -1,3 +1,5 @@
+import ReactDOM from "react-dom";
+
 import ContextMenuBuilder from "./ContextMenu/ContextMenuBuilder";
 
 const EventHandlers = {};
@@ -15,8 +17,7 @@ EventHandlers.onContextMenuNode = (d) => {
     d3.event.preventDefault();
 
     const popoverEl = ContextMenuBuilder.buildElement(d.key, d.category);
-    ContextMenuBuilder.create(popoverEl);
-    ContextMenuBuilder.show(popoverEl);
+    ContextMenuBuilder.createAndShow(popoverEl, d);
 };
 
 EventHandlers.onDoubleClickNode = (d, props) => {

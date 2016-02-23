@@ -47,7 +47,7 @@ export default class extends React.Component {
 
     renderGraph(data) {
         this.createForceLayout(data);
-        this.createZoom();
+        this.state.zoom = this.createZoom();
         this.updateGraph(data);
     }
 
@@ -63,7 +63,7 @@ export default class extends React.Component {
     }
 
     createZoom() {
-        this.state.zoom = d3.behavior
+        return d3.behavior
             .zoom()
             .scaleExtent([0.3, 8])
             .scale(this.state.scale)
@@ -99,7 +99,7 @@ export default class extends React.Component {
         const svg = d3.select("#" + this.props.divId).append("svg")
             .attr("width", this.getWidth())
             .attr("height", this.getHeight())
-            .attr("class", "force-graph ")
+            .attr("class", "force-graph")
             .on("click", (d) => EventHandlers.onClickSvg(d));
 
         const vis = svg
@@ -177,13 +177,7 @@ export default class extends React.Component {
         g.append("circle")
             .attr("class", "circle")
             .attr("r", 20)
-            .attr("id", (d) => { return ContextMenuBuilder.buildElementId(d.key, d.category);})
-            .attr("title", (d) => {
-                return `<span style="background:${Constants.colorMap[d.category]}; width: 15px; height: 15px; border-radius: 50%; display: inline-block;"></span>
-                    <span style="top: -2px; position: relative; ">${d.key}</span>`
-            })
-            .attr("data-toggle", "popover")
-            .attr("data-content", d => d.key);
+            .attr("id", (d) => { return ContextMenuBuilder.buildElementId(d.key, d.category);});
 
         this.addNodeText(g);
 

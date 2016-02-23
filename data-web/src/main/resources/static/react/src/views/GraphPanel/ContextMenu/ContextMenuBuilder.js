@@ -1,3 +1,8 @@
+import React from "react";
+import ReactDOM from "react-dom";
+
+import ContextMenu from "./ContextMenu";
+
 const ContextMenuBuilder = {};
 
 ContextMenuBuilder.buildElement = (key, category) => {
@@ -8,28 +13,17 @@ ContextMenuBuilder.buildElementId = (key, category) => {
     return "g" + key.replace(/^[^a-z]+|[^\w-]+/gi, "") + category;
 };
 
-ContextMenuBuilder.create = (element) => {
-    element.popover({
-        'trigger':'manual'
-        ,'container': 'body'
-        ,'placement': 'right'
-        ,'white-space': 'nowrap'
-        ,'html':'true'
-    });
-
-    return element;
-};
-
-ContextMenuBuilder.show = (element) => {
-    element.popover("show");
+ContextMenuBuilder.createAndShow = (element, d) => {
+    ReactDOM.render (
+        <ContextMenu d={d} target={element[0]} />,
+        $("#popover-content")[0]
+    );
 
     return element;
 };
 
 ContextMenuBuilder.removeAll = (selector) => {
-    const select = selector || ".popover";
-
-    $(select).remove();
+    $(selector || ".popover").remove();
 };
 
 export default ContextMenuBuilder;
