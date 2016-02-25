@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { toggleSetting } from "../../actions/action-creators/SettingsActions"
 
-import SettingsModal from "./SettingsModal";
+import SettingsSideBar from "./SettingsSideBar";
 
 const mapStateToProps = (state) => {
     return {
@@ -22,4 +22,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(SettingsModal);
+)(SettingsSideBar);

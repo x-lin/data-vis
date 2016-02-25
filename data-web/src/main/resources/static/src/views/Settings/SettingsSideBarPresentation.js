@@ -3,8 +3,6 @@ import React from "react";
 import GraphLoaderComponent from "../GraphLoader/GraphLoaderComponent";
 
 export default ( {
-    modalId,
-    title,
     toggleHandler,
     settings
 } ) => {

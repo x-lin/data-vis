@@ -2,7 +2,7 @@ var React = require("react");
 import Router from "react-router";
 import { Link } from "react-router";
 
-import SettingsModal from "./Settings/SettingsModalComponent";
+import SettingsSideBarComponent from "./Settings/SettingsSideBarComponent";
 
 class Main extends React.Component{ //creates react component
     //pushState() {
@@ -42,6 +42,8 @@ class Main extends React.Component{ //creates react component
                             </div>
                     </nav>
                 </header>
+
+                <SettingsSideBarComponent />
 
                 <div className="content-wrapper">
                     {this.props.children}
