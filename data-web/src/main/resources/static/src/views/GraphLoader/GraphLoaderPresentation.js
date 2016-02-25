@@ -6,20 +6,20 @@ export default ( {
     } ) => {
     return (
         <div>
-            <div className="btn-group" role="group" aria-label="Browse at source site">
-                <div className="btn-group" role="group">
-                    <div className="btn btn-default" onClick={onSave}>
-                        <span className="glyphicon glyphicon-floppy-disk"/>
-                        Save Graph as File
-                    </div>
-                </div>
-                <div className="btn-group" role="group">
-                    <div className="btn btn-default btn-file">
-                        <span className="glyphicon glyphicon-open"/>
-                        <input type="file" onChange={(event) => onLoad(event)} />
-                        Load Graph File
-                    </div>
-                </div>
+            <ul className="sidebar-menu">
+                <li className="header"><span className="fa  fa-file-text"></span>&nbsp; Save/Load Graph</li>
+            </ul>
+
+
+            <div className="btn btn-block sidebar-button" onClick={onSave}>
+                <span className="fa fa-save"/> &nbsp;
+                Save Graph to File
+            </div>
+
+            <div className="btn btn-block btn-file sidebar-button">
+                <span className="fa fa-upload"/>
+                <input type="file" onChange={(event) => onLoad(event)} /> &nbsp;
+                Load Graph from File
             </div>
         </div>
     );
