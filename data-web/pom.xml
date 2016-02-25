@@ -105,7 +105,7 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
-					<exclude>static/react/node_modules/**</exclude>
+					<exclude>static/node_modules/**</exclude>
 				</excludes>
 			</resource>
 		</resources>
