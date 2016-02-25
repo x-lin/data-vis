@@ -4,12 +4,37 @@ body {
     z-index:0;
 }
 
-.skin-blue .main-header .logo {
-    background-color: #00529B;
+.skin-black .main-header .logo {
+    background-color: #EFEFEF;
 }
 
-.skin-blue .main-header .navbar {
-    background-color: #00529B;
+.skin-black .main-header .navbar {
+    background-color: #EFEFEF;
+    font-size: 16px;
+}
+
+.skin-black .main-header > .navbar .nav > li > a {
+    /*text-transform: uppercase;*/
+    background-color: #EFEFEF;
+    font-weight: 700;
+    color: #333333;
+    font-size: 16px;
+    border-right: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+}
+
+.skin-black .main-header > .navbar .nav .open > a:focus, .skin-black .main-header > .navbar .nav > .active > a {
+    /*text-transform: uppercase;*/
+    background-color: #EFEFEF;
+    color: #3366CC;
+    font-size: 16px;
+}
+
+.skin-black .main-header > .navbar .nav > li > a:hover, a:active, a:focus {
+    /*text-transform: uppercase;*/
+    background-color: #EFEFEF;
+    color: #3366CC;
+    font-size: 16px;
 }
 
 .sidebar-padding {

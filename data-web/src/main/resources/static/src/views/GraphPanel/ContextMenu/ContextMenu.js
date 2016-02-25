@@ -44,16 +44,29 @@ export default class extends React.Component {
                             <li className=""><a href="#tab_3" data-toggle="tab" aria-expanded="false" className="title-small space-smaller"> Advanced</a></li>
                         </ul>
                         <div className="tab-content overflow-scroll">
+
                             <div className="tab-pane active" id="tab_1">
-                                <div className="row inpadding">
-                                    <div className="btn-group btn-group-justified" role="group" aria-label="Browse at source site">
-                                        <a type="button" className="btn btn-default">
-                                            <img src={`${imgDir}jira-logo.png`} height="20px" />
-                                        </a>
-                                        <a type="button" className="btn btn-default">
-                                            <img src={`${imgDir}jama-logo.png`} height="20px" />
-                                        </a>
+
+
+
+                                <div className="row inpadding ">
+                                    <div className="overlay-wrapper">
+                                        <div className="overlay">
+                                            <i className="fa fa-refresh  fa-spin"></i>
+                                        </div>
+
+                                        <div className="btn-group btn-group-justified" role="group" aria-label="Browse at source site">
+                                            <a type="button" className="btn btn-default">
+                                                <img src={`${imgDir}jira-logo.png`} height="20px" />
+                                            </a>
+                                            <a type="button" className="btn btn-default">
+                                                <img src={`${imgDir}jama-logo.png`} height="20px" />
+                                            </a>
+                                        </div>
                                     </div>
+
+
+
                                 </div>
 
                                 <b>How to use:</b>
