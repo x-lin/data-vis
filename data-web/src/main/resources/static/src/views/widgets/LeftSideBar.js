@@ -1,17 +1,8 @@
 import React from "react";
 
-export default class extends React.Component {
-    componentDidMount() {
-        $("#range4").ionRangeSlider({
-            type: "single",
-            min: 1,
-            max: 20,
-            step: 1,
-            grid: true,
-            grid_snap: true
-        });
-    }
+import Slider from "./Slider";
 
+export default class extends React.Component {
     render() {
         return (
             <aside className="main-sidebar">
@@ -69,23 +60,10 @@ export default class extends React.Component {
                                         Show as single nodes
                                         <input type="radio" name="optionsRadios" className="pull-right" id="optionsRadios2" value="option2" checked="checked" />
                                     </label>
-                                    <div>
-                                        {/*<span className="irs">
-                                            <span className="irs-line">
-                                                <span className="irs-line-left"></span>
-                                                <span className="irs-line-mid"></span>
-                                                <span className="irs-line-right"></span>
-                                            </span>
-                                            <span className="irs-min" style={{display: "none"}}>1</span>
-                                            <span className="irs-max" style={{display: "none"}}>20</span>
-                                            <span className="irs-from" style={{display: "none"}}>1</span>
-                                            <span className="irs-to" style={{display: "none"}}>20</span>
-                                            <span className="irs-single" style={{left: "100px"}}>10</span>
-                                            <span className="irs-slider single" style={{left: "120px"}}></span>
-                                        </span>*/}
-                                        <input id="range4" type="text" name="range4" />
-                                    </div>
 
+                                    <Slider min={1} max={20} defaultValue={10} onChange={function() {
+                                        console.log("slider on change")
+                                    }} />
 
                                     <label  className="control-sidebar-subheading">
                                         Show as clusters
