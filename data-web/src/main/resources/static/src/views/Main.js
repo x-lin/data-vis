@@ -12,39 +12,41 @@ class Main extends React.Component{ //creates react component
     render() {
         return (
             <div>
-                <div className="navbar navbar-default navbar-xs  navbar-static-top" role="navigation">
-                    <div className="container">
-                        <div className="navbar-header">
-                            {/*<a className="navbar-brand" href="#/"></a>
-                            for dropdown menu on passing under a width threshold*/}
-                            <button type="button" className="navbar-toggle">
-                                <span className="sr-only">Toggle navigation</span>
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                            </button>
-                        </div>
+                <header className="main-header">
 
-                        <div className="navbar-collapse collapse">
-                            <ul className="nav navbar-nav">
-                                <li><Link to="/">Home</Link></li>
-                                <li><Link to="/relationships">Relationships</Link></li>
-                                <li><Link to="/">Timeline</Link></li>
-                                <li><Link to="/">Graph Editor</Link></li>
-                                <li><Link to="/">Statistics</Link></li>
-                            </ul>
+                    <a href="index.html" className="logo ">
+                        &nbsp;
+                    </a>
 
-                            <ul className="nav navbar-nav navbar-right">
-                                <li><a href="#" data-toggle="modal" data-target="#settingsModal"><span className="glyphicon glyphicon-wrench"/>&nbsp; Settings</a></li>
+                    <nav className="navbar navbar-static-top">
+                        {/*<div className="navbar-header">
+                                <a href="../../index2.html" className="navbar-brand"><b>Admin</b>LTE</a>
+                                <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                                    <i className="fa fa-bars"></i>
+                                </button>
+                            </div>*/}
 
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <SettingsModal modalId={"settingsModal"} />
-                <div className="nopadding">
+
+                            <div className="collapse navbar-collapse pull-left" id="navbar-collapse">
+                                <ul className="nav navbar-nav">
+                                    <li><a href="#">Graph Navigator <span className="sr-only"></span></a></li>
+                                </ul>
+                            </div>
+
+                            <div className="navbar-custom-menu">
+                                <ul className="nav navbar-nav">
+                                    <li>
+                                        <a href="#" data-toggle="control-sidebar"><i className="fa fa-gears" /></a>
+                                    </li>
+                                </ul>
+                            </div>
+                    </nav>
+                </header>
+
+                <div className="content-wrapper">
                     {this.props.children}
                 </div>
+
             </div>
         )
     }

@@ -10,6 +10,7 @@
 
 .force-graph {
     cursor: move;
+    background: #FFF;
 }
 
 .force-text {

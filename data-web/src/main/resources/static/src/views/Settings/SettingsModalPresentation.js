@@ -11,9 +11,9 @@ export default ( {
     const renderCheckboxes = () => {
         return settings.map((setting, index) => {
             return (
-                <div className="checkbox " key={index}>
-                    <label>
-                        <input type="checkbox" value={setting.name} checked={setting.value}
+                <div className="form-group" key={index}>
+                    <label className="control-sidebar-subheading ">
+                        <input type="checkbox" className="pull-right" value={setting.name} checked={setting.value}
                                onChange={toggleHandler}/>
                         {setting.description}
                     </label>
@@ -23,26 +23,40 @@ export default ( {
     };
 
     return (
-        <div className="modal fade" id={modalId} role="dialog">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <button type="button" className="close" data-dismiss="modal">&times;</button>
-                        <h4 className="modal-title">{title}</h4>
-                    </div>
+    <div>
+        <aside className="control-sidebar control-sidebar-dark">
 
-                    <div className="container">
-                        <div className="modal-body">
-                            {renderCheckboxes()}
-                            <GraphLoaderComponent />
+            <ul className="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li className="active"><a href="#control-sidebar-settings-tab" data-toggle="tab"><i className="fa fa-gears" /></a></li>
+                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i className="fa fa-home" /></a></li>
+            </ul>
+
+            <div className="tab-content">
+                <div className="tab-pane active" id="control-sidebar-settings-tab">
+                    <form method="post">
+                        <ul className="sidebar-menu sidebar-topdown">
+                            <li className="header"><span className="fa fa-picture-o" />&nbsp; Graph Settings</li>
+                        </ul>
+                        <div className="sidebar-padding">
+                                {renderCheckboxes()}
                         </div>
-                    </div>
-
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+                    </form>
+                    <GraphLoaderComponent />
                 </div>
+
+                <div className="tab-pane" id="control-sidebar-home-tab">
+                    <ul className="sidebar-menu sidebar-topdown">
+                        <li className="header"><span className="fa fa-picture-o" />&nbsp; Some other settings</li>
+                    </ul>
+
+                    <ul className="sidebar-menu sidebar-topdown">
+                        <li className="header"><span className="fa fa-picture-o" />&nbsp; Another settings</li>
+                    </ul>
+                </div>
+
             </div>
-        </div>
+        </aside>
+        <div className="control-sidebar-bg"></div>
+    </div>
     );
 };

@@ -3,6 +3,12 @@ import React from "react";
 import SettingsModalPresentation from "./SettingsModalPresentation";
 
 export default class extends React.Component {
+    constructor(props) {
+        super(props);
+
+        console.log(this.props.settings);
+    }
+
     handleToggle(event) {
         this.props.toggle(event.target.value);
     }

@@ -12,7 +12,7 @@ ReactDOM.render (
     <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/" component={Main}>
-                <Route path="/relationships" component={Relations} />
+                <Route path="relationships" component={Relations} />
                 <IndexRoute component={Relations} /> /* default path -> take this, if no other match */
             </Route>
         </Router>
