@@ -1,10 +1,10 @@
 const Constants = {};
 
 Constants.colorMap = {
-    Project: "rgb(163, 85, 143)",
-    Issue : "rgb(140, 160, 255)",
-    Requirement : "rgb(92, 200, 80)",
-    User : "rgb(255, 170, 30)",
+    Project: "#716eb9",
+    Issue : "#4d9ecd",
+    Requirement : "#00a65a",
+    User : "#f39c12",
     //Other : "rgb(150, 150, 150)"
 };
 
