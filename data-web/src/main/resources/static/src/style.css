@@ -4,6 +4,14 @@ body {
     z-index:0;
 }
 
+.skin-blue .main-header .logo {
+    background-color: #00529B;
+}
+
+.skin-blue .main-header .navbar {
+    background-color: #00529B;
+}
+
 .sidebar-padding {
     padding: 10px 10px;
 }
