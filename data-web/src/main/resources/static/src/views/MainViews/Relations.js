@@ -6,7 +6,6 @@ import GraphPanel from "../GraphPanel/GraphPanel";
 import ExportToImage from "../GraphPanel/ExportToImage";
 
 import LeftSideBar from "../widgets/LeftSideBar";
-import SettingsModalComponent from "../Settings/SettingsModalComponent";
 
 class Relations extends React.Component {
     render() {
@@ -16,7 +15,6 @@ class Relations extends React.Component {
                 <SearchBarComponent />
                 {/*<ExportToImage />*/}
                 <GraphPanel />
-                <SettingsModalComponent  modalId={"settingsModal"} />
             </div>
         );
     };

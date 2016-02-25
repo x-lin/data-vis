@@ -1,12 +1,10 @@
 import React from "react";
 
-import SettingsModalPresentation from "./SettingsModalPresentation";
+import SettingsSideBarPresentation from "./SettingsSideBarPresentation";
 
 export default class extends React.Component {
     constructor(props) {
         super(props);
-
-        console.log(this.props.settings);
     }
 
     handleToggle(event) {
@@ -15,9 +13,7 @@ export default class extends React.Component {
 
     render() {
         return (
-            <SettingsModalPresentation
-                title={"Settings"}
-                modalId={this.props.modalId}
+            <SettingsSideBarPresentation
                 toggleHandler={(event) => this.handleToggle(event)}
                 settings={this.props.settings}
             />
