@@ -2,20 +2,36 @@ import React from "react";
 
 import GraphLoaderComponent from "../GraphLoader/GraphLoaderComponent";
 import SideBarHeader from "../widgets/SideBarHeader";
+import Slider from "../widgets/Slider";
 
 export default ( {
     toggleHandler,
+    valueHandler,
     settings
 } ) => {
     const renderCheckboxes = () => {
         return settings.map((setting, index) => {
             return (
                 <div className="form-group" key={index}>
-                    <label className="control-sidebar-subheading cursor">
-                        <input type="checkbox" className="pull-right cursor" value={setting.name} checked={setting.value}
-                               onChange={toggleHandler}/>
-                        {setting.description}
-                    </label>
+                    {typeof setting.value === "boolean" ?
+                        <label className="control-sidebar-subheading cursor">
+                            <input type="checkbox" className="pull-right cursor" value={setting.name} checked={setting.value}
+                                   onChange={toggleHandler}/>
+                            {setting.description}
+                        </label>
+                        :
+                        <div>
+                            <label className="control-sidebar-subheading cursor">
+                                {setting.description}
+                            </label>
+                            <div style={{marginTop: "10px"}}>
+                                <Slider min={setting.min} max={setting.max} defaultValue={setting.value} step={setting.step} onChange={function(value) {
+                                    valueHandler(setting.name, value);
+                            }} />
+                            </div>
+                        </div>
+                    }
+
                 </div>
             );
         });

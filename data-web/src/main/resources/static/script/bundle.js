@@ -26112,6 +26112,8 @@
 	    switch (action.type) {
 	        case _SettingsActions.TOGGLE_SETTING:
 	            return toggleSetting(state, action);
+	        case _SettingsActions.SET_SETTING_VALUE:
+	            return setSettingValue(state, action);
 	        default:
 	            return state;
 	    }
@@ -26129,6 +26131,19 @@
 	    }
 	};
 
+	var setSettingValue = function setSettingValue(state, action) {
+	    console.log("action", action);
+	    var index = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state, action.name, "name");
+	    var newVal = Object.assign(state[index]);
+
+	    if (index !== -1 && newVal.value != action.value) {
+	        newVal.value = action.value;
+	        return [].concat(_toConsumableArray(state.slice(0, index)), [newVal], _toConsumableArray(state.slice(index + 1)));
+	    } else {
+	        return state;
+	    }
+	};
+
 /***/ },
 /* 239 */
 /***/ function(module, exports) {
@@ -26139,11 +26154,20 @@
 	    value: true
 	});
 	var TOGGLE_SETTING = exports.TOGGLE_SETTING = "TOGGLE_SETTING";
+	var SET_SETTING_VALUE = exports.SET_SETTING_VALUE = "SET_SETTING_VALUE";
 
 	var toggleSetting = exports.toggleSetting = function toggleSetting(name) {
 	    return {
 	        type: TOGGLE_SETTING,
 	        name: name
+	    };
+	};
+
+	var setSettingValue = exports.setSettingValue = function setSettingValue(name, value) {
+	    return {
+	        type: SET_SETTING_VALUE,
+	        name: name,
+	        value: value
 	    };
 	};
 
@@ -26171,10 +26195,11 @@
 	    description: "Set opacity of filtered nodes/edges.",
 	    value: 0.3,
 	    min: 0,
-	    max: 1
+	    max: 0.5,
+	    step: 0.05
 	}, {
 	    name: DISABLE_SELECTION_OF_FILTERED_NODES,
-	    description: "Disable expansion and context menus of filtered nodes.",
+	    description: "Disable event handlers for filtered nodes.",
 	    value: false
 	}, {
 	    name: SET_NODE_POSITIONS_FIXED,
@@ -26182,7 +26207,7 @@
 	    value: false
 	}, {
 	    name: SHOW_CONTEXT_MENU,
-	    description: "Show context menu on right click.",
+	    description: "Show custom context menu on right click.",
 	    value: true
 	}];
 
@@ -26935,6 +26960,9 @@
 	    return {
 	        toggle: function toggle(name) {
 	            dispatch((0, _SettingsActions.toggleSetting)(name));
+	        },
+	        setValue: function setValue(name, value) {
+	            dispatch((0, _SettingsActions.setSettingValue)(name, value));
 	        }
 	    };
 	};
@@ -26984,6 +27012,11 @@
 	            this.props.toggle(event.target.value);
 	        }
 	    }, {
+	        key: "handleValueChange",
+	        value: function handleValueChange(name, value) {
+	            this.props.setValue(name, value);
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            var _this2 = this;
@@ -26991,6 +27024,9 @@
 	            return _react2.default.createElement(_SettingsSideBarPresentation2.default, {
 	                toggleHandler: function toggleHandler(event) {
 	                    return _this2.handleToggle(event);
+	                },
+	                valueHandler: function valueHandler(name, value) {
+	                    return _this2.handleValueChange(name, value);
 	                },
 	                settings: this.props.settings
 	            });
@@ -27024,10 +27060,15 @@
 
 	var _SideBarHeader2 = _interopRequireDefault(_SideBarHeader);
 
+	var _Slider = __webpack_require__(552);
+
+	var _Slider2 = _interopRequireDefault(_Slider);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = function (_ref) {
 	    var toggleHandler = _ref.toggleHandler;
+	    var valueHandler = _ref.valueHandler;
 	    var settings = _ref.settings;
 
 	    var renderCheckboxes = function renderCheckboxes() {
@@ -27035,12 +27076,27 @@
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "form-group", key: index },
-	                _react2.default.createElement(
+	                typeof setting.value === "boolean" ? _react2.default.createElement(
 	                    "label",
 	                    { className: "control-sidebar-subheading cursor" },
 	                    _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor", value: setting.name, checked: setting.value,
 	                        onChange: toggleHandler }),
 	                    setting.description
+	                ) : _react2.default.createElement(
+	                    "div",
+	                    null,
+	                    _react2.default.createElement(
+	                        "label",
+	                        { className: "control-sidebar-subheading cursor" },
+	                        setting.description
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { style: { marginTop: "10px" } },
+	                        _react2.default.createElement(_Slider2.default, { min: setting.min, max: setting.max, defaultValue: setting.value, step: setting.step, onChange: function onChange(value) {
+	                                valueHandler(setting.name, value);
+	                            } })
+	                    )
 	                )
 	            );
 	        });
@@ -38663,6 +38719,8 @@
 
 	var _GraphActionCreators = __webpack_require__(235);
 
+	var _Settings = __webpack_require__(240);
+
 	var _ForceGraph = __webpack_require__(289);
 
 	var _ForceGraph2 = _interopRequireDefault(_ForceGraph);
@@ -38670,9 +38728,23 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
+	    var settings = function () {
+	        var s = {};
+
+	        for (var i = 0; i < state.settings.length; i++) {
+	            s[state.settings[i].name] = state.settings[i].value;
+	        }
+
+	        return s;
+	    }();
+
 	    return {
 	        graph: state.graph,
-	        visibilityFilters: state.visibilityFilters
+	        visibilityFilters: state.visibilityFilters,
+	        disabledOpacity: settings[_Settings.DISABLED_OPACITY_VALUE],
+	        isFixed: settings[_Settings.SET_NODE_POSITIONS_FIXED],
+	        showContextMenu: settings[_Settings.SHOW_CONTEXT_MENU],
+	        disableFiltered: settings[_Settings.DISABLE_SELECTION_OF_FILTERED_NODES]
 	    };
 	};
 
@@ -38877,10 +38949,12 @@
 	    }, {
 	        key: "addLinks",
 	        value: function addLinks() {
+	            var _this4 = this;
+
 	            this.state.links.enter().insert("line", "g").attr("class", "link");
 
 	            this.state.links.attr("opacity", function (d) {
-	                return d.visible ? "1" : "0.3";
+	                return d.visible ? "1" : _this4.props.disabledOpacity;
 	            });
 	        }
 	    }, {
@@ -38905,7 +38979,10 @@
 	    }, {
 	        key: "addNodes",
 	        value: function addNodes() {
+	            var _this5 = this;
+
 	            var g = this.state.nodes.enter().append("g").attr("class", "g").style("fill", function (d) {
+
 	                return _Constants2.default.getColor(d.category);
 	            });
 
@@ -38916,7 +38993,7 @@
 	            this.addNodeText(g);
 
 	            this.state.nodes.attr("opacity", function (d) {
-	                return d.visible ? "1" : "0.4";
+	                return d.visible ? "1" : _this5.props.disabledOpacity;
 	            });
 
 	            this.setNodeBehavior();
@@ -38931,14 +39008,20 @@
 	    }, {
 	        key: "setNodeBehavior",
 	        value: function setNodeBehavior() {
-	            var _this4 = this;
+	            var _this6 = this;
 
 	            this.state.nodes.on("dblclick", function (d, props) {
-	                return _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this4.props);
+	                if (_this6.props.disableFiltered && d.visible || !_this6.props.disableFiltered) {
+	                    _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this6.props);
+	                }
 	            }).on("contextmenu", function (d) {
-	                return _ForceGraphEventHandlers2.default.onContextMenuNode(d);
+	                if (_this6.props.showContextMenu && (_this6.props.disableFiltered && d.visible || !_this6.props.disableFiltered)) {
+	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d);
+	                }
 	            }).call(this.state.force.drag().on("dragstart", function (d) {
-	                return _ForceGraphEventHandlers2.default.onDragStartNode(d);
+	                if (_this6.props.disableFiltered && d.visible || !_this6.props.disableFiltered) {
+	                    _ForceGraphEventHandlers2.default.onDragStartNode(d);
+	                }
 	            }));
 	        }
 	    }, {
@@ -38965,10 +39048,10 @@
 	    }, {
 	        key: "createSpeededUpAnimation",
 	        value: function createSpeededUpAnimation() {
-	            var _this5 = this;
+	            var _this7 = this;
 
 	            requestAnimationFrame(function () {
-	                _this5.createAnimation();
+	                _this7.createAnimation();
 	            });
 	        }
 	    }, {
@@ -38992,10 +39075,16 @@
 	    }, {
 	        key: "animateIfNotFinished",
 	        value: function animateIfNotFinished(alphaThreshold) {
+	            var _this8 = this;
+
 	            if (this.state.force.alpha() > alphaThreshold) {
 	                this.createSpeededUpAnimation();
 	            } else {
 	                this.state.force.stop();
+
+	                this.state.nodes.attr("fixed", function (d) {
+	                    d.fixed = _this8.props.isFixed ? true : !!d.isFixed;
+	                });
 	            }
 	        }
 	    }, {
@@ -56457,6 +56546,7 @@
 	    d3.event.sourceEvent.stopPropagation();
 	    _ContextMenuBuilder2.default.removeAll();
 	    d.fixed = true;
+	    d.isFixed = true;
 	};
 
 	exports.default = EventHandlers;
@@ -57289,12 +57379,13 @@
 	    var min = _ref.min;
 	    var max = _ref.max;
 	    var defaultValue = _ref.defaultValue;
+	    var step = _ref.step;
 	    var onChange = _ref.onChange;
 
 	    return _react2.default.createElement(
 	        "div",
 	        null,
-	        _react2.default.createElement(_rcSlider2.default, { defaultValue: defaultValue, min: min, max: max, onChange: onChange }),
+	        _react2.default.createElement(_rcSlider2.default, { defaultValue: defaultValue, min: min, max: max, onChange: onChange, step: step }),
 	        _react2.default.createElement(
 	            "span",
 	            null,
@@ -63622,7 +63713,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    _SideBarCollapsable2.default,
-	                    { title: "Neighbor Expansion" },
+	                    { title: "Neighbor Expansion", collapsed: true },
 	                    _react2.default.createElement(_NeighborExpansionComponent2.default, null)
 	                ),
 	                _react2.default.createElement(

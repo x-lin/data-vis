@@ -16,7 +16,7 @@ export default class extends React.Component {
                     <BasicOptionsComponent />
                 </SideBarCollapsable>
 
-                <SideBarCollapsable title="Neighbor Expansion">
+                <SideBarCollapsable title="Neighbor Expansion" collapsed={true}>
                     <NeighborExpansionComponent />
                 </SideBarCollapsable>
 

@@ -29,6 +29,7 @@ EventHandlers.onDragStartNode = (d) => {
     d3.event.sourceEvent.stopPropagation();
     ContextMenuBuilder.removeAll();
     d.fixed = true;
+    d.isFixed = true;
 };
 
 export default EventHandlers;

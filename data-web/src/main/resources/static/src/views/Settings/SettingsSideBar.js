@@ -11,10 +11,15 @@ export default class extends React.Component {
         this.props.toggle(event.target.value);
     }
 
+    handleValueChange(name, value) {
+        this.props.setValue(name, value);
+    }
+
     render() {
         return (
             <SettingsSideBarPresentation
                 toggleHandler={(event) => this.handleToggle(event)}
+                valueHandler={(name, value) => this.handleValueChange(name, value)}
                 settings={this.props.settings}
             />
         )

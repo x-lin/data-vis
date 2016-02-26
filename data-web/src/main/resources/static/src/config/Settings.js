@@ -14,10 +14,11 @@ export default [
         description: "Set opacity of filtered nodes/edges.",
         value: 0.3,
         min: 0,
-        max: 1
+        max: 0.5,
+        step: 0.05
     }, {
         name: DISABLE_SELECTION_OF_FILTERED_NODES,
-        description: "Disable expansion and context menus of filtered nodes.",
+        description: "Disable event handlers for filtered nodes.",
         value: false
     }, {
         name: SET_NODE_POSITIONS_FIXED,
@@ -25,7 +26,7 @@ export default [
         value: false
     }, {
         name: SHOW_CONTEXT_MENU,
-        description: "Show context menu on right click.",
+        description: "Show custom context menu on right click.",
         value: true
     }
 ];
