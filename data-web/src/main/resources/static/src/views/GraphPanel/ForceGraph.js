@@ -144,7 +144,7 @@ export default class extends React.Component {
             .attr("class", "link");
 
         this.state.links
-            .attr("opacity", (d) => { return d.visible ? "1" : "0.3"});
+            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity});
     }
 
     setVisibilityByFilter(data) {
@@ -171,7 +171,11 @@ export default class extends React.Component {
     addNodes() {
         const g = this.state.nodes.enter().append("g")
             .attr("class", "g")
-            .style("fill", (d) => Constants.getColor(d.category));
+            .style("fill", (d) => {
+
+
+                return Constants.getColor(d.category)
+            });
 
         g.append("circle")
             .attr("class", "circle")
@@ -181,7 +185,7 @@ export default class extends React.Component {
         this.addNodeText(g);
 
         this.state.nodes
-            .attr("opacity", (d) => { return d.visible ? "1" : "0.4"});
+            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity;});
 
         this.setNodeBehavior();
     }
@@ -194,11 +198,23 @@ export default class extends React.Component {
 
     setNodeBehavior() {
         this.state.nodes
-            .on("dblclick", (d, props) => EventHandlers.onDoubleClickNode(d, this.props))
-            .on("contextmenu", (d) => EventHandlers.onContextMenuNode(d))
+            .on("dblclick", (d, props) => {
+                if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                    EventHandlers.onDoubleClickNode(d, this.props);
+                }
+            })
+            .on("contextmenu", (d) => {
+                if(this.props.showContextMenu && ((this.props.disableFiltered && d.visible) || !this.props.disableFiltered)) {
+                    EventHandlers.onContextMenuNode(d);
+                }
+            })
             .call(
                 this.state.force.drag()
-                    .on("dragstart", (d) => EventHandlers.onDragStartNode(d))
+                    .on("dragstart", (d) => {
+                        if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                            EventHandlers.onDragStartNode(d);
+                        }
+                    })
             );
     }
 
@@ -249,6 +265,10 @@ export default class extends React.Component {
             this.createSpeededUpAnimation();
         } else {
             this.state.force.stop();
+
+            this.state.nodes.attr("fixed", (d) => {
+                d.fixed = this.props.isFixed ? true : !!(d.isFixed);
+            });
         }
     }
 

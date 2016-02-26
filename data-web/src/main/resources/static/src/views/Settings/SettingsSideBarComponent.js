@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { toggleSetting } from "../../actions/action-creators/SettingsActions"
+import { toggleSetting, setSettingValue } from "../../actions/action-creators/SettingsActions"
 
 import SettingsSideBar from "./SettingsSideBar";
 
@@ -15,6 +15,9 @@ const mapDispatchProps = (dispatch) => {
     return {
         toggle: (name) => {
             dispatch(toggleSetting(name));
+        },
+        setValue: (name, value) => {
+            dispatch(setSettingValue(name, value));
         }
     };
 };
