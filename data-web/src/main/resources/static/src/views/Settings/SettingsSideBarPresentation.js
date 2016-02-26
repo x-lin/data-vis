@@ -1,6 +1,7 @@
 import React from "react";
 
 import GraphLoaderComponent from "../GraphLoader/GraphLoaderComponent";
+import SideBarHeader from "../widgets/SideBarHeader";
 
 export default ( {
     toggleHandler,
@@ -10,8 +11,8 @@ export default ( {
         return settings.map((setting, index) => {
             return (
                 <div className="form-group" key={index}>
-                    <label className="control-sidebar-subheading ">
-                        <input type="checkbox" className="pull-right" value={setting.name} checked={setting.value}
+                    <label className="control-sidebar-subheading cursor">
+                        <input type="checkbox" className="pull-right cursor" value={setting.name} checked={setting.value}
                                onChange={toggleHandler}/>
                         {setting.description}
                     </label>
@@ -31,25 +32,22 @@ export default ( {
 
             <div className="tab-content">
                 <div className="tab-pane active" id="control-sidebar-settings-tab">
-                    <form method="post">
-                        <ul className="sidebar-menu sidebar-topdown">
-                            <li className="header"><span className="fa fa-picture-o" />&nbsp; Graph Settings</li>
-                        </ul>
-                        <div className="sidebar-padding">
-                                {renderCheckboxes()}
+                        <div className="sidebar-topdown">
+                            <SideBarHeader title="Graph Settings" iconClass="fa fa-picture-o" />
                         </div>
-                    </form>
+
+                        <div className="sidebar-padding">
+                            {renderCheckboxes()}
+                        </div>
+                    <SideBarHeader title="Save to/Load from File" iconClass="fa fa-file-text" />
                     <GraphLoaderComponent />
                 </div>
 
                 <div className="tab-pane" id="control-sidebar-home-tab">
-                    <ul className="sidebar-menu sidebar-topdown">
-                        <li className="header"><span className="fa fa-picture-o" />&nbsp; Some other settings</li>
-                    </ul>
-
-                    <ul className="sidebar-menu sidebar-topdown">
-                        <li className="header"><span className="fa fa-picture-o" />&nbsp; Another settings</li>
-                    </ul>
+                    <div className="sidebar-topdown">
+                        <SideBarHeader title="Some other settings" iconClass="fa fa-picture-o" />
+                    </div>
+                    <SideBarHeader title="Another settings" iconClass="fa fa-picture-o" />
                 </div>
 
             </div>

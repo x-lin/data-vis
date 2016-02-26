@@ -4,8 +4,10 @@ import "./Slider.css";
 
 export default ( { min, max, defaultValue, onChange }) => {
     return (
-        <div style={{marginTop: "10px"}}>
+        <div>
             <Slider defaultValue={defaultValue} min={min} max={max} onChange={onChange} />
+            <span>{min}</span>
+            <span className="pull-right">{max}</span>
         </div>
     );
 };

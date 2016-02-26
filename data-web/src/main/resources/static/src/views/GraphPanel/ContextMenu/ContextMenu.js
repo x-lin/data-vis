@@ -38,7 +38,7 @@ export default class extends React.Component {
                         >
 
                     <div className="nav-tabs-custom">
-                        <ul className="nav nav-tabs">
+                        <ul className="nav nav-tabs ">
                             <li className="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true" className="title-small space-smaller">Data</a></li>
                             <li className=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" className="title-small space-smaller">Filter by</a></li>
                             <li className=""><a href="#tab_3" data-toggle="tab" aria-expanded="false" className="title-small space-smaller"> Advanced</a></li>
@@ -50,23 +50,14 @@ export default class extends React.Component {
 
 
                                 <div className="row inpadding ">
-                                    <div className="overlay-wrapper">
-                                        <div className="overlay">
-                                            <i className="fa fa-refresh  fa-spin"></i>
-                                        </div>
-
-                                        <div className="btn-group btn-group-justified" role="group" aria-label="Browse at source site">
-                                            <a type="button" className="btn btn-default">
-                                                <img src={`${imgDir}jira-logo.png`} height="20px" />
-                                            </a>
-                                            <a type="button" className="btn btn-default">
-                                                <img src={`${imgDir}jama-logo.png`} height="20px" />
-                                            </a>
-                                        </div>
+                                    <div className="btn-group btn-group-justified" role="group" aria-label="Browse at source site">
+                                        <a type="button" className="btn btn-default">
+                                            <img src={`${imgDir}jira-logo.png`} height="20px" />
+                                        </a>
+                                        <a type="button" className="btn btn-default">
+                                            <img src={`${imgDir}jama-logo.png`} height="20px" />
+                                        </a>
                                     </div>
-
-
-
                                 </div>
 
                                 <b>How to use:</b>

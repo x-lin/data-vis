@@ -151,7 +151,6 @@ export default class extends React.Component {
         const filters = FilterHelpers.getKeysMatching(this.props.visibilityFilters, false);
         const filterIndexValues = FilterHelpers.getIndicesByProperty(data.nodes, "category", filters);
 
-        //TODO performance can be improved
         data.nodes = data.nodes.map((node, index) => {
             node.visible = (filterIndexValues.indexOf(index) === -1);
 

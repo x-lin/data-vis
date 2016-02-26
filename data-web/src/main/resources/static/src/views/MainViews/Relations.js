@@ -5,19 +5,15 @@ import GraphPanel from "../GraphPanel/GraphPanel";
 
 import ExportToImage from "../GraphPanel/ExportToImage";
 
-import LeftSideBar from "../widgets/LeftSideBar";
+import FilterSideBar from "../GraphPanel/FilterSideBar/FilterSideBar";
 
-class Relations extends React.Component {
-    render() {
-        return (
-            <div>
-                <LeftSideBar />
-                <SearchBarComponent />
-                {/*<ExportToImage />*/}
-                <GraphPanel />
-            </div>
-        );
-    };
+export default () => {
+    return (
+        <div>
+            <FilterSideBar />
+            <SearchBarComponent />
+            {/*<ExportToImage />*/}
+            <GraphPanel />
+        </div>
+    );
 }
-
-export default Relations;

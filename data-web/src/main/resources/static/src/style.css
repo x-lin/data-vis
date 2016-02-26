@@ -10,7 +10,6 @@ body {
 
 .skin-black .main-header .navbar {
     background-color: #EFEFEF;
-    font-size: 16px;
 }
 
 .skin-black .main-header > .navbar .nav > li > a {
@@ -18,7 +17,6 @@ body {
     background-color: #EFEFEF;
     font-weight: 700;
     color: #333333;
-    font-size: 16px;
     border-right: 1px solid #CCCCCC;
     border-left: 1px solid #CCCCCC;
 }
@@ -27,14 +25,12 @@ body {
     /*text-transform: uppercase;*/
     background-color: #EFEFEF;
     color: #3366CC;
-    font-size: 16px;
 }
 
 .skin-black .main-header > .navbar .nav > li > a:hover, a:active, a:focus {
     /*text-transform: uppercase;*/
     background-color: #EFEFEF;
     color: #3366CC;
-    font-size: 16px;
 }
 
 .sidebar-padding {
@@ -67,36 +63,13 @@ body {
     padding: 5px 10px;
 }
 
-.title-small {
-    font-size: 14px;
+.title-small, .title-small:focus, .title-small:hover, .title-small:active {
+    font-size: 13px !important;
 }
 
 .overflow-scroll {
     overflow:scroll;
     max-height: 400px;
-}
-
-.box-custom {
-    background-color: transparent;
-    color: #b8c7ce;
-    border-left: 3px solid transparent;
-    border-top: 0px;
-    margin-bottom: 0px;
-}
-
-.box-header {
-    color: #CCC;
-}
-
-.box-header .box-title-custom {
-    color: #CCC;
-    font-size: 14px;
-}
-
-.box-custom .box-content-custom {
-    background-color: #2c3b41;
-    font-size: 12px;
-    padding-bottom: 0px;
 }
 
 .panel-heading:hover {
@@ -105,26 +78,6 @@ body {
 
 .inpadding {
     padding: 0px 16px 8px 16px;
-}
-
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
 }
 
 .cursor {
@@ -164,39 +117,13 @@ body {
     padding-bottom: 100%; /* aspect ratio */
     vertical-align: top;
     overflow: hidden;
-    /*background-color: #333;*/
 }
+
 .svg-content-responsive {
     display: inline-block;
     position: absolute;
     top: 10px;
     left: 0;
-    /*background-color: #33F;*/
-}
-
-.glyphicon-spin {
-    -webkit-animation: spin 1000ms infinite linear;
-    animation: spin 1000ms infinite linear;
-}
-@-webkit-keyframes spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(359deg);
-        transform: rotate(359deg);
-    }
-}
-@keyframes spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(359deg);
-        transform: rotate(359deg);
-    }
 }
 
 .unselectable {
@@ -206,9 +133,4 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.navbar-default .navbar-nav>li>a:focus,
-.navbar-default .navbar-nav>li>a:hover{
-    background-color: #efefef;
 }
