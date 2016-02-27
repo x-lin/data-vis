@@ -55,7 +55,6 @@ const nodeReducer = (state, action) => {
                         }
 
                         if(!doesExist) {
-                            console.log("added edge");
                             state.edges.push(edge);
                         }
                     }

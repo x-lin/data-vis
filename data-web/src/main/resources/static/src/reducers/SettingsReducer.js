@@ -35,7 +35,6 @@ const toggleSetting = (state, action) => {
 };
 
 const setSettingValue = (state, action) => {
-    console.log("action", action);
     const index =  indexOfObjectInArrayByProperty(state, action.name, "name");
     const newVal = Object.assign(state[index]);
 

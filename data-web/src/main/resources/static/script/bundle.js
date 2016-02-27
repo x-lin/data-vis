@@ -25892,7 +25892,6 @@
 	                        }
 
 	                        if (!doesExist) {
-	                            console.log("added edge");
 	                            state.edges.push(edge);
 	                        }
 	                    }
@@ -26132,7 +26131,6 @@
 	};
 
 	var setSettingValue = function setSettingValue(state, action) {
-	    console.log("action", action);
 	    var index = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state, action.name, "name");
 	    var newVal = Object.assign(state[index]);
 
@@ -27093,9 +27091,13 @@
 	                    _react2.default.createElement(
 	                        "div",
 	                        { style: { marginTop: "10px" } },
-	                        _react2.default.createElement(_Slider2.default, { min: setting.min, max: setting.max, defaultValue: setting.value, step: setting.step, onChange: function onChange(value) {
+	                        _react2.default.createElement(_Slider2.default, { min: setting.min, max: setting.max,
+	                            defaultValue: setting.value,
+	                            step: setting.step,
+	                            onChange: function onChange(value) {
 	                                valueHandler(setting.name, value);
-	                            } })
+	                            }
+	                        })
 	                    )
 	                )
 	            );

@@ -25,9 +25,12 @@ export default ( {
                                 {setting.description}
                             </label>
                             <div style={{marginTop: "10px"}}>
-                                <Slider min={setting.min} max={setting.max} defaultValue={setting.value} step={setting.step} onChange={function(value) {
-                                    valueHandler(setting.name, value);
-                            }} />
+                                <Slider min={setting.min} max={setting.max}
+                                        defaultValue={setting.value}
+                                        step={setting.step}
+                                        onChange={function(value) {
+                                            valueHandler(setting.name, value)}}
+                                />
                             </div>
                         </div>
                     }
