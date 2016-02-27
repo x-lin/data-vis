@@ -9,7 +9,9 @@ export default class extends React.Component {
                 <div className="form-group">
                     <label  className="control-sidebar-subheading">
                         Show as single nodes
-                        <input type="radio" name="optionsRadios" className="pull-right" id="optionsRadios2" value="option2" checked="checked" />
+                        <input type="radio" name="optionsRadios" className="pull-right" id="optionsRadios2" value="option2" checked="checked" onChange={
+                            function(){}
+                        } />
                     </label>
 
                     <div style={{marginTop: "10px"}}>
@@ -21,7 +23,9 @@ export default class extends React.Component {
 
                     <label className="control-sidebar-subheading">
                         Show as clusters
-                        <input type="radio" name="optionsRadios" className="pull-right" id="optionsRadios1" value="option1" checked="" />
+                        <input type="radio" name="optionsRadios" className="pull-right" id="optionsRadios1" value="option1" onChange={
+                            function(){}
+                        } />
                     </label>
                 </div>
             </form>
