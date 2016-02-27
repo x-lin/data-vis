@@ -2,38 +2,38 @@ const Constants = {};
 
 Constants.colorMap = {
     Project: "#716eb9",
-    Issue : "#4d9ecd",
+    Ticket : "#4d9ecd",
     Requirement : "#00a65a",
     User : "#f39c12",
     //Other : "rgb(150, 150, 150)"
 };
 
 Constants.reversePropertyMap= {
-    Issue : "Issue",
+    Ticket : "Ticket",
     Project : "Project",
     User : "User",
     Requirement : "Requirement"
 };
 
 Constants.endpoints = {
-    Issue: "issues",
-        Project: "projects",
-        User: "users ",
-        Requirement: "reqs"
+    Ticket: "issues",
+    Project: "projects",
+    User: "users ",
+    Requirement: "reqs"
 };
 
 Constants.keyMap = {
     Project : "key",
-        Issue : "key",
-        User : "name",
-        Requirement : "key"
+    Ticket : "key",
+    User : "name",
+    Requirement : "key"
 };
 
 Constants.defaultVisible = {
     Project : true,
-        Issue : true,
-        User : true,
-        Requirement : true
+    Ticket : true,
+    User : true,
+    Requirement : true
 };
 
 Constants.getColor = (category) => {
