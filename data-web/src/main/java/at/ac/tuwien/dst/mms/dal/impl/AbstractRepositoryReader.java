@@ -116,6 +116,10 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 			}
 		}
 
+		if(result.containsKey("Issue")) {
+			List<Object> list = result.remove("Issue");
+			result.put("Ticket", list);
+		}
 
 		return result;
 	}
