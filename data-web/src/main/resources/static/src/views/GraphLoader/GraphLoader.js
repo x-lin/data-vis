@@ -20,6 +20,12 @@ export default class extends React.Component {
         reader.onload = function(e) {
             var graph = JSON.parse(e.target.result);
 
+            //set isFixed value, as it's not saved in file
+            graph.nodes = graph.nodes.map((node, index) => {
+                node.isFixed = (node.fixed && node.fixed==1) ? true : false;
+                return node;
+            });
+
             //resetting edges to indices, otherwise D3 will not recognize and render the edges
             //this way D3 creates the references to the nodes itself
             graph.edges = graph.edges.map((edge, index) => {
