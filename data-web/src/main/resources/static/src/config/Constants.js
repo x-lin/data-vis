@@ -40,6 +40,10 @@ Constants.getColor = (category) => {
     return Constants.colorMap[category] ? Constants.colorMap[category] : Constants.DEFAULT_COLOR;
 };
 
+Constants.getKeyIdentifier = (category) => {
+    return Constants.keyMap[category];
+};
+
 Constants.DEFAULT_COLOR = "rgb(100,100,100)";
 
 export default Constants;
