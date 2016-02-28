@@ -5,60 +5,44 @@ import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
 import { TOGGLE_FILTER_ITEM_CATEGORY } from "../actions/action-creators/GraphFilterActionCreators";
 
 import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from "../utils/SearchHelpers";
+import Comparisons from "../utils/Comparisons";
 import Constants from "../config/Constants";
 import { store } from "../stores/ReduxStore";
-
-import { combineReducers } from "redux";
+import Edge from "../utils/graph/Edge";
+import Node from "../utils/graph/Node";
 
 const nodeReducer = (state, action) => {
+    const { existsIndex, isEquals } = Comparisons;
+
     switch (action.type) {
         case NEIGHBORS_FETCH_SUCCESS:
             let index = indexOfObjectInArrayByProperty(state.nodes, action.key, "key");
 
-            if(index === -1) {
-                state.nodes.push(createNode(action.key, action.category));
+            if(!existsIndex(index)) {
+                state.nodes.push(new Node(action.key, action.category));
                 index = state.nodes.length - 1;
             }
 
             for(const neighborCategory in action.neighbors) {
                 const neighborNodes = action.neighbors[neighborCategory];
 
-                for(let i = 0; i < neighborNodes.length; i++) {
-                    const neighborNode = neighborNodes[i];
-                    const keyName = Constants.keyMap[neighborCategory];
-                    const neighborIndex = indexOfObjectInArrayByProperty(state.nodes, neighborNode[keyName], "key");
+                neighborNodes.forEach((neighborNode, i, array) => {
+                    const keyIdentifier = Constants.getKeyIdentifier(neighborCategory);
+                    const neighborIndex = indexOfObjectInArrayByProperty(state.nodes, neighborNode[keyIdentifier], "key");
 
-                    if(index >= 0 && neighborIndex === -1) {
-                        const edge = createEdge(index, state.nodes.length);
+                    if(existsIndex(index) && !existsIndex(neighborIndex)) {
+                        const edge = new Edge(index, state.nodes.length);
+                        const node = new Node(neighborNode[keyIdentifier], neighborCategory);
                         state.edges.push(edge);
+                        state.nodes.push(node);
+                    } else if(existsIndex(neighborIndex) && !isEquals(neighborIndex, index) ) {
+                        const edge = new Edge(index, neighborIndex);
 
-                        state.nodes.push(createNode(neighborNode[keyName], neighborCategory));
-                    } else if(neighborIndex > -1 && neighborIndex !== index ) {
-                        const edge = createEdge(index, neighborIndex);
-
-                        let doesExist = false;
-
-                        for(let j = 0; j < state.edges.length; j++) {
-                            let object = state.edges[j];
-
-                            if(edge.source === object.target.index) {
-                                if(edge.target === object.source.index) {
-                                    doesExist = true;
-                                    break;
-                                }
-                            } else if(edge.source === object.source.index) {
-                                if(edge.target === object.target.index) {
-                                    doesExist = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if(!doesExist) {
+                        if(!checkIfEdgeExists(state.edges, edge)) {
                             state.edges.push(edge);
                         }
                     }
-                }
+                });
             }
 
             return Object.assign({}, state);
@@ -68,6 +52,23 @@ const nodeReducer = (state, action) => {
             return state;
     }
 };
+
+function checkIfEdgeExists(edges, checkedEdge) {
+    const { isEquals } = Comparisons;
+
+    for(let j = 0; j < edges.length; j++) {
+        const comparedEdge = edges[j];
+
+        if ((isEquals(checkedEdge.source, comparedEdge.target.index) &&
+                isEquals(checkedEdge.target, comparedEdge.source.index)) ||
+            (isEquals(checkedEdge.source, comparedEdge.source.index) &&
+                isEquals(checkedEdge.target, comparedEdge.target.index))) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 const graphFilterReducer = (filterState, action) => {
     if(action.type === TOGGLE_FILTER_ITEM_CATEGORY) {
@@ -101,20 +102,4 @@ action) => {
         default:
             return state;
     }
-};
-
-const createNode = function(key, category) {
-    var node = {};
-    node.key = key;
-    node.category = category;
-
-    return node;
-};
-
-const createEdge = function(sourceIndex, targetIndex) {
-    var edge = {};
-    edge.source = sourceIndex;
-    edge.target = targetIndex;
-
-    return edge;
 };
