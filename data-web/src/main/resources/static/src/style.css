@@ -4,6 +4,23 @@ body {
     z-index:0;
 }
 
+.floatRight {
+    position:absolute;
+    float:right;
+    top: 100px;
+    right: 15px;
+    z-index: 1;
+    width: 200px;
+}
+
+.fill-height {
+    height: 100%;
+}
+
+.grey-box {
+    background-color: #EEEEEE;
+}
+
 .skin-black .main-header .logo {
     background-color: #EFEFEF;
 }

@@ -24,7 +24,7 @@ export default ( {
                             <label className="control-sidebar-subheading cursor">
                                 {setting.description}
                             </label>
-                            <div style={{marginTop: "10px"}}>
+                            <div>
                                 <Slider min={setting.min} max={setting.max}
                                         defaultValue={setting.value}
                                         step={setting.step}
