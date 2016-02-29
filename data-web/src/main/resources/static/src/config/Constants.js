@@ -4,7 +4,7 @@ Constants.colorMap = {
     Project: "#716eb9",
     Ticket : "#4d9ecd",
     User : "#f39c12",
-    Requirement : "#00a65a",
+    Requirement : "#00b73f",
     //Other : "rgb(150, 150, 150)"
 };
 

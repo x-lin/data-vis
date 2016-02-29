@@ -6,13 +6,17 @@ import { indexOfObjectInArrayByProperty } from "../../utils/SearchHelpers";
 
 export const searchNeighbors = (category, key) => {
     return (dispatch, getState) => {
-        const { settings } = getState();
-        const index = indexOfObjectInArrayByProperty(settings, ADD_TO_GRAPH_ON_SEARCH, "name");
+        if(key) {
+            const { settings } = getState();
+            const index = indexOfObjectInArrayByProperty(settings, ADD_TO_GRAPH_ON_SEARCH, "name");
 
-        if(!settings[index].value) {
-            dispatch(clearGraph());
+            if(!settings[index].value) {
+                dispatch(clearGraph());
+            }
+
+            return dispatch(getNeighbors(category, key));
+        } else {
+            return dispatch(function(){});
         }
-
-        return dispatch(getNeighbors(category, key));
     }
 };
