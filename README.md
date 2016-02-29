@@ -6,6 +6,8 @@ Currently, the project consists of two modules:
 - `data-web`: A Springboot application containing the main logic.
 - `jira-rest`: A wrapper REST interface for the JIRA Rest Java Client.
 
+NOTE: The following instructions are based on the current development setup and may be subject to change.
+
 # Starting the application
 ### Starting the REST Client Wrapper
 - Add the URL of the JIRA REST API to the properties file `config.properties` in the `src/main/resources` directory of the `jira-rest` module.
