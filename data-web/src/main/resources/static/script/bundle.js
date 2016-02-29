@@ -25841,10 +25841,6 @@
 
 	var _SearchHelpers = __webpack_require__(237);
 
-	var _Comparisons = __webpack_require__(623);
-
-	var _Comparisons2 = _interopRequireDefault(_Comparisons);
-
 	var _Constants = __webpack_require__(232);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
@@ -25859,41 +25855,26 @@
 
 	var _Node2 = _interopRequireDefault(_Node);
 
+	var _D3Graph = __webpack_require__(630);
+
+	var _D3Graph2 = _interopRequireDefault(_D3Graph);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var nodeReducer = function nodeReducer(state, action) {
-	    var existsIndex = _Comparisons2.default.existsIndex;
-	    var isEquals = _Comparisons2.default.isEquals;
-
+	    var graph = new _D3Graph2.default(state.nodes, state.edges);
 
 	    switch (action.type) {
 	        case _FetchNeighborsActionCreators.NEIGHBORS_FETCH_SUCCESS:
-	            var index = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state.nodes, action.key, "key");
-
-	            if (!existsIndex(index)) {
-	                state.nodes.push(new _Node2.default(action.key, action.category));
-	                index = state.nodes.length - 1;
-	            }
+	            var index = graph.addNode(new _Node2.default(action.key, action.category));
 
 	            var _loop = function _loop(neighborCategory) {
 	                var neighborNodes = action.neighbors[neighborCategory];
 
 	                neighborNodes.forEach(function (neighborNode, i, array) {
 	                    var keyIdentifier = _Constants2.default.getKeyIdentifier(neighborCategory);
-	                    var neighborIndex = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state.nodes, neighborNode[keyIdentifier], "key");
-
-	                    if (existsIndex(index) && !existsIndex(neighborIndex)) {
-	                        var edge = new _Edge2.default(index, state.nodes.length);
-	                        var node = new _Node2.default(neighborNode[keyIdentifier], neighborCategory);
-	                        state.edges.push(edge);
-	                        state.nodes.push(node);
-	                    } else if (existsIndex(neighborIndex) && !isEquals(neighborIndex, index)) {
-	                        var edge = new _Edge2.default(index, neighborIndex);
-
-	                        if (!checkIfEdgeExists(state.edges, edge)) {
-	                            state.edges.push(edge);
-	                        }
-	                    }
+	                    var neighborIndex = graph.addNode(new _Node2.default(neighborNode[keyIdentifier], neighborCategory));
+	                    graph.addEdge(new _Edge2.default(index, neighborIndex));
 	                });
 	            };
 
@@ -25901,28 +25882,13 @@
 	                _loop(neighborCategory);
 	            }
 
-	            return Object.assign({}, state);
+	            return graph;
 	        case _FetchNeighborsActionCreators.NEIGHBORS_FETCH_ERROR:
-	            return state;
+	            return graph;
 	        default:
-	            return state;
+	            return graph;
 	    }
 	};
-
-	function checkIfEdgeExists(edges, checkedEdge) {
-	    var isEquals = _Comparisons2.default.isEquals;
-
-
-	    for (var j = 0; j < edges.length; j++) {
-	        var comparedEdge = edges[j];
-
-	        if (isEquals(checkedEdge.source, comparedEdge.target.index) && isEquals(checkedEdge.target, comparedEdge.source.index) || isEquals(checkedEdge.source, comparedEdge.source.index) && isEquals(checkedEdge.target, comparedEdge.target.index)) {
-	            return true;
-	        }
-	    }
-
-	    return false;
-	}
 
 	var graphFilterReducer = function graphFilterReducer(filterState, action) {
 	    if (action.type === _GraphFilterActionCreators.TOGGLE_FILTER_ITEM_CATEGORY) {
@@ -25935,7 +25901,7 @@
 	};
 
 	var graphReducer = exports.graphReducer = function graphReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { nodes: [], edges: [] } : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? new _D3Graph2.default() : arguments[0];
 	    var action = arguments[1];
 
 
@@ -65238,27 +65204,7 @@
 
 /***/ },
 /* 622 */,
-/* 623 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var Comparisons = {};
-
-	Comparisons.existsIndex = function (index) {
-	    return index > -1;
-	};
-
-	Comparisons.isEquals = function (obj1, obj2) {
-	    return obj1 === obj2;
-	};
-
-	exports.default = Comparisons;
-
-/***/ },
+/* 623 */,
 /* 624 */,
 /* 625 */,
 /* 626 */,
@@ -65300,6 +65246,110 @@
 	    this.key = key;
 	    this.category = category;
 	};
+
+	exports.default = _class;
+
+/***/ },
+/* 629 */,
+/* 630 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var _class = function () {
+	    function _class(nodes, edges) {
+	        _classCallCheck(this, _class);
+
+	        this.nodes = nodes ? nodes : [];
+	        this.edges = edges ? edges : [];
+	    }
+
+	    _createClass(_class, [{
+	        key: "addNode",
+	        value: function addNode(node) {
+	            var index = this.indexOfNode(node.key);
+
+	            if (index === -1) {
+	                this.nodes.push(node);
+	                index = this.nodes.length - 1;
+	            }
+
+	            return index;
+	        }
+	    }, {
+	        key: "addEdge",
+	        value: function addEdge(edge) {
+	            if (!this.edgeExists(edge.source, edge.target)) {
+	                this.edges.push(edge);
+	            }
+	        }
+	    }, {
+	        key: "indexOfNode",
+	        value: function indexOfNode(key) {
+	            for (var i = 0; i < this.nodes.length; i++) {
+	                if (this.nodes[i].key === key) {
+	                    return i;
+	                }
+	            }
+
+	            return -1;
+	        }
+	    }, {
+	        key: "edgeExists",
+	        value: function edgeExists(inputSource, inputTarget) {
+	            var input = this.getCleansedSourceAndTarget(inputSource, inputTarget);
+
+	            for (var i = 0; i < this.edges.length; i++) {
+	                var edge = this.edges[i];
+
+	                var _getCleansedSourceAnd = this.getCleansedSourceAndTarget(edge.source, edge.target);
+
+	                var source = _getCleansedSourceAnd.source;
+	                var target = _getCleansedSourceAnd.target;
+
+
+	                if (input.source === source && input.target === target) {
+	                    return true;
+	                } else if (input.target === source && input.source === target) {
+	                    return true;
+	                }
+	            }
+
+	            return false;
+	        }
+	    }, {
+	        key: "getCleansedSourceAndTarget",
+	        value: function getCleansedSourceAndTarget(sourceInp, targetInp) {
+	            var source = undefined,
+	                target = undefined;
+
+	            if (this.isEdgeInit(sourceInp, targetInp)) {
+	                source = sourceInp.index;
+	                target = targetInp.index;
+	            } else {
+	                source = sourceInp;
+	                target = targetInp;
+	            }
+
+	            return { source: source, target: target };
+	        }
+	    }, {
+	        key: "isEdgeInit",
+	        value: function isEdgeInit(source, target) {
+	            return typeof source.index !== "undefined" && target.index !== "undefined";
+	        }
+	    }]);
+
+	    return _class;
+	}();
 
 	exports.default = _class;
 
