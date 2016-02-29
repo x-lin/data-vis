@@ -18,7 +18,7 @@ NOTE: The following instructions are based on the current development setup and 
 
 ### Frontend
 - JavaScript (+ES6 and JSX)
-- React with Flux Architecture through Redux
+- React with Redux
 - npm as package manager
 - Webpack as module bundler
 - Mocha + Chai for testing
