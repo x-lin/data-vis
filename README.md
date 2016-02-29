@@ -3,10 +3,32 @@ This project is aimed at visualizing relationships between multiple models and t
 
 # Modules
 Currently, the project consists of two modules:
-- `data-web`: A Springboot application containing the main logic.
+- `data-web`: A Spring Boot application containing the main logic.
 - `jira-rest`: A wrapper REST interface for the JIRA Rest Java Client.
 
 NOTE: The following instructions are based on the current development setup and may be subject to change.
+
+# Technology stack
+### Backend
+- Java
+- Spring + Spring Boot
+- Neo4j with Spring Data
+- Maven for build management
+- JUnit + Mockito for testing
+
+### Frontend
+- JavaScript (+ES6 and JSX)
+- React with Flux Architecture through Redux
+- npm as package manager
+- Webpack as module bundler
+- Mocha + Chai for testing
+- A bunch of other frameworks including D3, Bootstrap, jQuery, external react + redux libraries, and other utility libraries (check out `package.json` for a complete list).
+
+### JIRA Rest Client
+- Java
+- Jersey
+- Genson
+- JIRA Rest Java Client
 
 # Starting the application
 ### Starting the REST Client Wrapper
