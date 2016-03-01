@@ -1,13 +1,17 @@
 package at.ac.tuwien.dst.mms.jira.rest;
 
 import at.ac.tuwien.dst.mms.jira.util.Config;
+import com.atlassian.jira.rest.client.api.AuthenticationHandler;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
+import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.atlassian.util.concurrent.Promise;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -19,14 +23,33 @@ import java.util.concurrent.ExecutionException;
  * Extracts data from the JIRA REST API.
  */
 public class JiraRestExtractor {
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private JiraRestClient restClient;
 
 	public JiraRestExtractor() {
 		AsynchronousJiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
-		AnonymousAuthenticationHandler authHandler = new AnonymousAuthenticationHandler();
+		AuthenticationHandler authHandler = this.createAuthHandler();
 
 		restClient = factory.create(URI.create(Config.JIRA_URI), authHandler);
+
+		logger.info("rest client created");
+	}
+
+	/**
+	 * Creates the authentication handler for a concrete user, if one is specified. Note, that for SSL-encrypted
+	 * websites, there may be an issue with the certification path not recognized. To resolve this issue, you may
+	 * follow the instructions from the JIRA support page:
+	 * https://confluence.atlassian.com/jira/connecting-to-ssl-services-117455.html
+	 *
+	 * @return the appropriate authentication handler
+     */
+	private AuthenticationHandler createAuthHandler() {
+		if(Config.USERNAME != null && Config.USERNAME.length() > 0) {
+			return new BasicHttpAuthenticationHandler(Config.USERNAME, Config.PASSWORD);
+		} else {
+			return new AnonymousAuthenticationHandler();
+		}
 	}
 
 	public Iterable<BasicProject> getProjects() throws ExecutionException, InterruptedException {
