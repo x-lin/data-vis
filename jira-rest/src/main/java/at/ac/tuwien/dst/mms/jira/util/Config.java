@@ -15,10 +15,16 @@ public class Config {
 		try (InputStream in = Config.class.getResourceAsStream("/"+propertiesFile)) {
 			properties.load(in);
 			JIRA_URI = properties.getProperty("jira");
+			USERNAME = properties.getProperty("username");
+			PASSWORD = properties.getProperty("password");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static String JIRA_URI;
+
+	public static String USERNAME;
+
+	public static String PASSWORD;
 }
