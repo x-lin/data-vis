@@ -8,7 +8,7 @@ export const getNeighbors = (category, key) => {
     return dispatch => {
         dispatch(fetchNeighborsStart(category, key));
 
-        return axios.get(`http://localhost:8080/search/${endpoint}/neighbors/${key}`)
+        return axios.get(`/search/${endpoint}/neighbors/${key}`)
             .then(function (response) {
                 dispatch(fetchNeighborsSuccess(category, key, response.data));
             })

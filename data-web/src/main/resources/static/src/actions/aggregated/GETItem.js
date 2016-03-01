@@ -7,7 +7,8 @@ export const getItem = (category, key) => {
     const endpoint = Constants.endpoints[category];
     return dispatch => {
         dispatch(fetchStart(category, key));
-        return axios.get(`http://localhost:8080/search/${endpoint}/startLike/${key}?limit=10`)
+
+        return axios.get(`/search/${endpoint}/startLike/${key}?limit=10`)
             .then(function (response) {
                 dispatch(fetchSuccess(category, key, response.data));
             })
