@@ -10,6 +10,7 @@
     <modules>
         <module>jira-rest</module>
         <module>data-web</module>
+        <module>jama-rest</module>
     </modules>
     <packaging>pom</packaging>
 
