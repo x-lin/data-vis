@@ -2,9 +2,7 @@ package at.ac.tuwien.dst.mms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.GraphProperty;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.*;
 import org.springframework.data.neo4j.support.index.IndexType;
 
 import java.util.List;
@@ -12,8 +10,13 @@ import java.util.List;
 /**
  * Created by xlin on 14.01.2016.
  */
+@NodeEntity
 public class User extends ModelEntity {
 	public static final String USER_NAME_INDEX = "usernameIndex";
+
+	@JsonIgnore
+	@GraphId
+	private Long id;
 
 	@GraphProperty
 	@Indexed(unique = true, indexName=USER_NAME_INDEX, indexType = IndexType.FULLTEXT)

@@ -2,9 +2,7 @@ package at.ac.tuwien.dst.mms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.GraphProperty;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.*;
 import org.springframework.data.neo4j.support.index.IndexType;
 
 import java.util.Set;
@@ -12,8 +10,13 @@ import java.util.Set;
 /**
  * Entity representing a project.
  */
+@NodeEntity
 public class Project extends ModelEntity {
 	public static final String PROJECT_KEY_INDEX = "projectKeyIndex";
+
+	@JsonIgnore
+	@GraphId
+	private Long id;
 
 	@GraphProperty
 	@Indexed(unique = true, indexName=PROJECT_KEY_INDEX, indexType = IndexType.FULLTEXT)

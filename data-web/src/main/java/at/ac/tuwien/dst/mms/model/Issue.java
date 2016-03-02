@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.neo4j.graphdb.Direction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.GraphProperty;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.*;
 import org.springframework.data.neo4j.support.index.IndexType;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 
@@ -17,8 +14,13 @@ import java.util.Set;
 /**
  * Entity representing an issue.
  */
+@NodeEntity
 public class Issue extends ModelEntity {
 	public static final String ISSUE_KEY_INDEX = "issueKeyIndex";
+
+	@JsonIgnore
+	@GraphId
+	private Long id;
 
 	@GraphProperty
 	@Indexed(unique = true, indexName="issueKeyIndex", indexType = IndexType.FULLTEXT)

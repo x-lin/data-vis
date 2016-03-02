@@ -2,23 +2,16 @@ package at.ac.tuwien.dst.mms.model;
 
 import at.ac.tuwien.dst.mms.util.Config;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.template.Neo4jOperations;
 
 import java.util.Map;
 
 /**
- * Created by xlin on 15.01.2016.
+ * Wrapper class to get entities under a common type and to provide common methods.
+ * Note that this class should not contain a @NodeEntity annotation,
+ * otherwise Spring will persist the data as both this type and its concrete subtype.
  */
-@NodeEntity
 public abstract class ModelEntity {
-
-	@JsonIgnore
-	@GraphId
-	private Long id;
 
 	@JsonIgnore
 	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor) RETURN neighbor")
@@ -33,14 +26,12 @@ public abstract class ModelEntity {
 	@Query(value = "START n=node({self}) MATCH (n)-[r]->(neighbor) RETURN neighbor LIMIT " + Config.SEARCH_LIMIT)
 	private Iterable<Map<String, Object>> limitedNeighbors;
 
-	public Long getId() {
-		return id;
-	}
-
+	@JsonIgnore
 	public Iterable<Map<String, Object>> getNeighbors() {
 		return neighbors;
 	}
 
+	@JsonIgnore
 	public Iterable<Map<String, Object>> getNeighborsLimited() {
 		return neighborsLimited;
 	}
