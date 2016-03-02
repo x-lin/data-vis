@@ -46,9 +46,6 @@ public class JiraWebhook {
 			try {
 				//NOTE: Users don't need to be stored separately as saving an issue will store the corresponding
 				//user automatically
-				for(Issue issue : issues) {
-					issue.setRequirements(generator.generateRequirements());
-				}
 				neoWriter.storeIssues(issues);
 			} catch (Exception e) {
 				logger.error("Exception occurred: ", e);
