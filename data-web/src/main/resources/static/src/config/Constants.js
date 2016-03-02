@@ -36,6 +36,12 @@ Constants.defaultVisible = {
     Requirement : true
 };
 
+Constants.jiraAddresses = {
+    Project: project => `http://jira.frequentis.frq/browse/${project}`,
+    Ticket: ticket => `http://jira.frequentis.frq/browse/${ticket}`,
+    User: user => `https://jira.frequentis.frq/ViewProfile.jspa?name=${user}`
+};
+
 Constants.getColor = (category) => {
     return Constants.colorMap[category] ? Constants.colorMap[category] : Constants.DEFAULT_COLOR;
 };
@@ -43,6 +49,10 @@ Constants.getColor = (category) => {
 Constants.getKeyIdentifier = (category) => {
     return Constants.keyMap[category];
 };
+
+Constants.getJiraAddress = (category, key) => {
+    return Constants.jiraAddresses[category] ? Constants.jiraAddresses[category](key) : null;
+}
 
 Constants.DEFAULT_COLOR = "rgb(100,100,100)";
 

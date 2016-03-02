@@ -23,6 +23,9 @@ export default class extends React.Component {
 
     render() {
         const imgDir = "img/";
+        const { category, key } = this.props.d;
+        const jiraAddress = Constants.getJiraAddress(category, key);
+        console.log("testing me fsdf");
 
         return (
             <Overlay
@@ -46,21 +49,20 @@ export default class extends React.Component {
                         <div className="tab-content overflow-scroll">
 
                             <div className="tab-pane active" id="tab_1">
-
-
-
                                 <div className="row inpadding ">
                                     <div className="btn-group btn-group-justified" role="group" aria-label="Browse at source site">
-                                        <a type="button" className="btn btn-default">
+                                        {jiraAddress &&
+                                        <a type="button" className="btn btn-default" href={jiraAddress} target="_blank">
                                             <img src={`${imgDir}jira-logo.png`} height="20px" />
                                         </a>
+                                        }
                                         <a type="button" className="btn btn-default">
                                             <img src={`${imgDir}jama-logo.png`} height="20px" />
                                         </a>
                                     </div>
                                 </div>
 
-                                Some text.
+                                Some text 1.
                             </div>
                             <div className="tab-pane" id="tab_2">
                                 Second panel.

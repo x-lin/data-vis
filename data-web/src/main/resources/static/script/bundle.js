@@ -25768,12 +25768,28 @@
 	    Requirement: true
 	};
 
+	Constants.jiraAddresses = {
+	    Project: function Project(project) {
+	        return "http://jira.frequentis.frq/browse/" + project;
+	    },
+	    Ticket: function Ticket(ticket) {
+	        return "http://jira.frequentis.frq/browse/" + ticket;
+	    },
+	    User: function User(user) {
+	        return "https://jira.frequentis.frq/ViewProfile.jspa?name=" + user;
+	    }
+	};
+
 	Constants.getColor = function (category) {
 	    return Constants.colorMap[category] ? Constants.colorMap[category] : Constants.DEFAULT_COLOR;
 	};
 
 	Constants.getKeyIdentifier = function (category) {
 	    return Constants.keyMap[category];
+	};
+
+	Constants.getJiraAddress = function (category, key) {
+	    return Constants.jiraAddresses[category] ? Constants.jiraAddresses[category](key) : null;
 	};
 
 	Constants.DEFAULT_COLOR = "rgb(100,100,100)";
@@ -34263,7 +34279,7 @@
 	    var endpoint = _Constants2.default.endpoints[category];
 	    return function (dispatch) {
 	        dispatch((0, _FetchActionCreators.fetchStart)(category, key));
-	        console.log("ddsfasd");
+
 	        return _axios2.default.get("/search/" + endpoint + "/startLike/" + key + "?limit=10").then(function (response) {
 	            dispatch((0, _FetchActionCreators.fetchSuccess)(category, key, response.data));
 	        }).catch(function (response) {
@@ -45995,6 +46011,12 @@
 	            var _this2 = this;
 
 	            var imgDir = "img/";
+	            var _props$d = this.props.d;
+	            var category = _props$d.category;
+	            var key = _props$d.key;
+
+	            var jiraAddress = _Constants2.default.getJiraAddress(category, key);
+	            console.log("testing me fsdf");
 
 	            return _react2.default.createElement(
 	                _reactBootstrap.Overlay,
@@ -46059,9 +46081,9 @@
 	                                    _react2.default.createElement(
 	                                        "div",
 	                                        { className: "btn-group btn-group-justified", role: "group", "aria-label": "Browse at source site" },
-	                                        _react2.default.createElement(
+	                                        jiraAddress && _react2.default.createElement(
 	                                            "a",
-	                                            { type: "button", className: "btn btn-default" },
+	                                            { type: "button", className: "btn btn-default", href: jiraAddress, target: "_blank" },
 	                                            _react2.default.createElement("img", { src: imgDir + "jira-logo.png", height: "20px" })
 	                                        ),
 	                                        _react2.default.createElement(
@@ -46071,7 +46093,7 @@
 	                                        )
 	                                    )
 	                                ),
-	                                "Some text."
+	                                "Some text 1."
 	                            ),
 	                            _react2.default.createElement(
 	                                "div",
