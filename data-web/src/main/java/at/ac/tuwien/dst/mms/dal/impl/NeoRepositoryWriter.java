@@ -76,8 +76,27 @@ public class NeoRepositoryWriter implements DataWriter {
 	@Override
 	public void storeProjects(Project[] projects) {
 		try (Transaction tx = graphDatabase.beginTx()) {
-			for(int i = 0; i < projects.length; i++) {
-				projectRepository.save(projects[i]);
+			for(Project project : projects) {
+
+				Project dbProject = projectRepository.findByKey(project.getKey());
+
+				if(dbProject == null) {
+					projectRepository.save(project);
+				} else {
+					if(project.getJamaId() != null) {
+						dbProject.setJamaId(project.getJamaId());
+					}
+
+					if(project.getJamaParentId() != null) {
+						dbProject.setJamaParentId(project.getJamaParentId());
+					}
+
+					if(project.getName() != null && dbProject.getName() == null) {
+						dbProject.setName(project.getName());
+					}
+
+					projectRepository.save(dbProject);
+				}
 			}
 
 			tx.success();
@@ -117,9 +136,7 @@ public class NeoRepositoryWriter implements DataWriter {
 	public void storeUsers(User[] users) {
 		Set<String> processed = new HashSet<>();
 
-		for (int i = 0; i < users.length; i++) {
-			User user = users[i];
-
+		for (User user : users) {
 			if (!processed.contains(user.getName())) {
 				try (Transaction tx = graphDatabase.beginTx()) {
 					userRepository.save(user);

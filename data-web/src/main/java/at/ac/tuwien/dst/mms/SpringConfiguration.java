@@ -1,8 +1,10 @@
 package at.ac.tuwien.dst.mms;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
+import at.ac.tuwien.dst.mms.dal.extract.rest.JamaRestClient;
 import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
+import at.ac.tuwien.dst.mms.dal.jobs.JamaExtractor;
 import at.ac.tuwien.dst.mms.dal.jobs.JiraExtractor;
 import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,16 @@ public class SpringConfiguration {
 	@Bean
 	public JiraRestClient jiraRestClient() {
 		return new JiraRestClient();
+	}
+
+	@Bean
+	public JamaExtractor jamaExtractor() {
+		return new JamaExtractor();
+	}
+
+	@Bean
+	public JamaRestClient jamaRestClient() {
+		return new JamaRestClient();
 	}
 
 	@Bean

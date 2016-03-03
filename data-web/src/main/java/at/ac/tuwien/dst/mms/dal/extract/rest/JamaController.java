@@ -1,19 +1,16 @@
 package at.ac.tuwien.dst.mms.dal.extract.rest;
 
-import at.ac.tuwien.dst.mms.dal.jobs.JiraExtractor;
+import at.ac.tuwien.dst.mms.dal.jobs.JamaExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by xlin on 08.01.2016.
- */
 @RestController
-@RequestMapping("/jira/extract")
-public class JiraController {
+@RequestMapping("/jama/extract")
+public class JamaController {
 	@Autowired
-	JiraExtractor extractor;
+	JamaExtractor extractor;
 
 	/**
 	 * Start extractor to fetch complete dataset and store it in Neo4j DB.
@@ -23,12 +20,12 @@ public class JiraController {
 		extractor.extractAll();
 	}
 
-	/**
-	 * Testing purposes
-	 */
-	@RequestMapping(path="/test", method= RequestMethod.GET)
-	public void testing() {
-		extractor.testing();
-	}
+//	/**
+//	 * Testing purposes
+//	 */
+//	@RequestMapping(path="/test", method= RequestMethod.GET)
+//	public void testing() {
+//		extractor.testing();
+//	}
 
 }

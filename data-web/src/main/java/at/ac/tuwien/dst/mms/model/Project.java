@@ -29,7 +29,27 @@ public class Project extends ModelEntity {
 	@RelatedTo(type = "PROJECT", direction = Direction.INCOMING)
 	private Set<Issue> issues;
 
+	private Long jamaId;
+
+	private Long jamaParentId;
+
 	public Project() {
+	}
+
+	public Long getJamaParentId() {
+		return jamaParentId;
+	}
+
+	public void setJamaParentId(Long jamaParentId) {
+		this.jamaParentId = jamaParentId;
+	}
+
+	public Long getJamaId() {
+		return jamaId;
+	}
+
+	public void setJamaId(Long jamaId) {
+		this.jamaId = jamaId;
 	}
 
 	public String getKey() {

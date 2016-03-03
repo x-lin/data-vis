@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.*;
 import org.springframework.data.neo4j.support.index.IndexType;
@@ -19,6 +20,9 @@ public class Requirement extends ModelEntity {
 	@GraphId
 	private Long id;
 
+	@JsonProperty("id")
+	private Integer jamaId;
+
 	@GraphProperty
 	@Indexed(unique = true, indexName=REQUIREMENT_KEY_INDEX, indexType = IndexType.FULLTEXT)
 	private String key;
@@ -36,6 +40,14 @@ public class Requirement extends ModelEntity {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public Integer getJamaId() {
+		return this.jamaId;
+	}
+
+	public void setJameId(Integer id) {
+		this.jamaId = id;
 	}
 
 	public Set<Issue> getIssues() {

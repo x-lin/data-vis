@@ -24,6 +24,7 @@ public class Config {
 
 			HOST = properties.getProperty("host");
 			JIRA_WRAPPER_HOST = properties.getProperty("jiraWrapper");
+			JAMA_EXTRACTOR_HOST = properties.getProperty("jamaExtractor");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -38,6 +39,8 @@ public class Config {
 	public static String HOST;
 
 	public static String JIRA_WRAPPER_HOST;
+
+	public static String JAMA_EXTRACTOR_HOST;
 
 	public final static String JIRA_WEBHOOK_REL = "/jira/webhook";
 
