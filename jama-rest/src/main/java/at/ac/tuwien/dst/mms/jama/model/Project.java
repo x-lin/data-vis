@@ -16,6 +16,8 @@ public class Project {
 
 	String key;
 
+	FieldWrapper fields;
+
 	@JsonProperty("jamaId")
 	public Long getJamaId() {
 		return jamaId;
@@ -51,6 +53,16 @@ public class Project {
 		this.key = key;
 	}
 
+	@JsonProperty("fields")
+	public void setFields(FieldWrapper fields) {
+		this.fields = fields;
+	}
+
+	@JsonProperty
+	public String getName() {
+		return this.fields.getName();
+	}
+
 	@Override
 	public String toString() {
 		return "Project{" +
@@ -58,6 +70,7 @@ public class Project {
 				", parentId=" + parentId +
 				", isFolder=" + isFolder +
 				", key='" + key + '\'' +
+				", fields=" + fields +
 				'}';
 	}
 }

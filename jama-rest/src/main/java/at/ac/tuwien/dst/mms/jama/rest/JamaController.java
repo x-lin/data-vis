@@ -27,7 +27,6 @@ public class JamaController {
     List<Project> getAllProjects() {
         List<Project> projects = extractor.getAllProjects();
 
-        System.out.println("got all projects");
         return projects;
     }
 
