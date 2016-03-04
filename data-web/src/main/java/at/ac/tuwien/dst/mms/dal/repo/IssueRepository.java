@@ -15,6 +15,7 @@ import java.util.Map;
  * Created by xlin on 08.01.2016.
  */
 public interface IssueRepository extends GraphRepository<Issue> {
+	@Query("START  a=node:" + Issue.ISSUE_KEY_INDEX +"(key = {0}) RETURN a")
 	public Issue findByKey(String key);
 
 	public List<Issue> findByProject(Project project);

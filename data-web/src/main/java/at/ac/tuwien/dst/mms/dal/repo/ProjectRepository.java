@@ -12,10 +12,15 @@ import java.util.List;
  * Created by xlin on 08.01.2016.
  */
 public interface ProjectRepository extends GraphRepository<Project> {
+	@Query("START  b=node:" + Project.PROJECT_KEY_INDEX +"(key = {0}) RETURN b")
 	public Project findByKey(String key);
 
 	public Project findByName(String name);
 
+	//@Query("MATCH (n:Project) WHERE n.key = {0} RETURN n LIMIT {1}")
+	public Project findByJamaId(Integer id);
+
+//	@Query("MATCH (n:Project) WHERE n.key =~ {0} RETURN n")
 	public List<Project> findAllByKey(String key, Pageable pageable);
 
 	public List<Project> findAllByKey(String key);

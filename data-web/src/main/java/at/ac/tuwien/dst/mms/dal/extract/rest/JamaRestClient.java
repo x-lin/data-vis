@@ -1,12 +1,14 @@
 package at.ac.tuwien.dst.mms.dal.extract.rest;
 
-import at.ac.tuwien.dst.mms.dal.DataWriter;
+import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.util.Config;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
@@ -19,10 +21,9 @@ public class JamaRestClient {
 	@Autowired(required=false)
 	Logger logger;
 
-	@Autowired
-	DataWriter neoWriter;
-
 	private String projectsUri = Config.JAMA_EXTRACTOR_HOST + "/projects";
+
+	private String itemsUri = Config.JAMA_EXTRACTOR_HOST + "/items";
 
 //	private String issuesUri = Config.JIRA_WRAPPER_HOST + "/issues";
 //
@@ -36,18 +37,19 @@ public class JamaRestClient {
 		return projects;
 	}
 
-//	@Async
-//	public void getProjectsWebhook() {
-//		URI uri = UriComponentsBuilder
-//				.fromHttpUrl(projectsUri)
-//				.queryParam("webhook", Config.JIRA_WEBHOOK_PROJECTS)
-//				.build().encode().toUri();
-//
-//		logger.info("Requesting all projects. Results will be directed to specified webhook.");
-//
-//		restTemplate.getForObject(uri, List.class);
-//	}
-//
+	@Async
+	public GeneralNode[] getItems(Integer id) {
+		URI uri = UriComponentsBuilder
+				.fromHttpUrl(itemsUri)
+				.queryParam("project", id)
+				.queryParam("webhook", Config.JAMA_WEBHOOK_ITEMS)
+				.build().encode().toUri();
+
+		logger.info("Requesting all items for project " + id);
+
+		return restTemplate.getForEntity(uri, GeneralNode[].class).getBody();
+	}
+
 //	public Issue[] getIssues(String projectKey) {
 //		logger.info("Requesting issues for project " + projectKey + ". For larger projects, it is advisable to use " +
 //				"the webhook mode");

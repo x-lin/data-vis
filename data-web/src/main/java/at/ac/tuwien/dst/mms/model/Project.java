@@ -19,7 +19,7 @@ public class Project extends ModelEntity {
 	private Long id;
 
 	@GraphProperty
-	@Indexed(unique = true, indexName=PROJECT_KEY_INDEX, indexType = IndexType.FULLTEXT)
+	@Indexed(unique = true, indexName=PROJECT_KEY_INDEX, indexType = IndexType.FULLTEXT, failOnDuplicate = true)
 	private String key;
 
 	@GraphProperty
@@ -29,26 +29,28 @@ public class Project extends ModelEntity {
 	@RelatedTo(type = "PROJECT", direction = Direction.INCOMING)
 	private Set<Issue> issues;
 
-	private Long jamaId;
+	@GraphProperty
+	private Integer jamaId;
 
-	private Long jamaParentId;
+	@GraphProperty
+	private Integer jamaParentId;
 
 	public Project() {
 	}
 
-	public Long getJamaParentId() {
+	public Integer getJamaParentId() {
 		return jamaParentId;
 	}
 
-	public void setJamaParentId(Long jamaParentId) {
+	public void setJamaParentId(Integer jamaParentId) {
 		this.jamaParentId = jamaParentId;
 	}
 
-	public Long getJamaId() {
+	public Integer getJamaId() {
 		return jamaId;
 	}
 
-	public void setJamaId(Long jamaId) {
+	public void setJamaId(Integer jamaId) {
 		this.jamaId = jamaId;
 	}
 

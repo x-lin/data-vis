@@ -12,6 +12,7 @@ import java.util.List;
  * Created by xlin on 08.01.2016.
  */
 public interface UserRepository extends GraphRepository<User> {
+	@Query("START  a=node:" + User.USER_NAME_INDEX +"(name = {0}) RETURN a")
 	public User findByName(String name);
 
 	public List<User> findAllByName(String name, Pageable pageable);

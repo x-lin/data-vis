@@ -11,6 +11,7 @@ import java.util.List;
  * Created by xlin on 08.01.2016.
  */
 public interface RequirementRepository  extends GraphRepository<Requirement> {
+	@Query("START  a=node:" + Requirement.REQUIREMENT_KEY_INDEX +"(key = {0}) RETURN a")
 	public Requirement findByKey(String key);
 
 	@Query("MATCH (n:Requirement) WHERE n.key =~ {0} RETURN n LIMIT {1}")

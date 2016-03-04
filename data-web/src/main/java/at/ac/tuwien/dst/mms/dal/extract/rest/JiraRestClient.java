@@ -70,7 +70,7 @@ public class JiraRestClient {
 				"to specified webhook.");
 
 		restTemplate.getForObject(uri, List.class);
-	}
+}
 
 	public Issue getIssue(String key) {
 		return restTemplate.getForObject(URI.create(issueUri+"/"+key), Issue.class);

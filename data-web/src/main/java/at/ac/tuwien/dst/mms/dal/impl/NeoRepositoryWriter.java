@@ -1,21 +1,17 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.repo.IssueRepository;
-import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
-import at.ac.tuwien.dst.mms.dal.repo.RequirementRepository;
-import at.ac.tuwien.dst.mms.dal.repo.UserRepository;
-import at.ac.tuwien.dst.mms.model.Issue;
-import at.ac.tuwien.dst.mms.model.Project;
-import at.ac.tuwien.dst.mms.model.Requirement;
-import at.ac.tuwien.dst.mms.model.User;
+import at.ac.tuwien.dst.mms.dal.repo.*;
+import at.ac.tuwien.dst.mms.model.*;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.GraphDatabase;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,7 +31,15 @@ public class NeoRepositoryWriter implements DataWriter {
 	private UserRepository userRepository;
 
 	@Autowired
-	GraphDatabase graphDatabase;
+	private GeneralNodeRepository generalNodeRepository;
+
+	@Autowired
+	private GeneralNodeTypeRepository generalNodeTypeRepository;
+
+	@Autowired
+	private GraphDatabase graphDatabase;
+
+
 
 	@Autowired(required = false)
 	private Logger logger;
@@ -74,35 +78,31 @@ public class NeoRepositoryWriter implements DataWriter {
 	}
 
 	@Override
+	@Transactional
 	public void storeProjects(Project[] projects) {
-		try (Transaction tx = graphDatabase.beginTx()) {
-			for(Project project : projects) {
+		for(Project project : projects) {
 
-				Project dbProject = projectRepository.findByKey(project.getKey());
+			Project dbProject = projectRepository.findByKey(project.getKey());
 
-				if(dbProject == null) {
-					projectRepository.save(project);
-				} else {
-					if(project.getJamaId() != null) {
-						dbProject.setJamaId(project.getJamaId());
-					}
-
-					if(project.getJamaParentId() != null) {
-						dbProject.setJamaParentId(project.getJamaParentId());
-					}
-
-					if(project.getName() != null && dbProject.getName() == null) {
-						dbProject.setName(project.getName());
-					}
-
-					projectRepository.save(dbProject);
+			if(dbProject == null) {
+				projectRepository.save(project);
+			} else {
+				if(project.getJamaId() != null) {
+					dbProject.setJamaId(project.getJamaId());
 				}
+
+				if(project.getJamaParentId() != null) {
+					dbProject.setJamaParentId(project.getJamaParentId());
+				}
+
+				if(project.getName() != null && dbProject.getName() == null) {
+					dbProject.setName(project.getName());
+				}
+
+				projectRepository.save(dbProject);
 			}
-
-			tx.success();
-
-			logger.info(projects.length + " projects saved.");
 		}
+		logger.info(projects.length + " projects saved.");
 	}
 
 	@Override
@@ -148,5 +148,31 @@ public class NeoRepositoryWriter implements DataWriter {
 
 		logger.info(processed + " users saved.");
 
+	}
+
+	@Override
+	@Transactional
+	public void storeGeneralNodes(List<GeneralNode> nodes) {
+		for(GeneralNode node : nodes) {
+			this.storeGeneralNodeType(node.getType());
+			Project project = projectRepository.findByJamaId(node.getProjectId());
+			if(node.getProjectId() != null && project != null)  {
+				node.setProject(project);
+				generalNodeRepository.save(node);
+			} else {
+				logger.error("No project information found for general node.");
+			}
+
+		}
+
+		logger.info(nodes.size() + " general nodes processed.");
+	}
+
+	@Override
+	@Transactional
+	public void storeGeneralNodeType(GeneralNodeType nodeType) {
+		if (nodeType != null && generalNodeTypeRepository.findByKey(nodeType.getKey()) == null) {
+			generalNodeTypeRepository.save(nodeType);
+		}
 	}
 }

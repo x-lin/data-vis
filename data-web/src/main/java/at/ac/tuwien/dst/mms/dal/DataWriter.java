@@ -1,11 +1,9 @@
 package at.ac.tuwien.dst.mms.dal;
 
-import at.ac.tuwien.dst.mms.model.Issue;
-import at.ac.tuwien.dst.mms.model.Project;
-import at.ac.tuwien.dst.mms.model.Requirement;
-import at.ac.tuwien.dst.mms.model.User;
+import at.ac.tuwien.dst.mms.model.*;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface DataWriter {
 
@@ -26,4 +24,8 @@ public interface DataWriter {
 	void storeUser(User user);
 
 	void storeUsers(User[] users);
+
+	void storeGeneralNodes(List<GeneralNode> nodes);
+
+	void storeGeneralNodeType(GeneralNodeType nodeType);
 }

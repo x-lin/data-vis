@@ -44,7 +44,11 @@ public class Config {
 
 	public final static String JIRA_WEBHOOK_REL = "/jira/webhook";
 
+	public final static String JAMA_WEBHOOK_REL = "/jama/webhook";
+
 	public final static String JIRA_WEBHOOK_URI = HOST + JIRA_WEBHOOK_REL;
+
+	public final static String JAMA_WEBHOOK_URI = HOST + JAMA_WEBHOOK_REL;
 
 	public final static String PROJECTS_PATH = "/projects";
 
@@ -52,11 +56,19 @@ public class Config {
 
 	public final static String USERS_PATH = "/users";
 
+	public final static String ITEMS_PATH = "/items";
+
 	public final static String REQUIREMENTS_PATH = "/reqs";
+
+	public final static String GENERAL_NODES_PATH = "/generalNodes";
 
 	public final static String JIRA_WEBHOOK_PROJECTS = JIRA_WEBHOOK_URI + PROJECTS_PATH;
 
 	public final static String JIRA_WEBHOOK_ISSUES = JIRA_WEBHOOK_URI + ISSUES_PATH;
+
+	public final static String JAMA_WEBHOOK_PROJECTS = JAMA_WEBHOOK_URI + PROJECTS_PATH;
+
+	public final static String JAMA_WEBHOOK_ITEMS = JAMA_WEBHOOK_URI + ITEMS_PATH;
 
 	public final static String SEARCH_REST_PATH = "/search";
 }
