@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.jama.rest;
 
+import at.ac.tuwien.dst.mms.jama.model.Item;
 import at.ac.tuwien.dst.mms.jama.model.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,21 +20,22 @@ import java.util.List;
 public class JamaController {
 
     @Autowired
-    JameProjectExtractor extractor;
+    JameProjectExtractor projectExtractor;
+
+    @Autowired
+    JamaItemExtractor itemExtractor;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/projects", method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     List<Project> getAllProjects() {
-        List<Project> projects = extractor.getAllProjects();
-
-        return projects;
+        return projectExtractor.getAllProjects();
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    List<Object> getItems(
+    List<Item> getItems(
             @RequestParam("project") Integer projectId
     ) {
-        return null;
+        return itemExtractor.getAllItemsForProject(projectId);
     }
 }
