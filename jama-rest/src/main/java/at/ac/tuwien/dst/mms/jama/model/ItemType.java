@@ -8,10 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ItemType {
 	Integer jamaId;
 
-	@JsonProperty("typeKey")
 	String key;
 
-	@JsonProperty("display")
 	String name;
 
 	@JsonProperty("jamaId")
@@ -24,18 +22,22 @@ public class ItemType {
 		this.jamaId = jamaId;
 	}
 
+	@JsonProperty("key")
 	public String getKey() {
 		return key;
 	}
 
+	@JsonProperty("typeKey")
 	public void setKey(String key) {
 		this.key = key;
 	}
 
+	@JsonProperty("name")
 	public String getName() {
 		return name;
 	}
 
+	@JsonProperty("display")
 	public void setName(String name) {
 		this.name = name;
 	}

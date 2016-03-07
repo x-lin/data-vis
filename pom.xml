@@ -11,6 +11,7 @@
         <module>jira-rest</module>
         <module>data-web</module>
         <module>jama-rest</module>
+        <module>model</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.extract.rest;
 
+import at.ac.tuwien.dst.mms.dal.extract.rest.model.JamaRelationship;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.util.Config;
@@ -25,6 +26,8 @@ public class JamaRestClient {
 
 	private String itemsUri = Config.JAMA_EXTRACTOR_HOST + "/items";
 
+	private String relationshipsUri = Config.JAMA_EXTRACTOR_HOST + "/relationships";
+
 //	private String issuesUri = Config.JIRA_WRAPPER_HOST + "/issues";
 //
 //	private String issueUri = Config.JIRA_WRAPPER_HOST + "/issue";
@@ -48,6 +51,19 @@ public class JamaRestClient {
 		logger.info("Requesting all items for project " + id);
 
 		return restTemplate.getForEntity(uri, GeneralNode[].class).getBody();
+	}
+
+	@Async
+	public void getRelationships(Integer id) {
+		URI uri = UriComponentsBuilder
+				.fromHttpUrl(relationshipsUri)
+				.queryParam("project", id)
+				.queryParam("webhook", Config.JAMA_WEBHOOK_RELATIONSHIPS)
+				.build().encode().toUri();
+
+		logger.info("Requesting all relationships for project " + id);
+
+		restTemplate.getForEntity(uri, JamaRelationship[].class).getBody();
 	}
 
 //	public Issue[] getIssues(String projectKey) {

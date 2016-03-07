@@ -26,4 +26,10 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode> {
 
 	@Query("START b=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key = {0}) MATCH (a)-[]-(b) RETURN b")
 	public Iterable<Map<String, Object>> findNeighbors(String key);
+
+	@Query("START  a=node:" + GeneralNodeJamaIndex.KEY_INDEX +"(jamaId = {0}) MATCH (a)-[]-(b) RETURN b")
+	public GeneralNode findByJamaId(Long id);
+
+//	@Query("START  a=node:" + GeneralNodeJamaIndex.KEY_INDEX +"(key = {0}) RETURN a")
+//	public GeneralNodeJamaIndex findByJamaId(Long id);
 }

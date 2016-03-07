@@ -1,0 +1,68 @@
+package at.ac.tuwien.dst.mms.jama.rest;
+
+import at.ac.tuwien.dst.mms.jama.model.Relationship;
+import at.ac.tuwien.dst.mms.jama.rest.model.RelationshipResponse;
+import at.ac.tuwien.dst.mms.jama.util.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by XLin on 07.03.2016.
+ */
+@Service
+public class JamaRelationshipExtractor {
+	@Autowired
+	private RestTemplate restTemplate;
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private String relationshipUri = Config.HOST + "/relationships";
+
+	public List<Relationship> getAllRelationshipsForProject(Integer id) {
+		List<Relationship> relationships = new ArrayList<>();
+
+		RelationshipResponse initialResponse = this.getRelationshipsForProject(id, 0);
+		if(initialResponse != null && initialResponse.getRelationships() != null) {
+			relationships.addAll(initialResponse.getRelationships());
+
+			int resultCount = initialResponse.getPageInfo().getResultCount();
+			int totalResults = initialResponse.getPageInfo().getTotalResults();
+			int startIndex = initialResponse.getPageInfo().getStartIndex();
+
+			while(startIndex + resultCount < totalResults) {
+
+				startIndex += resultCount;
+				RelationshipResponse response = this.getRelationshipsForProject(id, startIndex);
+				if(response.getRelationships() != null) {
+					//				System.out.println(response.getRelationships());
+					relationships.addAll(response.getRelationships());
+				}
+			}
+		}
+
+		return relationships;
+	}
+
+	public RelationshipResponse getRelationshipsForProject(Integer projectId, Integer startAt) {
+		URI uri = UriComponentsBuilder
+				.fromHttpUrl(relationshipUri)
+				.queryParam("maxResults", Config.MAX_RESULTS)
+				.queryParam("project", projectId)
+				.queryParam("startAt", startAt)
+				.build().encode().toUri();
+
+		System.out.println("uri: " + uri);
+
+		logger.info("Requesting relationships for project " + projectId + " starting at " + startAt);
+
+		return restTemplate.getForObject(uri, RelationshipResponse.class);
+	}
+}

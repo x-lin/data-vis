@@ -7,6 +7,9 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.neo4j.annotation.*;
 import org.springframework.data.neo4j.support.index.IndexType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by XLin on 04.03.2016.
  */
@@ -38,9 +41,76 @@ public class GeneralNode extends ModelEntity {
 	@Transient
 	private Integer projectId;
 
-	@Fetch
 	@RelatedTo(type = "NODE_TYPE", direction = Direction.OUTGOING)
 	private GeneralNodeType type;
+
+	@JsonIgnore
+	@Fetch
+	@RelatedTo(type = "PARENT", direction = Direction.INCOMING)
+	private GeneralNode parent;
+
+	@JsonIgnore
+	@Fetch
+	@RelatedTo(type = "PARENT", direction = Direction.OUTGOING)
+	private Set<GeneralNode> children;
+
+	@JsonIgnore
+	@Fetch
+	@RelatedTo(type = "RELATED", direction = Direction.INCOMING)
+	private Set<GeneralNode> downstream;
+
+	public Set<GeneralNode> getDownstream() {
+		return downstream;
+	}
+
+	public void setDownstream(Set<GeneralNode> downstream) {
+		this.downstream = downstream;
+	}
+
+	public void addDownstream(Set<GeneralNode> downstream) {
+		if(this.downstream == null) {
+			this.downstream = new HashSet<>();
+		}
+
+		this.downstream.addAll(downstream);
+	}
+
+	public void addDownstream(GeneralNode downstream) {
+		if(this.downstream == null) {
+			this.downstream = new HashSet<>();
+		}
+
+		this.downstream.add(downstream);
+	}
+
+	public GeneralNode getParent() {
+		return this.parent;
+	}
+
+	public void setParent(GeneralNode parent) {
+		this.parent = parent;
+	}
+
+	public Set<GeneralNode> getChildren() {
+		return this.children;
+	}
+
+	public void setChildren(Set<GeneralNode> children) {
+		this.children = children;
+	}
+
+	public void addChildren(GeneralNode child) {
+		if(this.children == null) {
+			this.children = new HashSet<>();
+		}
+
+		this.children.add(child);
+	}
+
+	@JsonProperty("type")
+	public void setType(GeneralNodeType type) {
+		this.type = type;
+	}
 
 	@JsonIgnore
 	public GeneralNodeType getType() {

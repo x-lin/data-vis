@@ -1,7 +1,9 @@
 package at.ac.tuwien.dst.mms.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.neo4j.graphdb.Direction;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.neo4j.annotation.*;
 import org.springframework.data.neo4j.support.index.IndexType;
 
@@ -32,16 +34,53 @@ public class Project extends ModelEntity {
 	@GraphProperty
 	private Integer jamaId;
 
-	@GraphProperty
+//	@JsonIgnore
+//	@Fetch
+//	@RelatedTo(type = "PARENT", direction = Direction.INCOMING)
+//	private Project parent;
+//
+//	@JsonIgnore
+//	@Fetch
+//	@RelatedTo(type = "PARENT", direction = Direction.OUTGOING)
+//	private Set<Project> children;
+//
+	@Transient
 	private Integer jamaParentId;
 
-	public Project() {
-	}
+//	public Integer getJamaParentId() {
+//		return jamaParentId;
+//	}
 
+//	public Project getParent() {
+//		return this.parent;
+//	}
+//
+//	public void setParent(Project parent) {
+//		this.parent = parent;
+//	}
+//
+//	public Set<Project> getChildren() {
+//		return this.children;
+//	}
+//
+//	public void setChildren(Set<Project> children) {
+//		this.children = children;
+//	}
+//
+//	public void addChildren(Project child) {
+//		if(this.children == null) {
+//			this.children = new HashSet<>();
+//		}
+//
+//		this.children.add(child);
+//	}
+
+	@JsonIgnore
 	public Integer getJamaParentId() {
-		return jamaParentId;
+		return this.jamaParentId;
 	}
 
+	@JsonProperty
 	public void setJamaParentId(Integer jamaParentId) {
 		this.jamaParentId = jamaParentId;
 	}

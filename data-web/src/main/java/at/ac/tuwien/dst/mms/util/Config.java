@@ -60,6 +60,8 @@ public class Config {
 
 	public final static String REQUIREMENTS_PATH = "/reqs";
 
+	private static final String RELATIONSHIPS_PATH = "/relationships";
+
 	public final static String GENERAL_NODES_PATH = "/generalNodes";
 
 	public final static String JIRA_WEBHOOK_PROJECTS = JIRA_WEBHOOK_URI + PROJECTS_PATH;
@@ -69,6 +71,8 @@ public class Config {
 	public final static String JAMA_WEBHOOK_PROJECTS = JAMA_WEBHOOK_URI + PROJECTS_PATH;
 
 	public final static String JAMA_WEBHOOK_ITEMS = JAMA_WEBHOOK_URI + ITEMS_PATH;
+
+	public final static String JAMA_WEBHOOK_RELATIONSHIPS = JAMA_WEBHOOK_URI + RELATIONSHIPS_PATH;
 
 	public final static String SEARCH_REST_PATH = "/search";
 }

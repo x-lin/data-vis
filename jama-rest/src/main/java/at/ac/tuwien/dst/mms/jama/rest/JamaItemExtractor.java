@@ -12,7 +12,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by XLin on 04.03.2016.
@@ -40,13 +42,25 @@ public class JamaItemExtractor {
 
 			startIndex += resultCount;
 			ItemResponse response = this.getItemsForProject(id, startIndex);
-			items.addAll(response.getItems());
+			if(response.getItems() != null) {
+				items.addAll(response.getItems());
+			}
 		}
 
 		return items;
 	}
 
-	private ItemResponse getItemsForProject(Integer projectId, Integer startAt) {
+	public Map<Long, Item> indexItems(List<Item> items) {
+		Map<Long, Item> itemsMap = new HashMap<>();
+
+		for(Item item : items) {
+			itemsMap.put(item.getJamaId(), item);
+		}
+
+		return itemsMap;
+	}
+
+	public ItemResponse getItemsForProject(Integer projectId, Integer startAt) {
 		URI uri = UriComponentsBuilder
 				.fromHttpUrl(itemUri)
 				.queryParam("maxResults", Config.MAX_RESULTS)

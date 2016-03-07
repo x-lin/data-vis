@@ -18,8 +18,17 @@ public class Item {
 
     private ItemType type;
 
+    private Integer projectId;
+
     @JsonProperty("project")
-    Integer projectId;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    @JsonProperty("projectId")
+    public Integer getProjectId() {
+        return this.projectId;
+    }
 
     @JsonProperty("jamaId")
     public Long getJamaId() {
@@ -64,11 +73,6 @@ public class Item {
     @JsonProperty("type")
     public ItemType getItemType() {
         return this.type;
-    }
-
-    @JsonProperty
-    public String getName() {
-        return this.fields.getName();
     }
 
     @Override

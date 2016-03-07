@@ -10,7 +10,8 @@ public enum NodeType {
 	Issue,
 	Project,
 	Requirement,
-	User;
+	User,
+	GeneralNode;
 
 	private static Map<NodeType, Class> typeMapper;
 
@@ -20,6 +21,7 @@ public enum NodeType {
 		typeMapper.put(NodeType.Requirement, Requirement.class);
 		typeMapper.put(NodeType.Project, Project.class);
 		typeMapper.put(NodeType.User, User.class);
+		typeMapper.put(NodeType.GeneralNode, GeneralNode.class);
 	}
 
 	/**

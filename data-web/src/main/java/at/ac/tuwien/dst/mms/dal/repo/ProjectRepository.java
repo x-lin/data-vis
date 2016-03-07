@@ -20,6 +20,9 @@ public interface ProjectRepository extends GraphRepository<Project> {
 	//@Query("MATCH (n:Project) WHERE n.key = {0} RETURN n LIMIT {1}")
 	public Project findByJamaId(Integer id);
 
+	@Query("MATCH (n:Project) WHERE n.jama = {0} RETURN n LIMIT {1}")
+	public Project findByParent(Integer id);
+
 //	@Query("MATCH (n:Project) WHERE n.key =~ {0} RETURN n")
 	public List<Project> findAllByKey(String key, Pageable pageable);
 
