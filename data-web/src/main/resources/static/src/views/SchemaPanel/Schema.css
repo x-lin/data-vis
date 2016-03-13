@@ -1,14 +1,10 @@
-.force-graph .circle {
+.schemaClass .circle {
     stroke: #fff;
     stroke-width: 1.5px;
     cursor: pointer
 }
 
-.force-graph .link {
-    stroke: #999;
-}
-
-.force-graph {
+.schemaClass {
     cursor: move;
     background: #FFF;
 }
@@ -17,9 +13,9 @@
     font: 9px sans-serif;
     fill: black;
     text-anchor: middle;
-    cursor: pointer;
+    cursor: pointer
 }
 
-.force-graph .g {
+.schemaClass .g {
     outline: 0;
 }

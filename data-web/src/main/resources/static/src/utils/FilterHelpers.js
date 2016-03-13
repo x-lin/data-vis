@@ -15,7 +15,7 @@ export default {
 
         if(filterArray.length > 0) {
             for (let i = 0; i < array.length; i++) {
-                if (filterArray.indexOf(array[i][propertyName]) > -1) {
+                if (filterArray.indexOf(array[i][propertyName]) > -1 || filterArray.indexOf(array[i].type) > -1) {
                     indices.push(i);
                 }
             }

@@ -1,0 +1,35 @@
+.tree {
+    cursor: move;
+}
+
+.tree .node {
+    cursor: pointer;
+}
+
+.tree .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.tree .node text {
+    font: 10px sans-serif;
+    text-anchor: middle;
+}
+
+.tree .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+
+#test {
+    height: -webkit-calc(100vh);
+    height: -moz-calc(100vh);
+    height: calc(100vh);
+    /*background-color: #FFF;*/
+    /*margin: 10px 0px;*/
+    border: 1px solid #CCC;
+    overflow: hidden;
+    /*cursor: progress;*/
+}

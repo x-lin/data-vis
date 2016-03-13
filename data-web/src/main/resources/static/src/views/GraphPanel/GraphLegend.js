@@ -8,8 +8,7 @@ export default class extends React.Component {
 
         this.state = {
             width: "100%",
-            height: "100%",
-            data: createData()
+            height: "100%"
         };
     }
 
@@ -20,8 +19,8 @@ export default class extends React.Component {
             const extra = 10;
 
             this.setState({
-                width: bbox.width + 2*padding + extra,
-                height: bbox.height + 2*padding + extra
+                width: 200,
+                height: 400
             });
         }
     }
@@ -30,9 +29,36 @@ export default class extends React.Component {
         this.props.toggleFilterItemCategory(name);
     }
 
+    createData() {
+        var data = [];
+
+        this.props.legend.legend.forEach((legend) => {
+            data.push({
+                name: legend,
+                color: Constants.getColor(legend)
+            })
+        })
+
+        //for(let name in this.props.legend.legend) {
+        //    data.push({
+        //        name: name,
+        //        color: Constants.getColor(name)
+        //    })
+        //}
+
+        //for (var name in Constants.colorMap) {
+
+        //        name: Constants.reversePropertyMap[name],
+        //        color: Constants.colorMap[name]
+        //    })
+        //}
+
+        return data;
+    };
+
     render() {
         const g = () => {
-            return this.state.data.map((element, index) => {
+            return this.createData().map((element, index) => {
                 const yTranslate = index*25+10;
                 const opacity = this.props.visibilityFilters[element.name] ? "1" : "0.6";
 
@@ -54,16 +80,3 @@ export default class extends React.Component {
         );
     };
 }
-
-const createData = () => {
-    var data = [];
-
-    for (var name in Constants.colorMap) {
-        data.push({
-            name: Constants.reversePropertyMap[name],
-            color: Constants.colorMap[name]
-        })
-    }
-
-    return data;
-};

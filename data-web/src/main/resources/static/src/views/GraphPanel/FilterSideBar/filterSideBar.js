@@ -23,6 +23,7 @@ export default class extends React.Component {
                 <SideBarCollapsable title="Graph Traversal" collapsed={true}>
                     Just some text to test me
                 </SideBarCollapsable>
+
             </LeftSideBar>
         );
     };

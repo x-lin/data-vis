@@ -10,7 +10,8 @@ body {
     top: 100px;
     right: 15px;
     z-index: 1;
-    width: 200px;
+    width: 500px;
+    height: 300px;
 }
 
 .fill-height {

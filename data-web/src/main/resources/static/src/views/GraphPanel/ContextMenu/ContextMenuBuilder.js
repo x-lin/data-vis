@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import ContextMenu from "./ContextMenu";
+import Tooltip from "../../widgets/Tooltip";
 
 const ContextMenuBuilder = {};
 
@@ -22,8 +23,18 @@ ContextMenuBuilder.createAndShow = (element, d) => {
     return element;
 };
 
+ContextMenuBuilder.createAndShowTooltip = (element, d) => {
+    //ReactDOM.render (
+    //    <Tooltip d={d} target={element[0]} />,
+    //    $("#popover-content")[0]
+    //);
+    //
+    //return element;
+};
+
 ContextMenuBuilder.removeAll = (selector) => {
     $(selector || ".popover").remove();
+    //$(selector || ".tooltip").remove();
 };
 
 export default ContextMenuBuilder;

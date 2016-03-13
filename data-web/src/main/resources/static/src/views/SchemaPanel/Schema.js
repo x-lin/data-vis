@@ -1,14 +1,14 @@
 import React from "react";
 import d3 from "d3";
-import cola from "webcola";
 
 import Constants from "../../config/Constants";
-import ContextMenuBuilder from "./ContextMenu/ContextMenuBuilder";
-import EventHandlers from "./ForceGraphEventHandlers";
 import FilterHelpers from "../../utils/FilterHelpers";
-import "./ForceGraph.css";
+import "./Schema.css";
 import D3Utils from "../../utils/D3Utils";
 import DOMSelector from "../../utils/DOMSelector";
+import EventHandlers from "./SchemaEventHandlers";
+
+import cola from "webcola";
 
 //Note: This class is mostly a wrapper around the D3 force graph implementation enriched with some customized behaviors.
 //A refactoring of the force graph was started to apply to the React way (check out ForceGraph_Ref.js), it was however
@@ -22,22 +22,19 @@ export default class extends React.Component {
             nodes: {},
             links: {},
             g: {},
-            translate: [0,0],
-            scale: 1,
-            zoom: {},
-            selector: "#" + this.props.divId
+            selector: "#schema",
+            nodeCount: 0
         }
     }
 
     render() {
         return (
-            <div id={this.props.divId}>
+            <div id="schema">
             </div>
         );
     }
 
     componentDidMount() {
-        console.log("save");
         this.renderGraph(Object.assign({}, this.props.graph));
         window.addEventListener('resize', (event) => this.resizePanel(event));
     }
@@ -62,8 +59,8 @@ export default class extends React.Component {
         this.createSvg();
         this.updateGraphData(data);
         this.setVisibilityByFilter(data);
-        this.addLinks();
         this.addNodes();
+        this.addLinks();
         this.updateForceLayout(data);
     }
 
@@ -94,7 +91,7 @@ export default class extends React.Component {
 
     createSvg() {
         const svg = D3Utils.createSvg(this.state.selector)
-            .attr("class", "force-graph")
+            .attr("class", "schemaClass")
             .on("click", (d) => EventHandlers.onClickSvg(d));
 
         const vis = svg
@@ -117,24 +114,14 @@ export default class extends React.Component {
     }
 
     createForceLayout(data) {
-        this.state.force = d3.layout.force()
-            .charge(-500)
-            //.chargeDistance(300)
-            //.friction(0.5)
-            //.gravity(0.2)
-            .linkDistance(50)
+        this.state.force = cola.d3adaptor()
+            .linkDistance(150)
             .nodes(data.nodes)
             .links(data.edges)
+
+            .avoidOverlaps(true)
             .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
             .on("start", () => this.createSpeededUpAnimation());
-
-        //this.state.force = cola.d3adaptor()
-        //    .linkDistance(70)
-        //    .nodes(data.nodes)
-        //    .links(data.edges)
-        //    .avoidOverlaps(true)
-        //    .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
-        //    .on("start", () => this.createSpeededUpAnimation());
     }
 
     updateGraphData(data) {
@@ -144,10 +131,18 @@ export default class extends React.Component {
 
     addLinks() {
         this.state.links.enter().insert("line", "g")
-            .attr("class", "link ");
+            .attr("class", "link");
+
+        const MIN_SIZE = 1;
+        const MAX_SIZE = 100;
 
         this.state.links
-            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity});
+            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity})
+            .attr("stroke-width", (d) => {
+                const size = (d.count / d.total) *  MAX_SIZE * d.total/this.state.nodeCount;
+                return size < MIN_SIZE ? MIN_SIZE : size;
+            })
+            .attr("stroke", d => Constants.getColor(d.edgeType));
     }
 
     setVisibilityByFilter(data) {
@@ -175,13 +170,22 @@ export default class extends React.Component {
         const g = this.state.nodes.enter().append("g")
             .attr("class", "g")
             .style("fill", (d) => {
-                return Constants.getColor(d.type ? d.type : d.category)
+                return Constants.getColor(d.name)
             });
+
+
+
+        const MIN_SIZE = 5;
+        const MAX_SIZE = 100;
 
         g.append("circle")
             .attr("class", "circle")
-            .attr("r", 20)
-            .attr("id", (d) => { return ContextMenuBuilder.buildElementId(d.key, d.category);});
+            .attr("r", (d) => {
+                this.state.nodeCount = d.total;
+                const size = (d.count / d.total) *  MAX_SIZE;
+                return size < MIN_SIZE ? MIN_SIZE : size;
+            })
+            //.attr("id", (d) => { return ContextMenuBuilder.buildElementId(d.key, d.category);});
 
         this.addNodeText(g);
 
@@ -192,23 +196,15 @@ export default class extends React.Component {
     }
 
     addNodeText(g) {
+        const MAX_TEXT_LENGTH = 8;
+
         g.append("text")
             .attr("class", "force-text  unselectable")
-            .text(d => d.key)
-            .call(this.getTextBox);
-
-        g.insert("rect","text")
-            .attr("x", function(d){return d.bbox.x})
-            .attr("y", function(d){return d.bbox.y})
-            .attr("width", function(d){return d.bbox.width})
-            .attr("height", function(d){return d.bbox.height})
-            .attr("opacity", 0.5)
-            .style("fill", "white");
-
-    }
-
-    getTextBox(selection) {
-        selection.each(function(d) { d.bbox = this.getBBox(); })
+            .text(d =>  {
+                //const name = d.name.length > MAX_TEXT_LENGTH ? d.name.substring(0, MAX_TEXT_LENGTH) + "..." : d.name;
+                return `${d.name} (${d.key})`
+                //return "";
+            });
     }
 
     setNodeBehavior() {
@@ -222,12 +218,6 @@ export default class extends React.Component {
                 if(this.props.showContextMenu && ((this.props.disableFiltered && d.visible) || !this.props.disableFiltered)) {
                     EventHandlers.onContextMenuNode(d);
                 }
-            })
-            .on("mouseover", (d) => {
-                EventHandlers.onMouseOver(d);
-            })
-            .on("mouseout", (d) => {
-                EventHandlers.onMouseLeave(d);
             })
             .call(
                 this.state.force.drag()

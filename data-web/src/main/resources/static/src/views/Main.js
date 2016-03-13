@@ -16,6 +16,7 @@ class Main extends React.Component{ //creates react component
 
                     <a href="index.html" className="logo ">
                         &nbsp;
+                        {/*<img src="img/frequentis-logo.gif" width="160px" />*/}
                     </a>
 
                     <nav className="navbar navbar-static-top">
@@ -30,6 +31,8 @@ class Main extends React.Component{ //creates react component
                             <div className="collapse navbar-collapse pull-left" id="navbar-collapse">
                                 <ul className="nav navbar-nav">
                                     <li><a href="#">Graph Navigator <span className="sr-only"></span></a></li>
+                                    <li><a href="#tree">Tree <span className="sr-only"></span></a></li>
+                                    <li><a href="#schema/QCUBE">Schema <span className="sr-only"></span></a></li>
                                 </ul>
                             </div>
 

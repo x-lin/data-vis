@@ -5,11 +5,12 @@ import GraphPanel from "../GraphPanel/GraphPanel";
 import ExportToImage from "../GraphPanel/ExportToImage"
 import FilterSideBar from "../GraphPanel/FilterSideBar/FilterSideBar";
 import Draggable from "./Draggable";
+import LanePicker from "../LanePicker/LanePicker";
 
 export default () => {
     return (
         <div>
-            <FilterSideBar />
+            <LanePicker />
             <SearchBarComponent />
             {/*<ExportToImage />*/}
             <GraphPanel />

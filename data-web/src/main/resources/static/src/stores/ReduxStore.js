@@ -6,6 +6,8 @@ import { neighborsReducer } from "../reducers/NeighborsReducer";
 import { graphReducer } from "../reducers/GraphReducer";
 import { settingsReducer } from "../reducers/SettingsReducer";
 import { graphFilterReducer } from "../reducers/GraphFilterReducer";
+import { schemaReducer } from "../reducers/SchemaReducer";
+import LaneReducer from "../reducers/LaneReducer";
 
 export const createStore = () => {
     const allReducers = combineReducers({
@@ -13,7 +15,9 @@ export const createStore = () => {
         items: itemReducer,
         neighbors: neighborsReducer,
         graph: graphReducer,
-        visibilityFilters: graphFilterReducer
+        visibilityFilters: graphFilterReducer,
+        schema: schemaReducer,
+        lanes: LaneReducer
     });
 
     return createReduxStore(allReducers, applyMiddleware(

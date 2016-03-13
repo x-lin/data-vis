@@ -23,9 +23,10 @@ export default class extends React.Component {
 
     render() {
         const imgDir = "img/";
-        const { category, key } = this.props.d;
+        const { category, key, jamaId, jamaProjectId } = this.props.d;
+
         const jiraAddress = Constants.getJiraAddress(category, key);
-        console.log("testing me fsdf");
+        const jamaAddress = Constants.getJamaAddress(jamaId, jamaProjectId);
 
         return (
             <Overlay
@@ -56,9 +57,11 @@ export default class extends React.Component {
                                             <img src={`${imgDir}jira-logo.png`} height="20px" />
                                         </a>
                                         }
-                                        <a type="button" className="btn btn-default">
+                                        {jamaAddress &&
+                                        <a type="button" className="btn btn-default" href={jamaAddress} target="_blank">
                                             <img src={`${imgDir}jama-logo.png`} height="20px" />
                                         </a>
+                                        }
                                     </div>
                                 </div>
 

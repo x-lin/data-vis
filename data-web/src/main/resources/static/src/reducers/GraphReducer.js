@@ -16,17 +16,22 @@ action) => {
         case CLEAR_GRAPH:
             state.nodes.length = 0;
             state.edges.length = 0;
+            state.legend.length = 0;
 
             return state;
         case UPDATE_GRAPH:
             state.nodes.length = 0;
             state.edges.length = 0;
+            state.legend.length = 0;
+
             Array.prototype.push.apply(state.nodes, action.data.nodes);
             Array.prototype.push.apply(state.edges, action.data.edges);
 
+            Array.prototype.push.apply(state.legend, new D3Graph(action.data.nodes, action.data.edges).legend);
+
             return Object.assign({}, state);
         case NEIGHBORS_FETCH_SUCCESS:
-            const graph = new D3Graph(state.nodes, state.edges);
+            const graph = new D3Graph(state.nodes, state.edges, state.legend);
 
             const index = graph.addNode(new Node(action.key, action.category));
 
@@ -35,7 +40,7 @@ action) => {
 
                 neighborNodes.forEach((neighborNode) => {
                     const keyIdentifier = Constants.getKeyIdentifier(neighborCategory);
-                    const neighborIndex = graph.addNode(new Node(neighborNode[keyIdentifier], neighborCategory));
+                    const neighborIndex = graph.addNode(new Node(neighborNode[keyIdentifier], neighborCategory, neighborNode.type, neighborNode.jamaId, neighborNode.projectId));
                     graph.addEdge(new Edge(index, neighborIndex));
                 });
             }

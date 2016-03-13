@@ -1,3 +1,5 @@
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
     entry: "./src/index.js", //path of root component -> renders other components -> starting point
     output: {
@@ -20,7 +22,14 @@ module.exports = {
                 loader: 'style!css' // Run both loaders
             }
         ]
-    }
+    },
+    plugins: [
+        new CopyWebpackPlugin([
+            { from: 'src/index.html', to: '../../../../../target/classes/static/src/index.html' },
+            { from: 'src/style.css', to: '../../../../../target/classes/static/src/style.css' },
+            { from: 'script', to: '../../../../../target/classes/static/script' }
+        ])
+    ]
 };
 
 //webpack takes entry -> run transformations -> create output bundle
