@@ -27577,6 +27577,16 @@
 	                                        "Schema ",
 	                                        React.createElement("span", { className: "sr-only" })
 	                                    )
+	                                ),
+	                                React.createElement(
+	                                    "li",
+	                                    null,
+	                                    React.createElement(
+	                                        "a",
+	                                        { href: "#schema/QCUBE" },
+	                                        "Schema ",
+	                                        React.createElement("span", { className: "sr-only" })
+	                                    )
 	                                )
 	                            )
 	                        ),
@@ -69593,7 +69603,7 @@
 
 
 	// module
-	exports.push([module.id, ".box-custom {\r\n    background-color: transparent;\r\n    color: #b8c7ce;\r\n    border-left: 3px solid transparent;\r\n    border-top: 0px;\r\n    margin-bottom: 0px;\r\n}\r\n\r\n\r\n\r\n.box-header .box-title-custom {\r\n    color: #CCC;\r\n    font-size: 14px;\r\n}\r\n\r\n.box-custom .box-content-custom {\r\n    background-color: #2c3b41;\r\n    font-size: 12px;\r\n    padding-bottom: 0px;\r\n}", ""]);
+	exports.push([module.id, ".box-custom {\r\n    background-color: transparent;\r\n    color: #b8c7ce;\r\n    border-left: 3px solid transparent;\r\n    border-top: 0px;\r\n    margin-bottom: 0px;\r\n}\r\n\r\n\r\n\r\n.box-header .box-title-custom {\r\n    color: #CCC;\r\n    font-size: 14px;\r\n}\r\n\r\n.box-custom .box-content-custom {\r\n    background-color: #2c3b41;\r\n    font-size: 12px;\r\n    padding: 0px;\r\n}", ""]);
 
 	// exports
 
@@ -69608,25 +69618,64 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function (_ref) {
-	    var children = _ref.children;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	    return _react2.default.createElement(
-	        "aside",
-	        { className: "main-sidebar" },
-	        _react2.default.createElement(
-	            "section",
-	            { className: "sidebar" },
-	            children
-	        )
-	    );
-	};
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    }
+
+	    _createClass(_class, [{
+	        key: "componentDidMount",
+
+	        //done, so that scroll bar won't disappear after a page change
+	        value: function componentDidMount() {
+	            if (typeof $.fn.slimScroll != 'undefined') {
+	                //Destroy if it exists
+	                $(".sidebar").slimScroll({ destroy: true }).height("auto");
+	                //Add slimscroll
+	                $(".sidebar").slimscroll({
+	                    height: $(window).height() - $(".main-header").height() + "px",
+	                    color: "rgba(0,0,0,0.2)",
+	                    size: "3px"
+	                });
+	            }
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "aside",
+	                { className: "main-sidebar" },
+	                _react2.default.createElement(
+	                    "section",
+	                    { className: "sidebar" },
+	                    this.props.children
+	                )
+	            );
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
 
 /***/ },
 /* 636 */
@@ -71333,6 +71382,8 @@
 
 	var _LeftSideBar2 = _interopRequireDefault(_LeftSideBar);
 
+	__webpack_require__(818);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71341,16 +71392,16 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var App = function (_React$Component) {
-	  _inherits(App, _React$Component);
+	var LanePicker = function (_React$Component) {
+	  _inherits(LanePicker, _React$Component);
 
-	  function App() {
-	    _classCallCheck(this, App);
+	  function LanePicker() {
+	    _classCallCheck(this, LanePicker);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LanePicker).apply(this, arguments));
 	  }
 
-	  _createClass(App, [{
+	  _createClass(LanePicker, [{
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -71361,10 +71412,10 @@
 	    }
 	  }]);
 
-	  return App;
+	  return LanePicker;
 	}(_react2.default.Component);
 
-	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(App);
+	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(LanePicker);
 
 /***/ },
 /* 643 */
@@ -80093,7 +80144,7 @@
 	    };
 
 	    var withoutItems = Object.assign({}, withItems, {
-	        margin: "10px"
+	        margin: "30px"
 	    });
 
 	    var style = notes.length ? withItems : withoutItems;
@@ -80136,6 +80187,14 @@
 
 	var _flow2 = _interopRequireDefault(_flow);
 
+	var _Constants = __webpack_require__(232);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _CircleSpan = __webpack_require__(820);
+
+	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -80172,7 +80231,9 @@
 	        { style: {
 	            opacity: isDragging ? 0 : 1
 	          }, className: this.props.className },
-	        this.props.note.key
+	        _react2.default.createElement(_CircleSpan2.default, { radius: '8px', color: _Constants2.default.getColor(this.props.note.key) }),
+	        ' ',
+	        this.props.note.key.length > 30 ? this.props.note.key.substring(0, 30) + "..." : this.props.note.key
 	      )));
 	    }
 	  }]);
@@ -80779,6 +80840,76 @@
 
 	module.exports = copyArray;
 
+
+/***/ },
+/* 818 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(819);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(274)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./LanePicker.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./LanePicker.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 819 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(273)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".lane {\r\n    display: inline-block;\r\n\r\n    margin: 1em;\r\n    background-color: #efefef;\r\n    border: 1px solid #ccc;\r\n\r\n    min-width: 10em;\r\n    vertical-align: top;\r\n}\r\n\r\n.notes {\r\n    padding: 0px;\r\n    margin: 0px;\r\n    list-style: none;\r\n}\r\n\r\n.note {\r\n    padding: 0.5em;\r\n    cursor:move;\r\n    color: black;\r\n    background-color: #fdfdfd;\r\n    box-shadow: 0 0 0.3em .03em rgba(0,0,0,.3);\r\n}\r\n\r\n\r\n.note:hover {\r\n    box-shadow: 0 0 0.3em .03em rgba(0,0,0,.7);\r\n    background-color: #ededed;\r\n    transition: .3s;\r\n}\r\n\r\n.note .value {\r\n    /* force to use inline-block so that it gets minimum height */\r\n    display: inline-block;\r\n}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 820 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var color = _ref.color;
+	    var radius = _ref.radius;
+
+
+	    return _react2.default.createElement("span", { style: {
+	            background: color,
+	            width: radius,
+	            height: radius,
+	            borderRadius: "50%",
+	            display: "inline-block"
+	        } });
+	};
 
 /***/ }
 /******/ ]);

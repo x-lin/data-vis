@@ -3,8 +3,9 @@ import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import LaneComponent from "./LaneComponent";
 import LeftSideBar from "../widgets/LeftSideBar";
+import "./LanePicker.css";
 
-class App extends React.Component {
+class LanePicker extends React.Component {
   render() {
     return (
       <LeftSideBar>
@@ -14,4 +15,4 @@ class App extends React.Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(App);
+export default DragDropContext(HTML5Backend)(LanePicker);

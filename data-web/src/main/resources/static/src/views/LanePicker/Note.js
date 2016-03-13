@@ -2,8 +2,11 @@ import React from 'react';
 import {DragSource, DropTarget} from 'react-dnd';
 import ItemTypes from '../../config/itemTypes';
 import flow from "lodash/flow";
+import Constants from "../../config/Constants";
+import CircleSpan from "../widgets/CircleSpan";
 
 class Note extends React.Component {
+
   render() {
     const {connectDragSource, connectDropTarget, isDragging, editing} = this.props;
     // Pass through if we are editing
@@ -12,7 +15,10 @@ class Note extends React.Component {
     return dragSource(connectDropTarget(
       <li style={{
         opacity: isDragging ? 0 : 1
-      }} className={this.props.className}>{this.props.note.key}</li>
+      }} className={this.props.className}>
+        <CircleSpan radius="8px" color={Constants.getColor(this.props.note.key)} />
+        &nbsp;
+{this.props.note.key.length > 30 ? this.props.note.key.substring(0,30)+"..." : this.props.note.key}</li>
     ));
   }
 }
