@@ -33,7 +33,7 @@ class Main extends React.Component{ //creates react component
                                     <li><a href="#">Graph Navigator <span className="sr-only"></span></a></li>
                                     <li><a href="#tree">Tree <span className="sr-only"></span></a></li>
                                     <li><a href="#schema/QCUBE">Schema <span className="sr-only"></span></a></li>
-                                    <li><a href="#schema/QCUBE">Schema <span className="sr-only"></span></a></li>
+                                    <li><a href="#coverage">Test Coverage<span className="sr-only"></span></a></li>
                                 </ul>
                             </div>
 

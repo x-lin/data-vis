@@ -1,6 +1,6 @@
 package at.ac.tuwien.dst.mms.dal;
 
-import at.ac.tuwien.dst.mms.dal.extract.rest.model.JamaRelationship;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
 import at.ac.tuwien.dst.mms.model.*;
 
 import java.util.Collection;
@@ -28,5 +28,5 @@ public interface DataWriter {
 
 	void storeGeneralNodes(List<GeneralNode> nodes);
 
-	void addRelationships(List<JamaRelationship> relationships);
+	void addRelationships(List<JamaRelationshipDTO> relationships);
 }

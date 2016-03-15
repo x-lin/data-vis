@@ -9,6 +9,7 @@ import Main from "./views/Main";
 import Relations from "./views/MainViews/Relations";
 import Tree from "./views/TreePanel/Tree";
 import Schema from "./views/MainViews/SchemaComponent";
+import TestCoverage from "./views/MainViews/TestCoverage";
 
 ReactDOM.render (
     <Provider store={store}>
@@ -17,6 +18,7 @@ ReactDOM.render (
                 <Route path="relationships" component={Relations} />
                 <Route path="tree" component={Tree} />
                 <Route path="schema/:project" component={Schema} />
+                <Route path="coverage" component={TestCoverage} />
                 <IndexRoute component={Relations} /> /* default path -> take this, if no other match */
             </Route>
         </Router>

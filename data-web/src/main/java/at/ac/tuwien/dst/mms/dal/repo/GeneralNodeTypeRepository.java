@@ -16,7 +16,7 @@ public interface GeneralNodeTypeRepository extends GraphRepository<GeneralNodeTy
 	@Query("START  a=node:" + GeneralNodeType.GENERAL_NODE_TYPE_KEY_INDEX +"(key = {0}) RETURN a")
 	public GeneralNodeType findByKey(String key);
 
-	@Query("MATCH (a:GeneralNodeType) RETURN a LIMIT {0}")
+	@Query("MATCH (a:GeneralNodeType) RETURN a")
 	public List<GeneralNodeType> findAll(int limit);
 
 	public List<Issue> findAllByKey(String key, Pageable pageable);

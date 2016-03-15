@@ -1,6 +1,5 @@
-package at.ac.tuwien.dst.mms.dal.extract.rest;
+package at.ac.tuwien.dst.mms.dal.jama;
 
-import at.ac.tuwien.dst.mms.dal.jobs.JamaExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,23 +17,35 @@ public class JamaController {
 	 */
 	@RequestMapping(path="/nodes", method= RequestMethod.GET)
 	public void getNodes(
-			@RequestParam(value="limit", required=false) Integer limit
+			@RequestParam(value="limit", required=false) Integer limit,
+			@RequestParam(value="key", required=false) String[] keys
 	) {
-		if(limit != null && limit != -1 && limit != 0) {
-			extractor.extractNodes(limit);
+		if(keys != null) {
+			extractor.extractNodes(keys);
 		} else {
-			extractor.extractNodes();
+			if(limit != null && limit != -1 && limit != 0) {
+				extractor.extractNodes(limit);
+			} else {
+				extractor.extractNodes();
+			}
 		}
 	}
 
 	@RequestMapping(path="/relationships", method= RequestMethod.GET)
 	public void getRelationships(
-			@RequestParam(value="limit", required=false) Integer limit
+			@RequestParam(value="limit", required=false) Integer limit,
+			@RequestParam(value="key", required=false) String[] keys
 	) {
-		if(limit != null && limit != -1 && limit != 0) {
-			extractor.extractRelationships(limit);
+
+		if(keys != null) {
+			extractor.extractRelationships(keys);
 		} else {
-			//extractor.extractNodes();
+			if(limit != null && limit != -1 && limit != 0) {
+				extractor.extractRelationships(limit);
+			} else {
+				extractor.extractRelationships();
+				//extractor.extractNodes();
+			}
 		}
 	}
 }

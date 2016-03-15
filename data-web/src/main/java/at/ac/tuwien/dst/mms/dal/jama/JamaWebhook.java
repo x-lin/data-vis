@@ -1,7 +1,7 @@
-package at.ac.tuwien.dst.mms.dal.extract.rest;
+package at.ac.tuwien.dst.mms.dal.jama;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.extract.rest.model.JamaRelationship;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
@@ -55,13 +55,15 @@ public class JamaWebhook {
 
 	@RequestMapping(path="/relationships", method=RequestMethod.POST)
 	public void relationships(
-			@RequestBody List<JamaRelationship> relationships) {
+			@RequestBody List<JamaRelationshipDTO> relationships) {
 
 		try (Writer output = new BufferedWriter(new FileWriter("target/errors1.log"))) {
 			try {
 				logger.info(relationships.size() + " relationships received, storing now.");
 
 				neoWriter.addRelationships(relationships);
+
+				logger.info(relationships.size() + " relationships processed.");
 			} catch (Exception e) {
 				logger.error("Exception occurred: ", e);
 				output.append(e.getMessage());

@@ -1,7 +1,6 @@
-package at.ac.tuwien.dst.mms.dal.extract.rest;
+package at.ac.tuwien.dst.mms.dal.jira;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.extract.mock.RequirementRandomGenerator;
 import at.ac.tuwien.dst.mms.model.Issue;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
@@ -25,9 +24,6 @@ import java.util.List;
 public class JiraWebhook {
 	@Autowired
 	DataWriter neoWriter;
-
-	@Autowired
-	RequirementRandomGenerator generator;
 
 	@Autowired(required=false)
 	Logger logger;

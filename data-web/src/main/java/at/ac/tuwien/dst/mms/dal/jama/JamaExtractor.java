@@ -1,7 +1,5 @@
-package at.ac.tuwien.dst.mms.dal.jobs;
+package at.ac.tuwien.dst.mms.dal.jama;
 
-import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.extract.rest.JamaRestClient;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
@@ -13,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -22,7 +21,7 @@ public class JamaExtractor {
 	JamaRestClient jamaRestClient;
 
 	@Autowired
-	DataWriter neoWriter;
+	JamaDataWriter dataWriter;
 
 	@Autowired(required = false)
 	Logger logger;
@@ -36,7 +35,7 @@ public class JamaExtractor {
 
 			Project[] projects = jamaRestClient.getProjects();
 
-			neoWriter.storeProjects(projects);
+			dataWriter.storeProjects(projects);
 
 			for (Project project : projects) {
 				try {
@@ -61,7 +60,47 @@ public class JamaExtractor {
 
 			Project[] projects = Arrays.copyOfRange(jamaRestClient.getProjects(), 0, limit);
 
-			neoWriter.storeProjects(projects);
+			dataWriter.storeProjects(projects);
+
+			for (Project project : projects) {
+				try {
+					this.extractItems(project.getJamaId());
+				} catch (Exception e) {
+					logger.error("Exception occurred: ", e);
+					output.write(e.getMessage());
+				}
+			}
+
+			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Async
+	public void extractNodes(String[] keys) {
+		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
+
+			long start = System.nanoTime();
+
+			Project[] unfilteredProjects = jamaRestClient.getProjects();
+			ArrayList<Project> projects = new ArrayList<>();
+
+			for(Project project : unfilteredProjects) {
+				boolean isIn = false;
+				for(String key: keys) {
+					if(project.getKey().equals(key)) {
+						isIn = true;
+						break;
+					}
+				}
+
+				if(isIn) {
+					projects.add(project);
+				}
+			}
+
+			dataWriter.storeProjects(projects);
 
 			for (Project project : projects) {
 				try {
@@ -90,6 +129,51 @@ public class JamaExtractor {
 			} catch (Exception e) {
 				logger.error("Exception occurred: ", e);
 			}
+		}
+	}
+
+	@Async
+	public void extractRelationships() {
+		jamaRestClient.getRelationships(0);
+	}
+
+	@Async
+	public void extractRelationships(String[] keys) {
+		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
+
+			long start = System.nanoTime();
+
+			Project[] unfilteredProjects = jamaRestClient.getProjects();
+			ArrayList<Project> projects = new ArrayList<>();
+
+			for(Project project : unfilteredProjects) {
+				boolean isIn = false;
+				for(String key: keys) {
+					if(project.getKey().equals(key)) {
+						isIn = true;
+						break;
+					}
+				}
+
+				if(isIn) {
+					projects.add(project);
+				}
+			}
+
+			dataWriter.storeProjects(projects);
+
+			for (Project project : projects) {
+				try {
+					jamaRestClient.getRelationships(project.getJamaId());
+				} catch (Exception e) {
+					logger.error("Exception occurred: ", e);
+					output.write(e.getMessage());
+				}
+			}
+
+			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
 	}
 

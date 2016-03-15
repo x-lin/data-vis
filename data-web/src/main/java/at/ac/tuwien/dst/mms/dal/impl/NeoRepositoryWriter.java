@@ -1,9 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.extract.rest.model.JamaRelationship;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
 import at.ac.tuwien.dst.mms.dal.repo.*;
-import at.ac.tuwien.dst.mms.dal.util.RelationshipTempStorage;
 import at.ac.tuwien.dst.mms.model.*;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
@@ -40,9 +39,6 @@ public class NeoRepositoryWriter implements DataWriter {
 
 	@Autowired
 	private GeneralNodeJamaIndexRepository generalNodeJamaIndexRepository;
-
-	@Autowired
-	private RelationshipTempStorage tempStorage;
 
 	@Autowired(required = false)
 	private Logger logger;
@@ -147,7 +143,6 @@ public class NeoRepositoryWriter implements DataWriter {
 		}
 
 		logger.info(processed + " users saved.");
-
 	}
 
 	@Override
@@ -162,31 +157,38 @@ public class NeoRepositoryWriter implements DataWriter {
 			GeneralNode dbNode = generalNodeRepository.findByKey(node.getKey()) != null ?
 					generalNodeRepository.findByKey(node.getKey()) : node;
 
+//			System.out.println(dbNode);
+
 			if(generalNodeRepository.findByJamaId(node.getJamaId()) == null) {
 				generalNodeJamaIndexRepository.save(new GeneralNodeJamaIndex(node.getJamaId(), dbNode));
 			}
 
-			//add parent, if one exists in processedParents, otherwise save itself to unprocessedChilds
-			if(dbNode.getParent() == null && node.getJamaParentId() != null) {
-				GeneralNode parent = processedNodes.get(node.getJamaParentId());
+//			//add parent, if one exists in processedParents, otherwise save itself to unprocessedChilds
+//			if(dbNode.getParent() == null && node.getJamaParentId() != null) {
+//				GeneralNode parent = processedNodes.get(node.getJamaParentId());
+//
+//				if(parent != null) {
+//					dbNode.setParent(parent);
+//				} else {
+//					if(unprocessedChilds.get(node.getJamaParentId()) == null) {
+//						unprocessedChilds.put(node.getJamaParentId(), new HashSet<>());
+//					}
+//
+//					unprocessedChilds.get(node.getJamaParentId()).add(dbNode);
+//				}
+//			}
 
-				if(parent != null) {
-					dbNode.setParent(parent);
-				} else {
-					if(unprocessedChilds.get(node.getJamaParentId()) == null) {
-						unprocessedChilds.put(node.getJamaParentId(), new HashSet<>());
-					}
+//			System.out.println(dbNode);
 
-					unprocessedChilds.get(node.getJamaParentId()).add(dbNode);
-				}
-			}
 
 			//process all unprocessed children
-			if(node.getJamaId() != null && unprocessedChilds.get(node.getJamaId()) != null) {
-				unprocessedChilds.get(node.getJamaId()).forEach(dbNode::addChildren);
-				unprocessedChilds.remove(node.getJamaId());
-			}
-
+//			if(node.getJamaId() != null && unprocessedChilds.get(node.getJamaId()) != null) {
+//				unprocessedChilds.get(node.getJamaId()).forEach(dbNode::addChildren);
+//				unprocessedChilds.remove(node.getJamaId());
+//			}
+//			System.out.println(node);
+//			System.out.println("project id: " + node.getProjectId());
+//			System.out.println("projects: " + projects);
 			if(!projects.containsKey(node.getProjectId())) {
 				projects.put(node.getProjectId(), projectRepository.findByJamaId(node.getProjectId()));
 			}
@@ -201,7 +203,6 @@ public class NeoRepositoryWriter implements DataWriter {
 			}
 
 			processedNodes.put(node.getJamaId(), dbNode);
-
 		}
 
 		if(unprocessedChilds.size() > 0) {
@@ -219,31 +220,30 @@ public class NeoRepositoryWriter implements DataWriter {
 
 	@Override
 	@Transactional
-	public void addRelationships(List<JamaRelationship> relationships) {
-		for(JamaRelationship relationship : relationships) {
-//			try (Transaction tx = graphDatabase.beginTx()) {
-				System.out.println("from: " + relationship.getFrom() + " to: " + relationship.getTo());
-				System.out.println(generalNodeJamaIndexRepository.findByJamaId(relationship.getFrom()));
-
-				System.out.println("key: " + generalNodeRepository.findByKey("4Trial_1Sky-SS-3734"));
-
-				GeneralNode from = generalNodeJamaIndexRepository.findByJamaId(relationship.getFrom()).getNode();
-				GeneralNode to = generalNodeJamaIndexRepository.findByJamaId(relationship.getTo()).getNode();
-
-				System.out.println("from: " + from + " to: " + to);
-
-				if(from != null && to != null) {
-					from.addDownstream(to);
-					generalNodeRepository.save(from);
-
-				} else if(from == null) {
-					logger.warn("upstream object " + relationship.getFrom() + " doesn't exist!");
+	public void addRelationships(List<JamaRelationshipDTO> relationships) {
+		for(JamaRelationshipDTO relationship : relationships) {
+			if(relationship.getFrom() == null) {
+				logger.warn("no from end found!");
+			} else {
+				if(generalNodeJamaIndexRepository.findByJamaId(relationship.getFrom()) == null) {
+					logger.warn("no node found for id " + relationship.getFrom());
+				} else if(generalNodeJamaIndexRepository.findByJamaId(relationship.getTo()) == null) {
+					logger.warn("no node found for id " + relationship.getTo());
 				} else {
-					logger.warn("downstream object " + relationship.getTo() + " doesn't exist!");
-				}
-//				tx.success();
-//			}
-		}
+					GeneralNode from = generalNodeJamaIndexRepository.findByJamaId(relationship.getFrom()).getNode();
+					GeneralNode to = generalNodeJamaIndexRepository.findByJamaId(relationship.getTo()).getNode();
 
+					if(from != null && to != null) {
+						from.addDownstream(to);
+						generalNodeRepository.save(from);
+
+					} else if(from == null) {
+						logger.warn("upstream object " + relationship.getFrom() + " doesn't exist!");
+					} else {
+						logger.warn("downstream object " + relationship.getTo() + " doesn't exist!");
+					}
+				}
+			}
+		}
 	}
 }

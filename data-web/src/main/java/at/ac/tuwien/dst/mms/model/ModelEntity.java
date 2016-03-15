@@ -18,12 +18,12 @@ public abstract class ModelEntity {
 	protected Iterable<Map<String, Object>> neighbors;
 
 	@JsonIgnore
-	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor) RETURN neighbor LIMIT 20")
+	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor:GeneralNode) RETURN neighbor LIMIT 20")
 	protected Iterable<Map<String, Object>> neighborsLimited;
 
 	//TODO find out how to specify limit dynamically
 	@JsonIgnore
-	@Query(value = "START n=node({self}) MATCH (n)-[r]->(neighbor) RETURN neighbor LIMIT " + Config.SEARCH_LIMIT)
+	@Query(value = "START n=node({self}) MATCH (n)-[]->(neighbor:GeneralNode) RETURN neighbor LIMIT " + Config.SEARCH_LIMIT)
 	private Iterable<Map<String, Object>> limitedNeighbors;
 
 	@JsonIgnore

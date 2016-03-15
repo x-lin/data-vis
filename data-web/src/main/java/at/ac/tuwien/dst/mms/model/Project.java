@@ -34,46 +34,8 @@ public class Project extends ModelEntity {
 	@GraphProperty
 	private Integer jamaId;
 
-//	@JsonIgnore
-//	@Fetch
-//	@RelatedTo(type = "PARENT", direction = Direction.INCOMING)
-//	private Project parent;
-//
-//	@JsonIgnore
-//	@Fetch
-//	@RelatedTo(type = "PARENT", direction = Direction.OUTGOING)
-//	private Set<Project> children;
-//
 	@Transient
 	private Integer jamaParentId;
-
-//	public Integer getJamaParentId() {
-//		return jamaParentId;
-//	}
-
-//	public Project getParent() {
-//		return this.parent;
-//	}
-//
-//	public void setParent(Project parent) {
-//		this.parent = parent;
-//	}
-//
-//	public Set<Project> getChildren() {
-//		return this.children;
-//	}
-//
-//	public void setChildren(Set<Project> children) {
-//		this.children = children;
-//	}
-//
-//	public void addChildren(Project child) {
-//		if(this.children == null) {
-//			this.children = new HashSet<>();
-//		}
-//
-//		this.children.add(child);
-//	}
 
 	@JsonIgnore
 	public Integer getJamaParentId() {
@@ -113,7 +75,4 @@ public class Project extends ModelEntity {
 		return issues;
 	}
 
-	public void setIssues(Set<Issue> issues) {
-		this.issues = issues;
-	}
 }

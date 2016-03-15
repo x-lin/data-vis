@@ -9,7 +9,7 @@ export default ({notes, move}) => {
     };
 
     const withoutItems = Object.assign({}, withItems, {
-        margin: "30px"
+        margin: "20px"
     });
 
     const style = notes.length ? withItems : withoutItems;

@@ -1,6 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
+import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
+import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
 import at.ac.tuwien.dst.mms.model.NodeType;
 import at.ac.tuwien.dst.mms.util.Config;
@@ -65,6 +67,7 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 
 	@Override
 	public Map<String, List<Object>> getNeighbors(String key) {
+
 		return this.getNeighbors(this.find(key).getNeighbors());
 	}
 
@@ -72,6 +75,11 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 	@Override
 	@Transactional
 	public Map<String, List<Object>> getNeighbors(String key, int limit) {
+		System.out.println("key: " + key);
+		System.out.println("element: " + this.find(key));
+		System.out.println("neighbors: " + this.find(key).getNeighborsLimited());
+		System.out.println("neighbors unlimited: " + this.find(key).getNeighbors());
+
 		return this.getNeighbors(this.find(key).getNeighborsLimited());
 	}
 
@@ -88,13 +96,16 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 
 		if(neighbors != null) {
 			for(Map<String, Object> entry : neighbors) {
+				//System.out.println("result before: " + result);
 				//we know that each return entry is only one object (neighbor node), thus take the first key
 				String key = entry.keySet().iterator().next();
+
 				Node node = neo4jOperations.convert(entry.get(key), Node.class);
 
 				//a node may have multiple labels: check one for one, if the label is mapped to a type
 				//until the object was mapped
 				for(Label label : node.getLabels()) {
+
 					if(NodeType.getClass(label.name()) != null) {
 						Object o = neo4jOperations.convert(node, NodeType.getClass(label.name()));
 
@@ -116,11 +127,28 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 			}
 		}
 
+
+
 		if(result.containsKey("Issue")) {
 			List<Object> list = result.remove("Issue");
 			result.put("Ticket", list);
 		}
 
 		return result;
+	}
+
+	@Override
+	public ProjectSchema getSchema(String projectKey) {
+		return null;
+	}
+
+	@Override
+	public ProjectSchema getSchema(String projectKey, String relation) {
+		return null;
+	}
+
+	@Override
+	public List<TestCoverage> getTestCoverage(String projectKey) {
+		return null;
 	}
 }

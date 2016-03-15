@@ -1,6 +1,5 @@
-package at.ac.tuwien.dst.mms.dal.extract.rest;
+package at.ac.tuwien.dst.mms.dal.jira;
 
-import at.ac.tuwien.dst.mms.dal.jobs.JiraExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -3,7 +3,7 @@ import React from "react";
 export default class extends React.Component {
     //done, so that scroll bar won't disappear after a page change
     componentDidMount() {
-        if (typeof $.fn.slimScroll != 'undefined') {
+        if (typeof $.fn.slimScroll != "undefined") {
             //Destroy if it exists
             $(".sidebar").slimScroll({destroy: true}).height("auto");
             //Add slimscroll

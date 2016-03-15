@@ -8,6 +8,7 @@ import { settingsReducer } from "../reducers/SettingsReducer";
 import { graphFilterReducer } from "../reducers/GraphFilterReducer";
 import { schemaReducer } from "../reducers/SchemaReducer";
 import LaneReducer from "../reducers/LaneReducer";
+import TestCoverageReducer from "../reducers/TestCoverageReducer";
 
 export const createStore = () => {
     const allReducers = combineReducers({
@@ -17,7 +18,8 @@ export const createStore = () => {
         graph: graphReducer,
         visibilityFilters: graphFilterReducer,
         schema: schemaReducer,
-        lanes: LaneReducer
+        lanes: LaneReducer,
+        coverage: TestCoverageReducer
     });
 
     return createReduxStore(allReducers, applyMiddleware(

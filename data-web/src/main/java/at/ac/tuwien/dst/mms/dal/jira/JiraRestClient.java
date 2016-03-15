@@ -1,4 +1,4 @@
-package at.ac.tuwien.dst.mms.dal.extract.rest;
+package at.ac.tuwien.dst.mms.dal.jira;
 
 import at.ac.tuwien.dst.mms.model.Issue;
 import at.ac.tuwien.dst.mms.model.Project;

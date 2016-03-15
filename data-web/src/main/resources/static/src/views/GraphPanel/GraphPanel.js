@@ -10,7 +10,7 @@ import "./ForceGraphComponent.css"
 class D3Panel extends React.Component {
     render() {
         return (
-            <div>
+            <div style={{height: "100%"}}>
                 <GraphLegendComponent divId={"graph-legend"}/>
                 <ForceGraphComponent divId={"force-graph-component"} />
             </div>

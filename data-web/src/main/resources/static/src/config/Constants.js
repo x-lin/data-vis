@@ -53,7 +53,7 @@ Constants.defaultVisible = {
     "Test Activity": true,
     Component: true,
     "Hardware Unit": true,
-    "Computer Software Compnent": true,
+    "Computer Software Component": true,
     "System Subsystem Design Description": true,
     "Customer Requirement": true,
     Text: true,

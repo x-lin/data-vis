@@ -22,6 +22,7 @@ public class GeneralNode extends ModelEntity {
 	private Long id;
 
 	@RelatedTo(type = "PROJECT", direction = Direction.INCOMING)
+	@Fetch
 	@JsonIgnore
 	private Project project;
 
@@ -38,26 +39,35 @@ public class GeneralNode extends ModelEntity {
 	@JsonProperty
 	private String key;
 
+	@GraphProperty
+	@JsonProperty
+	private String name;
+
 	@Transient
 	private Integer projectId;
 
 	@RelatedTo(type = "NODE_TYPE", direction = Direction.OUTGOING)
+	@Fetch
 	private GeneralNodeType type;
 
 	@JsonIgnore
-	@Fetch
+	//@Fetch
 	@RelatedTo(type = "PARENT", direction = Direction.INCOMING)
 	private GeneralNode parent;
 
 	@JsonIgnore
-	@Fetch
+	//@Fetch
 	@RelatedTo(type = "PARENT", direction = Direction.OUTGOING)
 	private Set<GeneralNode> children;
 
 	@JsonIgnore
 	@Fetch
-	@RelatedTo(type = "RELATED", direction = Direction.INCOMING)
+	@RelatedTo(type = "DOWNSTREAM", direction = Direction.INCOMING)
 	private Set<GeneralNode> downstream;
+
+	@GraphProperty
+	@JsonProperty
+	private String status;
 
 	public Set<GeneralNode> getDownstream() {
 		return downstream;
@@ -119,7 +129,7 @@ public class GeneralNode extends ModelEntity {
 
 	@JsonProperty("type")
 	public String getTypeKey() {
-		return type.getKey();
+		return type.getName();
 	}
 
 	public String getKey() {
@@ -147,9 +157,13 @@ public class GeneralNode extends ModelEntity {
 		this.projectId = projectId;
 	}
 
-	@JsonIgnore
+	@JsonProperty
 	public Integer getProjectId() {
-		return this.projectId;
+		if(this.project == null) {
+			return this.projectId;
+		} else {
+			return this.project.getJamaId();
+		}
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import ExportToImage from "../GraphPanel/ExportToImage"
 import FilterSideBar from "../GraphPanel/FilterSideBar/FilterSideBar";
 import Draggable from "./Draggable";
 import LanePicker from "../LanePicker/LanePicker";
+import TestCoverage from "../TestCoveragePanel/TestCoverageTable";
 
 export default () => {
     return (
@@ -13,7 +14,9 @@ export default () => {
             <LanePicker />
             <SearchBarComponent />
             {/*<ExportToImage />*/}
-            <GraphPanel />
+            <div style={{height: "100vh"}}>
+                <GraphPanel />
+            </div>
             {/*<Draggable />*/}
         </div>
     );

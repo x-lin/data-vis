@@ -1,5 +1,8 @@
 package at.ac.tuwien.dst.mms.dal;
 
+import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
+import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +29,10 @@ public interface DataReader<T> {
 	Map<String, List<Object>> getNeighbors(String indexAttribute);
 
 	Map<String, List<Object>> getNeighbors(String indexAttribute, int limit);
+
+	ProjectSchema getSchema(String key);
+
+	ProjectSchema getSchema(String key, String relation);
+
+	List<TestCoverage> getTestCoverage(String projectKey);
 }

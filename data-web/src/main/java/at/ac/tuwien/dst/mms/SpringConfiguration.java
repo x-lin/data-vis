@@ -1,11 +1,11 @@
 package at.ac.tuwien.dst.mms;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.extract.rest.JamaRestClient;
-import at.ac.tuwien.dst.mms.dal.extract.rest.JiraRestClient;
+import at.ac.tuwien.dst.mms.dal.jama.JamaRestClient;
+import at.ac.tuwien.dst.mms.dal.jira.JiraRestClient;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
-import at.ac.tuwien.dst.mms.dal.jobs.JamaExtractor;
-import at.ac.tuwien.dst.mms.dal.jobs.JiraExtractor;
+import at.ac.tuwien.dst.mms.dal.jama.JamaExtractor;
+import at.ac.tuwien.dst.mms.dal.jira.JiraExtractor;
 import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

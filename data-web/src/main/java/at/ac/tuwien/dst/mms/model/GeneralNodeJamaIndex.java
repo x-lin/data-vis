@@ -40,8 +40,6 @@ public class GeneralNodeJamaIndex {
 	}
 
 	public GeneralNode getNode() {
-		System.out.println("in index: " + jamaId);
-		System.out.println("general node is: " + node);
 		return node;
 	}
 

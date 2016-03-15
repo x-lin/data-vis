@@ -1,9 +1,9 @@
-package at.ac.tuwien.dst.mms.dal.extract.rest.model;
+package at.ac.tuwien.dst.mms.dal.jama.dto;
 
 /**
  * Created by XLin on 07.03.2016.
  */
-public class JamaRelationship {
+public class JamaRelationshipDTO {
 	private Long from;
 
 	private Long to;
@@ -22,5 +22,13 @@ public class JamaRelationship {
 
 	public void setTo(Long to) {
 		this.to = to;
+	}
+
+	@Override
+	public String toString() {
+		return "JamaRelationshipDTO{" +
+				"from=" + from +
+				", to=" + to +
+				'}';
 	}
 }

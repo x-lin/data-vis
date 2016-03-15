@@ -1,6 +1,6 @@
-package at.ac.tuwien.dst.mms.dal.extract.rest;
+package at.ac.tuwien.dst.mms.dal.jama;
 
-import at.ac.tuwien.dst.mms.dal.extract.rest.model.JamaRelationship;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.util.Config;
@@ -63,7 +63,7 @@ public class JamaRestClient {
 
 		logger.info("Requesting all relationships for project " + id);
 
-		restTemplate.getForEntity(uri, JamaRelationship[].class).getBody();
+		restTemplate.getForEntity(uri, JamaRelationshipDTO[].class).getBody();
 	}
 
 //	public Issue[] getIssues(String projectKey) {
