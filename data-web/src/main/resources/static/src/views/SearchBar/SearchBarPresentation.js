@@ -17,11 +17,8 @@ export default ( {
 
     return (
         <form onSubmit={(event) => submitHandler(event)}>
-            <div className="input-group fixed">
-                <SearchCategoryDropdown
-                    activeCategory={activeCategory}
-                    categories={categories}
-                />
+            <div className="input-group relative">
+
 
                 <SearchInputField
                     value={activeInputValue}

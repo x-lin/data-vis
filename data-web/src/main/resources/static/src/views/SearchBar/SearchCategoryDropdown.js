@@ -6,13 +6,11 @@ export default ( {
     } ) => {
 
     return (
-        <div className="input-group-btn search-panel">
-            <button type="button" className="btn btn-default btn-flat dropdown-toggle" data-toggle="dropdown">
-                <span id="search_concept">{activeCategory}</span> <span className="caret" />
+        <div className="input-group-btn">
+            <button type="button" className="btn btn-default btn-flat" data-toggle="dropdown">
+
             </button>
-            <ul className="dropdown-menu" role="menu">
-                {categories}
-            </ul>
+
         </div>
     );
 };

@@ -75,11 +75,6 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 	@Override
 	@Transactional
 	public Map<String, List<Object>> getNeighbors(String key, int limit) {
-		System.out.println("key: " + key);
-		System.out.println("element: " + this.find(key));
-		System.out.println("neighbors: " + this.find(key).getNeighborsLimited());
-		System.out.println("neighbors unlimited: " + this.find(key).getNeighbors());
-
 		return this.getNeighbors(this.find(key).getNeighborsLimited());
 	}
 

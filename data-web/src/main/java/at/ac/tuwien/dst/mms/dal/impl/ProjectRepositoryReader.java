@@ -80,6 +80,8 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 		ProjectRepository repo = (ProjectRepository)this.getRepository();
 
 		List<TestCoverageQueryResult> testCoverage = repo.getTestCoverage(projectKey);
+
+		System.out.println("got test coverage");
 		Map<String, TestCoverage> testCoverageConv = new HashMap<>();
 
 //		List<TestCoverage> testCoverageConv = new ArrayList<>();

@@ -40,7 +40,7 @@ action) => {
 
                 neighborNodes.forEach((neighborNode) => {
                     const keyIdentifier = Constants.getKeyIdentifier(neighborCategory);
-                    const neighborIndex = graph.addNode(new Node(neighborNode[keyIdentifier], neighborCategory, neighborNode.type, neighborNode.jamaId, neighborNode.projectId));
+                    const neighborIndex = graph.addNode(new Node(neighborNode[keyIdentifier], neighborNode.name, neighborCategory, neighborNode.type, neighborNode.jamaId, neighborNode.projectId));
                     graph.addEdge(new Edge(index, neighborIndex));
                 });
             }

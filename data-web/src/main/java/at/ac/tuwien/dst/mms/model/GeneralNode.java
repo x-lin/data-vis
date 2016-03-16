@@ -61,7 +61,7 @@ public class GeneralNode extends ModelEntity {
 	private Set<GeneralNode> children;
 
 	@JsonIgnore
-	@Fetch
+	//@Fetch
 	@RelatedTo(type = "DOWNSTREAM", direction = Direction.INCOMING)
 	private Set<GeneralNode> downstream;
 

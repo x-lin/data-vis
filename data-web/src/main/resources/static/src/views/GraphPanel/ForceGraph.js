@@ -194,7 +194,10 @@ export default class extends React.Component {
     addNodeText(g) {
         g.append("text")
             .attr("class", "force-text  unselectable")
-            .text(d => d.key)
+            .text(d => {
+                console.log(d)
+                return d.name;
+            })
             .call(this.getTextBox);
 
         g.insert("rect","text")
