@@ -50,13 +50,36 @@ public class JamaController {
     ) {
         List<Item> items = itemExtractor.getAllItemsForProject(projectId);
 
+        List<Item> filteredItems = new ArrayList<>();
+
+        for(Item item : items) {
+            if(item.getStatus() != null && !item.getStatus().equals("Deleted") && !item.getStatus().equals("Rejected")) {
+                filteredItems.add(item);
+                this.extractRelationships(item);
+            }
+        }
+
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
         if(isWebhook) {
-            restTemplate.postForEntity(webhook, items, Object.class);
+            restTemplate.postForEntity(webhook, filteredItems, Object.class);
             return new ArrayList<>();
         } else {
             return items;
+        }
+    }
+
+    private void extractRelationships(Item item) {
+        System.out.println(item.getItemType());
+
+        if(item.getItemType() != null && !item.getItemType().getKey().equals("FLD") && !item.getItemType().getKey().equals("SET")) {
+            RelationshipResponse initialResponse = relationshipExtractor.getRelationshipsForItem(item.getJamaId());
+
+            if(initialResponse != null && initialResponse.getRelationships() != null) {
+                RelationshipsTempStorage.get().add(initialResponse.getRelationships());
+            }
+        } else {
+            logger.info("Folder or Set detected, not extracting.");
         }
     }
 
@@ -65,31 +88,12 @@ public class JamaController {
             @RequestParam("project") Integer projectId,
             @RequestParam(value="webhook", required=false) String webhook
     ) {
-//        List<Relationship> relationships = relationshipExtractor.getAllRelationshipsForProject(projectId);
-
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
         if(isWebhook) {
-            RelationshipResponse initialResponse = relationshipExtractor.getRelationshipsForProject(projectId, 0);
 
-            if(initialResponse != null && initialResponse.getRelationships() != null) {
-                restTemplate.postForEntity(webhook, initialResponse.getRelationships(), Object.class);
+            restTemplate.postForEntity(webhook, RelationshipsTempStorage.get().getAll(), Object.class);
 
-                int resultCount = initialResponse.getPageInfo().getResultCount();
-                int totalResults = initialResponse.getPageInfo().getTotalResults();
-                int startIndex = initialResponse.getPageInfo().getStartIndex();
-
-                while(startIndex + resultCount < totalResults) {
-
-                    startIndex += resultCount;
-                    RelationshipResponse response =
-                            relationshipExtractor.getRelationshipsForProject(projectId, startIndex);
-
-                    if(response.getRelationships() != null) {
-                        restTemplate.postForEntity(webhook, response.getRelationships(), Object.class);
-                    }
-                }
-            }
             return new ArrayList<>();
         } else {
             return relationshipExtractor.getAllRelationshipsForProject(projectId);

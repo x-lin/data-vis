@@ -2,6 +2,8 @@ package at.ac.tuwien.dst.mms.jama;
 
 import at.ac.tuwien.dst.mms.jama.rest.ItemTypeLookupRegistry;
 import at.ac.tuwien.dst.mms.jama.rest.JamaItemTypesExtractor;
+import at.ac.tuwien.dst.mms.jama.rest.JamaStatusExtractor;
+import at.ac.tuwien.dst.mms.jama.rest.StatusLookupRegistry;
 import at.ac.tuwien.dst.mms.jama.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -27,18 +29,30 @@ public class Application {
 	}
 
 	@Autowired
-	JamaItemTypesExtractor extractor;
+	JamaItemTypesExtractor itemTypesExtractor;
+
+	@Autowired
+	JamaStatusExtractor statusExtractor;
 
 	@Autowired
 	ItemTypeLookupRegistry itemTypeLookupRegistry;
 
+	@Autowired
+	StatusLookupRegistry statusLookupRegistry;
+
 	@Bean
 	public ItemTypeLookupRegistry itemTypeLookupRegistry() {
-		return new ItemTypeLookupRegistry(extractor);
+		return new ItemTypeLookupRegistry(itemTypesExtractor);
+	}
+
+	@Bean
+	public StatusLookupRegistry statusLookupRegistry() {
+		return new StatusLookupRegistry(statusExtractor);
 	}
 
 	@PostConstruct
 	public void initItemTypes() {
 		ItemTypeLookupRegistry.set(itemTypeLookupRegistry);
+		StatusLookupRegistry.set(statusLookupRegistry);
 	}
 }

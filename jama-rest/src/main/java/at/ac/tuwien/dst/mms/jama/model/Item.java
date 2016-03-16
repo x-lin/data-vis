@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.jama.model;
 
 import at.ac.tuwien.dst.mms.jama.rest.ItemTypeLookupRegistry;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -13,6 +14,8 @@ public class Item {
     private LocationWrapper location;
 
     private String key;
+
+    private String name;
 
     private FieldWrapper fields;
 
@@ -60,6 +63,16 @@ public class Item {
         this.fields = fields;
     }
 
+    @JsonIgnore
+    public FieldWrapper getFields() {
+        return this.fields;
+    }
+
+    @JsonProperty("name")
+    public String getName() {
+        return fields.getName();
+    }
+
     @JsonProperty("location")
     public void setLocation(LocationWrapper location) {
         this.location = location;
@@ -73,6 +86,11 @@ public class Item {
     @JsonProperty("type")
     public ItemType getItemType() {
         return this.type;
+    }
+
+    @JsonProperty("status")
+    public String getStatus() {
+        return fields.getStatus();
     }
 
     @Override
