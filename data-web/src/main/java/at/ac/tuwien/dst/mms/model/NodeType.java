@@ -14,7 +14,7 @@ public enum NodeType {
 	GeneralNode,
 	GeneralNodeType;
 
-	private static Map<NodeType, Class> typeMapper;
+	private static Map<NodeType, Class<? extends ModelEntity>> typeMapper;
 
 	static {
 		typeMapper = new HashMap<>();
@@ -30,8 +30,8 @@ public enum NodeType {
 	 * Maps a model type to a class. This is done as a convenience method, so we can e.g. send Neo4j queries with
 	 * results of multiple types where the types are then mapped automatically accordingly.
 	 */
-	public static Class<?> getClass(NodeType type) {
-		Class<?> clazz = null;
+	public static Class<? extends ModelEntity> getClass(NodeType type) {
+		Class<? extends ModelEntity> clazz = null;
 
 		if (typeMapper.containsKey(type)) {
 			clazz = typeMapper.get(type);
@@ -40,8 +40,8 @@ public enum NodeType {
 		return clazz;
 	}
 
-	public static Class<?> getClass(String type) {
-		Class<?> clazz = null;
+	public static Class<? extends ModelEntity> getClass(String type) {
+		Class<? extends ModelEntity> clazz = null;
 
 		if (typeMapper.containsKey(NodeType.valueOf(type))) {
 			clazz = typeMapper.get(NodeType.valueOf(type));

@@ -1,10 +1,10 @@
 package at.ac.tuwien.dst.mms.dal;
 
+import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by xlin on 10.01.2016.
@@ -26,9 +26,11 @@ public interface DataReader<T> {
 
 	Long count();
 
-	Map<String, List<Object>> getNeighbors(String indexAttribute);
+	Neighbors getNeighbors(String indexAttribute);
 
-	Map<String, List<Object>> getNeighbors(String indexAttribute, int limit);
+	Neighbors getNeighbors(String indexAttribute, int limit);
+
+	Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit);
 
 	ProjectSchema getSchema(String key);
 

@@ -1,35 +1,31 @@
 package at.ac.tuwien.dst.mms.dal.query.model;
 
-import at.ac.tuwien.dst.mms.model.GeneralNode;
+import at.ac.tuwien.dst.mms.model.ModelEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by XLin on 16.03.2016.
  */
 public class Neighbors {
-	private GeneralNode node;
+	private ModelEntity node;
 
-	private List<GeneralNode> neighbors;
+	private List<ModelEntity> neighbors;
 
-	public Neighbors() {
-		neighbors = new ArrayList<>();
-	}
 
-	public GeneralNode getNode() {
+	public ModelEntity getNode() {
 		return node;
 	}
 
-	public void setNode(GeneralNode node) {
+	public void setNode(ModelEntity node) {
 		this.node = node;
 	}
 
-	public List<GeneralNode> getNeighbors() {
+	public List<ModelEntity> getNeighbors() {
 		return neighbors;
 	}
 
-	public void setNeighbors(List<GeneralNode> neighbors) {
+	public void setNeighbors(List<ModelEntity> neighbors) {
 		this.neighbors = neighbors;
 	}
 }

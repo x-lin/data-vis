@@ -195,7 +195,6 @@ export default class extends React.Component {
         g.append("text")
             .attr("class", "force-text  unselectable")
             .text(d => {
-                console.log(d)
                 return d.name;
             })
             .call(this.getTextBox);

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by xlin on 08.01.2016.
  */
-public interface GeneralNodeRepository extends GraphRepository<GeneralNode> {
+public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, GeneralNodeRepositoryCustom {
 	@Query("START  a=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX +"(key = {0}) RETURN a")
 	public GeneralNode findByKey(String key);
 

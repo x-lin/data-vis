@@ -1,27 +1,30 @@
 package at.ac.tuwien.dst.mms.dal.query.model;
 
 import at.ac.tuwien.dst.mms.model.GeneralNode;
+import org.springframework.data.neo4j.annotation.QueryResult;
+import org.springframework.data.neo4j.annotation.ResultColumn;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by XLin on 15.03.2016.
+ * Created by XLin on 14.03.2016.
  */
+@QueryResult
 public class TestCoverage {
+	@ResultColumn("key")
 	private String key;
 
+	@ResultColumn("name")
 	private String name;
 
+	@ResultColumn("type")
 	private String type;
 
+	@ResultColumn("testcases")
 	private List<String> testcases;
 
+	@ResultColumn("node")
 	private GeneralNode node;
-
-	public TestCoverage() {
-		testcases = new ArrayList<>();
-	}
 
 	public String getKey() {
 		return key;
@@ -47,10 +50,6 @@ public class TestCoverage {
 		this.testcases = testcases;
 	}
 
-	public void addTestcase(String testcase) {
-		this.testcases.add(testcase);
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -65,5 +64,16 @@ public class TestCoverage {
 
 	public void setNode(GeneralNode node) {
 		this.node = node;
+	}
+
+	@Override
+	public String toString() {
+		return "TestCoverage{" +
+				"key='" + key + '\'' +
+				", name='" + name + '\'' +
+				", type='" + type + '\'' +
+				", testcases=" + testcases +
+				", node=" + node +
+				'}';
 	}
 }

@@ -64,7 +64,8 @@ function initNotes(notes) {
     return notes.map((note, index) => {
         return {
             id: index,
-            key: note
+            key: note.key,
+            name: note.name
         }
     })
 }

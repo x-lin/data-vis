@@ -33,17 +33,13 @@ action) => {
         case NEIGHBORS_FETCH_SUCCESS:
             const graph = new D3Graph(state.nodes, state.edges, state.legend);
 
-            const index = graph.addNode(new Node(action.key, action.category));
+            const node = action.neighbors.node;
+            const index = graph.addNode(new Node(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId));
 
-            for(const neighborCategory in action.neighbors) {
-                const neighborNodes = action.neighbors[neighborCategory];
-
-                neighborNodes.forEach((neighborNode) => {
-                    const keyIdentifier = Constants.getKeyIdentifier(neighborCategory);
-                    const neighborIndex = graph.addNode(new Node(neighborNode[keyIdentifier], neighborNode.name, neighborCategory, neighborNode.type, neighborNode.jamaId, neighborNode.projectId));
-                    graph.addEdge(new Edge(index, neighborIndex));
-                });
-            }
+            action.neighbors.neighbors.forEach((neighbor) => {
+                const neighborIndex = graph.addNode(new Node(neighbor.key, neighbor.name, "GeneralNode", neighbor.type, neighbor.jamaId, neighbor.projectId));
+                graph.addEdge(new Edge(index, neighborIndex));
+            });
 
             return graph;
         default:

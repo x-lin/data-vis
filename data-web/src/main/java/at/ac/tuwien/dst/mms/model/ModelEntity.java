@@ -14,16 +14,16 @@ import java.util.Map;
 public abstract class ModelEntity {
 
 	@JsonIgnore
-	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor) RETURN neighbor")
+	@Query(value = "START n=node({self}) MATCH (n)-[:PROJECT|DOWNSTREAM]-(neighbor) RETURN neighbor")
 	protected Iterable<Map<String, Object>> neighbors;
 
 	@JsonIgnore
-	@Query(value = "START n=node({self}) MATCH (n)-[]-(neighbor:GeneralNode) RETURN neighbor LIMIT 20")
+	//@Query(value = "START n=node({self}) MATCH (n)-[:PROJECT|DOWNSTREAM]-(neighbor) RETURN neighbor LIMIT 20")
 	protected Iterable<Map<String, Object>> neighborsLimited;
 
 	//TODO find out how to specify limit dynamically
 	@JsonIgnore
-	@Query(value = "START n=node({self}) MATCH (n)-[]->(neighbor:GeneralNode) RETURN neighbor LIMIT " + Config.SEARCH_LIMIT)
+	@Query(value = "START n=node({self}) MATCH (n)-[:PROJECT|DOWNSTREAM]-(neighbor) RETURN neighbor LIMIT " + Config.SEARCH_LIMIT)
 	private Iterable<Map<String, Object>> limitedNeighbors;
 
 	@JsonIgnore
@@ -32,6 +32,7 @@ public abstract class ModelEntity {
 	}
 
 	@JsonIgnore
+	@Query(value = "START n=node({self}) MATCH (n)-[:PROJECT|DOWNSTREAM]-(neighbor) RETURN neighbor LIMIT 20")
 	public Iterable<Map<String, Object>> getNeighborsLimited() {
 		return neighborsLimited;
 	}

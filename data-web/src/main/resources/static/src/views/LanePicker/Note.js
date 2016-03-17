@@ -16,9 +16,9 @@ class Note extends React.Component {
       <li style={{
         opacity: isDragging ? 0 : 1
       }} className={this.props.className}>
-        <CircleSpan radius="8px" color={Constants.getColor(this.props.note.key)} />
+        <CircleSpan radius="8px" color={Constants.getColor(this.props.note.name)} />
         &nbsp;
-{this.props.note.key.length > 30 ? this.props.note.key.substring(0,30)+"..." : this.props.note.key}</li>
+{this.props.note.name.length > 30 ? this.props.note.key.substring(0,30)+"..." : this.props.note.name}</li>
     ));
   }
 }

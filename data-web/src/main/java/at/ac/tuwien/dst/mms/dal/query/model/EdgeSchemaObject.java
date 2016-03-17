@@ -1,15 +1,23 @@
 package at.ac.tuwien.dst.mms.dal.query.model;
 
+import org.springframework.data.neo4j.annotation.QueryResult;
+import org.springframework.data.neo4j.annotation.ResultColumn;
+
 /**
  * Created by XLin on 08.03.2016.
  */
+@QueryResult
 public class EdgeSchemaObject {
+	@ResultColumn("source")
 	private String source;
 
+	@ResultColumn("target")
 	private String target;
 
+	@ResultColumn("edgeType")
 	private String edgeType;
 
+	@ResultColumn("count")
 	private Integer count;
 
 	public void setSource(String source) {

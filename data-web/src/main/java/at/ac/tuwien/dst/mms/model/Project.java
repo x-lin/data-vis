@@ -75,4 +75,8 @@ public class Project extends ModelEntity {
 		return issues;
 	}
 
+	@JsonProperty
+	public String getType() {
+		return "Project";
+	}
 }

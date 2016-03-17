@@ -1,9 +1,10 @@
 package at.ac.tuwien.dst.mms.model;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphProperty;
 import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.support.index.IndexType;
 
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
 /**
  * Created by XLin on 09.03.2016.
  */
+//@NodeEntity
 public class TextIndexNode {
 	private final String TEXT_INDEX_NODE_KEY_INDEX = "textIndexNodeKeyIndex";
 
@@ -19,7 +21,8 @@ public class TextIndexNode {
 	private String text;
 
 	@GraphProperty
-	@Fetch
+	//@Fetch
+	@RelatedTo(type = "TEXT_INDEX", direction = Direction.INCOMING)
 	private Set<Node> nodes;
 
 	public String getText() {

@@ -8,8 +8,6 @@ export default (state = {data: []}, action) => {
                 status: TEST_COVERAGE_FETCH_START
             });
         case TEST_COVERAGE_FETCH_SUCCESS:
-            console.log()
-
             return Object.assign({}, state, {
                 data: action.data,
                 error: {},

@@ -28,7 +28,7 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-        this.props.searchTestCoverage("PVCSC");
+        this.props.searchTestCoverage("PVCSB");
     }
 
     onClick(key) {

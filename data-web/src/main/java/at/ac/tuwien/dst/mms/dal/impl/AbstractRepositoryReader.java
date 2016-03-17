@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
+import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
@@ -15,7 +16,6 @@ import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,16 +66,31 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 	}
 
 	@Override
-	public Map<String, List<Object>> getNeighbors(String key) {
+	public Neighbors getNeighbors(String key) {
+		T node = this.find(key);
 
-		return this.getNeighbors(this.find(key).getNeighbors());
+		List<ModelEntity> neighbors = this.getNeighbors(node.getNeighborsLimited());
+
+		Neighbors returnVal = new Neighbors();
+		returnVal.setNode(node);
+		returnVal.setNeighbors(neighbors);
+
+		return returnVal;
 	}
 
 	//TODO limit not factored in yet -> map is by default restricted to 20
 	@Override
 	@Transactional
-	public Map<String, List<Object>> getNeighbors(String key, int limit) {
-		return this.getNeighbors(this.find(key).getNeighborsLimited());
+	public Neighbors getNeighbors(String key, int limit) {
+		T node = this.find(key);
+
+		List<ModelEntity> neighbors = this.getNeighbors(node.getNeighborsLimited());
+
+		Neighbors returnVal = new Neighbors();
+		returnVal.setNode(node);
+		returnVal.setNeighbors(neighbors);
+
+		return returnVal;
 	}
 
 	public GraphRepository<T> getRepository() {
@@ -86,8 +101,8 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 	protected Neo4jOperations neo4jOperations;
 
 	@Transactional
-	protected Map<String, List<Object>> getNeighbors(Iterable<Map<String, Object>> neighbors) {
-		Map<String, List<Object>> result = new HashMap<>();
+	protected List<ModelEntity> getNeighbors(Iterable<Map<String, Object>> neighbors) {
+		List<ModelEntity> results = new ArrayList<>();
 
 		if(neighbors != null) {
 			for(Map<String, Object> entry : neighbors) {
@@ -102,19 +117,10 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 				for(Label label : node.getLabels()) {
 
 					if(NodeType.getClass(label.name()) != null) {
-						Object o = neo4jOperations.convert(node, NodeType.getClass(label.name()));
+						ModelEntity o = neo4jOperations.convert(node, NodeType.getClass(label.name()));
 
 						if(o != null) {
-							List<Object> objects;
-
-							if (result.containsKey(label.name())) {
-								objects = result.get(label.name());
-							} else {
-								objects = new ArrayList<>();
-								result.put(label.name(), objects);
-							}
-
-							objects.add(o);
+							results.add(o);
 							break;
 						}
 					}
@@ -122,15 +128,13 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 			}
 		}
 
-
-
-		if(result.containsKey("Issue")) {
-			List<Object> list = result.remove("Issue");
-			result.put("Ticket", list);
-		}
-
-		return result;
+		return results;
 	}
+
+//	@Override
+//	public Neighbors getNeighbors(String key, boolean downstream, boolean upstream, List<String> priority, List<String> excluded, Integer limit) {
+//		return null;
+//	}
 
 	@Override
 	public ProjectSchema getSchema(String projectKey) {
@@ -144,6 +148,11 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 
 	@Override
 	public List<TestCoverage> getTestCoverage(String projectKey) {
+		return null;
+	}
+
+	@Override
+	public Neighbors getNeighbors(String key, boolean downstream, boolean upstream, List priority, List excluded, Integer limit) {
 		return null;
 	}
 }

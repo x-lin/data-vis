@@ -8,6 +8,7 @@ import "./GraphLegend.css";
 import "./ForceGraphComponent.css"
 
 class D3Panel extends React.Component {
+
     render() {
         return (
             <div style={{height: "100%"}}>
