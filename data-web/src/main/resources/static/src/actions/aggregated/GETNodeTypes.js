@@ -13,7 +13,6 @@ export const getNodeTypes = () => {
             .then(function (response) {
                 dispatch(fetchNodeTypeSuccess(response.data));
                 dispatch(initLane(response.data));
-                dispatch(initGraphFilter(response.data));
             })
             .catch(function (response) {
                 dispatch(fetchNodeTypeError(response.data));

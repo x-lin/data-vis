@@ -7,7 +7,9 @@ import { PRIORITIZED, EXCLUDED } from "../../reducers/LaneReducer";
 export const getNeighbors = (category, key) => {
     const endpoint = Constants.endpoints[category];
     return (dispatch, getState) => {
-        const lanes = getState().lanes;
+        const lanes = getState().lanes.lanes;
+        const filters = getState().lanes.filters;
+
         let excluded = null;
         let priority = null;
         //TODO add downstream/upstream option
@@ -25,11 +27,17 @@ export const getNeighbors = (category, key) => {
             }
         });
 
+        console.log(filters);
+
+        const upstream = filters.upstream === false ? "upstream=false" : "";
+        const downstream = filters.downstream === false ? "downstream=false" : "";
+        const limit = "limit=" + filters.limit;
+
         //excluded += "excluded=SET&excluded=FLD";
 
         dispatch(fetchNeighborsStart(category, key));
 
-        return axios.get(`/search/${endpoint}/neighbors/${key}?${excluded ? excluded : ""}&${priority ? priority : ""}&limit=20`)
+        return axios.get(`/search/${endpoint}/neighbors/${key}?${excluded ? excluded : ""}&${priority ? priority : ""}&${upstream}&${downstream}&${limit}`)
             .then(function (response) {
                 dispatch(fetchNeighborsSuccess(category, key, response.data));
             })

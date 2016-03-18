@@ -9,14 +9,12 @@ import NeighborExpansionComponent from "./NeighborExpansionComponent";
 export default class extends React.Component {
     render() {
         return (
-            <LeftSideBar>
-                <SideBarHeader title="Filters" iconClass="fa fa-filter" />
-
-                <SideBarCollapsable title="Basic Options">
+            <div>
+                <SideBarCollapsable title="Edge Directions">
                     <BasicOptionsComponent />
                 </SideBarCollapsable>
 
-                <SideBarCollapsable title="Neighbor Expansion" collapsed={true}>
+                <SideBarCollapsable title="Neighbor Limit">
                     <NeighborExpansionComponent />
                 </SideBarCollapsable>
 
@@ -24,7 +22,7 @@ export default class extends React.Component {
                     Just some text to test me
                 </SideBarCollapsable>
 
-            </LeftSideBar>
+            </div>
         );
     };
 }

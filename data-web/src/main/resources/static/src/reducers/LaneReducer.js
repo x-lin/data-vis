@@ -1,11 +1,14 @@
-import { ATTACH_TO_LANE, MOVE, INIT_LANE } from "../actions/action-creators/LaneActions";
+import { ATTACH_TO_LANE, MOVE, INIT_LANE, SET_FILTER_VALUE } from "../actions/action-creators/LaneActions";
 
 export const PRIORITIZED = "PRIORITIZED";
 export const EXCLUDED = "EXCLUDED";
 export const UNORDERED = "UNORDERED";
 
 export default (
-    state = [], action
+    state = {
+        lanes: [],
+        filters: {"upstream" : true, "downstream" : true, "limit" : 20}
+    }, action
 ) => {
     switch (action.type) {
         case INIT_LANE:
@@ -21,7 +24,7 @@ export default (
                 }
             });
 
-            return array.map((lane, index) => {
+            const lanes2 = array.map((lane, index) => {
                 switch (lane) {
                     case EXCLUDED:
                         return getInit(excluded, lane, index);
@@ -31,8 +34,12 @@ export default (
                         return getInit([], lane, index);
                 }
             });
+
+            return Object.assign({}, state, {
+                lanes: lanes2
+            });
         case ATTACH_TO_LANE:
-            return state.map(lane => {
+            const lanes1 = state.lanes.map(lane => {
                 if(lane.notes.includes(action.note)) {
                     lane.notes = lane.notes.filter(note => note !== action.note);
                 }
@@ -48,8 +55,12 @@ export default (
 
                 return lane;
             });
+
+            return Object.assign({}, state, {
+                lanes: lanes1
+            });
         case MOVE:
-            const lanes = [...state];
+            const lanes = [...state.lanes];
 
             const sourceLane = lanes.filter(lane => lane.notes.includes(action.sourceNote))[0];
             const targetLane = lanes.filter(lane => lane.notes.includes(action.targetNote))[0];
@@ -70,7 +81,17 @@ export default (
                 ...targetLane.notes.slice(targetNoteIndex)
             ];
 
-            return lanes;
+            return Object.assign({}, state, {
+                lanes: lanes
+            });
+        case SET_FILTER_VALUE:
+            const filters = state.filters;
+            filters[action.name] = action.value;
+
+            return Object.assign({}, state, {
+                filters
+            });
+
         default:
             return state;
     }

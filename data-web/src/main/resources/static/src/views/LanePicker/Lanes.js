@@ -15,7 +15,7 @@ export default class extends React.Component {
 
   render() {
     return (
-        <div className="lanes">{this.props.lanes.map(lane => this.renderLane(lane))}</div>
+        <div>{this.props.lanes.map(lane => this.renderLane(lane))}</div>
     );
   }
 }

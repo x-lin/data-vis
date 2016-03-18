@@ -3,30 +3,30 @@ import React from "react";
 import Slider from "../../widgets/Slider";
 
 export default class extends React.Component {
+    setFilterValue(value) {
+        console.log(value);
+        this.props.setFilterValue("limit", value);
+    }
+
     render() {
         return (
             <form>
-                <div className="form-group">
+                <div className="form-group sidebar-padding">
                     <label  className="control-sidebar-subheading">
-                        Show as single nodes
-                        <input type="radio" name="optionsRadios" className="pull-right" id="optionsRadios2" value="option2" checked="checked" onChange={
-                            function(){}
-                        } />
+                        Limit for Graph Rendering
                     </label>
 
                     <div style={{marginTop: "10px"}}>
-                        <Slider min={1} max={20} defaultValue={10} onChange={function() {
-                                        console.log("slider on change")
-                                    }} />
-
+                        <Slider min={1} max={100} defaultValue={this.props.limit} onChange={(val) => this.setFilterValue(val)} />
+                        {/*<br/><br/>
+                        <label className="control-sidebar-subheading cursor">
+                            Limit Node Returns
+                            <input type="checkbox" className="pull-right cursor"
+                                   checked={false }
+                                   onChange={(e) => {}}
+                            />
+                        </label>*/}
                     </div>
-
-                    <label className="control-sidebar-subheading">
-                        Show as clusters
-                        <input type="radio" name="optionsRadios" className="pull-right" id="optionsRadios1" value="option1" onChange={
-                            function(){}
-                        } />
-                    </label>
                 </div>
             </form>
         );

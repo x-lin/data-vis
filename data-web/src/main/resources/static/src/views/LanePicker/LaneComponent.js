@@ -7,7 +7,7 @@ import Lanes from "./Lanes.js";
 
 const mapStateToProps = (state) => {
     return {
-        lanes: state.lanes
+        lanes: state.lanes.lanes
     };
 };
 

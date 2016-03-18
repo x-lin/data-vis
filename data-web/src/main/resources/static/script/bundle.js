@@ -26630,7 +26630,10 @@
 	var UNORDERED = exports.UNORDERED = "UNORDERED";
 
 	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        lanes: [],
+	        filters: { "upstream": true, "downstream": true, "limit": 20 }
+	    } : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
@@ -26647,7 +26650,7 @@
 	                }
 	            });
 
-	            return array.map(function (lane, index) {
+	            var lanes2 = array.map(function (lane, index) {
 	                switch (lane) {
 	                    case EXCLUDED:
 	                        return getInit(excluded, lane, index);
@@ -26657,8 +26660,12 @@
 	                        return getInit([], lane, index);
 	                }
 	            });
+
+	            return Object.assign({}, state, {
+	                lanes: lanes2
+	            });
 	        case _LaneActions.ATTACH_TO_LANE:
-	            return state.map(function (lane) {
+	            var lanes1 = state.lanes.map(function (lane) {
 	                if (lane.notes.includes(action.note)) {
 	                    lane.notes = lane.notes.filter(function (note) {
 	                        return note !== action.note;
@@ -26675,8 +26682,12 @@
 
 	                return lane;
 	            });
+
+	            return Object.assign({}, state, {
+	                lanes: lanes1
+	            });
 	        case _LaneActions.MOVE:
-	            var lanes = [].concat(_toConsumableArray(state));
+	            var lanes = [].concat(_toConsumableArray(state.lanes));
 
 	            var sourceLane = lanes.filter(function (lane) {
 	                return lane.notes.includes(action.sourceNote);
@@ -26694,7 +26705,17 @@
 	            //add at target index
 	            targetLane.notes = [].concat(_toConsumableArray(targetLane.notes.slice(0, targetNoteIndex)), [action.sourceNote], _toConsumableArray(targetLane.notes.slice(targetNoteIndex)));
 
-	            return lanes;
+	            return Object.assign({}, state, {
+	                lanes: lanes
+	            });
+	        case _LaneActions.SET_FILTER_VALUE:
+	            var filters = state.filters;
+	            filters[action.name] = action.value;
+
+	            return Object.assign({}, state, {
+	                filters: filters
+	            });
+
 	        default:
 	            return state;
 	    }
@@ -26721,6 +26742,7 @@
 	var ATTACH_TO_LANE = exports.ATTACH_TO_LANE = "ATTACH_TO_LANE";
 	var MOVE = exports.MOVE = "MOVE_NOTE";
 	var INIT_LANE = exports.INIT_LANE = "INIT_LANE";
+	var SET_FILTER_VALUE = exports.SET_FILTER_VALUE = "SET_FILTER_VALUE";
 
 	var attachToLane = exports.attachToLane = function attachToLane(laneId, note) {
 	    return {
@@ -26742,6 +26764,14 @@
 	    return {
 	        type: INIT_LANE,
 	        data: data
+	    };
+	};
+
+	var setFilterValue = exports.setFilterValue = function setFilterValue(name, value) {
+	    return {
+	        type: SET_FILTER_VALUE,
+	        name: name,
+	        value: value
 	    };
 	};
 
@@ -35946,7 +35976,9 @@
 	var getNeighbors = exports.getNeighbors = function getNeighbors(category, key) {
 	    var endpoint = _Constants2.default.endpoints[category];
 	    return function (dispatch, getState) {
-	        var lanes = getState().lanes;
+	        var lanes = getState().lanes.lanes;
+	        var filters = getState().lanes.filters;
+
 	        var excluded = null;
 	        var priority = null;
 	        //TODO add downstream/upstream option
@@ -35964,11 +35996,17 @@
 	            }
 	        });
 
+	        console.log(filters);
+
+	        var upstream = filters.upstream === false ? "upstream=false" : "";
+	        var downstream = filters.downstream === false ? "downstream=false" : "";
+	        var limit = "limit=" + filters.limit;
+
 	        //excluded += "excluded=SET&excluded=FLD";
 
 	        dispatch((0, _FetchNeighborsActionCreators.fetchNeighborsStart)(category, key));
 
-	        return _axios2.default.get("/search/" + endpoint + "/neighbors/" + key + "?" + (excluded ? excluded : "") + "&" + (priority ? priority : "") + "&limit=20").then(function (response) {
+	        return _axios2.default.get("/search/" + endpoint + "/neighbors/" + key + "?" + (excluded ? excluded : "") + "&" + (priority ? priority : "") + "&" + upstream + "&" + downstream + "&" + limit).then(function (response) {
 	            dispatch((0, _FetchNeighborsActionCreators.fetchNeighborsSuccess)(category, key, response.data));
 	        }).catch(function (response) {
 	            dispatch((0, _FetchNeighborsActionCreators.fetchNeighborsError)(category, key, response.data));
@@ -69563,17 +69601,16 @@
 	        key: "render",
 	        value: function render() {
 	            return _react2.default.createElement(
-	                _LeftSideBar2.default,
+	                "div",
 	                null,
-	                _react2.default.createElement(_SideBarHeader2.default, { title: "Filters", iconClass: "fa fa-filter" }),
 	                _react2.default.createElement(
 	                    _SideBarCollapsable2.default,
-	                    { title: "Basic Options" },
+	                    { title: "Edge Directions" },
 	                    _react2.default.createElement(_BasicOptionsComponent2.default, null)
 	                ),
 	                _react2.default.createElement(
 	                    _SideBarCollapsable2.default,
-	                    { title: "Neighbor Expansion", collapsed: true },
+	                    { title: "Neighbor Limit" },
 	                    _react2.default.createElement(_NeighborExpansionComponent2.default, null)
 	                ),
 	                _react2.default.createElement(
@@ -69728,7 +69765,7 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                "aside",
-	                { className: "main-sidebar" },
+	                { className: "main-sidebar control-sidebar-dark" },
 	                _react2.default.createElement(
 	                    "section",
 	                    { className: "sidebar" },
@@ -69759,7 +69796,7 @@
 
 	var _reactRedux = __webpack_require__(254);
 
-	var _GraphFilterActionCreators = __webpack_require__(246);
+	var _LaneActions = __webpack_require__(251);
 
 	var _BasicOptions = __webpack_require__(639);
 
@@ -69769,14 +69806,16 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        visibilityFilters: state.visibilityFilters
+	        upstream: state.lanes.filters.upstream,
+	        downstream: state.lanes.filters.downstream,
+	        limit: state.lanes.filters.limit
 	    };
 	};
 
 	var mapDispatchProps = function mapDispatchProps(dispatch) {
 	    return {
-	        toggleFilterItemCategory: function toggleFilterItemCategory(category) {
-	            dispatch((0, _GraphFilterActionCreators.toggleFilterItemCategory)(category));
+	        setFilterValue: function setFilterValue(name, value) {
+	            dispatch((0, _LaneActions.setFilterValue)(name, value));
 	        }
 	    };
 	};
@@ -69817,48 +69856,38 @@
 	    }
 
 	    _createClass(_class, [{
-	        key: "toggleCategoryFilter",
-	        value: function toggleCategoryFilter(name) {
-	            this.props.toggleFilterItemCategory(name);
+	        key: "setFilterValue",
+	        value: function setFilterValue(name, value) {
+	            this.props.setFilterValue(name, value);
+	        }
+	    }, {
+	        key: "renderCheckbox",
+	        value: function renderCheckbox(name, checked) {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                "label",
+	                { className: "control-sidebar-subheading cursor", key: name },
+	                name,
+	                _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor",
+	                    checked: checked,
+	                    onChange: function onChange() {
+	                        return _this2.setFilterValue(name.toLowerCase(), !checked);
+	                    }
+	                })
+	            );
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            var _this2 = this;
-
-	            var g = function g() {
-	                var visibilityFilters = _this2.props.visibilityFilters;
-
-	                var dom = [];
-
-	                var _loop = function _loop(filter) {
-	                    dom.push(_react2.default.createElement(
-	                        "label",
-	                        { className: "control-sidebar-subheading cursor", key: filter },
-	                        filter,
-	                        _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor",
-	                            checked: visibilityFilters[filter] ? "checked" : null,
-	                            onChange: function onChange(e) {
-	                                return _this2.toggleCategoryFilter(filter);
-	                            }
-	                        })
-	                    ));
-	                };
-
-	                for (var filter in visibilityFilters) {
-	                    _loop(filter);
-	                }
-
-	                return dom;
-	            };
-
 	            return _react2.default.createElement(
 	                "form",
 	                null,
 	                _react2.default.createElement(
 	                    "div",
-	                    { className: "form-group" },
-	                    g()
+	                    { className: "form-group sidebar-padding" },
+	                    this.renderCheckbox("Upstream", this.props.upstream),
+	                    this.renderCheckbox("Downstream", this.props.downstream)
 	                )
 	            );
 	        }
@@ -69885,7 +69914,7 @@
 
 	var _reactRedux = __webpack_require__(254);
 
-	var _GraphFilterActionCreators = __webpack_require__(246);
+	var _LaneActions = __webpack_require__(251);
 
 	var _NeighborExpansion = __webpack_require__(641);
 
@@ -69895,14 +69924,14 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        visibilityFilters: state.visibilityFilters
+	        limit: state.lanes.filters.limit
 	    };
 	};
 
 	var mapDispatchProps = function mapDispatchProps(dispatch) {
 	    return {
-	        toggleFilterItemCategory: function toggleFilterItemCategory(category) {
-	            dispatch((0, _GraphFilterActionCreators.toggleFilterItemCategory)(category));
+	        setFilterValue: function setFilterValue(name, value) {
+	            dispatch((0, _LaneActions.setFilterValue)(name, value));
 	        }
 	    };
 	};
@@ -69947,32 +69976,33 @@
 	    }
 
 	    _createClass(_class, [{
+	        key: "setFilterValue",
+	        value: function setFilterValue(value) {
+	            console.log(value);
+	            this.props.setFilterValue("limit", value);
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
+	            var _this2 = this;
+
 	            return _react2.default.createElement(
 	                "form",
 	                null,
 	                _react2.default.createElement(
 	                    "div",
-	                    { className: "form-group" },
+	                    { className: "form-group sidebar-padding" },
 	                    _react2.default.createElement(
 	                        "label",
 	                        { className: "control-sidebar-subheading" },
-	                        "Show as single nodes",
-	                        _react2.default.createElement("input", { type: "radio", name: "optionsRadios", className: "pull-right", id: "optionsRadios2", value: "option2", checked: "checked", onChange: function onChange() {} })
+	                        "Limit for Graph Rendering"
 	                    ),
 	                    _react2.default.createElement(
 	                        "div",
 	                        { style: { marginTop: "10px" } },
-	                        _react2.default.createElement(_Slider2.default, { min: 1, max: 20, defaultValue: 10, onChange: function onChange() {
-	                                console.log("slider on change");
+	                        _react2.default.createElement(_Slider2.default, { min: 1, max: 100, defaultValue: this.props.limit, onChange: function onChange(val) {
+	                                return _this2.setFilterValue(val);
 	                            } })
-	                    ),
-	                    _react2.default.createElement(
-	                        "label",
-	                        { className: "control-sidebar-subheading" },
-	                        "Show as clusters",
-	                        _react2.default.createElement("input", { type: "radio", name: "optionsRadios", className: "pull-right", id: "optionsRadios1", value: "option1", onChange: function onChange() {} })
 	                    )
 	                )
 	            );
@@ -71425,7 +71455,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -71450,6 +71480,16 @@
 
 	__webpack_require__(806);
 
+	var _SideBarHeader = __webpack_require__(277);
+
+	var _SideBarHeader2 = _interopRequireDefault(_SideBarHeader);
+
+	__webpack_require__(831);
+
+	var _filterSideBar = __webpack_require__(833);
+
+	var _filterSideBar2 = _interopRequireDefault(_filterSideBar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71459,26 +71499,61 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var LanePicker = function (_React$Component) {
-	  _inherits(LanePicker, _React$Component);
+	    _inherits(LanePicker, _React$Component);
 
-	  function LanePicker() {
-	    _classCallCheck(this, LanePicker);
+	    function LanePicker() {
+	        _classCallCheck(this, LanePicker);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LanePicker).apply(this, arguments));
-	  }
-
-	  _createClass(LanePicker, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _LeftSideBar2.default,
-	        null,
-	        _react2.default.createElement(_LaneComponent2.default, null)
-	      );
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(LanePicker).apply(this, arguments));
 	    }
-	  }]);
 
-	  return LanePicker;
+	    _createClass(LanePicker, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _LeftSideBar2.default,
+	                null,
+	                _react2.default.createElement(
+	                    'ul',
+	                    { className: 'nav nav-tabs nav-justified control-sidebar-tabs' },
+	                    _react2.default.createElement(
+	                        'li',
+	                        { className: 'active' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#left-sidebar-settings-tab', 'data-toggle': 'tab' },
+	                            _react2.default.createElement('i', { className: 'fa fa-filter' })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#left-sidebar-home-tab', 'data-toggle': 'tab' },
+	                            _react2.default.createElement('i', { className: 'fa fa-sliders' })
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'tab-content' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'tab-pane active', id: 'left-sidebar-settings-tab' },
+	                        _react2.default.createElement(_LaneComponent2.default, null)
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'tab-pane', id: 'left-sidebar-home-tab' },
+	                        _react2.default.createElement(_filterSideBar2.default, null)
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LanePicker;
 	}(_react2.default.Component);
 
 	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(LanePicker);
@@ -78889,7 +78964,7 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        lanes: state.lanes
+	        lanes: state.lanes.lanes
 	    };
 	};
 
@@ -78966,7 +79041,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'lanes' },
+	        null,
 	        this.props.lanes.map(function (lane) {
 	          return _this2.renderLane(lane);
 	        })
@@ -81398,7 +81473,6 @@
 	        return _axios2.default.get("/search/nodeTypes").then(function (response) {
 	            dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeSuccess)(response.data));
 	            dispatch((0, _LaneActions.initLane)(response.data));
-	            dispatch((0, _GraphFilterActionCreators.initGraphFilter)(response.data));
 	        }).catch(function (response) {
 	            dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeError)(response.data));
 	        });
@@ -81475,6 +81549,129 @@
 	            return state;
 	    }
 	};
+
+/***/ },
+/* 831 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(832);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(276)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./SideBarHeader.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./SideBarHeader.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 832 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(275)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "", ""]);
+
+	// exports
+
+
+/***/ },
+/* 833 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SideBarHeader = __webpack_require__(277);
+
+	var _SideBarHeader2 = _interopRequireDefault(_SideBarHeader);
+
+	var _SideBarCollapsable = __webpack_require__(634);
+
+	var _SideBarCollapsable2 = _interopRequireDefault(_SideBarCollapsable);
+
+	var _LeftSideBar = __webpack_require__(637);
+
+	var _LeftSideBar2 = _interopRequireDefault(_LeftSideBar);
+
+	var _BasicOptionsComponent = __webpack_require__(638);
+
+	var _BasicOptionsComponent2 = _interopRequireDefault(_BasicOptionsComponent);
+
+	var _NeighborExpansionComponent = __webpack_require__(640);
+
+	var _NeighborExpansionComponent2 = _interopRequireDefault(_NeighborExpansionComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    }
+
+	    _createClass(_class, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    _SideBarCollapsable2.default,
+	                    { title: "Edge Directions" },
+	                    _react2.default.createElement(_BasicOptionsComponent2.default, null)
+	                ),
+	                _react2.default.createElement(
+	                    _SideBarCollapsable2.default,
+	                    { title: "Neighbor Limit" },
+	                    _react2.default.createElement(_NeighborExpansionComponent2.default, null)
+	                ),
+	                _react2.default.createElement(
+	                    _SideBarCollapsable2.default,
+	                    { title: "Graph Traversal", collapsed: true },
+	                    "Just some text to test me"
+	                )
+	            );
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
 
 /***/ }
 /******/ ]);

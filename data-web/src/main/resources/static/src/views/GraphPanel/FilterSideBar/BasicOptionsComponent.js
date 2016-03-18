@@ -1,20 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { toggleFilterItemCategory } from "../../../actions/action-creators/GraphFilterActionCreators";
+import { setFilterValue } from "../../../actions/action-creators/LaneActions";
 
 import BasicOptions from "./BasicOptions";
 
 const mapStateToProps = (state) => {
     return {
-        visibilityFilters: state.visibilityFilters
+        upstream: state.lanes.filters.upstream,
+        downstream: state.lanes.filters.downstream,
+        limit: state.lanes.filters.limit
     };
 };
 
 const mapDispatchProps = (dispatch) => {
     return {
-        toggleFilterItemCategory: (category) => {
-            dispatch(toggleFilterItemCategory(category));
+        setFilterValue: (name, value) => {
+            dispatch(setFilterValue(name, value));
         }
     };
 };
