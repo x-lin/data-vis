@@ -10,12 +10,25 @@ export default (
     switch (action.type) {
         case INIT_LANE:
             const array = [PRIORITIZED, EXCLUDED, UNORDERED];
+            let unordered = [];
+            let excluded = [];
+
+            action.data.forEach(note => {
+                if(note.key !== "FLD" && note.key !== "SET") {
+                    unordered.push(note);
+                } else {
+                    excluded.push(note);
+                }
+            });
 
             return array.map((lane, index) => {
-                return {
-                    id: index,
-                    key: lane,
-                    notes: lane === UNORDERED ? action.data : []
+                switch (lane) {
+                    case EXCLUDED:
+                        return getInit(excluded, lane, index);
+                    case UNORDERED:
+                        return getInit(unordered, lane, index);
+                    default:
+                        return getInit([], lane, index);
                 }
             });
         case ATTACH_TO_LANE:
@@ -26,7 +39,7 @@ export default (
 
                 if(lane.id === action.laneId) {
                     if(lane.notes.includes(action.note)) {
-                        console.warn('Already attached note to lane', lanes);
+                        console.warn('Already attached note to lane', lane);
                     }
                     else {
                         lane.notes = [action.note, ...lane.notes];
@@ -63,12 +76,10 @@ export default (
     }
 };
 
-function initNotes(notes) {
-    return notes.map((note, index) => {
-        return {
-            id: index,
-            key: note.key,
-            name: note.name
-        }
-    })
+function getInit(data, lane, index) {
+    return {
+        id: index,
+        key: lane,
+        notes: data
+    }
 }

@@ -1,10 +1,11 @@
 var React = require("react");
 import Router from "react-router";
 import { Link } from "react-router";
+import { connect } from "react-redux";
 
 import SettingsSideBarComponent from "./Settings/SettingsSideBarComponent";
 
-class Main extends React.Component{ //creates react component
+export default class Main extends React.Component{ //creates react component
     //pushState() {
     //    this.props.history.pushState(null, "/relationships/");
     //};
@@ -57,5 +58,3 @@ class Main extends React.Component{ //creates react component
         )
     }
 };
-
-export default Main;

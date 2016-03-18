@@ -25816,47 +25816,9 @@
 	    GeneralNode: "key"
 	};
 
-	Constants.defaultVisible = {
-	    Project: true,
-	    Set: true,
-	    "System Requirement": true,
-	    Folder: true,
-	    "Test Activity": true,
-	    Component: true,
-	    "Hardware Unit": true,
-	    "Computer Software Component": true,
-	    "System Subsystem Design Description": true,
-	    "Customer Requirement": true,
-	    Text: true,
-	    "Use Case": true,
-	    "Library and Definitions": true,
-	    "Change Request": true,
-	    Build: true,
-	    Standard: true,
-	    Subsystem: true,
-	    "Comumpter Software Configuration": true,
-	    "User Interface Design": true,
-	    "Software Requirement": true,
-	    Feature: true,
-	    "Proxy Relation": true,
-	    "Software Functional Block": true,
-	    Product: true,
-	    "CSC Interface": true,
-	    "HWC Interface": true,
-	    "Preliminary Hardware Requirement": true,
-	    "Hardware Confiuration Item": true,
-	    "Test Tool": true,
-	    "Safety Requirement": true,
-	    "Test Tool Configuration": true,
-	    Stakeholder: true,
-	    "Testable System Configuration": true,
-	    "Security Requirement": true,
-	    "Basic Safety Requirement": true,
-	    "Hardware Requirement": true,
-	    "Hardware Component": true,
-	    "Hardware Configuration Item": true,
-	    "Test Case": true,
-	    "Defect": true
+	Constants.invisible = {
+	    Folder: false,
+	    Set: false
 	};
 
 	Constants.jiraAddresses = {
@@ -25871,14 +25833,6 @@
 	    }
 	};
 
-	Constants.jamaAddresses = {
-	    Project: function Project(project) {
-	        return "https://jama.frequentis.com/contour/perspective.req?projectId=" + project;
-	    }
-	};
-
-	//Ticket: ticket => "",
-	//Other: other => ""
 	Constants.getKeyIdentifier = function (category) {
 	    return Constants.keyMap[category];
 	};
@@ -26473,16 +26427,24 @@
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	var graphFilterReducer = exports.graphFilterReducer = function graphFilterReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? _Constants2.default.defaultVisible : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments[1];
 
-	    if (action.type === _GraphFilterActionCreators.TOGGLE_FILTER_ITEM_CATEGORY) {
-	        if (state.hasOwnProperty(action.category)) {
-	            return Object.assign({}, state, _defineProperty({}, action.category, !state[action.category]));
-	        }
+	    switch (action.type) {
+	        case _GraphFilterActionCreators.TOGGLE_FILTER_ITEM_CATEGORY:
+	            if (state.hasOwnProperty(action.category)) {
+	                return Object.assign({}, state, _defineProperty({}, action.category, !state[action.category]));
+	            } else {
+	                return Object.assign({}, state, _defineProperty({}, action.category, false));
+	            }
+	        case _GraphFilterActionCreators.INIT_GRAPH_FILTER:
+	            return action.data.reduce(function (previous, currentVal) {
+	                previous[currentVal.name] = true;
+	                return previous;
+	            }, {});
+	        default:
+	            return state;
 	    }
-
-	    return state;
 	};
 
 /***/ },
@@ -26498,6 +26460,7 @@
 	var UNFILTER_ITEM_CATEGORY = exports.UNFILTER_ITEM_CATEGORY = "UNFILTER_ITEM_CATEGORY";
 	var SHOW_ALL_ITEM_CATEGORIES = exports.SHOW_ALL_ITEM_CATEGORIES = "SHOW_ALL_ITEM_CATEGORIES";
 	var TOGGLE_FILTER_ITEM_CATEGORY = exports.TOGGLE_FILTER_ITEM_CATEGORY = "TOGGLE_FILTER_ITEM_CATEGORY";
+	var INIT_GRAPH_FILTER = exports.INIT_GRAPH_FILTER = "INIT_GRAPH_FILTER";
 
 	var FILTER_BY_PROPERTY = exports.FILTER_BY_PROPERTY = "";
 
@@ -26525,6 +26488,13 @@
 	var showAllItemCategories = exports.showAllItemCategories = function showAllItemCategories() {
 	    return {
 	        type: SHOW_ALL_ITEM_CATEGORIES
+	    };
+	};
+
+	var initGraphFilter = exports.initGraphFilter = function initGraphFilter(data) {
+	    return {
+	        type: INIT_GRAPH_FILTER,
+	        data: data
 	    };
 	};
 
@@ -26666,13 +26636,26 @@
 	    switch (action.type) {
 	        case _LaneActions.INIT_LANE:
 	            var array = [PRIORITIZED, EXCLUDED, UNORDERED];
+	            var unordered = [];
+	            var excluded = [];
+
+	            action.data.forEach(function (note) {
+	                if (note.key !== "FLD" && note.key !== "SET") {
+	                    unordered.push(note);
+	                } else {
+	                    excluded.push(note);
+	                }
+	            });
 
 	            return array.map(function (lane, index) {
-	                return {
-	                    id: index,
-	                    key: lane,
-	                    notes: lane === UNORDERED ? action.data : []
-	                };
+	                switch (lane) {
+	                    case EXCLUDED:
+	                        return getInit(excluded, lane, index);
+	                    case UNORDERED:
+	                        return getInit(unordered, lane, index);
+	                    default:
+	                        return getInit([], lane, index);
+	                }
 	            });
 	        case _LaneActions.ATTACH_TO_LANE:
 	            return state.map(function (lane) {
@@ -26684,7 +26667,7 @@
 
 	                if (lane.id === action.laneId) {
 	                    if (lane.notes.includes(action.note)) {
-	                        console.warn('Already attached note to lane', lanes);
+	                        console.warn('Already attached note to lane', lane);
 	                    } else {
 	                        lane.notes = [action.note].concat(_toConsumableArray(lane.notes));
 	                    }
@@ -26717,14 +26700,12 @@
 	    }
 	};
 
-	function initNotes(notes) {
-	    return notes.map(function (note, index) {
-	        return {
-	            id: index,
-	            key: note.key,
-	            name: note.name
-	        };
-	    });
+	function getInit(data, lane, index) {
+	    return {
+	        id: index,
+	        key: lane,
+	        notes: data
+	    };
 	}
 
 /***/ },
@@ -27595,6 +27576,8 @@
 
 	var _reactRouter2 = _interopRequireDefault(_reactRouter);
 
+	var _reactRedux = __webpack_require__(254);
+
 	var _SettingsSideBarComponent = __webpack_require__(266);
 
 	var _SettingsSideBarComponent2 = _interopRequireDefault(_SettingsSideBarComponent);
@@ -27715,9 +27698,8 @@
 	    return Main;
 	}(React.Component);
 
-	;
-
 	exports.default = Main;
+	;
 
 /***/ },
 /* 266 */
@@ -69222,30 +69204,22 @@
 	var _class = function (_React$Component) {
 	    _inherits(_class, _React$Component);
 
-	    function _class(props) {
+	    function _class() {
 	        _classCallCheck(this, _class);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
-
-	        _this.state = {
-	            width: "100%",
-	            height: "100%"
-	        };
-	        return _this;
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
 	    }
 
 	    _createClass(_class, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
+	        key: "componentDidUpdate",
+	        value: function componentDidUpdate() {
 	            var bbox = $("#" + this.props.divId)[0].getBBox();
+
 	            if (bbox) {
 	                var padding = 15;
 	                var extra = 10;
 
-	                this.setState({
-	                    width: 200,
-	                    height: 400
-	                });
+	                $("#" + this.props.divId).attr("width", bbox.width + 2 * padding + extra).attr("height", bbox.height + 2 * padding + extra);
 	            }
 	        }
 	    }, {
@@ -69265,20 +69239,6 @@
 	                });
 	            });
 
-	            //for(let name in this.props.legend.legend) {
-	            //    data.push({
-	            //        name: name,
-	            //        color: Constants.getColor(name)
-	            //    })
-	            //}
-
-	            //for (var name in Constants.colorMap) {
-
-	            //        name: Constants.reversePropertyMap[name],
-	            //        color: Constants.colorMap[name]
-	            //    })
-	            //}
-
 	            return data;
 	        }
 	    }, {
@@ -69287,9 +69247,14 @@
 	            var _this2 = this;
 
 	            var g = function g() {
+
 	                return _this2.createData().map(function (element, index) {
 	                    var yTranslate = index * 25 + 10;
-	                    var opacity = _this2.props.visibilityFilters[element.name] ? "1" : "0.6";
+	                    var opacity = 1;
+
+	                    if (_this2.props.visibilityFilters.hasOwnProperty(element.name)) {
+	                        opacity = _this2.props.visibilityFilters[element.name] ? "1" : "0.6";
+	                    }
 
 	                    return _react2.default.createElement(
 	                        "g",
@@ -69310,7 +69275,7 @@
 
 	            return _react2.default.createElement(
 	                "svg",
-	                { id: this.props.divId, width: this.state.width, height: this.state.height },
+	                { id: this.props.divId },
 	                g()
 	            );
 	        }
@@ -80844,9 +80809,22 @@
 	        value: function createForceLayout(data) {
 	            var _this3 = this;
 
-	            this.state.force = _webcola2.default.d3adaptor().linkDistance(150).nodes(data.nodes).links(data.edges).avoidOverlaps(true).size([_DOMSelector2.default.getWidth(this.state.selector), _DOMSelector2.default.getHeight(this.state.selector)]).on("start", function () {
+	            this.state.force = _d2.default.layout.force().charge(-500)
+	            //.chargeDistance(300)
+	            //.friction(0.5)
+	            //.gravity(0.2)
+	            .linkDistance(50).nodes(data.nodes).links(data.edges).size([_DOMSelector2.default.getWidth(this.state.selector), _DOMSelector2.default.getHeight(this.state.selector)]).on("start", function () {
 	                return _this3.createSpeededUpAnimation();
 	            });
+
+	            //this.state.force = cola.d3adaptor()
+	            //    .linkDistance(150)
+	            //    .nodes(data.nodes)
+	            //    .links(data.edges)
+	            //
+	            //    .avoidOverlaps(true)
+	            //    .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
+	            //    .on("start", () => this.createSpeededUpAnimation());
 	        }
 	    }, {
 	        key: "updateGraphData",
@@ -81405,6 +81383,8 @@
 
 	var _LaneActions = __webpack_require__(251);
 
+	var _GraphFilterActionCreators = __webpack_require__(246);
+
 	var _Constants = __webpack_require__(232);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
@@ -81416,9 +81396,9 @@
 	        dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeStart)());
 
 	        return _axios2.default.get("/search/nodeTypes").then(function (response) {
-	            console.log("fetching");
 	            dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeSuccess)(response.data));
 	            dispatch((0, _LaneActions.initLane)(response.data));
+	            dispatch((0, _GraphFilterActionCreators.initGraphFilter)(response.data));
 	        }).catch(function (response) {
 	            dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeError)(response.data));
 	        });

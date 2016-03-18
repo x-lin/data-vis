@@ -46,47 +46,9 @@ Constants.keyMap = {
     GeneralNode: "key"
 };
 
-Constants.defaultVisible = {
-    Project: true,
-    Set: true,
-    "System Requirement": true,
-    Folder: true,
-    "Test Activity": true,
-    Component: true,
-    "Hardware Unit": true,
-    "Computer Software Component": true,
-    "System Subsystem Design Description": true,
-    "Customer Requirement": true,
-    Text: true,
-    "Use Case": true,
-    "Library and Definitions": true,
-    "Change Request": true,
-    Build: true,
-    Standard: true,
-    Subsystem: true,
-    "Comumpter Software Configuration": true,
-    "User Interface Design": true,
-    "Software Requirement": true,
-    Feature: true,
-    "Proxy Relation": true,
-    "Software Functional Block": true,
-    Product: true,
-    "CSC Interface": true,
-    "HWC Interface": true,
-    "Preliminary Hardware Requirement": true,
-    "Hardware Confiuration Item": true,
-    "Test Tool": true,
-    "Safety Requirement": true,
-    "Test Tool Configuration": true,
-    Stakeholder: true,
-    "Testable System Configuration": true,
-    "Security Requirement": true,
-    "Basic Safety Requirement": true,
-    "Hardware Requirement": true,
-    "Hardware Component": true,
-    "Hardware Configuration Item": true,
-    "Test Case": true,
-    "Defect": true
+Constants.invisible = {
+    Folder: false,
+    Set: false
 };
 
 Constants.jiraAddresses = {
@@ -94,12 +56,6 @@ Constants.jiraAddresses = {
     Ticket: ticket => `http://jira.frequentis.frq/browse/${ticket}`,
     User: user => `https://jira.frequentis.frq/ViewProfile.jspa?name=${user}`
 };
-
-Constants.jamaAddresses = {
-    Project: project => `https://jama.frequentis.com/contour/perspective.req?projectId=${project}`,
-    //Ticket: ticket => "",
-    //Other: other => ""
-}
 
 Constants.getKeyIdentifier = (category) => {
     return Constants.keyMap[category];

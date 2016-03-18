@@ -114,14 +114,25 @@ export default class extends React.Component {
     }
 
     createForceLayout(data) {
-        this.state.force = cola.d3adaptor()
-            .linkDistance(150)
+        this.state.force = d3.layout.force()
+            .charge(-500)
+            //.chargeDistance(300)
+            //.friction(0.5)
+            //.gravity(0.2)
+            .linkDistance(50)
             .nodes(data.nodes)
             .links(data.edges)
-
-            .avoidOverlaps(true)
             .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
             .on("start", () => this.createSpeededUpAnimation());
+
+        //this.state.force = cola.d3adaptor()
+        //    .linkDistance(150)
+        //    .nodes(data.nodes)
+        //    .links(data.edges)
+        //
+        //    .avoidOverlaps(true)
+        //    .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
+        //    .on("start", () => this.createSpeededUpAnimation());
     }
 
     updateGraphData(data) {
