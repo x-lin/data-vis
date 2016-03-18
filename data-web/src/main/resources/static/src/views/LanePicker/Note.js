@@ -18,7 +18,7 @@ class Note extends React.Component {
       }} className={this.props.className}>
         <CircleSpan radius="8px" color={Constants.getColor(this.props.note.name)} />
         &nbsp;
-{this.props.note.name.length > 30 ? this.props.note.key.substring(0,30)+"..." : this.props.note.name}</li>
+{this.props.note.name.length > 30 ? this.props.note.name.substring(0,30)+"..." : this.props.note.name}</li>
     ));
   }
 }

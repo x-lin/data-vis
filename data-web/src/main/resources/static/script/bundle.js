@@ -24764,6 +24764,10 @@
 
 	var _TestCoverageReducer2 = _interopRequireDefault(_TestCoverageReducer);
 
+	var _NodeTypeReducer = __webpack_require__(830);
+
+	var _NodeTypeReducer2 = _interopRequireDefault(_NodeTypeReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var createStore = exports.createStore = function createStore() {
@@ -24775,7 +24779,8 @@
 	        visibilityFilters: _GraphFilterReducer.graphFilterReducer,
 	        schema: _SchemaReducer.schemaReducer,
 	        lanes: _LaneReducer2.default,
-	        coverage: _TestCoverageReducer2.default
+	        coverage: _TestCoverageReducer2.default,
+	        nodeTypes: _NodeTypeReducer2.default
 	    });
 
 	    return (0, _redux.createStore)(allReducers, (0, _redux.applyMiddleware)(_reduxThunk2.default // lets us dispatch() asynchronous functions
@@ -25790,16 +25795,17 @@
 	//Other : "rgb(150, 150, 150)"
 	Constants.reversePropertyMap = {
 	    Project: "Project",
-	    Set: "Set",
-	    GeneralNode: "GeneralNode"
+	    GeneralNode: "GeneralNode",
+	    //Project : "Project",
+	    Set: "Set"
 	};
 
 	Constants.endpoints = {
+	    GeneralNode: "generalNodes",
 	    Ticket: "issues",
 	    Project: "projects",
 	    User: "users ",
-	    Requirement: "reqs",
-	    GeneralNode: "generalNodes"
+	    Requirement: "reqs"
 	};
 
 	Constants.keyMap = {
@@ -25882,8 +25888,11 @@
 	};
 
 	Constants.getJamaAddress = function (jamaId, jamaProjectId) {
-	    return "https://jama.frequentis.com/contour/perspective.req?docId=" + jamaId + "&projectId=" + jamaProjectId;
-	    //return Constants.jamaAddresses[category] ? Constants.jamaAddresses[category](jamaId) : null;
+	    if (jamaProjectId) {
+	        return "https://jama.frequentis.com/contour/perspective.req?docId=" + jamaId + "&projectId=" + jamaProjectId;
+	    } else {
+	        return "https://jama.frequentis.com/contour/perspective.req?projectId=" + jamaId;
+	    }
 	};
 
 	exports.default = Constants;
@@ -26640,18 +26649,31 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	var _LaneData = __webpack_require__(250);
+	exports.UNORDERED = exports.EXCLUDED = exports.PRIORITIZED = undefined;
 
 	var _LaneActions = __webpack_require__(251);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	var PRIORITIZED = exports.PRIORITIZED = "PRIORITIZED";
+	var EXCLUDED = exports.EXCLUDED = "EXCLUDED";
+	var UNORDERED = exports.UNORDERED = "UNORDERED";
+
 	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? init() : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
+	        case _LaneActions.INIT_LANE:
+	            var array = [PRIORITIZED, EXCLUDED, UNORDERED];
+
+	            return array.map(function (lane, index) {
+	                return {
+	                    id: index,
+	                    key: lane,
+	                    notes: lane === UNORDERED ? action.data : []
+	                };
+	            });
 	        case _LaneActions.ATTACH_TO_LANE:
 	            return state.map(function (lane) {
 	                if (lane.notes.includes(action.note)) {
@@ -26695,16 +26717,6 @@
 	    }
 	};
 
-	function init() {
-	    return _LaneData.lanes.map(function (lane, index) {
-	        return {
-	            id: index,
-	            key: lane,
-	            notes: lane === "UNORDERED" ? initNotes(_LaneData.notes) : []
-	        };
-	    });
-	}
-
 	function initNotes(notes) {
 	    return notes.map(function (note, index) {
 	        return {
@@ -26716,19 +26728,7 @@
 	}
 
 /***/ },
-/* 250 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var lanes = exports.lanes = ["PRIORITIZED", "EXCLUDED", "UNORDERED"];
-
-	var notes = exports.notes = [{ name: "System Requirement", key: "SSS" }, { name: "Test Activity", key: "TA" }, { name: "Computer Software Component", key: "CSC" }, { name: "Use Case", key: "UC" }, { name: "Standard", key: "STD" }, { name: "Software Requirement", key: "SRS" }, { name: "Feature", key: "FEAT" }, { name: "Stakeholder", key: "STK" }, { name: "Test Case", key: "TC" }, { name: "Defect", key: "BUG" }];
-
-/***/ },
+/* 250 */,
 /* 251 */
 /***/ function(module, exports) {
 
@@ -26739,6 +26739,7 @@
 	});
 	var ATTACH_TO_LANE = exports.ATTACH_TO_LANE = "ATTACH_TO_LANE";
 	var MOVE = exports.MOVE = "MOVE_NOTE";
+	var INIT_LANE = exports.INIT_LANE = "INIT_LANE";
 
 	var attachToLane = exports.attachToLane = function attachToLane(laneId, note) {
 	    return {
@@ -26753,6 +26754,13 @@
 	        type: MOVE,
 	        sourceNote: sourceNote,
 	        targetNote: targetNote
+	    };
+	};
+
+	var initLane = exports.initLane = function initLane(data) {
+	    return {
+	        type: INIT_LANE,
+	        data: data
 	    };
 	};
 
@@ -35949,6 +35957,8 @@
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
+	var _LaneReducer = __webpack_require__(249);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var getNeighbors = exports.getNeighbors = function getNeighbors(category, key) {
@@ -35961,16 +35971,18 @@
 	        //TODO add limit option
 
 	        lanes.forEach(function (lane) {
-	            if (lane.key === "PRIORITIZED") {
-	                priority = lane.notes.map(function (note) {
-	                    return "priority=" + note.key + "&";
-	                });
-	            } else if (lane.key === "EXCLUDED") {
-	                excluded = lane.notes.map(function (note) {
-	                    return "excluded=" + note.key + "&";
-	                });
+	            if (lane.key === _LaneReducer.PRIORITIZED) {
+	                priority = lane.notes.reduce(function (prevVal, currentVal) {
+	                    return prevVal + "priority=" + currentVal.key + "&";
+	                }, "");
+	            } else if (lane.key === _LaneReducer.EXCLUDED) {
+	                excluded = lane.notes.reduce(function (prevVal, currentVal) {
+	                    return prevVal + "excluded=" + currentVal.key + "&";
+	                }, "");
 	            }
 	        });
+
+	        //excluded += "excluded=SET&excluded=FLD";
 
 	        dispatch((0, _FetchNeighborsActionCreators.fetchNeighborsStart)(category, key));
 
@@ -46305,7 +46317,7 @@
 	        key: "addNodeText",
 	        value: function addNodeText(g) {
 	            g.append("text").attr("class", "force-text  unselectable").text(function (d) {
-	                return d.name;
+	                return d.name.length > 20 ? d.name.substring(0, 20) + "..." : d.name;
 	            }).call(this.getTextBox);
 
 	            g.insert("rect", "text").attr("x", function (d) {
@@ -51730,6 +51742,10 @@
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
+	var _CircleSpan = __webpack_require__(805);
+
+	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = function (_ref) {
@@ -51738,21 +51754,14 @@
 	    return _react2.default.createElement(
 	        "div",
 	        null,
-	        _react2.default.createElement("span", { style: {
-	                background: _Constants2.default.colorMap[d.category],
-	                width: "15px",
-	                height: "15px",
-	                borderRadius: "50%",
-	                display: "inline-block"
-	            } }),
+	        _react2.default.createElement(_CircleSpan2.default, { radius: "8px", color: _Constants2.default.getColor(d.type) }),
 	        " ",
 	        _react2.default.createElement(
 	            "span",
 	            { style: {
-	                    top: "-2px",
 	                    position: "relative"
 	                } },
-	            d.key
+	            d.name
 	        )
 	    );
 	};
@@ -78905,6 +78914,8 @@
 
 	var _LaneActions = __webpack_require__(251);
 
+	var _GETNodeTypes = __webpack_require__(828);
+
 	var _Lanes = __webpack_require__(785);
 
 	var _Lanes2 = _interopRequireDefault(_Lanes);
@@ -78924,6 +78935,9 @@
 	        },
 	        move: function move(sourceId, targetId) {
 	            dispatch((0, _LaneActions.move)(sourceId, targetId));
+	        },
+	        getNodeTypes: function getNodeTypes() {
+	            dispatch((0, _GETNodeTypes.getNodeTypes)());
 	        }
 	    };
 	};
@@ -78968,6 +78982,11 @@
 	  }
 
 	  _createClass(_class, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.getNodeTypes();
+	    }
+	  }, {
 	    key: 'renderLane',
 	    value: function renderLane(lane) {
 	      return _react2.default.createElement(_Lane2.default, { className: 'lane', key: lane.id, lane: lane,
@@ -79119,7 +79138,7 @@
 	    var style = notes.length ? withItems : withoutItems;
 
 	    var notesRendered = notes.map(function (note) {
-	        return _react2.default.createElement(_Note2.default, { className: 'note', id: note.id, key: note.id,
+	        return _react2.default.createElement(_Note2.default, { className: 'note', id: note.key, key: note.key,
 	            onMove: move, note: note });
 	    });
 
@@ -79202,7 +79221,7 @@
 	          }, className: this.props.className },
 	        _react2.default.createElement(_CircleSpan2.default, { radius: '8px', color: _Constants2.default.getColor(this.props.note.name) }),
 	        ' ',
-	        this.props.note.name.length > 30 ? this.props.note.key.substring(0, 30) + "..." : this.props.note.name
+	        this.props.note.name.length > 30 ? this.props.note.name.substring(0, 30) + "..." : this.props.note.name
 	      )));
 	    }
 	  }]);
@@ -81365,6 +81384,116 @@
 	            dispatch((0, _TestCoverageActions.fetchError)(key, response.data));
 	        });
 	    };
+	};
+
+/***/ },
+/* 828 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.getNodeTypes = undefined;
+
+	var _axios = __webpack_require__(339);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _FetchNodeTypeActionCreators = __webpack_require__(829);
+
+	var _LaneActions = __webpack_require__(251);
+
+	var _Constants = __webpack_require__(232);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var getNodeTypes = exports.getNodeTypes = function getNodeTypes() {
+	    return function (dispatch, getState) {
+	        dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeStart)());
+
+	        return _axios2.default.get("/search/nodeTypes").then(function (response) {
+	            console.log("fetching");
+	            dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeSuccess)(response.data));
+	            dispatch((0, _LaneActions.initLane)(response.data));
+	        }).catch(function (response) {
+	            dispatch((0, _FetchNodeTypeActionCreators.fetchNodeTypeError)(response.data));
+	        });
+	    };
+	};
+
+/***/ },
+/* 829 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var NODETYPE_FETCH_START = exports.NODETYPE_FETCH_START = "NODETYPE_FETCH_START";
+	var NODETYPE_FETCH_SUCCESS = exports.NODETYPE_FETCH_SUCCESS = "NODETYPE_FETCH_SUCCESS";
+	var NODETYPE_FETCH_ERROR = exports.NODETYPE_FETCH_ERROR = "NODETYPE_FETCH_ERROR";
+
+	var fetchNodeTypeStart = exports.fetchNodeTypeStart = function fetchNodeTypeStart() {
+	    return {
+	        type: NODETYPE_FETCH_START
+	    };
+	};
+
+	var fetchNodeTypeSuccess = exports.fetchNodeTypeSuccess = function fetchNodeTypeSuccess(data) {
+	    return {
+	        type: NODETYPE_FETCH_SUCCESS,
+	        data: data
+	    };
+	};
+
+	var fetchNodeTypeError = exports.fetchNodeTypeError = function fetchNodeTypeError(error) {
+	    return {
+	        type: NODETYPE_FETCH_ERROR,
+	        error: error
+	    };
+	};
+
+/***/ },
+/* 830 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _FetchNodeTypeActionCreators = __webpack_require__(829);
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { data: [] } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _FetchNodeTypeActionCreators.NODETYPE_FETCH_START:
+	            return Object.assign({}, state, {
+	                status: _FetchNodeTypeActionCreators.NODETYPE_FETCH_START
+	            });
+	        case _FetchNodeTypeActionCreators.NODETYPE_FETCH_SUCCESS:
+	            return Object.assign({}, state, {
+	                data: action.data,
+	                error: {},
+	                status: _FetchNodeTypeActionCreators.NODETYPE_FETCH_SUCCESS
+	            });
+	        case _FetchNodeTypeActionCreators.NODETYPE_FETCH_ERROR:
+	            return Object.assign({}, state, {
+	                data: [],
+	                error: action.error,
+	                status: _FetchNodeTypeActionCreators.NODETYPE_FETCH_ERROR
+	            });
+	        default:
+	            return state;
+	    }
 	};
 
 /***/ }

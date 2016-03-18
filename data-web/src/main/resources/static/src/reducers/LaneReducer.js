@@ -1,10 +1,23 @@
-import { lanes, notes } from "../config/LaneData";
-import { ATTACH_TO_LANE, MOVE } from "../actions/action-creators/LaneActions";
+import { ATTACH_TO_LANE, MOVE, INIT_LANE } from "../actions/action-creators/LaneActions";
+
+export const PRIORITIZED = "PRIORITIZED";
+export const EXCLUDED = "EXCLUDED";
+export const UNORDERED = "UNORDERED";
 
 export default (
-    state = init(), action
+    state = [], action
 ) => {
     switch (action.type) {
+        case INIT_LANE:
+            const array = [PRIORITIZED, EXCLUDED, UNORDERED];
+
+            return array.map((lane, index) => {
+                return {
+                    id: index,
+                    key: lane,
+                    notes: lane === UNORDERED ? action.data : []
+                }
+            });
         case ATTACH_TO_LANE:
             return state.map(lane => {
                 if(lane.notes.includes(action.note)) {
@@ -49,16 +62,6 @@ export default (
             return state;
     }
 };
-
-function init() {
-    return lanes.map((lane, index) => {
-        return {
-            id: index,
-            key: lane,
-            notes: lane === "UNORDERED" ? initNotes(notes) : []
-        }
-    });
-}
 
 function initNotes(notes) {
     return notes.map((note, index) => {

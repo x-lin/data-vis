@@ -15,7 +15,7 @@ export default ({notes, move}) => {
     const style = notes.length ? withItems : withoutItems;
 
     const notesRendered = notes.map(note => {
-        return <Note className="note" id={note.id} key={note.id}
+        return <Note className="note" id={note.key} key={note.key}
               onMove={move} note={note}>
         </Note>
     });

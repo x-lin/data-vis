@@ -1,25 +1,19 @@
 import React from "react";
 
 import Constants from "../../../config/Constants";
+import CircleSpan from "../../widgets/CircleSpan";
 
 export default ( { d
     } ) => {
     return (
 
         <div>
-            <span style={{
-                    background: Constants.colorMap[d.category],
-                    width: "15px",
-                    height: "15px",
-                    borderRadius: "50%",
-                    display: "inline-block"
-                }} />
+            <CircleSpan radius="8px" color={Constants.getColor(d.type)} />
             &nbsp;
             <span style={{
-                    top: "-2px",
                     position: "relative"
                 }}>
-                {d.key}
+                {d.name}
             </span>
         </div>
     );

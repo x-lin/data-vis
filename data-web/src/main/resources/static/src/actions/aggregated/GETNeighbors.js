@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { fetchNeighborsSuccess, fetchNeighborsError, fetchNeighborsStart } from "../action-creators/FetchNeighborsActionCreators";
 import Constants from "../../config/Constants";
+import { PRIORITIZED, EXCLUDED } from "../../reducers/LaneReducer";
 
 export const getNeighbors = (category, key) => {
     const endpoint = Constants.endpoints[category];
@@ -13,16 +14,18 @@ export const getNeighbors = (category, key) => {
         //TODO add limit option
 
         lanes.forEach((lane) => {
-            if(lane.key === "PRIORITIZED") {
-                priority = lane.notes.map(note => {
-                    return "priority=" + note.key + "&";
-                })
-            } else if(lane.key === "EXCLUDED") {
-                excluded = lane.notes.map(note => {
-                    return "excluded=" + note.key + "&";
-                })
+            if(lane.key === PRIORITIZED) {
+                priority = lane.notes.reduce((prevVal, currentVal) => {
+                    return prevVal + "priority=" + currentVal.key + "&";
+                }, "")
+            } else if(lane.key === EXCLUDED) {
+                excluded = lane.notes.reduce((prevVal, currentVal) => {
+                    return prevVal + "excluded=" + currentVal.key + "&";
+                }, "")
             }
         });
+
+        //excluded += "excluded=SET&excluded=FLD";
 
         dispatch(fetchNeighborsStart(category, key));
 

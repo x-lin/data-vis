@@ -1,5 +1,6 @@
 export const ATTACH_TO_LANE = "ATTACH_TO_LANE";
 export const MOVE = "MOVE_NOTE";
+export const INIT_LANE = "INIT_LANE";
 
 export const attachToLane = (laneId, note) => {
     return {
@@ -16,3 +17,10 @@ export const move = (sourceNote, targetNote) => {
         targetNote
     }
 };
+
+export const initLane = (data) => {
+    return {
+        type: INIT_LANE,
+        data
+    }
+}

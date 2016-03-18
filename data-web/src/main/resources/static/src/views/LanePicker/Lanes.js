@@ -2,6 +2,9 @@ import React from 'react';
 import Lane from './Lane';
 
 export default class extends React.Component {
+  componentWillMount() {
+    this.props.getNodeTypes();
+  }
 
   renderLane(lane) {
     return <Lane className="lane" key={lane.id} lane={lane}

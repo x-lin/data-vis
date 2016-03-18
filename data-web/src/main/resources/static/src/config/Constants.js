@@ -25,16 +25,17 @@ Constants.colorMap = {
 
 Constants.reversePropertyMap= {
     Project : "Project",
-    Set: "Set",
-    GeneralNode: "GeneralNode"
+    GeneralNode: "GeneralNode",
+    //Project : "Project",
+    Set: "Set"
 };
 
 Constants.endpoints = {
+    GeneralNode: "generalNodes",
     Ticket: "issues",
     Project: "projects",
     User: "users ",
-    Requirement: "reqs",
-    GeneralNode: "generalNodes"
+    Requirement: "reqs"
 };
 
 Constants.keyMap = {
@@ -109,8 +110,11 @@ Constants.getJiraAddress = (category, key) => {
 }
 
 Constants.getJamaAddress = (jamaId, jamaProjectId) => {
-    return `https://jama.frequentis.com/contour/perspective.req?docId=${jamaId}&projectId=${jamaProjectId}`
-    //return Constants.jamaAddresses[category] ? Constants.jamaAddresses[category](jamaId) : null;
+    if(jamaProjectId) {
+        return `https://jama.frequentis.com/contour/perspective.req?docId=${jamaId}&projectId=${jamaProjectId}`;
+    } else {
+        return `https://jama.frequentis.com/contour/perspective.req?projectId=${jamaId}`;
+    }
 }
 
 export default Constants;
