@@ -11,8 +11,8 @@ import java.util.List;
 public class NeighborQueryBuilder {
 	public String buildQuery(String indexName, String key, boolean upstream, boolean downstream,
 							 List<String> excluded, List<String> priority, Integer limit) {
-		String query = this.buildStart(indexName, key) + this.buildMatch() + this.buildDownstream(downstream) +
-				"-[]-" + this.buildUpstream(upstream) + "(m:GeneralNodeType)" + this.buildExclude(excluded) + this.buildPriority(priority) +
+		String query = this.buildStart(indexName, key) + this.buildMatch(downstream, upstream) +
+				"-[:NODE_TYPE]-(m:GeneralNodeType)" + this.buildOthers() + this.buildExclude(excluded) + this.buildPriority(priority) +
 				this.buildLimit(limit);
 
 		System.out.println("query: " + query);
@@ -20,8 +20,8 @@ public class NeighborQueryBuilder {
 		return query;
 	}
 
-	private String buildMatch() {
-		return " MATCH (p)-[]-(n:GeneralNode)";
+	private String buildMatch(boolean downstream, boolean upstream) {
+		return " MATCH (p)" + this.buildUpstream(upstream) + "-[]-" + this.buildDownstream(downstream) + "(n:GeneralNode)";
 	}
 
 	private String buildStart(String indexName, String key) {
@@ -54,17 +54,16 @@ public class NeighborQueryBuilder {
 		return caseString;
 	}
 
+	private String buildOthers() {
+		return " WHERE (NOT EXISTS(n.jiraStatus) OR n.jiraStatus <> 'Closed') ";
+	}
+
 	private String buildExclude(List<String> excluded) {
 		String exclude = "";
 
 		if(excluded != null && excluded.size() > 0) {
-			exclude += " WHERE ";
-
 			for(int i = 0; i < excluded.size(); i++) {
-				if(i != 0) {
-					exclude += " AND";
-				}
-
+				exclude += " AND";
 				exclude += " m.key<>'" + excluded.get(i) + "'";
 			}
 		}
@@ -73,11 +72,11 @@ public class NeighborQueryBuilder {
 	}
 
 	private String buildUpstream(boolean isUpstream) {
-		return isUpstream ? ">" : "";
+		return isUpstream ? "<" : "";
 	}
 
 	private String buildDownstream(boolean isDownstream) {
-		return isDownstream ? "<" : "";
+		return isDownstream ? ">" : "";
 	}
 
 	private String buildLimit(Integer limit) {

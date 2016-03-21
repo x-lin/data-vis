@@ -28,6 +28,13 @@ public class GeneralNodeType extends ModelEntity {
 	@GraphProperty
 	String name;
 
+	public GeneralNodeType(){}
+
+	public GeneralNodeType(String key, String name) {
+		this.key = key;
+		this.name = name;
+	}
+
 	public Integer getJamaId() {
 		return jamaId;
 	}

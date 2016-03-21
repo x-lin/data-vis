@@ -1,7 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.jira;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.model.Issue;
+import at.ac.tuwien.dst.mms.dal.jira.model.JiraIssueDTO;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +36,10 @@ public class JiraWebhook {
 
 	@RequestMapping(path="/issues", method=RequestMethod.POST)
 	public void issues(
-			@RequestBody List<Issue> issues) {
+			@RequestBody List<JiraIssueDTO> issues) {
 
 		try (Writer output = new BufferedWriter(new FileWriter("target/errors1.log"))) {
 			try {
-				//NOTE: Users don't need to be stored separately as saving an issue will store the corresponding
-				//user automatically
 				neoWriter.storeIssues(issues);
 			} catch (Exception e) {
 				logger.error("Exception occurred: ", e);
@@ -50,8 +48,10 @@ public class JiraWebhook {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
 
-
-
+	@RequestMapping(path="/index", method=RequestMethod.GET)
+	public void textIndex() {
+		//neoWriter.addIndex();
 	}
 }

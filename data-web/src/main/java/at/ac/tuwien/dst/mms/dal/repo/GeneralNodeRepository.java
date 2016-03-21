@@ -17,6 +17,10 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 
 	public List<GeneralNode> findByProject(Project project);
 
+	//TODO fix some issues with duplicate entries
+	@Query("MATCH (p:Project)--(a:GeneralNode)--(b:GeneralNodeType) WHERE a.name={0} AND (b.key='BUG' OR b.key='WP') AND p.key={1} RETURN a LIMIT 1")
+	public GeneralNode findbyName(String name, String projectKey);
+
 	@Query("MATCH (a:GeneralNode) RETURN a LIMIT {0}")
 	public List<GeneralNode> findAll(int limit);
 

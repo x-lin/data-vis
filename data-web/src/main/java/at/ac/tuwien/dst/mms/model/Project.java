@@ -27,15 +27,16 @@ public class Project extends ModelEntity {
 	@GraphProperty
 	private String name;
 
-	@JsonIgnore
-	@RelatedTo(type = "PROJECT", direction = Direction.INCOMING)
-	private Set<Issue> issues;
-
 	@GraphProperty
 	private Integer jamaId;
 
 	@Transient
 	private Integer jamaParentId;
+
+	@JsonIgnore
+	//@Fetch
+	@RelatedTo(type = "TEXT_INDEX", direction = Direction.OUTGOING)
+	private Set<TextIndex> textIndex;
 
 	@JsonIgnore
 	public Integer getJamaParentId() {
@@ -71,12 +72,12 @@ public class Project extends ModelEntity {
 		this.name = name;
 	}
 
-	public Set<Issue> getIssues() {
-		return issues;
-	}
-
 	@JsonProperty
 	public String getType() {
 		return "Project";
+	}
+
+	public void setTextIndex(Set<TextIndex> textIndex) {
+		this.textIndex = textIndex;
 	}
 }

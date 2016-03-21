@@ -3,12 +3,13 @@ import React from "react";
 import Constants from "../../config/Constants";
 
 import SearchBarPresent from "./SearchBarPresentation";
+import CircleSpan from "../widgets/CircleSpan";
 
 export default class extends React.Component {
     render() {
         return (
             <SearchBarPresent
-                activeCategory={this.props.category}
+                activeCategory={this.props.type}
                 categories={this.renderCategories()}
 
                 activeInputValue={this.props.value}
@@ -30,7 +31,7 @@ export default class extends React.Component {
                 <li className={listgroupClass} key={index}
                     onClick={() => {this.resetOnOptionSelection(item)}}
                     onMouseOver={() => {this.props.setSearchSelectedIndex(index)}}>
-                    {item[this.getItemKey()]}
+                    <CircleSpan radius="8px" color={Constants.getColor(item.type)}/> &nbsp; {item.type  + " | " + item.key + " | " + item.name}
                 </li>
             );
         });
@@ -51,24 +52,33 @@ export default class extends React.Component {
     }
 
     handleSubmit(event) {
-        const { items, selectedIndex, category, value } = this.props;
+        const { items, selectedIndex, value } = this.props;
         event.preventDefault(); //done to disable site refreshes
 
-        if(selectedIndex >= 0) {
-            this.resetOnOptionSelection(items[selectedIndex]);
-        } else {
-            this.props.searchNeighborsStart(category, value);
-            this.props.setSearchInputValue("")
-        }
+        console.log(items[selectedIndex]);
+
+        const item = items[selectedIndex];
+        const type = item.type === "Project" ? item.type : "GeneralNode";
+
+        this.props.searchNeighborsStart(type, items[selectedIndex].key);
+        this.props.setSearchInputValue("");
+        this.resetOnOptionSelection(items[selectedIndex]);
+
+        //if(selectedIndex >= 0) {
+        //    this.resetOnOptionSelection(items[selectedIndex]);
+        //} else {
+        //    this.props.searchNeighborsStart(type, value);
+        //    this.props.setSearchInputValue("")
+        //}
     };
 
     handleChange(event) {
         this.applyInputAndResetSelectionList(event.target.value);
-        this.props.searchItem(this.props.category, event.target.value);
+        this.props.searchItem(this.props.type, event.target.value);
     };
 
     resetOnOptionSelection(item) {
-        this.applyInputAndResetSelectionList(item[this.getItemKey()]);
+        //this.applyInputAndResetSelectionList(item[this.getItemKey()]);
         this.props.clearAllItems();
     }
 
@@ -94,9 +104,5 @@ export default class extends React.Component {
         if(event.keyCode === 27) {
             this.props.clearAllItems();
         }
-    }
-
-    getItemKey() {
-        return Constants.keyMap[this.props.category];
     }
 }

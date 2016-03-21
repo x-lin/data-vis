@@ -122,7 +122,7 @@ export default class extends React.Component {
             //.chargeDistance(300)
             //.friction(0.5)
             //.gravity(0.2)
-            .linkDistance(50)
+            .linkDistance(70)
             .nodes(data.nodes)
             .links(data.edges)
             .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
@@ -266,6 +266,7 @@ export default class extends React.Component {
         const ALPHA_THRESHOLD = 0.03;
 
         this.passOverTicks(TICKS_PER_RENDER);
+
         D3Utils.moveLinks(this.state.links);
         D3Utils.moveNodes(this.state.nodes);
         this.animateIfNotFinished(ALPHA_THRESHOLD);

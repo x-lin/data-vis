@@ -24,6 +24,14 @@ public class ItemTypeLookupRegistry {
         for(ItemType itemType : extractor.getAllItemTypes()) {
             itemTypes.put(itemType.getJamaId(), itemType);
         }
+
+        //add custom item types
+        ItemType workPackage = new ItemType();
+        workPackage.setJamaId(-1);
+        workPackage.setKey("WP");
+        workPackage.setName("Work Package");
+
+        itemTypes.put(workPackage.getJamaId(), workPackage);
     }
 
     public ItemType getItemType(Integer itemtypeId) {

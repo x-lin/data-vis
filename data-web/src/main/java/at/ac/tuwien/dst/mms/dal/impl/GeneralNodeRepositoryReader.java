@@ -2,7 +2,6 @@ package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeRepository;
-import at.ac.tuwien.dst.mms.dal.util.RepositoryUtils;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
 import org.springframework.stereotype.Service;
@@ -43,10 +42,10 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 		return null;
 	}
 
-	@Override
-	public List<GeneralNode> findAllMatching(String key, int limit) {
-		return ((GeneralNodeRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
-	}
+//	@Override
+//	public List<GeneralNode> findAllMatching(String key, int limit) {
+//		return ((GeneralNodeRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
+//	}
 
 	@Override
 	public GeneralNode find(String key) {

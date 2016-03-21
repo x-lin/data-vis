@@ -40,12 +40,12 @@ export default (
             });
         case ATTACH_TO_LANE:
             const lanes1 = state.lanes.map(lane => {
-                if(lane.notes.includes(action.note)) {
+                if(lane.notes.indexOf(action.note) >= 0) {
                     lane.notes = lane.notes.filter(note => note !== action.note);
                 }
 
                 if(lane.id === action.laneId) {
-                    if(lane.notes.includes(action.note)) {
+                    if(lane.notes.indexOf(action.note) >= 0) {
                         console.warn('Already attached note to lane', lane);
                     }
                     else {
@@ -62,8 +62,8 @@ export default (
         case MOVE:
             const lanes = [...state.lanes];
 
-            const sourceLane = lanes.filter(lane => lane.notes.includes(action.sourceNote))[0];
-            const targetLane = lanes.filter(lane => lane.notes.includes(action.targetNote))[0];
+            const sourceLane = lanes.filter(lane => lane.notes.indexOf(action.sourceNote) >= 0)[0];
+            const targetLane = lanes.filter(lane => lane.notes.indexOf(action.targetNote) >= 0)[0];
 
             const sourceNoteIndex = sourceLane.notes.indexOf(action.sourceNote);
             const targetNoteIndex = targetLane.notes.indexOf(action.targetNote);

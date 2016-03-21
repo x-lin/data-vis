@@ -7,10 +7,8 @@ import java.util.Map;
  * Created by xlin on 14.01.2016.
  */
 public enum NodeType {
-	Issue,
+	TextIndex,
 	Project,
-	Requirement,
-	User,
 	GeneralNode,
 	GeneralNodeType;
 
@@ -18,10 +16,8 @@ public enum NodeType {
 
 	static {
 		typeMapper = new HashMap<>();
-		typeMapper.put(NodeType.Issue, Issue.class);
-		typeMapper.put(NodeType.Requirement, Requirement.class);
+		typeMapper.put(NodeType.TextIndex, TextIndex.class);
 		typeMapper.put(NodeType.Project, Project.class);
-		typeMapper.put(NodeType.User, User.class);
 		typeMapper.put(NodeType.GeneralNode, GeneralNode.class);
 		typeMapper.put(NodeType.GeneralNodeType, GeneralNodeType.class);
 	}

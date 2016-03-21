@@ -6,7 +6,6 @@ import TestCoverageComponent from "../TestCoveragePanel/TestCoverageComponent";
 export default () => {
     return (
         <div>
-            <LanePicker />
             <TestCoverageComponent />
         </div>
     );

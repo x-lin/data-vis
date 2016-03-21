@@ -1,6 +1,5 @@
 package at.ac.tuwien.dst.mms.dal.jira;
 
-import at.ac.tuwien.dst.mms.model.Issue;
 import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.util.Config;
 import org.slf4j.Logger;
@@ -51,13 +50,6 @@ public class JiraRestClient {
 		restTemplate.getForObject(uri, List.class);
 	}
 
-	public Issue[] getIssues(String projectKey) {
-		logger.info("Requesting issues for project " + projectKey + ". For larger projects, it is advisable to use " +
-				"the webhook mode");
-
-		return restTemplate.getForEntity(URI.create(issuesUri), Issue[].class).getBody();
-	}
-
 	@Async
 	public void getIssuesWebhook(String projectKey) {
 		URI uri = UriComponentsBuilder
@@ -70,9 +62,5 @@ public class JiraRestClient {
 				"to specified webhook.");
 
 		restTemplate.getForObject(uri, List.class);
-}
-
-	public Issue getIssue(String key) {
-		return restTemplate.getForObject(URI.create(issueUri+"/"+key), Issue.class);
 	}
 }

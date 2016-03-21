@@ -1,16 +1,16 @@
-package at.ac.tuwien.dst.mms.dal.jira.model;
+package at.ac.tuwien.dst.mms.jira.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 /**
- * Created by XLin on 10.03.2016.
+ * Created by XLin on 09.03.2016.
  */
-public class JiraUserDTO {
-	@JsonProperty("name")
+public class JiraIssue implements Serializable {
 	private String key;
 
-	@JsonProperty("displayName")
 	private String name;
+
+	private JiraUser user;
 
 	public String getKey() {
 		return key;
@@ -28,11 +28,20 @@ public class JiraUserDTO {
 		this.name = name;
 	}
 
+	public JiraUser getUser() {
+		return user;
+	}
+
+	public void setUser(JiraUser user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
-		return "JiraUserDTO{" +
+		return "JiraIssue{" +
 				"key='" + key + '\'' +
 				", name='" + name + '\'' +
+				", user=" + user +
 				'}';
 	}
 }

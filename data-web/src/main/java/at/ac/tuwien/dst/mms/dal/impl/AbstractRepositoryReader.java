@@ -4,6 +4,7 @@ import at.ac.tuwien.dst.mms.dal.DataReader;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+import at.ac.tuwien.dst.mms.dal.repo.TextIndexRepository;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
 import at.ac.tuwien.dst.mms.model.NodeType;
 import at.ac.tuwien.dst.mms.util.Config;
@@ -25,6 +26,9 @@ import java.util.Map;
 public abstract class AbstractRepositoryReader<T extends ModelEntity> implements DataReader {
 	@Autowired
 	protected GraphRepository<T> repository;
+
+	@Autowired
+	protected TextIndexRepository textIndexRepository;
 
 	@Autowired(required = false)
 	protected Logger logger;
@@ -53,8 +57,18 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 	public abstract List<T> findMatchingByNeighborKey(String property, String keyValue, int limit);
 
 	@Override
-	public List<T> findAllMatching(String key) {
+	public Iterable<Map<String,Object>> findAllMatching(String key) {
 		return findAllMatching(key, Config.REPO_LIMIT);
+	}
+
+	@Override
+	public Iterable<Map<String,Object>> findAllMatching(String key, int limit) {
+		Iterable<Map<String,Object>> search = textIndexRepository.findBySearchText(key, limit);
+
+		System.out.println("search" + search);
+
+//		((GeneralNodeRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
+		return textIndexRepository.findBySearchText(key, limit);
 	}
 
 	@Override

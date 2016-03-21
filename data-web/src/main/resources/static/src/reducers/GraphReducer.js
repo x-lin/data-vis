@@ -34,10 +34,10 @@ action) => {
             const graph = new D3Graph(state.nodes, state.edges, state.legend);
 
             const node = action.neighbors.node;
-            const index = graph.addNode(new Node(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId));
+            const index = graph.addNode(new Node(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId, node.jiraId));
 
             action.neighbors.neighbors.forEach((neighbor) => {
-                const neighborIndex = graph.addNode(new Node(neighbor.key, neighbor.name, "GeneralNode", neighbor.type, neighbor.jamaId, neighbor.projectId));
+                const neighborIndex = graph.addNode(new Node(neighbor.key, neighbor.name, "GeneralNode", neighbor.type, neighbor.jamaId, neighbor.projectId, neighbor.jiraId));
                 graph.addEdge(new Edge(index, neighborIndex));
             });
 

@@ -2,6 +2,7 @@ var React = require("react");
 import Router from "react-router";
 import { Link } from "react-router";
 import { connect } from "react-redux";
+import LanePicker from "./LanePicker/LanePicker";
 
 import SettingsSideBarComponent from "./Settings/SettingsSideBarComponent";
 
@@ -13,6 +14,7 @@ export default class Main extends React.Component{ //creates react component
     render() {
         return (
             <div>
+                <LanePicker />
                 <header className="main-header">
 
                     <a href="index.html" className="logo ">

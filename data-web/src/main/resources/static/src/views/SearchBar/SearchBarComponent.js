@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
     return {
         items: state.items.data,
         selectedIndex: state.items.selectedIndex,
-        category: state.items.category,
+        type: state.items.type,
         value: state.items.value,
         categories: state.items.categories
     };

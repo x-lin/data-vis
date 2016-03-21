@@ -14,9 +14,8 @@ export default ( {
     inputKeyDownHandler,
     submitHandler,
     } ) => {
-
     return (
-        <form onSubmit={(event) => submitHandler(event)}>
+                <form onSubmit={(event) => submitHandler(event)}>
             <div className="input-group relative">
 
 

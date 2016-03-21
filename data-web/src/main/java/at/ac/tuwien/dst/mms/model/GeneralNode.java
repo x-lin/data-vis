@@ -34,6 +34,8 @@ public class GeneralNode extends ModelEntity {
 	@JsonProperty
 	private Long jamaParentId;
 
+	private String jiraId;
+
 	@GraphProperty
 	@Indexed(unique = true, indexName=GENERAL_NODE_KEY_INDEX, indexType = IndexType.FULLTEXT, failOnDuplicate = true)
 	@JsonProperty
@@ -62,12 +64,66 @@ public class GeneralNode extends ModelEntity {
 
 	@JsonIgnore
 	//@Fetch
-	@RelatedTo(type = "DOWNSTREAM", direction = Direction.INCOMING)
+	@RelatedTo(type = "DOWNSTREAM", direction = Direction.OUTGOING)
 	private Set<GeneralNode> downstream;
+
+	@JsonIgnore
+	@RelatedTo(type = "UNCLASSIFIED", direction = Direction.BOTH)
+	private Set<GeneralNode> unclassified;
+
+	@JsonIgnore
+	//@Fetch
+	@RelatedTo(type = "TEXT_INDEX", direction = Direction.OUTGOING)
+	private Set<TextIndex> textIndex;
+
+	private String jiraStatus;
 
 	@GraphProperty
 	@JsonProperty
 	private String status;
+
+	public GeneralNode() {}
+
+	public GeneralNode(String key, String name) {
+		this.key = key;
+		this.name = name;
+	}
+
+	public Set<TextIndex> getTextIndex() {
+		return textIndex;
+	}
+
+	public void setTextIndex(Set<TextIndex> textIndex) {
+		this.textIndex = textIndex;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setJiraStatus(String jiraStatus) {
+		this.jiraStatus = jiraStatus;
+	}
+
+	public String getJiraId() {
+		return jiraId;
+	}
+
+	public void setJiraId(String jiraId) {
+		this.jiraId = jiraId;
+	}
+
+	public Set<GeneralNode> getUnclassified() {
+		return unclassified;
+	}
+
+	public void setUnclassified(Set<GeneralNode> unclassified) {
+		this.unclassified = unclassified;
+	}
+
+	public void addUnclassified(GeneralNode node) {
+		this.unclassified.add(node);
+	}
 
 	public Set<GeneralNode> getDownstream() {
 		return downstream;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xlin on 16.01.2016.
@@ -30,17 +31,10 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 	}
 
 	@Override
-	public List<T> getAllMatching(
+	public Iterable<Map<String, Object>> getAllStartingWith(
 			@PathVariable String string,
 			@RequestParam(required = false, defaultValue = Config.REPO_LIMIT_STRING) Integer limit) {
-		return reader.findAllMatching("*" + string + "*", limit);
-	}
-
-	@Override
-	public List<T> getAllStartingWith(
-			@PathVariable String string,
-			@RequestParam(required = false, defaultValue = Config.REPO_LIMIT_STRING) Integer limit) {
-		return reader.findAllMatching(string + "*", limit);
+		return reader.findAllMatching(string, limit);
 	}
 
 	@Override

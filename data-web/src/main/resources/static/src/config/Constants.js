@@ -53,7 +53,8 @@ Constants.invisible = {
 
 Constants.jiraAddresses = {
     Project: project => `http://jira.frequentis.frq/browse/${project}`,
-    Ticket: ticket => `http://jira.frequentis.frq/browse/${ticket}`,
+    Defect: defect => `http://jira.frequentis.frq/browse/${defect}`,
+    'Work Package': workpackage => `http://jira.frequentis.frq/browse/${workpackage}`,
     User: user => `https://jira.frequentis.frq/ViewProfile.jspa?name=${user}`
 };
 
@@ -61,14 +62,14 @@ Constants.getKeyIdentifier = (category) => {
     return Constants.keyMap[category];
 };
 
-Constants.getJiraAddress = (category, key) => {
-    return Constants.jiraAddresses[category] ? Constants.jiraAddresses[category](key) : null;
+Constants.getJiraAddress = (type, key) => {
+    return Constants.jiraAddresses[type] ? Constants.jiraAddresses[type](key) : null;
 }
 
 Constants.getJamaAddress = (jamaId, jamaProjectId) => {
     if(jamaProjectId) {
         return `https://jama.frequentis.com/contour/perspective.req?docId=${jamaId}&projectId=${jamaProjectId}`;
-    } else {
+    } else if(jamaProjectId && jamaId) {
         return `https://jama.frequentis.com/contour/perspective.req?projectId=${jamaId}`;
     }
 }

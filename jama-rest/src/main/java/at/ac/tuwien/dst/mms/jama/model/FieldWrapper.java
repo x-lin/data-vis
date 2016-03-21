@@ -3,10 +3,12 @@ package at.ac.tuwien.dst.mms.jama.model;
 import at.ac.tuwien.dst.mms.jama.rest.StatusLookupRegistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by XLin on 03.03.2016.
  */
-public class FieldWrapper {
+public class FieldWrapper implements Serializable {
 	private String name;
 
 	private String status;

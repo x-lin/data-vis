@@ -4,7 +4,6 @@ import Slider from "../../widgets/Slider";
 
 export default class extends React.Component {
     setFilterValue(value) {
-        console.log(value);
         this.props.setFilterValue("limit", value);
     }
 

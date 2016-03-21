@@ -11,6 +11,8 @@ import Tree from "./views/TreePanel/Tree";
 import Schema from "./views/MainViews/SchemaComponent";
 import TestCoverage from "./views/MainViews/TestCoverage";
 
+import { polyfill } from "es6-promise";
+
 ReactDOM.render (
     <Provider store={store}>
         <Router history={hashHistory}>
@@ -25,3 +27,5 @@ ReactDOM.render (
     </Provider>,
     $("#root")[0]
 );
+
+polyfill();

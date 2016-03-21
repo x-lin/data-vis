@@ -23,9 +23,14 @@ export default class extends React.Component {
 
     render() {
         const imgDir = "img/";
-        const { category, key, jamaId, jamaProjectId } = this.props.d;
+        let { jiraId, key, jamaId, jamaProjectId, type } = this.props.d;
 
-        const jiraAddress = Constants.getJiraAddress(category, key);
+        //TODO fix that for extraction -> add jiraId
+        if(type === "User") {
+            jiraId = key;
+        }
+
+        const jiraAddress = Constants.getJiraAddress(type, jiraId);
         const jamaAddress = Constants.getJamaAddress(jamaId, jamaProjectId);
 
         return (

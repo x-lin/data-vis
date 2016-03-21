@@ -2,10 +2,12 @@ package at.ac.tuwien.dst.mms.jama.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by XLin on 07.03.2016.
  */
-public class Relationship {
+public class Relationship implements Serializable {
 //	private Long jamaId;
 
 	private Long fromItem;
@@ -40,6 +42,15 @@ public class Relationship {
 	public void setToItem(Long toItem) {
 		this.toItem = toItem;
 	}
+
+	@Override
+	public String toString() {
+		return "Relationship{" +
+				"from=" + fromItem +
+				", to=" + toItem +
+				'}';
+	}
+
 //
 //	@JsonIgnore
 //	public Integer getRelationshipType() {

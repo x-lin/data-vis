@@ -5,7 +5,6 @@ import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
-import at.ac.tuwien.dst.mms.dal.util.RepositoryUtils;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,19 +34,13 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 	public List<Project> findMatchingByNeighborKey(String key, String keyValue, int limit) {
 		List<Project> projectWrapper = null;
 
-		if(key.equals("issue")) {
-			Project project = repositoryService.getIssueRepository().findByKey(keyValue).getProject();
-			projectWrapper = new ArrayList<>();
-			projectWrapper.add(project);
-		}
-
 		return projectWrapper;
 	}
 
-	@Override
-	public List<Project> findAllMatching(String key, int limit) {
-		return ((ProjectRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
-	}
+//	@Override
+//	public List<Project> findAllMatching(String key, int limit) {
+//		return ((ProjectRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
+//	}
 
 	@Override
 	public Project find(String key) {

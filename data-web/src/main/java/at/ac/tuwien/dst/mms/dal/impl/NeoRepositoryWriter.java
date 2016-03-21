@@ -2,6 +2,7 @@ package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
+import at.ac.tuwien.dst.mms.dal.jira.model.JiraIssueDTO;
 import at.ac.tuwien.dst.mms.dal.repo.*;
 import at.ac.tuwien.dst.mms.model.*;
 import org.neo4j.graphdb.Transaction;
@@ -17,16 +18,7 @@ import java.util.*;
  */
 public class NeoRepositoryWriter implements DataWriter {
 	@Autowired
-	private IssueRepository issueRepository;
-
-	@Autowired
 	private ProjectRepository projectRepository;
-
-	@Autowired
-	private RequirementRepository requirementRepository;
-
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	private GeneralNodeRepository generalNodeRepository;
@@ -40,28 +32,60 @@ public class NeoRepositoryWriter implements DataWriter {
 	@Autowired
 	private GeneralNodeJamaIndexRepository generalNodeJamaIndexRepository;
 
+	@Autowired
+	private TextIndexRepository textIndexRepository;
+
 	@Autowired(required = false)
 	private Logger logger;
 
 	@Override
-	public void storeIssues(Collection<Issue> issues) {
+	public void storeIssues(Collection<JiraIssueDTO> issues) {
 		try (Transaction tx = graphDatabase.beginTx()) {
-			issueRepository.save(issues);
+			for(JiraIssueDTO issue : issues) {
+				GeneralNode dbIssue = generalNodeRepository.findbyName(issue.getName(), issue.getProject().getKey());
+				GeneralNodeType userType = new GeneralNodeType("USER", "User");
+
+				if(dbIssue != null && (dbIssue.getType().getKey().equals("BUG") || dbIssue.getType().getKey().equals("WP") )) {
+
+					dbIssue.setJiraId(issue.getKey());
+
+					if(issue.getUser() != null && issue.getUser().getKey() != null && issue.getUser().getName() != null) {
+						GeneralNode user = new GeneralNode(issue.getUser().getKey(), issue.getUser().getName());
+						user.setType(userType);
+						dbIssue.setJiraStatus(issue.getStatus());
+
+						if(dbIssue.getUnclassified() == null) {
+							dbIssue.setUnclassified(new HashSet<>());
+						}
+
+						dbIssue.addUnclassified(user);
+					} else {
+						logger.warn("User assignee for issue " + dbIssue + " was " + issue.getUser());
+					}
+
+					generalNodeRepository.save(dbIssue);
+				} else {
+					logger.warn("Issue not found in Db..." + (dbIssue == null ? "name was " + issue.getName() : "type wrong, was " + dbIssue.getType().getKey() ));
+
+					dbIssue = new GeneralNode(issue.getKey(), issue.getName());
+
+					if(issue.getUser() != null && issue.getUser().getKey() != null && issue.getUser().getName() != null) {
+						GeneralNode user = new GeneralNode(issue.getUser().getKey(), issue.getUser().getName());
+						user.setType(userType);
+						dbIssue.setJiraStatus(issue.getStatus());
+						dbIssue.setUnclassified(new HashSet<>());
+						dbIssue.addUnclassified(user);
+						Project project = projectRepository.findByKey(issue.getProject().getKey());
+						dbIssue.setProject(project);
+					} else {
+						logger.warn("User assignee for issue " + dbIssue + " was " + issue.getUser());
+					}
+				}
+			}
 			tx.success();
 
 			logger.info(issues.size() + " issues saved for project " +
 					(issues.size() > 0 ? issues.iterator().next().getProject().getKey() : "") + ".");
-		}
-	}
-
-	@Override
-	public void storeIssue(Issue issue) {
-		try(Transaction tx = graphDatabase.beginTx()) {
-			issueRepository.save(issue);
-
-			tx.success();
-
-			logger.info("Issue with key " + issue.getKey() + " saved.");
 		}
 	}
 
@@ -104,45 +128,6 @@ public class NeoRepositoryWriter implements DataWriter {
 	@Override
 	public void storeProject(Project project) {
 		projectRepository.save(project);
-	}
-
-	@Override
-	public void storeRequirements(Collection<Requirement> requirements) {
-		try (Transaction tx = graphDatabase.beginTx()) {
-			requirementRepository.save(requirements);
-
-			tx.success();
-
-			logger.info(requirements.size() + " requirements saved.");
-		}
-
-	}
-
-	@Override
-	public void storeRequirement(Requirement requirement) {
-		requirementRepository.save(requirement);
-	}
-
-	@Override
-	public void storeUser(User user) {
-		userRepository.save(user);
-	}
-
-	@Override
-	public void storeUsers(User[] users) {
-		Set<String> processed = new HashSet<>();
-
-		for (User user : users) {
-			if (!processed.contains(user.getName())) {
-				try (Transaction tx = graphDatabase.beginTx()) {
-					userRepository.save(user);
-					tx.success();
-					processed.add(user.getName());
-				}
-			}
-		}
-
-		logger.info(processed + " users saved.");
 	}
 
 	@Override
@@ -245,5 +230,62 @@ public class NeoRepositoryWriter implements DataWriter {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void addIndex() {
+		this.addIndexForProjects();
+		logger.info("text index added for projects");
+		//this.addIndexforGeneralNodes();
+		//logger.info("text index added for general nodes");
+	}
+
+	@Transactional
+	private void addIndexforGeneralNodes() {
+		List<GeneralNode> nodes = generalNodeRepository.findAll(100000);
+
+		for(GeneralNode node : nodes) {
+			if(node.getJiraId() == null) {
+				Set<TextIndex> indices = new HashSet<>();
+				node.setTextIndex(indices);
+
+				TextIndex indexKey = this.getTextIndex(node.getKey());
+				TextIndex indexName = this.getTextIndex(node.getName());
+
+				indices.add(indexKey);
+				indices.add(indexName);
+			}
+		}
+
+		generalNodeRepository.save(nodes);
+	}
+
+	private TextIndex getTextIndex(String key) {
+		TextIndex indexKey = textIndexRepository.findByKey(key);
+
+		if(indexKey == null) {
+			indexKey = new TextIndex(key);
+			textIndexRepository.save(indexKey);
+		}
+
+		return indexKey;
+	}
+
+	@Transactional
+	private void addIndexForProjects(){
+		List<Project> projects = projectRepository.findAll(100000);
+
+		for(Project node : projects) {
+			Set<TextIndex> indices = new HashSet<>();
+			node.setTextIndex(indices);
+
+			TextIndex indexKey = this.getTextIndex(node.getKey());
+			TextIndex indexName = this.getTextIndex(node.getName());
+
+			indices.add(indexKey);
+			indices.add(indexName);
+		}
+
+		projectRepository.save(projects);
 	}
 }

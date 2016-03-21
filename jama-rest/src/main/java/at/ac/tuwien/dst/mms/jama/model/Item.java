@@ -4,10 +4,12 @@ import at.ac.tuwien.dst.mms.jama.rest.ItemTypeLookupRegistry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by XLin on 02.03.2016.
  */
-public class Item {
+public class Item implements Serializable {
 
     private Long jamaId;
 

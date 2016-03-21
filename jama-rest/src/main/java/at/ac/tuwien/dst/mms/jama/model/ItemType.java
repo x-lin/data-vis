@@ -2,10 +2,12 @@ package at.ac.tuwien.dst.mms.jama.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by XLin on 04.03.2016.
  */
-public class ItemType {
+public class ItemType implements Serializable {
 	Integer jamaId;
 
 	String key;

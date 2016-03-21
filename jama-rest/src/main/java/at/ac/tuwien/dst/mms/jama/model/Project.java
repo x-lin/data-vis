@@ -3,10 +3,12 @@ package at.ac.tuwien.dst.mms.jama.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by XLin on 03.03.2016.
  */
-public class Project {
+public class Project implements Serializable {
 	Long jamaId;
 
 	Integer parentId;

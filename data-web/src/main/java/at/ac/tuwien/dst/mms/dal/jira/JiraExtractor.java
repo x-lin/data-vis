@@ -27,25 +27,23 @@ public class JiraExtractor {
 
 	//TODO remove persistent error logging
 	public void extractAll() {
-		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
+		long start = System.nanoTime();
 
-			long start = System.nanoTime();
+		Project[] projects = jiraRestClient.getProjects();
+		neoWriter.storeProjects(projects);
 
-			Project[] projects = jiraRestClient.getProjects();
-			neoWriter.storeProjects(projects);
+		for (Project project : projects) {
+			this.extractTickets(project.getKey());
+		}
 
-			for (Project project : projects) {
-				try {
-					jiraRestClient.getIssuesWebhook(project.getKey());
-				} catch (Exception e) {
-					logger.error("Exception occurred: ", e);
-					output.append(project.getKey());
-				}
-			}
+		logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
+	}
 
-			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
-		} catch(IOException e) {
-			e.printStackTrace();
+	public void extractTickets(String projectKey) {
+		try {
+			jiraRestClient.getIssuesWebhook(projectKey);
+		} catch (Exception e) {
+			logger.error("Exception occurred: ", e);
 		}
 	}
 

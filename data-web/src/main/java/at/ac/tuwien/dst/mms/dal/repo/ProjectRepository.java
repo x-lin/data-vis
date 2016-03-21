@@ -3,7 +3,6 @@ package at.ac.tuwien.dst.mms.dal.repo;
 import at.ac.tuwien.dst.mms.dal.query.model.EdgeSchemaObject;
 import at.ac.tuwien.dst.mms.dal.query.model.NodeSchemaObject;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
-import at.ac.tuwien.dst.mms.model.Issue;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
@@ -37,12 +36,6 @@ public interface ProjectRepository extends GraphRepository<Project>, ProjectRepo
 	@Query("MATCH (a:Project) RETURN a LIMIT {0}")
 	public List<Project> findAll(int limit);
 
-	@Query("START  b=node:" + Project.PROJECT_KEY_INDEX +"(key = {0}) MATCH (a:Issue)-[:PROJECT]->(b) RETURN a LIMIT {1}")
-	public List<Issue> findIssues(String project, Integer limit);
-
-	@Query("START  b=node:" + Project.PROJECT_KEY_INDEX +"(key = {0}) MATCH (a:Issue)-[:PROJECT]->(b) RETURN a")
-	public List<Issue> findIssues(String project);
-
 	@Query("START b=node:" + Project.PROJECT_KEY_INDEX + "(key = {0}) MATCH (a:Issue)-[:PROJECT]->(b) RETURN COUNT(a)")
 	public Integer countIssues(String key);
 
@@ -61,8 +54,8 @@ public interface ProjectRepository extends GraphRepository<Project>, ProjectRepo
 	@Query(value="START p=node:projectKeyIndex(key={0})" +
 			"MATCH (p)-[:PROJECT]->(n:GeneralNode)--(n1:GeneralNodeType)" +
 			"WHERE n1.key='SSS' OR n1.key='SRS' OR n1.key='PSRS'" +
-			"AND NOT EXISTS((n)-[:DOWNSTREAM]->(:GeneralNode)-->(:GeneralNodeType{key: 'SSS'}))" +
-			"OPTIONAL MATCH (n)<-[:DOWNSTREAM]-(tc:GeneralNode)--(:GeneralNodeType {key: 'TC'})" +
+			"AND NOT EXISTS((n)<-[:DOWNSTREAM]-(:GeneralNode)-->(:GeneralNodeType{key: 'SSS'}))" +
+			"OPTIONAL MATCH (n)-[:DOWNSTREAM]->(tc:GeneralNode)-->(:GeneralNodeType {key: 'TC'})" +
 			"RETURN n.key AS key, n.name AS name, n1.name + ' (' + n1.key + ')' AS type, COLLECT(tc.key) AS testcases, n AS node")
 	public List<TestCoverage> getTestCoverage(String projectKey);
 

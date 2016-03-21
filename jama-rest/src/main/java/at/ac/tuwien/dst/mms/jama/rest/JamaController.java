@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,25 +49,44 @@ public class JamaController {
             @RequestParam("project") Integer projectId,
             @RequestParam(value="webhook", required=false) String webhook
     ) {
-        List<Item> items = itemExtractor.getAllItemsForProject(projectId);
+        //List<Item> items = itemExtractor.getAllItemsForProject(projectId);
+
+        //this.writeItems(items);
+
+        boolean isWebhook = (webhook != null && webhook.length() > 0);
+
+        List<Item> pvcsb = this.getForFile("items_pvcsb.txt");
+        List<Item> pvcsc = this.getForFile("items_pvcsc.txt");
+
+        if(isWebhook) {
+            restTemplate.postForEntity(webhook, pvcsb, Object.class);
+            restTemplate.postForEntity(webhook, pvcsc, Object.class);
+            return new ArrayList<>();
+        } else {
+            return pvcsb;
+        }
+    }
+
+    private List<Item> getForFile(String filename) {
+        List<Item> items = this.readItems(filename);
 
         List<Item> filteredItems = new ArrayList<>();
 
         for(Item item : items) {
-            if(item.getStatus() != null && !item.getStatus().equals("Deleted") && !item.getStatus().equals("Rejected")) {
+            if(item.getStatus() == null ||
+                    (item.getStatus() != null && !item.getStatus().equals("Deleted") && !item.getStatus().equals("Rejected"))) {
                 filteredItems.add(item);
-                this.extractRelationships(item);
+
+                if(item.getItemType().getKey().equals("FEAT") && (item.getKey().contains("-WP-") || item.getName().trim().startsWith("[WP]"))) {
+                    logger.info("is work package");
+                    item.setItemType(-1);
+                }
+
+                //this.extractRelationships(item);
             }
         }
 
-        boolean isWebhook = (webhook != null && webhook.length() > 0);
-
-        if(isWebhook) {
-            restTemplate.postForEntity(webhook, filteredItems, Object.class);
-            return new ArrayList<>();
-        } else {
-            return items;
-        }
+        return filteredItems;
     }
 
     private void extractRelationships(Item item) {
@@ -88,15 +108,128 @@ public class JamaController {
             @RequestParam("project") Integer projectId,
             @RequestParam(value="webhook", required=false) String webhook
     ) {
+
+        List<Relationship> relationships = this.readObjects();
+
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
         if(isWebhook) {
 
-            restTemplate.postForEntity(webhook, RelationshipsTempStorage.get().getAll(), Object.class);
+            restTemplate.postForEntity(webhook, relationships, Object.class);
 
             return new ArrayList<>();
         } else {
-            return relationshipExtractor.getAllRelationshipsForProject(projectId);
+            return relationships;
         }
+    }
+
+    private void writeItems(List<Item> items, String filename) {
+        try {
+            FileOutputStream out = new FileOutputStream(filename);
+            ObjectOutputStream objOut = new ObjectOutputStream(out);
+            objOut.writeObject(items);
+            objOut.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<Item> readItems(String filename) {
+        List<Item> items = new ArrayList<>();
+
+        try {
+            FileInputStream fileIn = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            items = (List<Item>)in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return items;
+    }
+
+    private void writeObjects(List<Relationship> relationships) {
+        try {
+            FileOutputStream out = new FileOutputStream("relationships.txt");
+            ObjectOutputStream objOut = new ObjectOutputStream(out);
+            objOut.writeObject(relationships);
+            objOut.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<Relationship> readObjects() {
+        List<Relationship> relationships = new ArrayList<Relationship>();
+
+        try {
+            FileInputStream fileIn = new FileInputStream("relationships.txt");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            relationships = (List<Relationship>)in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return relationships;
+    }
+
+    private void writeFile() {
+        try(FileWriter writer = new FileWriter("output.txt")) {
+            for(Relationship rel: RelationshipsTempStorage.get().getAll()) {
+                writer.write(rel.toString());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String readFile() {
+        StringBuilder sb = new StringBuilder();
+
+        try(BufferedReader br = new BufferedReader(new FileReader("output.txt"))) {
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            String everything = sb.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
+
+    private List<Relationship> convertToObjects(String data) {
+        List<Relationship> relationships = new ArrayList<>();
+
+        String[] tokens = data.split("}");
+        for(String token : tokens) {
+            if(token.trim().length() > 0) {
+                token = token.substring(13);
+
+                String[] fromTo = token.split(", ");
+                String from = fromTo[0].substring(5);
+                String to = fromTo[1].substring(3);
+                relationships.add(new Relationship(Long.parseLong(from), Long.parseLong(to)));
+            }
+        }
+
+        return relationships;
     }
 }
