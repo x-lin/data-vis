@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 const EventHandlers = {};
 
 EventHandlers.onClickSvg = () => {
-    //ContextMenuBuilder.removeAll();
+    //ContextMenuBuilder.removePopup();
 };
 
 EventHandlers.onZoomSvg = (panelElement) => {
-    //ContextMenuBuilder.removeAll();
+    //ContextMenuBuilder.removePopup();
     panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
 };
 
@@ -25,7 +25,7 @@ EventHandlers.onDoubleClickNode = (d, props) => {
 
 EventHandlers.onDragStartNode = (d) => {
     d3.event.sourceEvent.stopPropagation();
-    //ContextMenuBuilder.removeAll();
+    //ContextMenuBuilder.removePopup();
     d.fixed = true;
     d.isFixed = true;
 };

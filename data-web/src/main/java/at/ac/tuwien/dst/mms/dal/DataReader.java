@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.dal;
 
+import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
@@ -31,11 +32,13 @@ public interface DataReader<T> {
 
 	Neighbors getNeighbors(String indexAttribute, int limit);
 
-	Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit);
+	Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit, List type);
 
 	ProjectSchema getSchema(String key);
 
 	ProjectSchema getSchema(String key, String relation);
 
 	List<TestCoverage> getTestCoverage(String projectKey);
+
+	List<NeighborType> getNeighborTypes(String key);
 }

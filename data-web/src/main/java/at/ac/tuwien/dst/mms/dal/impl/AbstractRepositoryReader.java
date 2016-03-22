@@ -3,7 +3,6 @@ package at.ac.tuwien.dst.mms.dal.impl;
 import at.ac.tuwien.dst.mms.dal.DataReader;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.dal.repo.TextIndexRepository;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
 import at.ac.tuwien.dst.mms.model.NodeType;
@@ -63,11 +62,6 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 
 	@Override
 	public Iterable<Map<String,Object>> findAllMatching(String key, int limit) {
-		Iterable<Map<String,Object>> search = textIndexRepository.findBySearchText(key, limit);
-
-		System.out.println("search" + search);
-
-//		((GeneralNodeRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
 		return textIndexRepository.findBySearchText(key, limit);
 	}
 
@@ -145,11 +139,6 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 		return results;
 	}
 
-//	@Override
-//	public Neighbors getNeighbors(String key, boolean downstream, boolean upstream, List<String> priority, List<String> excluded, Integer limit) {
-//		return null;
-//	}
-
 	@Override
 	public ProjectSchema getSchema(String projectKey) {
 		return null;
@@ -157,16 +146,6 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 
 	@Override
 	public ProjectSchema getSchema(String projectKey, String relation) {
-		return null;
-	}
-
-	@Override
-	public List<TestCoverage> getTestCoverage(String projectKey) {
-		return null;
-	}
-
-	@Override
-	public Neighbors getNeighbors(String key, boolean downstream, boolean upstream, List priority, List excluded, Integer limit) {
 		return null;
 	}
 }

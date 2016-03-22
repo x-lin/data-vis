@@ -4,40 +4,45 @@ import { fetchNeighborsSuccess, fetchNeighborsError, fetchNeighborsStart } from 
 import Constants from "../../config/Constants";
 import { PRIORITIZED, EXCLUDED } from "../../reducers/LaneReducer";
 
-export const getNeighbors = (category, key) => {
-    const endpoint = Constants.endpoints[category];
+export const getNeighbors = (category, key, paramsString) => {
+    console.log("params", category, key, paramsString);
+
+    const endpoint = Constants.getEndpoint(category);
     return (dispatch, getState) => {
-        const lanes = getState().lanes.lanes;
-        const filters = getState().lanes.filters;
+        let params = null;
 
-        let excluded = null;
-        let priority = null;
-        //TODO add downstream/upstream option
-        //TODO add limit option
+        if(!paramsString) {
+            const lanes = getState().lanes.lanes;
+            const filters = getState().lanes.filters;
 
-        lanes.forEach((lane) => {
-            if(lane.key === PRIORITIZED) {
-                priority = lane.notes.reduce((prevVal, currentVal) => {
-                    return prevVal + "priority=" + currentVal.key + "&";
-                }, "")
-            } else if(lane.key === EXCLUDED) {
-                excluded = lane.notes.reduce((prevVal, currentVal) => {
-                    return prevVal + "excluded=" + currentVal.key + "&";
-                }, "")
-            }
-        });
+            let excluded = null;
+            let priority = null;
+            //TODO add downstream/upstream option
+            //TODO add limit option
 
-        console.log(filters);
+            lanes.forEach((lane) => {
+                if(lane.key === PRIORITIZED) {
+                    priority = lane.notes.reduce((prevVal, currentVal) => {
+                        return prevVal + "priority=" + currentVal.key + "&";
+                    }, "")
+                } else if(lane.key === EXCLUDED) {
+                    excluded = lane.notes.reduce((prevVal, currentVal) => {
+                        return prevVal + "excluded=" + currentVal.key + "&";
+                    }, "")
+                }
+            });
 
-        const upstream = filters.upstream === false ? "upstream=false" : "";
-        const downstream = filters.downstream === false ? "downstream=false" : "";
-        const limit = "limit=" + filters.limit;
-
-        //excluded += "excluded=SET&excluded=FLD";
+            const upstream = filters.upstream === false ? "upstream=false" : "";
+            const downstream = filters.downstream === false ? "downstream=false" : "";
+            const limit = "limit=" + filters.limit;
+            params = `${excluded ? excluded : ""}&${priority ? priority : ""}&${upstream}&${downstream}&${limit}`;
+        } else {
+            params = paramsString;
+        }
 
         dispatch(fetchNeighborsStart(category, key));
 
-        return axios.get(`/search/${endpoint}/neighbors/${key}?${excluded ? excluded : ""}&${priority ? priority : ""}&${upstream}&${downstream}&${limit}`)
+        return axios.get(`/search/${endpoint}/neighbors/${key}?${params}`)
             .then(function (response) {
                 dispatch(fetchNeighborsSuccess(category, key, response.data));
             })
@@ -45,4 +50,4 @@ export const getNeighbors = (category, key) => {
                 dispatch(fetchNeighborsError(category, key, response.data));
             });
     };
-};
+}

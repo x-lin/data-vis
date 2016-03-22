@@ -1,37 +1,88 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Link } from "react-router";
 
+import { store } from "../../../stores/ReduxStore";
 import Constants from "../../../config/Constants";
 import Group1 from "./ContextMenuGroupl1";
 import Group2 from "./ContextMenuGroupl2";
 import Group3 from "./ContextMenuGroupl3";
 import ContextMenuTitle from "./ContextMenuTitle";
+import "./ContextMenu.css";
+import { connect } from "react-redux";
+
+import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
 
 import { OverlayTrigger, Popover, Button, Overlay } from "react-bootstrap";
 
-export default class extends React.Component {
+export default class ContextMenu extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {openGroupId: "group1"};
+        console.log(props);
     }
 
-    setGroup(id) {
-        this.setState({openGroupId: id});
-    }
-
-
-    render() {
+    renderButtons(type, jiraId, jamaId, jamaProjectId) {
         const imgDir = "img/";
-        let { jiraId, key, jamaId, jamaProjectId, type } = this.props.d;
-
-        //TODO fix that for extraction -> add jiraId
-        if(type === "User") {
-            jiraId = key;
-        }
-
         const jiraAddress = Constants.getJiraAddress(type, jiraId);
         const jamaAddress = Constants.getJamaAddress(jamaId, jamaProjectId);
+
+        return <div className="btn-group btn-group-justified" role="group" aria-label="Browse at source site">
+            {jiraAddress &&
+            <a type="button" className="btn btn-default" href={jiraAddress} target="_blank">
+                <img src={`${imgDir}jira-logo.png`} height="20px" />
+            </a>
+            }
+            {jamaAddress &&
+            <a type="button" className="btn btn-default" href={jamaAddress} target="_blank">
+                <img src={`${imgDir}jama-logo.png`} height="20px" />
+            </a>
+            }
+        </div>;
+    }
+
+    renderMenu(key, type) {
+        const isProject = type === "Project";
+        const isFeature = type === ("Feature" || "FEAT");
+        const isReq = type === ("SSS" || "SRS" || "PSRS" || "System Requirement" || "Preliminary System Requirement" || "Software Requirement");
+
+        return <div className="dropdown">
+            <div className="dropdown-content">
+                <a href={`#coverage/${key}/${type === "Project" ? type : "GeneralNode"}`}>Show Test Coverage</a>
+                <a onClick={() => this.goUpstream(key, type)}>Show System Decomp. - Upstream</a>
+                <a onClick={() => this.goDownstream(key, type)}>Show System Decomp. - Downstream</a>
+                <a onClick={() => this.showStats(key, type)}>Show Stats</a>
+            </div>
+        </div>
+    }
+
+    showStats(key, category) {
+
+    }
+
+    goUpstream(key, category) {
+        const paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&downstream=false&limit=500";
+
+        store.dispatch(getNeighbors(category, key, paramsString));
+    }
+
+    goDownstream(key, category) {
+        const paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&upstream=false&limit=500";
+
+        store.dispatch(getNeighbors(category, key, paramsString));
+    }
+
+    render() {
+
+        let { jiraId, key, jamaId, jamaProjectId, type } = this.props.d;
+
+        console.log(this.props.d);
+
+
+        //TODO fix that for extraction -> add jiraId
+        if(type === "User" || type === "Project") {
+            jiraId = key;
+        }
 
         return (
             <Overlay
@@ -56,24 +107,13 @@ export default class extends React.Component {
 
                             <div className="tab-pane active" id="tab_1">
                                 <div className="row inpadding ">
-                                    <div className="btn-group btn-group-justified" role="group" aria-label="Browse at source site">
-                                        {jiraAddress &&
-                                        <a type="button" className="btn btn-default" href={jiraAddress} target="_blank">
-                                            <img src={`${imgDir}jira-logo.png`} height="20px" />
-                                        </a>
-                                        }
-                                        {jamaAddress &&
-                                        <a type="button" className="btn btn-default" href={jamaAddress} target="_blank">
-                                            <img src={`${imgDir}jama-logo.png`} height="20px" />
-                                        </a>
-                                        }
-                                    </div>
+                                    {this.renderButtons(type, jiraId, jamaId, jamaProjectId)}
                                 </div>
-
-                                Some text 1.
+                                {this.renderMenu(key, type)}
                             </div>
                             <div className="tab-pane" id="tab_2">
-                                Second panel.
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
                             </div>
                             <div className="tab-pane" id="tab_3">
                                 Some other text.
@@ -89,3 +129,22 @@ export default class extends React.Component {
         )
     }
 };
+
+//const mapStateToProps = (state) => {
+//    return {
+//        graph: state.schema,
+//    };
+//};
+//
+//const mapDispatchProps = (dispatch) => {
+//    return {
+//        searchNeighbors: (category, key, paramsString) => {
+//            dispatch(getNeighbors(category, key, paramsString));
+//        }
+//    };
+//};
+//
+//export default connect(
+//    () => {},
+//    mapDispatchProps
+//)(ContextMenu);

@@ -2,7 +2,9 @@ package at.ac.tuwien.dst.mms.client.rest.impl;
 
 import at.ac.tuwien.dst.mms.client.rest.SearchController;
 import at.ac.tuwien.dst.mms.dal.DataReader;
+import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
+import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,8 +51,9 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 			@RequestParam(required = false, defaultValue = "true") boolean upstream,
 			@RequestParam(required = false) List<String> priority,
 			@RequestParam(required = false) List<String> excluded,
-			@RequestParam(required = false, defaultValue = Config.REPO_LIMIT_STRING) Integer limit) {
-		return reader.getNeighbors(key, upstream, downstream, priority, excluded, limit);
+			@RequestParam(required = false, defaultValue = Config.REPO_LIMIT_STRING) Integer limit,
+			@RequestParam(required = false) List<String> type) {
+		return reader.getNeighbors(key, upstream, downstream, priority, excluded, limit, type);
 	}
 
 	@Override
@@ -59,6 +62,20 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 			@RequestParam String value,
 			@RequestParam(required = false, defaultValue = Config.REPO_LIMIT_STRING) Integer limit) {
 		return reader.findMatchingByNeighborKey(key, value, limit);
+	}
+
+	@Override
+	public List<NeighborType> getNeighborTypes(
+			@PathVariable String key
+	) {
+		return reader.getNeighborTypes(key);
+	}
+
+	@Override
+	public List<TestCoverage> getTestCoverage(
+			@PathVariable String key
+	) {
+		return reader.getTestCoverage(key);
 	}
 
 	protected DataReader<T> getRepositoryReader() {

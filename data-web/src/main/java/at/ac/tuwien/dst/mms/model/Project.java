@@ -48,10 +48,12 @@ public class Project extends ModelEntity {
 		this.jamaParentId = jamaParentId;
 	}
 
+	@JsonProperty
 	public Integer getJamaId() {
 		return jamaId;
 	}
 
+	@JsonProperty
 	public void setJamaId(Integer jamaId) {
 		this.jamaId = jamaId;
 	}

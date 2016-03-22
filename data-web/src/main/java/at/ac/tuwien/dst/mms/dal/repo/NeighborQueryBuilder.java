@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public class NeighborQueryBuilder {
 	public String buildQuery(String indexName, String key, boolean upstream, boolean downstream,
-							 List<String> excluded, List<String> priority, Integer limit) {
+							 List<String> excluded, List<String> priority, Integer limit, List<String> type) {
 		String query = this.buildStart(indexName, key) + this.buildMatch(downstream, upstream) +
-				"-[:NODE_TYPE]-(m:GeneralNodeType)" + this.buildOthers() + this.buildExclude(excluded) + this.buildPriority(priority) +
+				"-[:NODE_TYPE]-(m:GeneralNodeType)" + this.buildOthers() + this.buildType(type) + this.buildExclude(excluded) + this.buildPriority(priority) +
 				this.buildLimit(limit);
 
 		System.out.println("query: " + query);
@@ -26,6 +26,23 @@ public class NeighborQueryBuilder {
 
 	private String buildStart(String indexName, String key) {
 		return "START p=node:" + indexName + "(key='" + key + "')";
+	}
+
+	private String buildType(List<String> type) {
+		String typeString = "";
+
+		if(type != null && type.size() > 0) {
+			typeString += " AND (";
+
+			for(String t : type) {
+				typeString += "m.key = '" + t + "'" + " OR ";
+			}
+
+			typeString = typeString.substring(0, typeString.length()-3);
+			typeString += ")";
+		}
+
+		return typeString;
 	}
 
 	private String buildPriority(List<String> priority) {

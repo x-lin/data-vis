@@ -1,6 +1,8 @@
 package at.ac.tuwien.dst.mms.client.rest;
 
+import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
+import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +38,8 @@ public interface SearchController<T> {
 			@RequestParam boolean upstream,
 			@RequestParam List<String> priority,
 			@RequestParam List<String> excluded,
-			@RequestParam Integer limit);
+			@RequestParam Integer limit,
+			@RequestParam List<String> type);
 
 	@RequestMapping(value = "/indirect", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	List<T> getByNeighborKey(
@@ -44,4 +47,13 @@ public interface SearchController<T> {
 			@RequestParam String value,
 			@RequestParam Integer limit);
 
+	@RequestMapping(value = "/neighborTypes/{key}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	List<NeighborType> getNeighborTypes(
+			@PathVariable String key
+	);
+
+	@RequestMapping(value ="/coverage/{key}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<TestCoverage> getTestCoverage(
+			@PathVariable String key
+	);
 }

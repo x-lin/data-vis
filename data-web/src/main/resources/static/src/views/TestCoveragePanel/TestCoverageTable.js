@@ -9,31 +9,25 @@ export default class extends React.Component {
         super(props);
 
         this.state = {
-            isGraphPanelOpen : false,
+            isGraphPanelOpen : true,
             filter: false
         };
     }
 
-    componentDidUpdate() {
-        if (typeof $.fn.slimScroll != "undefined") {
-            //Destroy if it exists
-            $("#mytest").slimScroll({destroy: true}).height("auto");
-            //Add slimscroll
-            $("#mytest").slimscroll({
-                //height: ($(window).height() - $(".main-header").height()) + "px",
-                color: "rgba(0,0,0,0.2)",
-                size: "3px"
-            });
+    componentDidMount() {
+        if(this.props.searchType && this.props.searchKey) {
+            this.props.searchTestCoverage(this.props.searchType, this.props.searchKey);
         }
     }
 
-    componentDidMount() {
-        this.props.searchTestCoverage("PVCSC");
+    componentWillReceiveProps(nextProps) {
+        if(this.props.searchKey !== nextProps.searchKey && nextProps.searchType && nextProps.searchKey) {
+            this.props.searchTestCoverage(nextProps.searchType, nextProps.searchKey);
+        }
     }
 
     onClick(key) {
         this.props.searchNeighborsStart("GeneralNode", key);
-        this.setState({isGraphPanelOpen : true});
     }
 
     filter(bool) {
@@ -57,7 +51,7 @@ export default class extends React.Component {
                     <td><a href={Constants.getJamaAddress(coverage.node.jamaId, coverage.node.projectId)} target="_blank">
                         <img src="img/jama-logo.png" className="tableImg" /></a>
                     </td>
-                    <td><a href="#coverage" onClick={(key) => this.onClick(coverage.key)}>{coverage.key}</a></td>
+                    <td><a onClick={(key) => this.onClick(coverage.key)}>{coverage.key}</a></td>
                     <td>{coverage.name}</td>
                     <td>{coverage.type}</td>
                     <td>{coverage.testcases ? coverage.testcases.length : 0}</td>
@@ -75,12 +69,16 @@ export default class extends React.Component {
 
                 <div style={{overflow: "auto", height: height}}>
                     <div className="box box-solid">
-                        { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                        `${data.length} result${data.length !== 1 ? "s" : ""} found.`}
-                            {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                            <div><a href="#coverage" onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
-                                <a href="#coverage" onClick={(filter) => this.filter(true)}>Show Uncovered</a></div>}
+
+                        <div className="box-header with-border"><h4>{this.props.searchKey}</h4></div>
+
                         <div className="box-body">
+                            { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
+                            `${data.length} result${data.length !== 1 ? "s" : ""} found.`}
+                            {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
+                            <div><a onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
+                                <a onClick={(filter) => this.filter(true)}>Show Uncovered</a></div>}
+
                             <table id="table" className="table table-bordered table-hover">
                                 <thead>
                                 <tr>

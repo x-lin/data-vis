@@ -29,7 +29,7 @@ export default class extends React.Component {
 
             return (
                 <li className={listgroupClass} key={index}
-                    onClick={() => {this.resetOnOptionSelection(item)}}
+                    onClick={(event) => {this.handleSubmit(event)}}
                     onMouseOver={() => {this.props.setSearchSelectedIndex(index)}}>
                     <CircleSpan radius="8px" color={Constants.getColor(item.type)}/> &nbsp; {item.type  + " | " + item.key + " | " + item.name}
                 </li>
@@ -78,7 +78,6 @@ export default class extends React.Component {
     };
 
     resetOnOptionSelection(item) {
-        //this.applyInputAndResetSelectionList(item[this.getItemKey()]);
         this.props.clearAllItems();
     }
 

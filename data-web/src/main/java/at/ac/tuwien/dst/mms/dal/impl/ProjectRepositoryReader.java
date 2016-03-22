@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
+import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
@@ -12,7 +13,6 @@ import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,11 +36,6 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 
 		return projectWrapper;
 	}
-
-//	@Override
-//	public List<Project> findAllMatching(String key, int limit) {
-//		return ((ProjectRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
-//	}
 
 	@Override
 	public Project find(String key) {
@@ -85,9 +80,11 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 
 	@Override
 	@Transactional
-	public Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit) {
+	public Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit, List type) {
 		Project node = this.find(key);
-		Iterable<Map<String, Object>> nodes = ((ProjectRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit);
+		Iterable<Map<String, Object>> nodes = null;
+
+		((ProjectRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit, type);
 
 		List<ModelEntity> neighbors = this.getNeighbors(nodes);
 
@@ -100,27 +97,7 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 
 	@Override
 	@Transactional
-	public Neighbors getNeighbors(String key, int limit) {
-		Project node = this.find(key);
-		List<String> priority = new ArrayList<>();
-		//priority.add("FEAT");
-		priority.add("CSC");
-
-		List<String> excluded = new ArrayList<>();
-		excluded.add("SSS");
-		excluded.add("TC");
-		excluded.add("STD");
-		excluded.add("BUG");
-
-		Iterable<Map<String, Object>> nodes = ((ProjectRepository)this.getRepository()).findNeighbors(key, true, true, excluded, priority, 20);
-
-//		List<ModelEntity> neighbors = this.getNeighbors(node.getNeighborsLimited());
-		List<ModelEntity> neighbors = this.getNeighbors(nodes);
-
-		Neighbors returnVal = new Neighbors();
-		returnVal.setNode(node);
-		returnVal.setNeighbors(neighbors);
-
-		return returnVal;
+	public List<NeighborType> getNeighborTypes(String key) {
+		return ((ProjectRepository)this.getRepository()).getNeighborTypes(key);
 	}
 }

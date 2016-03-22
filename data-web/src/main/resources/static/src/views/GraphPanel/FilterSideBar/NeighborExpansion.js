@@ -16,7 +16,7 @@ export default class extends React.Component {
                     </label>
 
                     <div style={{marginTop: "10px"}}>
-                        <Slider min={1} max={100} defaultValue={this.props.limit} onChange={(val) => this.setFilterValue(val)} />
+                        <Slider min={0} max={100} defaultValue={this.props.limit} onChange={(val) => this.setFilterValue(val)} />
                         {/*<br/><br/>
                         <label className="control-sidebar-subheading cursor">
                             Limit Node Returns

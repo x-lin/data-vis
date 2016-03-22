@@ -6,14 +6,7 @@ import { Overlay, Tooltip } from "react-bootstrap";
 export default class extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {openGroupId: "group1"};
     }
-
-    setGroup(id) {
-        this.setState({openGroupId: id});
-    }
-
 
     render() {
         return (
@@ -25,8 +18,7 @@ export default class extends React.Component {
             >
                 <Tooltip className="in"
                 >
-
-                    test me
+                    {this.props.tooltip}
                 </Tooltip>
             </Overlay>
         )

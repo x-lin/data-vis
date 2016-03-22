@@ -118,7 +118,7 @@ export default class extends React.Component {
 
     createForceLayout(data) {
         this.state.force = d3.layout.force()
-            .charge(-500)
+            .charge(-700)
             //.chargeDistance(300)
             //.friction(0.5)
             //.gravity(0.2)
@@ -195,7 +195,7 @@ export default class extends React.Component {
         g.append("text")
             .attr("class", "force-text  unselectable")
             .text(d => {
-                return d.name.length > 20 ? d.name.substring(0, 20) + "..." : d.name;
+                return d.name.length > 30 ? d.name.substring(0, 30) + "..." : d.name;
             })
             .call(this.getTextBox);
 
@@ -222,13 +222,13 @@ export default class extends React.Component {
             })
             .on("contextmenu", (d) => {
                 if(this.props.showContextMenu && ((this.props.disableFiltered && d.visible) || !this.props.disableFiltered)) {
-                    EventHandlers.onContextMenuNode(d);
+                    EventHandlers.onContextMenuNode(d, this.props);
                 }
             })
             .on("mouseover", (d) => {
                 EventHandlers.onMouseOver(d);
             })
-            .on("mouseout", (d) => {
+            .on("mouseleave", (d) => {
                 EventHandlers.onMouseLeave(d);
             })
             .call(

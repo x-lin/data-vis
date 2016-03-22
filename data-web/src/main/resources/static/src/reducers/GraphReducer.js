@@ -34,6 +34,9 @@ action) => {
             const graph = new D3Graph(state.nodes, state.edges, state.legend);
 
             const node = action.neighbors.node;
+
+            console.log("node", node);
+
             const index = graph.addNode(new Node(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId, node.jiraId));
 
             action.neighbors.neighbors.forEach((neighbor) => {

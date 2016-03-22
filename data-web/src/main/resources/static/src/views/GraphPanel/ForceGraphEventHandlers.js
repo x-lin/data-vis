@@ -4,31 +4,41 @@ import ContextMenuBuilder from "./ContextMenu/ContextMenuBuilder";
 
 const EventHandlers = {};
 
+let isContextOpen = false;
+
 EventHandlers.onClickSvg = () => {
-    ContextMenuBuilder.removeAll();
+    //ContextMenuBuilder.removeTooltip();
+    ContextMenuBuilder.removePopup();
+    isContextOpen = false;
 };
 
 EventHandlers.onMouseOver = (d) => {
     d3.event.preventDefault();
 
-    const popoverEl = ContextMenuBuilder.buildElement(d.key, d.category);
-    ContextMenuBuilder.createAndShowTooltip(popoverEl, d);
+    if(!isContextOpen) {
+        const popoverEl = ContextMenuBuilder.buildElement(d.key, d.category);
+        ContextMenuBuilder.createAndShowTooltip(popoverEl, d);
+    }
 };
 
 EventHandlers.onMouseLeave = (d) => {
-    //ContextMenuBuilder.removeAll();
+    ContextMenuBuilder.removeTooltip();
+    //ContextMenuBuilder.removePopup();
 };
 
 EventHandlers.onZoomSvg = (panelElement) => {
-    ContextMenuBuilder.removeAll();
+    ContextMenuBuilder.removePopup();
+    isContextOpen = false;
     panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
 };
 
-EventHandlers.onContextMenuNode = (d) => {
+EventHandlers.onContextMenuNode = (d, props) => {
     d3.event.preventDefault();
 
+    isContextOpen = true;
+    ContextMenuBuilder.removeTooltip();
     const popoverEl = ContextMenuBuilder.buildElement(d.key, d.category);
-    ContextMenuBuilder.createAndShow(popoverEl, d);
+    ContextMenuBuilder.createAndShow(popoverEl, d, props);
 };
 
 EventHandlers.onDoubleClickNode = (d, props) => {
@@ -38,7 +48,9 @@ EventHandlers.onDoubleClickNode = (d, props) => {
 
 EventHandlers.onDragStartNode = (d) => {
     d3.event.sourceEvent.stopPropagation();
-    ContextMenuBuilder.removeAll();
+    //ContextMenuBuilder.removeTooltip();
+    ContextMenuBuilder.removePopup();
+    isContextOpen = false;
     d.fixed = true;
     d.isFixed = true;
 };

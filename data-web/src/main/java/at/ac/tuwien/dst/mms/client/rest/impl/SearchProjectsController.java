@@ -1,13 +1,10 @@
 package at.ac.tuwien.dst.mms.client.rest.impl;
 
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.util.Config;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by xlin on 15.01.2016.
@@ -28,10 +25,10 @@ public class SearchProjectsController extends AbstractSearchController<Project> 
 		}
 	}
 
-	@RequestMapping(value ="/coverage/{projectKey}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<TestCoverage> getTestCoverage(
-			@PathVariable String projectKey
-	) {
-		return this.getRepositoryReader().getTestCoverage(projectKey);
-	}
+//	@RequestMapping(value ="/coverage/{projectKey}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public List<TestCoverage> getTestCoverage(
+//			@PathVariable String projectKey
+//	) {
+//		return this.getRepositoryReader().getTestCoverage(projectKey);
+//	}
 }

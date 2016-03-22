@@ -21,7 +21,7 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
 
 	@Override
 	public Iterable<Map<String, Object>> findNeighbors(String key, boolean upstream, boolean downstream,
-													   List<String> excluded, List<String> priority, Integer limit) {
+													   List<String> excluded, List<String> priority, Integer limit, List<String> type) {
 
 //		"START p=node:projectKeyIndex(key={0}) MATCH (p)-[]-(n:GeneralNode)-[]-(m:GeneralNodeType) RETURN n LIMIT 20") //direction
 //			"WHERE m.key<>'FEAT'" + //{2}
@@ -35,7 +35,7 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
 //			"RETURN n ORDER BY sortOrder" +
 //			"LIMIT {4}")
 
-		String query = queryBuilder.buildQuery(Project.PROJECT_KEY_INDEX, key, upstream, downstream, excluded, priority, limit);
+		String query = queryBuilder.buildQuery(Project.PROJECT_KEY_INDEX, key, upstream, downstream, excluded, priority, limit, type);
 
 		return template.query(query, null);
 	}

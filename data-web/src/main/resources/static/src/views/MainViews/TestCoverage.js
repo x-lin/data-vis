@@ -3,10 +3,10 @@ import React from "react";
 import LanePicker from "../LanePicker/LanePicker";
 import TestCoverageComponent from "../TestCoveragePanel/TestCoverageComponent";
 
-export default () => {
+export default (params) => {
     return (
         <div>
-            <TestCoverageComponent />
+            <TestCoverageComponent searchKey={params.params.key} searchType={params.params.type} />
         </div>
     );
 }

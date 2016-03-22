@@ -13,10 +13,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        attachToLane: (laneId, noteId) => {
-            dispatch(attachToLane(laneId, noteId));
+        attachToLane: (laneId, note) => {
+            console.log(laneId, note);
+            dispatch(attachToLane(laneId, note));
         },
         move: (sourceId, targetId) => {
+            console.log("move", sourceId, targetId);
             dispatch(move(sourceId, targetId))
         },
         getNodeTypes: () => {

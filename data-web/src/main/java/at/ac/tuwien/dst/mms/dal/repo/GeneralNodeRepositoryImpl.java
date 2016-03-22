@@ -19,9 +19,9 @@ public class GeneralNodeRepositoryImpl implements GeneralNodeRepositoryCustom {
 
 	@Override
 	public Iterable<Map<String, Object>> findNeighbors(String key, boolean upstream, boolean downstream,
-													   List<String> excluded, List<String> priority, Integer limit) {
+													   List<String> excluded, List<String> priority, Integer limit, List<String> type) {
 
-		String query = queryBuilder.buildQuery(GeneralNode.GENERAL_NODE_KEY_INDEX, key, upstream, downstream, excluded, priority, limit);
+		String query = queryBuilder.buildQuery(GeneralNode.GENERAL_NODE_KEY_INDEX, key, upstream, downstream, excluded, priority, limit, type);
 
 		return template.query(query, null);
 	}

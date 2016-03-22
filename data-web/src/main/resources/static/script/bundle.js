@@ -97,6 +97,7 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: "tree", component: _Tree2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: "schema/:project", component: _SchemaComponent2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: "coverage", component: _TestCoverage2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: "coverage/:key/:type", component: _TestCoverage2.default }),
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Relations2.default }),
 	            " /* default path -> take this, if no other match */"
 	        )
@@ -25844,6 +25845,14 @@
 	    }
 	};
 
+	Constants.getEndpoint = function (type) {
+	    if (type === "Project") {
+	        return Constants.endpoints.Project;
+	    } else {
+	        return Constants.endpoints.GeneralNode;
+	    }
+	};
+
 	Constants.getKeyIdentifier = function (category) {
 	    return Constants.keyMap[category];
 	};
@@ -25853,9 +25862,9 @@
 	};
 
 	Constants.getJamaAddress = function (jamaId, jamaProjectId) {
-	    if (jamaProjectId) {
+	    if (jamaProjectId && jamaId) {
 	        return "https://jama.frequentis.com/contour/perspective.req?docId=" + jamaId + "&projectId=" + jamaProjectId;
-	    } else if (jamaProjectId && jamaId) {
+	    } else if (jamaId) {
 	        return "https://jama.frequentis.com/contour/perspective.req?projectId=" + jamaId;
 	    }
 	};
@@ -25938,7 +25947,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	            value: true
 	});
 	exports.graphReducer = undefined;
 
@@ -25967,43 +25976,46 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var graphReducer = exports.graphReducer = function graphReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? new _D3Graph2.default() : arguments[0];
-	    var action = arguments[1];
+	            var state = arguments.length <= 0 || arguments[0] === undefined ? new _D3Graph2.default() : arguments[0];
+	            var action = arguments[1];
 
 
-	    switch (action.type) {
-	        case _GraphActionCreators.CLEAR_GRAPH:
-	            state.nodes.length = 0;
-	            state.edges.length = 0;
-	            state.legend.length = 0;
+	            switch (action.type) {
+	                        case _GraphActionCreators.CLEAR_GRAPH:
+	                                    state.nodes.length = 0;
+	                                    state.edges.length = 0;
+	                                    state.legend.length = 0;
 
-	            return state;
-	        case _GraphActionCreators.UPDATE_GRAPH:
-	            state.nodes.length = 0;
-	            state.edges.length = 0;
-	            state.legend.length = 0;
+	                                    return state;
+	                        case _GraphActionCreators.UPDATE_GRAPH:
+	                                    state.nodes.length = 0;
+	                                    state.edges.length = 0;
+	                                    state.legend.length = 0;
 
-	            Array.prototype.push.apply(state.nodes, action.data.nodes);
-	            Array.prototype.push.apply(state.edges, action.data.edges);
+	                                    Array.prototype.push.apply(state.nodes, action.data.nodes);
+	                                    Array.prototype.push.apply(state.edges, action.data.edges);
 
-	            Array.prototype.push.apply(state.legend, new _D3Graph2.default(action.data.nodes, action.data.edges).legend);
+	                                    Array.prototype.push.apply(state.legend, new _D3Graph2.default(action.data.nodes, action.data.edges).legend);
 
-	            return _extends({}, state);
-	        case _FetchNeighborsActionCreators.NEIGHBORS_FETCH_SUCCESS:
-	            var graph = new _D3Graph2.default(state.nodes, state.edges, state.legend);
+	                                    return _extends({}, state);
+	                        case _FetchNeighborsActionCreators.NEIGHBORS_FETCH_SUCCESS:
+	                                    var graph = new _D3Graph2.default(state.nodes, state.edges, state.legend);
 
-	            var node = action.neighbors.node;
-	            var index = graph.addNode(new _Node2.default(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId, node.jiraId));
+	                                    var node = action.neighbors.node;
 
-	            action.neighbors.neighbors.forEach(function (neighbor) {
-	                var neighborIndex = graph.addNode(new _Node2.default(neighbor.key, neighbor.name, "GeneralNode", neighbor.type, neighbor.jamaId, neighbor.projectId, neighbor.jiraId));
-	                graph.addEdge(new _Edge2.default(index, neighborIndex));
-	            });
+	                                    console.log("node", node);
 
-	            return graph;
-	        default:
-	            return state;
-	    }
+	                                    var index = graph.addNode(new _Node2.default(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId, node.jiraId));
+
+	                                    action.neighbors.neighbors.forEach(function (neighbor) {
+	                                                var neighborIndex = graph.addNode(new _Node2.default(neighbor.key, neighbor.name, "GeneralNode", neighbor.type, neighbor.jamaId, neighbor.projectId, neighbor.jiraId));
+	                                                graph.addEdge(new _Edge2.default(index, neighborIndex));
+	                                    });
+
+	                                    return graph;
+	                        default:
+	                                    return state;
+	            }
 	};
 
 /***/ },
@@ -26818,10 +26830,15 @@
 
 	    switch (action.type) {
 	        case _TestCoverageActions.TEST_COVERAGE_FETCH_START:
+	            console.log("received for key ", action);
+
 	            return _extends({}, state, {
+	                data: [],
 	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_START
 	            });
 	        case _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS:
+	            console.log("fetched data for ", action);
+
 	            return _extends({}, state, {
 	                data: action.data,
 	                error: {},
@@ -35356,10 +35373,12 @@
 
 	var mapDispatchProps = function mapDispatchProps(dispatch) {
 	    return {
-	        attachToLane: function attachToLane(laneId, noteId) {
-	            dispatch((0, _LaneActions.attachToLane)(laneId, noteId));
+	        attachToLane: function attachToLane(laneId, note) {
+	            console.log(laneId, note);
+	            dispatch((0, _LaneActions.attachToLane)(laneId, note));
 	        },
 	        move: function move(sourceId, targetId) {
+	            console.log("move", sourceId, targetId);
 	            dispatch((0, _LaneActions.move)(sourceId, targetId));
 	        },
 	        getNodeTypes: function getNodeTypes() {
@@ -38296,7 +38315,7 @@
 	                    _react2.default.createElement(
 	                        "div",
 	                        { style: { marginTop: "10px" } },
-	                        _react2.default.createElement(_Slider2.default, { min: 1, max: 100, defaultValue: this.props.limit, onChange: function onChange(val) {
+	                        _react2.default.createElement(_Slider2.default, { min: 0, max: 100, defaultValue: this.props.limit, onChange: function onChange(val) {
 	                                return _this2.setFilterValue(val);
 	                            } })
 	                    )
@@ -45109,40 +45128,45 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var getNeighbors = exports.getNeighbors = function getNeighbors(category, key) {
-	    var endpoint = _Constants2.default.endpoints[category];
+	var getNeighbors = exports.getNeighbors = function getNeighbors(category, key, paramsString) {
+	    console.log("params", category, key, paramsString);
+
+	    var endpoint = _Constants2.default.getEndpoint(category);
 	    return function (dispatch, getState) {
-	        var lanes = getState().lanes.lanes;
-	        var filters = getState().lanes.filters;
+	        var params = null;
 
-	        var excluded = null;
-	        var priority = null;
-	        //TODO add downstream/upstream option
-	        //TODO add limit option
+	        if (!paramsString) {
+	            var lanes = getState().lanes.lanes;
+	            var filters = getState().lanes.filters;
 
-	        lanes.forEach(function (lane) {
-	            if (lane.key === _LaneReducer.PRIORITIZED) {
-	                priority = lane.notes.reduce(function (prevVal, currentVal) {
-	                    return prevVal + "priority=" + currentVal.key + "&";
-	                }, "");
-	            } else if (lane.key === _LaneReducer.EXCLUDED) {
-	                excluded = lane.notes.reduce(function (prevVal, currentVal) {
-	                    return prevVal + "excluded=" + currentVal.key + "&";
-	                }, "");
-	            }
-	        });
+	            var excluded = null;
+	            var priority = null;
+	            //TODO add downstream/upstream option
+	            //TODO add limit option
 
-	        console.log(filters);
+	            lanes.forEach(function (lane) {
+	                if (lane.key === _LaneReducer.PRIORITIZED) {
+	                    priority = lane.notes.reduce(function (prevVal, currentVal) {
+	                        return prevVal + "priority=" + currentVal.key + "&";
+	                    }, "");
+	                } else if (lane.key === _LaneReducer.EXCLUDED) {
+	                    excluded = lane.notes.reduce(function (prevVal, currentVal) {
+	                        return prevVal + "excluded=" + currentVal.key + "&";
+	                    }, "");
+	                }
+	            });
 
-	        var upstream = filters.upstream === false ? "upstream=false" : "";
-	        var downstream = filters.downstream === false ? "downstream=false" : "";
-	        var limit = "limit=" + filters.limit;
-
-	        //excluded += "excluded=SET&excluded=FLD";
+	            var upstream = filters.upstream === false ? "upstream=false" : "";
+	            var downstream = filters.downstream === false ? "downstream=false" : "";
+	            var limit = "limit=" + filters.limit;
+	            params = (excluded ? excluded : "") + "&" + (priority ? priority : "") + "&" + upstream + "&" + downstream + "&" + limit;
+	        } else {
+	            params = paramsString;
+	        }
 
 	        dispatch((0, _FetchNeighborsActionCreators.fetchNeighborsStart)(category, key));
 
-	        return _axios2.default.get("/search/" + endpoint + "/neighbors/" + key + "?" + (excluded ? excluded : "") + "&" + (priority ? priority : "") + "&" + upstream + "&" + downstream + "&" + limit).then(function (response) {
+	        return _axios2.default.get("/search/" + endpoint + "/neighbors/" + key + "?" + params).then(function (response) {
 	            dispatch((0, _FetchNeighborsActionCreators.fetchNeighborsSuccess)(category, key, response.data));
 	        }).catch(function (response) {
 	            dispatch((0, _FetchNeighborsActionCreators.fetchNeighborsError)(category, key, response.data));
@@ -45229,8 +45253,8 @@
 	                return _react2.default.createElement(
 	                    "li",
 	                    { className: listgroupClass, key: index,
-	                        onClick: function onClick() {
-	                            _this3.resetOnOptionSelection(item);
+	                        onClick: function onClick(event) {
+	                            _this3.handleSubmit(event);
 	                        },
 	                        onMouseOver: function onMouseOver() {
 	                            _this3.props.setSearchSelectedIndex(index);
@@ -45303,7 +45327,6 @@
 	    }, {
 	        key: "resetOnOptionSelection",
 	        value: function resetOnOptionSelection(item) {
-	            //this.applyInputAndResetSelectionList(item[this.getItemKey()]);
 	            this.props.clearAllItems();
 	        }
 	    }, {
@@ -55406,7 +55429,7 @@
 	        value: function createForceLayout(data) {
 	            var _this3 = this;
 
-	            this.state.force = _d2.default.layout.force().charge(-500)
+	            this.state.force = _d2.default.layout.force().charge(-700)
 	            //.chargeDistance(300)
 	            //.friction(0.5)
 	            //.gravity(0.2)
@@ -55483,7 +55506,7 @@
 	        key: "addNodeText",
 	        value: function addNodeText(g) {
 	            g.append("text").attr("class", "force-text  unselectable").text(function (d) {
-	                return d.name.length > 20 ? d.name.substring(0, 20) + "..." : d.name;
+	                return d.name.length > 30 ? d.name.substring(0, 30) + "..." : d.name;
 	            }).call(this.getTextBox);
 
 	            g.insert("rect", "text").attr("x", function (d) {
@@ -55514,11 +55537,11 @@
 	                }
 	            }).on("contextmenu", function (d) {
 	                if (_this6.props.showContextMenu && (_this6.props.disableFiltered && d.visible || !_this6.props.disableFiltered)) {
-	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d);
+	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d, _this6.props);
 	                }
 	            }).on("mouseover", function (d) {
 	                _ForceGraphEventHandlers2.default.onMouseOver(d);
-	            }).on("mouseout", function (d) {
+	            }).on("mouseleave", function (d) {
 	                _ForceGraphEventHandlers2.default.onMouseLeave(d);
 	            }).call(this.state.force.drag().on("dragstart", function (d) {
 	                if (_this6.props.disableFiltered && d.visible || !_this6.props.disableFiltered) {
@@ -60504,6 +60527,8 @@
 	    value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -60532,22 +60557,23 @@
 	    return "g" + key.replace(/^[^a-z]+|[^\w-]+/gi, "") + category;
 	};
 
-	ContextMenuBuilder.createAndShow = function (element, d) {
-	    _reactDom2.default.render(_react2.default.createElement(_ContextMenu2.default, { d: d, target: element[0] }), $("#popover-content")[0]);
+	ContextMenuBuilder.createAndShow = function (element, d, props) {
+	    _reactDom2.default.render(_react2.default.createElement(_ContextMenu2.default, _extends({ d: d, target: element[0] }, props)), $("#popover-content")[0]);
 
 	    return element;
 	};
 
 	ContextMenuBuilder.createAndShowTooltip = function (element, d) {
-	    //ReactDOM.render (
-	    //    <Tooltip d={d} target={element[0]} />,
-	    //    $("#popover-content")[0]
-	    //);
-	    //
-	    //return element;
+	    _reactDom2.default.render(_react2.default.createElement(_Tooltip2.default, { tooltip: d.name, target: element[0] }), $("#popover-content")[0]);
+
+	    return element;
 	};
 
-	ContextMenuBuilder.removeAll = function (selector) {
+	ContextMenuBuilder.removeTooltip = function (selector) {
+	    $(selector || ".tooltip").remove();
+	};
+
+	ContextMenuBuilder.removePopup = function (selector) {
 	    $(selector || ".popover").remove();
 	    //$(selector || ".tooltip").remove();
 	};
@@ -60574,6 +60600,10 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _reactRouter = __webpack_require__(159);
+
+	var _ReduxStore = __webpack_require__(216);
+
 	var _Constants = __webpack_require__(232);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
@@ -60594,6 +60624,12 @@
 
 	var _ContextMenuTitle2 = _interopRequireDefault(_ContextMenuTitle);
 
+	__webpack_require__(835);
+
+	var _reactRedux = __webpack_require__(255);
+
+	var _GETNeighbors = __webpack_require__(534);
+
 	var _reactBootstrap = __webpack_require__(552);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -60604,29 +60640,106 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _class = function (_React$Component) {
-	    _inherits(_class, _React$Component);
+	var ContextMenu = function (_React$Component) {
+	    _inherits(ContextMenu, _React$Component);
 
-	    function _class(props) {
-	        _classCallCheck(this, _class);
+	    function ContextMenu(props) {
+	        _classCallCheck(this, ContextMenu);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ContextMenu).call(this, props));
 
-	        _this.state = { openGroupId: "group1" };
+	        console.log(props);
 	        return _this;
 	    }
 
-	    _createClass(_class, [{
-	        key: "setGroup",
-	        value: function setGroup(id) {
-	            this.setState({ openGroupId: id });
+	    _createClass(ContextMenu, [{
+	        key: "renderButtons",
+	        value: function renderButtons(type, jiraId, jamaId, jamaProjectId) {
+	            var imgDir = "img/";
+	            var jiraAddress = _Constants2.default.getJiraAddress(type, jiraId);
+	            var jamaAddress = _Constants2.default.getJamaAddress(jamaId, jamaProjectId);
+
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "btn-group btn-group-justified", role: "group", "aria-label": "Browse at source site" },
+	                jiraAddress && _react2.default.createElement(
+	                    "a",
+	                    { type: "button", className: "btn btn-default", href: jiraAddress, target: "_blank" },
+	                    _react2.default.createElement("img", { src: imgDir + "jira-logo.png", height: "20px" })
+	                ),
+	                jamaAddress && _react2.default.createElement(
+	                    "a",
+	                    { type: "button", className: "btn btn-default", href: jamaAddress, target: "_blank" },
+	                    _react2.default.createElement("img", { src: imgDir + "jama-logo.png", height: "20px" })
+	                )
+	            );
+	        }
+	    }, {
+	        key: "renderMenu",
+	        value: function renderMenu(key, type) {
+	            var _this2 = this;
+
+	            var isProject = type === "Project";
+	            var isFeature = type === ("Feature" || "FEAT");
+	            var isReq = type === ("SSS" || "SRS" || "PSRS" || "System Requirement" || "Preliminary System Requirement" || "Software Requirement");
+
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "dropdown" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "dropdown-content" },
+	                    _react2.default.createElement(
+	                        "a",
+	                        { href: "#coverage/" + key + "/" + (type === "Project" ? type : "GeneralNode") },
+	                        "Show Test Coverage"
+	                    ),
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick() {
+	                                return _this2.goUpstream(key, type);
+	                            } },
+	                        "Show System Decomp. - Upstream"
+	                    ),
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick() {
+	                                return _this2.goDownstream(key, type);
+	                            } },
+	                        "Show System Decomp. - Downstream"
+	                    ),
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick() {
+	                                return _this2.showStats(key, type);
+	                            } },
+	                        "Show Stats"
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: "showStats",
+	        value: function showStats(key, category) {}
+	    }, {
+	        key: "goUpstream",
+	        value: function goUpstream(key, category) {
+	            var paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&downstream=false&limit=500";
+
+	            _ReduxStore.store.dispatch((0, _GETNeighbors.getNeighbors)(category, key, paramsString));
+	        }
+	    }, {
+	        key: "goDownstream",
+	        value: function goDownstream(key, category) {
+	            var paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&upstream=false&limit=500";
+
+	            _ReduxStore.store.dispatch((0, _GETNeighbors.getNeighbors)(category, key, paramsString));
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            var _this2 = this;
+	            var _this3 = this;
 
-	            var imgDir = "img/";
 	            var _props$d = this.props.d;
 	            var jiraId = _props$d.jiraId;
 	            var key = _props$d.key;
@@ -60634,21 +60747,20 @@
 	            var jamaProjectId = _props$d.jamaProjectId;
 	            var type = _props$d.type;
 
-	            //TODO fix that for extraction -> add jiraId
 
-	            if (type === "User") {
+	            console.log(this.props.d);
+
+	            //TODO fix that for extraction -> add jiraId
+	            if (type === "User" || type === "Project") {
 	                jiraId = key;
 	            }
-
-	            var jiraAddress = _Constants2.default.getJiraAddress(type, jiraId);
-	            var jamaAddress = _Constants2.default.getJamaAddress(jamaId, jamaProjectId);
 
 	            return _react2.default.createElement(
 	                _reactBootstrap.Overlay,
 	                {
 	                    show: true,
 	                    target: function target() {
-	                        return _reactDom2.default.findDOMNode(_this2.props.target);
+	                        return _reactDom2.default.findDOMNode(_this3.props.target);
 	                    },
 	                    placement: "right",
 	                    container: this
@@ -60703,27 +60815,14 @@
 	                                _react2.default.createElement(
 	                                    "div",
 	                                    { className: "row inpadding " },
-	                                    _react2.default.createElement(
-	                                        "div",
-	                                        { className: "btn-group btn-group-justified", role: "group", "aria-label": "Browse at source site" },
-	                                        jiraAddress && _react2.default.createElement(
-	                                            "a",
-	                                            { type: "button", className: "btn btn-default", href: jiraAddress, target: "_blank" },
-	                                            _react2.default.createElement("img", { src: imgDir + "jira-logo.png", height: "20px" })
-	                                        ),
-	                                        jamaAddress && _react2.default.createElement(
-	                                            "a",
-	                                            { type: "button", className: "btn btn-default", href: jamaAddress, target: "_blank" },
-	                                            _react2.default.createElement("img", { src: imgDir + "jama-logo.png", height: "20px" })
-	                                        )
-	                                    )
+	                                    this.renderButtons(type, jiraId, jamaId, jamaProjectId)
 	                                ),
-	                                "Some text 1."
+	                                this.renderMenu(key, type)
 	                            ),
 	                            _react2.default.createElement(
 	                                "div",
 	                                { className: "tab-pane", id: "tab_2" },
-	                                "Second panel."
+	                                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
 	                            ),
 	                            _react2.default.createElement(
 	                                "div",
@@ -60737,11 +60836,30 @@
 	        }
 	    }]);
 
-	    return _class;
+	    return ContextMenu;
 	}(_react2.default.Component);
 
-	exports.default = _class;
+	exports.default = ContextMenu;
 	;
+
+	//const mapStateToProps = (state) => {
+	//    return {
+	//        graph: state.schema,
+	//    };
+	//};
+	//
+	//const mapDispatchProps = (dispatch) => {
+	//    return {
+	//        searchNeighbors: (category, key, paramsString) => {
+	//            dispatch(getNeighbors(category, key, paramsString));
+	//        }
+	//    };
+	//};
+	//
+	//export default connect(
+	//    () => {},
+	//    mapDispatchProps
+	//)(ContextMenu);
 
 /***/ },
 /* 548 */
@@ -78050,18 +78168,10 @@
 	    function _class(props) {
 	        _classCallCheck(this, _class);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
-
-	        _this.state = { openGroupId: "group1" };
-	        return _this;
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
 	    }
 
 	    _createClass(_class, [{
-	        key: "setGroup",
-	        value: function setGroup(id) {
-	            this.setState({ openGroupId: id });
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            var _this2 = this;
@@ -78080,7 +78190,7 @@
 	                    _reactBootstrap.Tooltip,
 	                    { className: "in"
 	                    },
-	                    "test me"
+	                    this.props.tooltip
 	                )
 	            );
 	        }
@@ -78114,31 +78224,41 @@
 
 	var EventHandlers = {};
 
+	var isContextOpen = false;
+
 	EventHandlers.onClickSvg = function () {
-	    _ContextMenuBuilder2.default.removeAll();
+	    //ContextMenuBuilder.removeTooltip();
+	    _ContextMenuBuilder2.default.removePopup();
+	    isContextOpen = false;
 	};
 
 	EventHandlers.onMouseOver = function (d) {
 	    d3.event.preventDefault();
 
-	    var popoverEl = _ContextMenuBuilder2.default.buildElement(d.key, d.category);
-	    _ContextMenuBuilder2.default.createAndShowTooltip(popoverEl, d);
+	    if (!isContextOpen) {
+	        var popoverEl = _ContextMenuBuilder2.default.buildElement(d.key, d.category);
+	        _ContextMenuBuilder2.default.createAndShowTooltip(popoverEl, d);
+	    }
 	};
 
 	EventHandlers.onMouseLeave = function (d) {
-	    //ContextMenuBuilder.removeAll();
+	    _ContextMenuBuilder2.default.removeTooltip();
+	    //ContextMenuBuilder.removePopup();
 	};
 
 	EventHandlers.onZoomSvg = function (panelElement) {
-	    _ContextMenuBuilder2.default.removeAll();
+	    _ContextMenuBuilder2.default.removePopup();
+	    isContextOpen = false;
 	    panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
 	};
 
-	EventHandlers.onContextMenuNode = function (d) {
+	EventHandlers.onContextMenuNode = function (d, props) {
 	    d3.event.preventDefault();
 
+	    isContextOpen = true;
+	    _ContextMenuBuilder2.default.removeTooltip();
 	    var popoverEl = _ContextMenuBuilder2.default.buildElement(d.key, d.category);
-	    _ContextMenuBuilder2.default.createAndShow(popoverEl, d);
+	    _ContextMenuBuilder2.default.createAndShow(popoverEl, d, props);
 	};
 
 	EventHandlers.onDoubleClickNode = function (d, props) {
@@ -78148,7 +78268,9 @@
 
 	EventHandlers.onDragStartNode = function (d) {
 	    d3.event.sourceEvent.stopPropagation();
-	    _ContextMenuBuilder2.default.removeAll();
+	    //ContextMenuBuilder.removeTooltip();
+	    _ContextMenuBuilder2.default.removePopup();
+	    isContextOpen = false;
 	    d.fixed = true;
 	    d.isFixed = true;
 	};
@@ -80174,36 +80296,30 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
 
 	        _this.state = {
-	            isGraphPanelOpen: false,
+	            isGraphPanelOpen: true,
 	            filter: false
 	        };
 	        return _this;
 	    }
 
 	    _createClass(_class, [{
-	        key: "componentDidUpdate",
-	        value: function componentDidUpdate() {
-	            if (typeof $.fn.slimScroll != "undefined") {
-	                //Destroy if it exists
-	                $("#mytest").slimScroll({ destroy: true }).height("auto");
-	                //Add slimscroll
-	                $("#mytest").slimscroll({
-	                    //height: ($(window).height() - $(".main-header").height()) + "px",
-	                    color: "rgba(0,0,0,0.2)",
-	                    size: "3px"
-	                });
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            if (this.props.searchType && this.props.searchKey) {
+	                this.props.searchTestCoverage(this.props.searchType, this.props.searchKey);
 	            }
 	        }
 	    }, {
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
-	            this.props.searchTestCoverage("PVCSC");
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (this.props.searchKey !== nextProps.searchKey && nextProps.searchType && nextProps.searchKey) {
+	                this.props.searchTestCoverage(nextProps.searchType, nextProps.searchKey);
+	            }
 	        }
 	    }, {
 	        key: "onClick",
 	        value: function onClick(key) {
 	            this.props.searchNeighborsStart("GeneralNode", key);
-	            this.setState({ isGraphPanelOpen: true });
 	        }
 	    }, {
 	        key: "filter",
@@ -80243,7 +80359,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            "a",
-	                            { href: "#coverage", onClick: function onClick(key) {
+	                            { onClick: function onClick(key) {
 	                                    return _this2.onClick(coverage.key);
 	                                } },
 	                            coverage.key
@@ -80284,29 +80400,38 @@
 	                    _react2.default.createElement(
 	                        "div",
 	                        { className: "box box-solid" },
-	                        this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && data.length + " result" + (data.length !== 1 ? "s" : "") + " found.",
-	                        this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && _react2.default.createElement(
+	                        _react2.default.createElement(
 	                            "div",
-	                            null,
+	                            { className: "box-header with-border" },
 	                            _react2.default.createElement(
-	                                "a",
-	                                { href: "#coverage", onClick: function onClick(filter) {
-	                                        return _this2.filter(false);
-	                                    } },
-	                                "Show All"
-	                            ),
-	                            "  |  ",
-	                            _react2.default.createElement(
-	                                "a",
-	                                { href: "#coverage", onClick: function onClick(filter) {
-	                                        return _this2.filter(true);
-	                                    } },
-	                                "Show Uncovered"
+	                                "h4",
+	                                null,
+	                                this.props.searchKey
 	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            "div",
 	                            { className: "box-body" },
+	                            this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && data.length + " result" + (data.length !== 1 ? "s" : "") + " found.",
+	                            this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && _react2.default.createElement(
+	                                "div",
+	                                null,
+	                                _react2.default.createElement(
+	                                    "a",
+	                                    { onClick: function onClick(filter) {
+	                                            return _this2.filter(false);
+	                                        } },
+	                                    "Show All"
+	                                ),
+	                                "  |  ",
+	                                _react2.default.createElement(
+	                                    "a",
+	                                    { onClick: function onClick(filter) {
+	                                            return _this2.filter(true);
+	                                        } },
+	                                    "Show Uncovered"
+	                                )
+	                            ),
 	                            _react2.default.createElement(
 	                                "table",
 	                                { id: "table", className: "table table-bordered table-hover" },
@@ -81318,11 +81443,11 @@
 	var EventHandlers = {};
 
 	EventHandlers.onClickSvg = function () {
-	    //ContextMenuBuilder.removeAll();
+	    //ContextMenuBuilder.removePopup();
 	};
 
 	EventHandlers.onZoomSvg = function (panelElement) {
-	    //ContextMenuBuilder.removeAll();
+	    //ContextMenuBuilder.removePopup();
 	    panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
 	};
 
@@ -81340,7 +81465,7 @@
 
 	EventHandlers.onDragStartNode = function (d) {
 	    d3.event.sourceEvent.stopPropagation();
-	    //ContextMenuBuilder.removeAll();
+	    //ContextMenuBuilder.removePopup();
 	    d.fixed = true;
 	    d.isFixed = true;
 	};
@@ -81519,11 +81644,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function () {
+	exports.default = function (params) {
 	    return _react2.default.createElement(
 	        "div",
 	        null,
-	        _react2.default.createElement(_TestCoverageComponent2.default, null)
+	        _react2.default.createElement(_TestCoverageComponent2.default, { searchKey: params.params.key, searchType: params.params.type })
 	    );
 	};
 
@@ -81561,8 +81686,8 @@
 
 	var mapDispatchProps = function mapDispatchProps(dispatch) {
 	    return {
-	        searchTestCoverage: function searchTestCoverage(key) {
-	            dispatch((0, _SearchTestCoverage.searchTestCoverage)(key));
+	        searchTestCoverage: function searchTestCoverage(type, key) {
+	            dispatch((0, _SearchTestCoverage.searchTestCoverage)(type, key));
 	        },
 	        searchNeighborsStart: function searchNeighborsStart(category, key) {
 	            dispatch((0, _SearchNeighbors.searchNeighbors)(category, key));
@@ -81585,10 +81710,10 @@
 
 	var _GETTestCoverage = __webpack_require__(831);
 
-	var searchTestCoverage = exports.searchTestCoverage = function searchTestCoverage(key) {
+	var searchTestCoverage = exports.searchTestCoverage = function searchTestCoverage(type, key) {
 	    return function (dispatch, getState) {
 	        if (key) {
-	            return dispatch((0, _GETTestCoverage.getCoverage)(key));
+	            return dispatch((0, _GETTestCoverage.getCoverage)(type, key));
 	        } else {
 	            return dispatch(function () {});
 	        }
@@ -81618,13 +81743,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var getCoverage = exports.getCoverage = function getCoverage(key) {
+	var getCoverage = exports.getCoverage = function getCoverage(type, key) {
 	    return function (dispatch) {
 	        dispatch((0, _TestCoverageActions.fetchStart)(key));
 
 	        console.log("fetching things");
 
-	        return _axios2.default.get("/search/projects/coverage/" + key).then(function (response) {
+	        return _axios2.default.get("/search/" + _Constants2.default.getEndpoint(type) + "/coverage/" + key).then(function (response) {
 	            dispatch((0, _TestCoverageActions.fetchSuccess)(key, response.data));
 	        }).catch(function (response) {
 	            dispatch((0, _TestCoverageActions.fetchError)(key, response.data));
@@ -82604,6 +82729,46 @@
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 835 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(836);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(451)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./ContextMenu.css", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./ContextMenu.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 836 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(450)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".dropdown-content {\r\n    width: 100%;\r\n}\r\n\r\n.dropdown-content a {\r\n    color: black;\r\n    padding: 12px 16px;\r\n    text-decoration: none;\r\n    display: block;\r\n    background-color: #f9f9f9;\r\n    margin: 2px 0px;\r\n}\r\n\r\n.dropdown-content a:hover {background-color: #f1f1f1}\r\n\r\n.dropdown:hover .dropbtn {\r\n    background-color: #3e8e41;\r\n}", ""]);
+
+	// exports
 
 
 /***/ }

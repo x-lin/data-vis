@@ -21,6 +21,7 @@ ReactDOM.render (
                 <Route path="tree" component={Tree} />
                 <Route path="schema/:project" component={Schema} />
                 <Route path="coverage" component={TestCoverage} />
+                <Route path="coverage/:key/:type" component={TestCoverage} />
                 <IndexRoute component={Relations} /> /* default path -> take this, if no other match */
             </Route>
         </Router>

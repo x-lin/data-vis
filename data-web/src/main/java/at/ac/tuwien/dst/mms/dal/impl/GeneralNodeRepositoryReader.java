@@ -1,6 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
+import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
+import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeRepository;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
@@ -15,23 +17,6 @@ import java.util.Map;
  */
 @Service
 public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<GeneralNode> {
-
-//	@Autowired
-//	RepositoryService repositoryService;
-
-//	@Override
-//	public List<Issue> findAll(Integer limit) {
-//		return ((IssueRepository)this.getRepository()).
-//
-//		logger.info("in findAll limit");
-//		logger.info(limit.toString());
-//		Page<T> page = repository.findAll(RepositoryUtils.getResultsNr(limit));
-//
-//		logger.info("total elements" + page.getTotalElements()+"");
-//
-//		return page.getContent();
-//	}
-
 	@Override
 	public List<GeneralNode> findAll(Integer limit) {
 		return ((GeneralNodeRepository)this.getRepository()).findAll(limit);
@@ -42,11 +27,6 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 		return null;
 	}
 
-//	@Override
-//	public List<GeneralNode> findAllMatching(String key, int limit) {
-//		return ((GeneralNodeRepository)this.getRepository()).findAllByKey(key, RepositoryUtils.getResultsNr(limit));
-//	}
-
 	@Override
 	public GeneralNode find(String key) {
 		return ((GeneralNodeRepository)this.getRepository()).findByKey(key);
@@ -54,9 +34,9 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 
 	@Override
 	@Transactional
-	public Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit) {
+	public Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit, List type) {
 		GeneralNode node = this.find(key);
-		Iterable<Map<String, Object>> nodes = ((GeneralNodeRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit);
+		Iterable<Map<String, Object>> nodes = ((GeneralNodeRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit, type);
 
 		List<ModelEntity> neighbors = this.getNeighbors(nodes);
 
@@ -65,5 +45,20 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 		returnVal.setNeighbors(neighbors);
 
 		return returnVal;
+	}
+
+	@Transactional
+	@Override
+	public List<TestCoverage> getTestCoverage(String projectKey) {
+		GeneralNodeRepository repo = (GeneralNodeRepository)this.getRepository();
+		List<TestCoverage> testCoverage = repo.getTestCoverage(projectKey);
+
+		return testCoverage;
+	}
+
+	@Override
+	@Transactional
+	public List<NeighborType> getNeighborTypes(String key) {
+		return ((GeneralNodeRepository)this.getRepository()).getNeighborTypes(key);
 	}
 }

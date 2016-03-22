@@ -58,6 +58,14 @@ Constants.jiraAddresses = {
     User: user => `https://jira.frequentis.frq/ViewProfile.jspa?name=${user}`
 };
 
+Constants.getEndpoint = (type) => {
+    if(type === "Project") {
+        return Constants.endpoints.Project;
+    } else {
+        return Constants.endpoints.GeneralNode;
+    }
+}
+
 Constants.getKeyIdentifier = (category) => {
     return Constants.keyMap[category];
 };
@@ -67,9 +75,9 @@ Constants.getJiraAddress = (type, key) => {
 }
 
 Constants.getJamaAddress = (jamaId, jamaProjectId) => {
-    if(jamaProjectId) {
+    if(jamaProjectId && jamaId) {
         return `https://jama.frequentis.com/contour/perspective.req?docId=${jamaId}&projectId=${jamaProjectId}`;
-    } else if(jamaProjectId && jamaId) {
+    } else if(jamaId) {
         return `https://jama.frequentis.com/contour/perspective.req?projectId=${jamaId}`;
     }
 }
