@@ -10,6 +10,7 @@ import Group3 from "./ContextMenuGroupl3";
 import ContextMenuTitle from "./ContextMenuTitle";
 import "./ContextMenu.css";
 import { connect } from "react-redux";
+import TestCoverageComponent from "../../TestCoveragePanel/TestCoverageComponent";
 
 import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
 
@@ -18,8 +19,6 @@ import { OverlayTrigger, Popover, Button, Overlay } from "react-bootstrap";
 export default class ContextMenu extends React.Component {
     constructor(props) {
         super(props);
-
-        console.log(props);
     }
 
     renderButtons(type, jiraId, jamaId, jamaProjectId) {
@@ -51,13 +50,23 @@ export default class ContextMenu extends React.Component {
                 <a href={`#coverage/${key}/${type === "Project" ? type : "GeneralNode"}`}>Show Test Coverage</a>
                 <a onClick={() => this.goUpstream(key, type)}>Show System Decomp. - Upstream</a>
                 <a onClick={() => this.goDownstream(key, type)}>Show System Decomp. - Downstream</a>
+                {/*<a onClick={() => this.showFeatures(key, type)}>Show Features</a>*/}
                 <a onClick={() => this.showStats(key, type)}>Show Stats</a>
             </div>
         </div>
     }
 
-    showStats(key, category) {
+    showTestCoverage(key, category) {
 
+    }
+
+    showFeatures(key, category) {
+        const paramsString = "type=FEAT&limit=500";
+
+        store.dispatch(getNeighbors(category, key, paramsString));
+    }
+
+    showStats(key, category) {
     }
 
     goUpstream(key, category) {
@@ -113,7 +122,6 @@ export default class ContextMenu extends React.Component {
                             </div>
                             <div className="tab-pane" id="tab_2">
                                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-
                             </div>
                             <div className="tab-pane" id="tab_3">
                                 Some other text.
@@ -123,7 +131,6 @@ export default class ContextMenu extends React.Component {
                     {/*<Group1 id="group1" openGroupId={this.state.openGroupId} clickHandler={(id) => this.setGroup("group1")} />
                         <Group2 id="group2" openGroupId={this.state.openGroupId} clickHandler={(id) => this.setGroup("group2")} />
                         <Group3 id="group3" openGroupId={this.state.openGroupId} clickHandler={(id) => this.setGroup("group3")} />*/}
-
                 </Popover>
             </Overlay>
         )

@@ -37,7 +37,6 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-        console.log("save");
         this.renderGraph(Object.assign({}, this.props.graph));
         window.addEventListener('resize', (event) => this.resizePanel(event));
     }
@@ -236,6 +235,16 @@ export default class extends React.Component {
                     .on("dragstart", (d) => {
                         if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
                             EventHandlers.onDragStartNode(d);
+                        }
+                    })
+                    .on("drag", (d) => {
+                        if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                            EventHandlers.onDragNode(d);
+                        }
+                    })
+                    .on("dragend", (d) => {
+                        if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                            EventHandlers.onDragEndNode(d);
                         }
                     })
             );

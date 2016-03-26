@@ -55,4 +55,15 @@ EventHandlers.onDragStartNode = (d) => {
     d.isFixed = true;
 };
 
+EventHandlers.onDragEndNode = (d) => {
+    if(!isContextOpen) {
+        const popoverEl = ContextMenuBuilder.buildElement(d.key, d.category);
+        ContextMenuBuilder.createAndShowTooltip(popoverEl, d);
+    }
+};
+
+EventHandlers.onDragNode = (d) => {
+    ContextMenuBuilder.removeTooltip();
+};
+
 export default EventHandlers;

@@ -1,4 +1,5 @@
 import React from "react";
+import { Table, Tr, Td, Thead, Th } from "reactable";
 
 import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS } from "../../actions/action-creators/TestCoverageActions";
 import GraphPanel from "../GraphPanel/GraphPanel";
@@ -9,7 +10,7 @@ export default class extends React.Component {
         super(props);
 
         this.state = {
-            isGraphPanelOpen : true,
+            isPanelOpen : true,
             filter: false
         };
     }
@@ -43,27 +44,28 @@ export default class extends React.Component {
             })
         }
 
-        const table = data.map((coverage, index) => {
+        const height = this.state.isPanelOpen ? "calc(50vh - 50px)" : "calc(100vh - 50px)";
+
+        const prepared = data.map((coverage, index) => {
             const count = coverage.testcases ? coverage.testcases.length : 0;
 
             return (
-                <tr key={index} className = { count ? "" :  "bg-red"}>
-                    <td><a href={Constants.getJamaAddress(coverage.node.jamaId, coverage.node.projectId)} target="_blank">
+                <Tr key={index} className = { count ? "" :  "bg-red"}>
+                    <Td column=""><a href={Constants.getJamaAddress(coverage.node.jamaId, coverage.node.projectId)} target="_blank">
                         <img src="img/jama-logo.png" className="tableImg" /></a>
-                    </td>
-                    <td><a onClick={(key) => this.onClick(coverage.key)}>{coverage.key}</a></td>
-                    <td>{coverage.name}</td>
-                    <td>{coverage.type}</td>
-                    <td>{coverage.testcases ? coverage.testcases.length : 0}</td>
-                </tr>
+                    </Td>
+                    <Td column="Key" style={{whiteSpace: "nowrap"}}>{coverage.key}</Td>
+                    <Td column="Name"><a onClick={(key) => this.onClick(coverage.key)}>{coverage.name}</a></Td>
+                    <Td column="Type" style={{whiteSpace: "nowrap"}}>{coverage.type}</Td>
+                    <Td column="Status">{coverage.node.status}</Td>
+                    <Td column="Test Cases">{coverage.testcases ? coverage.testcases.length : 0}</Td>
+                </Tr>
             );
         });
 
-        const height = this.state.isGraphPanelOpen ? "calc(50vh - 50px)" : "calc(100vh - 50px)";
-
         return (
             <div>
-                {this.state.isGraphPanelOpen && <div style={{ height: "50vh" }}><GraphPanel /></div>}
+                {this.state.isPanelOpen && <div style={{ height: "50vh" }}><GraphPanel /></div>}
 
                 { this.props.coverage.status === TEST_COVERAGE_FETCH_START && "Fetching data..."}
 
@@ -79,20 +81,9 @@ export default class extends React.Component {
                             <div><a onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
                                 <a onClick={(filter) => this.filter(true)}>Show Uncovered</a></div>}
 
-                            <table id="table" className="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th style={{width: "15px"}}></th>
-                                    <th>Key</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Test Cases</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {table}
-                                </tbody>
-                            </table>
+                            <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={true} filterable={['Name', 'Key', 'Status', 'Type']}>
+                                {prepared}
+                            </Table>
                         </div>
                     </div>
                 </div>

@@ -17,6 +17,7 @@ export default class extends React.Component {
                 container={this}
             >
                 <Tooltip className="in"
+                         id="actual-tooltip"
                 >
                     {this.props.tooltip}
                 </Tooltip>

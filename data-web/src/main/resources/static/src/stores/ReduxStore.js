@@ -10,6 +10,7 @@ import { schemaReducer } from "../reducers/SchemaReducer";
 import LaneReducer from "../reducers/LaneReducer";
 import TestCoverageReducer from "../reducers/TestCoverageReducer";
 import NodeTypeReducer from "../reducers/NodeTypeReducer";
+import StatsReducer from "../reducers/StatsReducer";
 
 export const createStore = () => {
     const allReducers = combineReducers({
@@ -21,7 +22,8 @@ export const createStore = () => {
         schema: schemaReducer,
         lanes: LaneReducer,
         coverage: TestCoverageReducer,
-        nodeTypes: NodeTypeReducer
+        nodeTypes: NodeTypeReducer,
+        stats: StatsReducer
     });
 
     return createReduxStore(allReducers, applyMiddleware(

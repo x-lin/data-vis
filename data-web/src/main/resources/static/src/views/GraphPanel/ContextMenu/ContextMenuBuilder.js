@@ -26,19 +26,18 @@ ContextMenuBuilder.createAndShow = (element, d, props) => {
 ContextMenuBuilder.createAndShowTooltip = (element, d) => {
     ReactDOM.render (
         <Tooltip tooltip={d.name} target={element[0]} />,
-        $("#popover-content")[0]
+        $("#tooltip-content")[0]
     );
 
     return element;
 };
 
 ContextMenuBuilder.removeTooltip = (selector) => {
-    $(selector || ".tooltip").remove();
+    ReactDOM.unmountComponentAtNode($("#tooltip-content")[0]);
 }
 
 ContextMenuBuilder.removePopup = (selector) => {
-    $(selector || ".popover").remove();
-    //$(selector || ".tooltip").remove();
+    ReactDOM.unmountComponentAtNode($("#popover-content")[0]);
 };
 
 export default ContextMenuBuilder;
