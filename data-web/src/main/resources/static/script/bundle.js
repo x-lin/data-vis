@@ -76,10 +76,6 @@
 
 	var _SchemaComponent2 = _interopRequireDefault(_SchemaComponent);
 
-	var _TestCoverage = __webpack_require__(851);
-
-	var _TestCoverage2 = _interopRequireDefault(_TestCoverage);
-
 	var _es6Promise = __webpack_require__(852);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -96,8 +92,6 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: "relationships", component: _Relations2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: "tree", component: _Tree2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: "schema/:project", component: _SchemaComponent2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: "coverage", component: _TestCoverage2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: "coverage/:key/:type", component: _TestCoverage2.default }),
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Relations2.default }),
 	            " /* default path -> take this, if no other match */"
 	        )
@@ -61444,14 +61438,6 @@
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
-	var _VerticalSplitView = __webpack_require__(855);
-
-	var _VerticalSplitView2 = _interopRequireDefault(_VerticalSplitView);
-
-	var _HorizontalSplitView = __webpack_require__(856);
-
-	var _HorizontalSplitView2 = _interopRequireDefault(_HorizontalSplitView);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61544,7 +61530,6 @@
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "box box-solid" },
-	                this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_START && "Fetching data...",
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "box-header with-border" },
@@ -61574,7 +61559,7 @@
 	                            { onClick: function onClick(filter) {
 	                                    return _this2.filter(true);
 	                                } },
-	                            "Show Uncovered"
+	                            "Show With No Test Cases"
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -61583,6 +61568,11 @@
 	                            filterable: ['Name', 'Key', 'Status', 'Type'] },
 	                        prepared
 	                    )
+	                ),
+	                this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_START && _react2.default.createElement(
+	                    "div",
+	                    { className: "overlay" },
+	                    _react2.default.createElement("i", { className: "fa fa-refresh fa-spin" })
 	                )
 	            );
 	        }
@@ -83521,38 +83511,7 @@
 	exports.default = _class;
 
 /***/ },
-/* 851 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _LanePicker = __webpack_require__(269);
-
-	var _LanePicker2 = _interopRequireDefault(_LanePicker);
-
-	var _TestCoverageComponent = __webpack_require__(556);
-
-	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (params) {
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(_TestCoverageComponent2.default, { searchKey: params.params.key, searchType: params.params.type })
-	    );
-	};
-
-/***/ },
+/* 851 */,
 /* 852 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -84569,44 +84528,7 @@
 	};
 
 /***/ },
-/* 856 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (_ref) {
-	    var percentageUpper = _ref.percentageUpper;
-	    var children = _ref.children;
-
-	    var percentage = children[0] && children[1] ? percentageUpper : 100;
-
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(
-	            "div",
-	            { style: { height: "calc(" + percentage + "vh - 50px)" } },
-	            children[0] ? children[0] : children
-	        ),
-	        _react2.default.createElement(
-	            "div",
-	            { style: { height: "calc(" + (100 - percentage) + "vh)", overflow: "auto" } },
-	            children[1]
-	        )
-	    );
-	};
-
-/***/ },
+/* 856 */,
 /* 857 */
 /***/ function(module, exports, __webpack_require__) {
 

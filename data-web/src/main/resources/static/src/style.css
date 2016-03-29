@@ -166,3 +166,33 @@ a, a:hover {
 .relative {
     position: relative;
 }
+
+.reactable-current-page, .reactable-current-page:hover, .reactable-current-page:focus, .reactable-current-page:focus {
+    pointer-events: none;
+    cursor: default;
+    color: #fff;
+    background-color: #2c3b41;
+    box-shadow: 0 0 0 .03em #2c3b41;
+}
+
+.reactable-page-button, .reactable-next-page, .reactable-previous-page {
+    padding: 6px 8px;
+}
+
+.reactable-page-button:not(.reactable-current-page), .reactable-next-page, .reactable-previous-page {
+    background-color: #FFF;
+    color: #444;
+    box-shadow: 0 0 0 .03em #ddd;
+}
+
+.reactable-page-button:not(.reactable-current-page):hover, .reactable-next-page:hover, .reactable-previous-page:hover {
+    background-color: #f4f4f4;
+    color: #444;
+    box-shadow: 0 0 0 .03em #ddd;
+}
+
+.reactable-page-button:not(.reactable-current-page):active, .reactable-next-page:active, .reactable-previous-page:active,
+.reactable-page-button:not(.reactable-current-page):focus, .reactable-next-page:focus, .reactable-previous-page:focus {
+    color: #444;
+    box-shadow: 0 0 0 .03em #ddd;
+}

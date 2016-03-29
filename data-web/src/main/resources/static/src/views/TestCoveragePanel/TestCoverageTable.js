@@ -5,9 +5,6 @@ import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS } from "../../ac
 import GraphPanel from "../GraphPanel/GraphPanel";
 import Constants from "../../config/Constants";
 
-import VerticalSplitView from "../widgets/VerticalSplitView";
-import HorizontalSplitView from "../widgets/HorizontalSplitView";
-
 export default class extends React.Component {
     constructor(props) {
         super(props);
@@ -53,8 +50,6 @@ export default class extends React.Component {
 
         return (
             <div className="box box-solid">
-                {this.props.coverage.status === TEST_COVERAGE_FETCH_START && "Fetching data..."}
-
                 <div className="box-header with-border"><h4>{this.props.coverage.name}</h4></div>
 
                 <div className="box-body">
@@ -62,13 +57,18 @@ export default class extends React.Component {
                     `${data.length} result${data.length !== 1 ? "s" : ""} found.`}
                     {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
                     <div><a onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
-                        <a onClick={(filter) => this.filter(true)}>Show Uncovered</a></div>}
+                        <a onClick={(filter) => this.filter(true)}>Show With No Test Cases</a></div>}
 
                     <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name"]}
                            filterable={['Name', 'Key', 'Status', 'Type']}>
                         {prepared}
                     </Table>
                 </div>
+
+                {this.props.coverage.status === TEST_COVERAGE_FETCH_START &&
+                <div className="overlay">
+                    <i className="fa fa-refresh fa-spin" />
+                </div>}
             </div>
         )
     }
