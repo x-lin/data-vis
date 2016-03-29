@@ -5,26 +5,16 @@ import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS } from "../../ac
 import GraphPanel from "../GraphPanel/GraphPanel";
 import Constants from "../../config/Constants";
 
+import VerticalSplitView from "../widgets/VerticalSplitView";
+import HorizontalSplitView from "../widgets/HorizontalSplitView";
+
 export default class extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isPanelOpen : true,
             filter: false
         };
-    }
-
-    componentDidMount() {
-        if(this.props.searchType && this.props.searchKey) {
-            this.props.searchTestCoverage(this.props.searchType, this.props.searchKey);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(this.props.searchKey !== nextProps.searchKey && nextProps.searchType && nextProps.searchKey) {
-            this.props.searchTestCoverage(nextProps.searchType, nextProps.searchKey);
-        }
     }
 
     onClick(key) {
@@ -44,8 +34,6 @@ export default class extends React.Component {
             })
         }
 
-        const height = this.state.isPanelOpen ?  "calc(100vh - 50px)" : "";
-
         const prepared = data.map((coverage, index) => {
             const count = coverage.testcases ? coverage.testcases.length : 0;
 
@@ -64,29 +52,22 @@ export default class extends React.Component {
         });
 
         return (
-            <div>
-                <div id="container" style={{width: "100%", float: "left", marginRight: "-500px"}}><div style={{marginRight: "500px", height: height}}><GraphPanel /></div></div>
+            <div className="box box-solid">
+                {this.props.coverage.status === TEST_COVERAGE_FETCH_START && "Fetching data..."}
 
-                { this.props.coverage.status === TEST_COVERAGE_FETCH_START && "Fetching data..."}
+                <div className="box-header with-border"><h4>{this.props.coverage.name}</h4></div>
 
-                <div style={{overflow: "auto", float: "right", width: "500", height: height}}>
-                    <div className="box box-solid">
+                <div className="box-body">
+                    { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
+                    `${data.length} result${data.length !== 1 ? "s" : ""} found.`}
+                    {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
+                    <div><a onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
+                        <a onClick={(filter) => this.filter(true)}>Show Uncovered</a></div>}
 
-                        <div className="box-header with-border"><h4>{this.props.searchKey}</h4></div>
-
-                        <div className="box-body">
-                            { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                            `${data.length} result${data.length !== 1 ? "s" : ""} found.`}
-                            {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                            <div><a onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
-                                <a onClick={(filter) => this.filter(true)}>Show Uncovered</a></div>}
-
-                            <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name"]}
-                               filterable={['Name', 'Key', 'Status', 'Type']}>
-                                {prepared}
-                            </Table>
-                        </div>
-                    </div>
+                    <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name"]}
+                           filterable={['Name', 'Key', 'Status', 'Type']}>
+                        {prepared}
+                    </Table>
                 </div>
             </div>
         )

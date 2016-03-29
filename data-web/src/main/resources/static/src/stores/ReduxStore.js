@@ -11,6 +11,7 @@ import LaneReducer from "../reducers/LaneReducer";
 import TestCoverageReducer from "../reducers/TestCoverageReducer";
 import NodeTypeReducer from "../reducers/NodeTypeReducer";
 import StatsReducer from "../reducers/StatsReducer";
+import LayoutReducer from "../reducers/LayoutReducer";
 
 export const createStore = () => {
     const allReducers = combineReducers({
@@ -23,7 +24,8 @@ export const createStore = () => {
         lanes: LaneReducer,
         coverage: TestCoverageReducer,
         nodeTypes: NodeTypeReducer,
-        stats: StatsReducer
+        stats: StatsReducer,
+        layout: LayoutReducer
     });
 
     return createReduxStore(allReducers, applyMiddleware(

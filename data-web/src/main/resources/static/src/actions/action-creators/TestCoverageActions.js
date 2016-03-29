@@ -4,10 +4,11 @@ export const TEST_COVERAGE_FETCH_ERROR = "TEST_COVERAGE_FETCH_ERROR";
 
 export const TEST_COVERAGE_CLEAR = "TEST_COVERAGE_CLEAR";
 
-export const fetchStart = (key) => {
+export const fetchStart = (key, name) => {
     return {
         type: TEST_COVERAGE_FETCH_START,
-        key
+        key,
+        name
     }
 };
 

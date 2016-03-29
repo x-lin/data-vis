@@ -1,4 +1,7 @@
+import React from "react";
+
 import stringToColor from "../utils/stringToColor";
+import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageComponent";
 
 const Constants = {};
 
@@ -38,13 +41,13 @@ Constants.endpoints = {
     Requirement: "reqs"
 };
 
-Constants.keyMap = {
-    Project : "key",
-    Ticket : "key",
-    User : "name",
-    Requirement : "key",
-    GeneralNode: "key"
+Constants.sidePanels = {
+    test: false //test coverage panel
 };
+
+Constants.sidePanels = [
+    {object: <TestCoverageComponent />, key: "test"}
+];
 
 Constants.invisible = {
     Folder: false,

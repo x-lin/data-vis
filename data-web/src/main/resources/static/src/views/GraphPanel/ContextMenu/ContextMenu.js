@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import TestCoverageComponent from "../../TestCoveragePanel/TestCoverageComponent";
 
 import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
+import { searchTestCoverage } from "../../../actions/aggregated/SearchTestCoverage";
 
 import { OverlayTrigger, Popover, Button, Overlay } from "react-bootstrap";
 
@@ -40,14 +41,15 @@ export default class ContextMenu extends React.Component {
         </div>;
     }
 
-    renderMenu(key, type) {
+    renderMenu(key, type, name) {
         const isProject = type === "Project";
         const isFeature = type === ("Feature" || "FEAT");
         const isReq = type === ("SSS" || "SRS" || "PSRS" || "System Requirement" || "Preliminary System Requirement" || "Software Requirement");
 
         return <div className="dropdown">
             <div className="dropdown-content">
-                <a href={`#coverage/${key}/${type === "Project" ? type : "GeneralNode"}`}>Show Test Coverage</a>
+
+                <a onClick={() => this.showTestCoverage(key, type, name)}>Show Test Coverage</a>
                 <a onClick={() => this.goUpstream(key, type)}>Show System Decomp. - Upstream</a>
                 <a onClick={() => this.goDownstream(key, type)}>Show System Decomp. - Downstream</a>
                 {/*<a onClick={() => this.showFeatures(key, type)}>Show Features</a>*/}
@@ -56,8 +58,8 @@ export default class ContextMenu extends React.Component {
         </div>
     }
 
-    showTestCoverage(key, category) {
-
+    showTestCoverage(key, category, name) {
+        store.dispatch(searchTestCoverage(category, key, name));
     }
 
     showFeatures(key, category) {
@@ -83,10 +85,7 @@ export default class ContextMenu extends React.Component {
 
     render() {
 
-        let { jiraId, key, jamaId, jamaProjectId, type } = this.props.d;
-
-        console.log(this.props.d);
-
+        let { jiraId, key, jamaId, jamaProjectId, type, name } = this.props.d;
 
         //TODO fix that for extraction -> add jiraId
         if(type === "User" || type === "Project") {
@@ -118,7 +117,7 @@ export default class ContextMenu extends React.Component {
                                 <div className="row inpadding ">
                                     {this.renderButtons(type, jiraId, jamaId, jamaProjectId)}
                                 </div>
-                                {this.renderMenu(key, type)}
+                                {this.renderMenu(key, type, name)}
                             </div>
                             <div className="tab-pane" id="tab_2">
                                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.

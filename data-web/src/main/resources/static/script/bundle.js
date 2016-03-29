@@ -24777,6 +24777,10 @@
 
 	var _StatsReducer2 = _interopRequireDefault(_StatsReducer);
 
+	var _LayoutReducer = __webpack_require__(857);
+
+	var _LayoutReducer2 = _interopRequireDefault(_LayoutReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var createStore = exports.createStore = function createStore() {
@@ -24790,7 +24794,8 @@
 	        lanes: _LaneReducer2.default,
 	        coverage: _TestCoverageReducer2.default,
 	        nodeTypes: _NodeTypeReducer2.default,
-	        stats: _StatsReducer2.default
+	        stats: _StatsReducer2.default,
+	        layout: _LayoutReducer2.default
 	    });
 
 	    return (0, _redux.createStore)(allReducers, (0, _redux.applyMiddleware)(_reduxThunk2.default // lets us dispatch() asynchronous functions
@@ -25778,9 +25783,17 @@
 	    value: true
 	});
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _stringToColor = __webpack_require__(233);
 
 	var _stringToColor2 = _interopRequireDefault(_stringToColor);
+
+	var _TestCoverageComponent = __webpack_require__(556);
+
+	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25822,13 +25835,11 @@
 	    Requirement: "reqs"
 	};
 
-	Constants.keyMap = {
-	    Project: "key",
-	    Ticket: "key",
-	    User: "name",
-	    Requirement: "key",
-	    GeneralNode: "key"
+	Constants.sidePanels = {
+	    test: false //test coverage panel
 	};
+
+	Constants.sidePanels = [{ object: _react2.default.createElement(_TestCoverageComponent2.default, null), key: "test" }];
 
 	Constants.invisible = {
 	    Folder: false,
@@ -26831,20 +26842,20 @@
 	var _TestCoverageActions = __webpack_require__(252);
 
 	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { data: [] } : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        name: null,
+	        data: []
+	    } : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
 	        case _TestCoverageActions.TEST_COVERAGE_FETCH_START:
-	            console.log("received for key ", action);
-
 	            return _extends({}, state, {
+	                name: action.name,
 	                data: [],
 	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_START
 	            });
 	        case _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS:
-	            console.log("fetched data for ", action);
-
 	            return _extends({}, state, {
 	                data: action.data,
 	                error: {},
@@ -26876,10 +26887,11 @@
 
 	var TEST_COVERAGE_CLEAR = exports.TEST_COVERAGE_CLEAR = "TEST_COVERAGE_CLEAR";
 
-	var fetchStart = exports.fetchStart = function fetchStart(key) {
+	var fetchStart = exports.fetchStart = function fetchStart(key, name) {
 	    return {
 	        type: TEST_COVERAGE_FETCH_START,
-	        key: key
+	        key: key,
+	        name: name
 	    };
 	};
 
@@ -45072,6 +45084,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(257);
+
 	var _SearchBarComponent = __webpack_require__(533);
 
 	var _SearchBarComponent2 = _interopRequireDefault(_SearchBarComponent);
@@ -45088,24 +45102,60 @@
 
 	var _Draggable2 = _interopRequireDefault(_Draggable);
 
-	var _TestCoverageTable = __webpack_require__(559);
+	var _TestCoverageComponent = __webpack_require__(556);
 
-	var _TestCoverageTable2 = _interopRequireDefault(_TestCoverageTable);
+	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
+
+	var _VerticalSplitView = __webpack_require__(855);
+
+	var _VerticalSplitView2 = _interopRequireDefault(_VerticalSplitView);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function () {
+	var Relations = function Relations(_ref) {
+	    var sidebarObject = _ref.sidebarObject;
+
+	    console.log("rerendering");
+
 	    return _react2.default.createElement(
 	        "div",
 	        null,
-	        _react2.default.createElement(_SearchBarComponent2.default, null),
 	        _react2.default.createElement(
-	            "div",
-	            { style: { height: "100vh" } },
-	            _react2.default.createElement(_GraphPanel2.default, null)
+	            _VerticalSplitView2.default,
+	            { rightWidth: 500 },
+	            _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(_SearchBarComponent2.default, null),
+	                _react2.default.createElement(
+	                    "div",
+	                    { style: { height: "100vh" } },
+	                    _react2.default.createElement(_GraphPanel2.default, null)
+	                )
+	            ),
+	            sidebarObject
 	        )
 	    );
 	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        sidebarObject: state.layout.sidebar.object
+	    };
+	};
+
+	//const mapDispatchProps = (dispatch) => {
+	//    return {
+	//        getStats: (type, key) => {
+	//            dispatch(getStats(type, key));
+	//        },
+	//        getStatsCategory: (type, key) => {
+	//            dispatch(getStatsCategory(type, key));
+	//        }
+	//    };
+	//};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(Relations);
 
 /***/ },
 /* 533 */
@@ -60781,6 +60831,8 @@
 
 	var _GETNeighbors = __webpack_require__(536);
 
+	var _SearchTestCoverage = __webpack_require__(557);
+
 	var _reactBootstrap = __webpack_require__(576);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -60824,7 +60876,7 @@
 	        }
 	    }, {
 	        key: "renderMenu",
-	        value: function renderMenu(key, type) {
+	        value: function renderMenu(key, type, name) {
 	            var _this2 = this;
 
 	            var isProject = type === "Project";
@@ -60839,7 +60891,9 @@
 	                    { className: "dropdown-content" },
 	                    _react2.default.createElement(
 	                        "a",
-	                        { href: "#coverage/" + key + "/" + (type === "Project" ? type : "GeneralNode") },
+	                        { onClick: function onClick() {
+	                                return _this2.showTestCoverage(key, type, name);
+	                            } },
 	                        "Show Test Coverage"
 	                    ),
 	                    _react2.default.createElement(
@@ -60868,7 +60922,9 @@
 	        }
 	    }, {
 	        key: "showTestCoverage",
-	        value: function showTestCoverage(key, category) {}
+	        value: function showTestCoverage(key, category, name) {
+	            _ReduxStore.store.dispatch((0, _SearchTestCoverage.searchTestCoverage)(category, key, name));
+	        }
 	    }, {
 	        key: "showFeatures",
 	        value: function showFeatures(key, category) {
@@ -60904,11 +60960,10 @@
 	            var jamaId = _props$d.jamaId;
 	            var jamaProjectId = _props$d.jamaProjectId;
 	            var type = _props$d.type;
-
-
-	            console.log(this.props.d);
+	            var name = _props$d.name;
 
 	            //TODO fix that for extraction -> add jiraId
+
 	            if (type === "User" || type === "Project") {
 	                jiraId = key;
 	            }
@@ -60975,7 +61030,7 @@
 	                                    { className: "row inpadding " },
 	                                    this.renderButtons(type, jiraId, jamaId, jamaProjectId)
 	                                ),
-	                                this.renderMenu(key, type)
+	                                this.renderMenu(key, type, name)
 	                            ),
 	                            _react2.default.createElement(
 	                                "div",
@@ -61313,10 +61368,10 @@
 
 	var _GETTestCoverage = __webpack_require__(558);
 
-	var searchTestCoverage = exports.searchTestCoverage = function searchTestCoverage(type, key) {
+	var searchTestCoverage = exports.searchTestCoverage = function searchTestCoverage(type, key, name) {
 	    return function (dispatch, getState) {
 	        if (key) {
-	            return dispatch((0, _GETTestCoverage.getCoverage)(type, key));
+	            return dispatch((0, _GETTestCoverage.getCoverage)(type, key, name));
 	        } else {
 	            return dispatch(function () {});
 	        }
@@ -61340,17 +61395,18 @@
 
 	var _TestCoverageActions = __webpack_require__(252);
 
+	var _LayoutActions = __webpack_require__(858);
+
 	var _Constants = __webpack_require__(232);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var getCoverage = exports.getCoverage = function getCoverage(type, key) {
+	var getCoverage = exports.getCoverage = function getCoverage(type, key, name) {
 	    return function (dispatch) {
-	        dispatch((0, _TestCoverageActions.fetchStart)(key));
-
-	        console.log("fetching things");
+	        dispatch((0, _LayoutActions.setTestCoverageVisibility)(true));
+	        dispatch((0, _TestCoverageActions.fetchStart)(key, name));
 
 	        return _axios2.default.get("/search/" + _Constants2.default.getEndpoint(type) + "/coverage/" + key).then(function (response) {
 	            dispatch((0, _TestCoverageActions.fetchSuccess)(key, response.data));
@@ -61388,6 +61444,14 @@
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
+	var _VerticalSplitView = __webpack_require__(855);
+
+	var _VerticalSplitView2 = _interopRequireDefault(_VerticalSplitView);
+
+	var _HorizontalSplitView = __webpack_require__(856);
+
+	var _HorizontalSplitView2 = _interopRequireDefault(_HorizontalSplitView);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61405,27 +61469,12 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
 
 	        _this.state = {
-	            isPanelOpen: true,
 	            filter: false
 	        };
 	        return _this;
 	    }
 
 	    _createClass(_class, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
-	            if (this.props.searchType && this.props.searchKey) {
-	                this.props.searchTestCoverage(this.props.searchType, this.props.searchKey);
-	            }
-	        }
-	    }, {
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
-	            if (this.props.searchKey !== nextProps.searchKey && nextProps.searchType && nextProps.searchKey) {
-	                this.props.searchTestCoverage(nextProps.searchType, nextProps.searchKey);
-	            }
-	        }
-	    }, {
 	        key: "onClick",
 	        value: function onClick(key) {
 	            this.props.searchNeighborsStart("GeneralNode", key);
@@ -61447,8 +61496,6 @@
 	                    return !coverage.testcases || coverage.testcases.length === 0;
 	                });
 	            }
-
-	            var height = this.state.isPanelOpen ? "calc(100vh - 50px)" : "";
 
 	            var prepared = data.map(function (coverage, index) {
 	                var count = coverage.testcases ? coverage.testcases.length : 0;
@@ -61496,62 +61543,45 @@
 
 	            return _react2.default.createElement(
 	                "div",
-	                null,
-	                _react2.default.createElement(
-	                    "div",
-	                    { id: "container", style: { width: "100%", float: "left", marginRight: "-500px" } },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { style: { marginRight: "500px", height: height } },
-	                        _react2.default.createElement(_GraphPanel2.default, null)
-	                    )
-	                ),
+	                { className: "box box-solid" },
 	                this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_START && "Fetching data...",
 	                _react2.default.createElement(
 	                    "div",
-	                    { style: { overflow: "auto", float: "right", width: "500", height: height } },
+	                    { className: "box-header with-border" },
 	                    _react2.default.createElement(
+	                        "h4",
+	                        null,
+	                        this.props.coverage.name
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "box-body" },
+	                    this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && data.length + " result" + (data.length !== 1 ? "s" : "") + " found.",
+	                    this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && _react2.default.createElement(
 	                        "div",
-	                        { className: "box box-solid" },
+	                        null,
 	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "box-header with-border" },
-	                            _react2.default.createElement(
-	                                "h4",
-	                                null,
-	                                this.props.searchKey
-	                            )
+	                            "a",
+	                            { onClick: function onClick(filter) {
+	                                    return _this2.filter(false);
+	                                } },
+	                            "Show All"
 	                        ),
+	                        "  |  ",
 	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "box-body" },
-	                            this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && data.length + " result" + (data.length !== 1 ? "s" : "") + " found.",
-	                            this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && _react2.default.createElement(
-	                                "div",
-	                                null,
-	                                _react2.default.createElement(
-	                                    "a",
-	                                    { onClick: function onClick(filter) {
-	                                            return _this2.filter(false);
-	                                        } },
-	                                    "Show All"
-	                                ),
-	                                "  |  ",
-	                                _react2.default.createElement(
-	                                    "a",
-	                                    { onClick: function onClick(filter) {
-	                                            return _this2.filter(true);
-	                                        } },
-	                                    "Show Uncovered"
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                _reactable.Table,
-	                                { className: "table table-bordered table-hover", itemsPerPage: 100, sortable: ["Key", "Status", "Type", "Name"],
-	                                    filterable: ['Name', 'Key', 'Status', 'Type'] },
-	                                prepared
-	                            )
+	                            "a",
+	                            { onClick: function onClick(filter) {
+	                                    return _this2.filter(true);
+	                                } },
+	                            "Show Uncovered"
 	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactable.Table,
+	                        { className: "table table-bordered table-hover", itemsPerPage: 100, sortable: ["Key", "Status", "Type", "Name"],
+	                            filterable: ['Name', 'Key', 'Status', 'Type'] },
+	                        prepared
 	                    )
 	                )
 	            );
@@ -84495,6 +84525,187 @@
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
+
+/***/ },
+/* 855 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var rightWidth = _ref.rightWidth;
+	    var children = _ref.children;
+
+	    var margin = children[0] && children[1] ? rightWidth : 0;
+
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	            "div",
+	            { style: { width: "100%", float: "left", marginRight: "-" + margin + "px" } },
+	            _react2.default.createElement(
+	                "div",
+	                { style: { marginRight: margin + "px", height: "calc(100vh - 50px)" } },
+	                children[0] ? children[0] : children
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { style: { overflow: "auto", float: "right", width: margin + "px", height: "calc(100vh - 50px)" } },
+	            children[1]
+	        )
+	    );
+	};
+
+/***/ },
+/* 856 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var percentageUpper = _ref.percentageUpper;
+	    var children = _ref.children;
+
+	    var percentage = children[0] && children[1] ? percentageUpper : 100;
+
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	            "div",
+	            { style: { height: "calc(" + percentage + "vh - 50px)" } },
+	            children[0] ? children[0] : children
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { style: { height: "calc(" + (100 - percentage) + "vh)", overflow: "auto" } },
+	            children[1]
+	        )
+	    );
+	};
+
+/***/ },
+/* 857 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _LayoutActions = __webpack_require__(858);
+
+	var _Constants = __webpack_require__(232);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        sidebar: {
+	            object: null,
+	            visible: false,
+	            key: null,
+	            sidePanels: _Constants2.default.sidePanels
+	        }
+
+	    } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _LayoutActions.SET_SIDEBAR_PANEL:
+	            state = setSidebarVisibility(state, action);
+	            state = setSidebarObject(state, action);
+
+	            return state;
+	        default:
+	            return state;
+	    }
+	};
+
+	var setSidebarVisibility = function setSidebarVisibility(state, action) {
+	    if (state.sidebar.visible !== action.visible) {
+	        var newSidebar = _extends({}, state.sidebar, {
+	            visible: action.visible
+	        });
+
+	        return _extends({}, state, {
+	            sidebar: newSidebar
+	        });
+	    } else {
+	        return state;
+	    }
+	};
+
+	var setSidebarObject = function setSidebarObject(state, action) {
+	    if (state.sidebar.key !== action.key) {
+	        var panelObject = null;
+	        var panels = state.sidebar.sidePanels;
+
+	        for (var i = 0; i < panels.length; i++) {
+	            if (panels[i].key === action.key) {
+	                panelObject = panels[i].object;
+	                break;
+	            }
+	        }
+
+	        var newSidebar = _extends({}, state.sidebar, {
+	            key: action.key,
+	            object: panelObject
+	        });
+
+	        return _extends({}, state, {
+	            sidebar: newSidebar
+	        });
+	    } else {
+	        return state;
+	    }
+	};
+
+/***/ },
+/* 858 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var SET_SIDEBAR_PANEL = exports.SET_SIDEBAR_PANEL = "SET_SIDEBAR_PANEL";
+
+	var setTestCoverageVisibility = exports.setTestCoverageVisibility = function setTestCoverageVisibility(visible) {
+	    return {
+	        type: SET_SIDEBAR_PANEL,
+	        key: "test",
+	        visible: visible
+	    };
+	};
 
 /***/ }
 /******/ ]);
