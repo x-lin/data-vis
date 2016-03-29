@@ -44,7 +44,7 @@ export default class extends React.Component {
             })
         }
 
-        const height = this.state.isPanelOpen ? "calc(50vh - 50px)" : "calc(100vh - 50px)";
+        const height = this.state.isPanelOpen ?  "calc(100vh - 50px)" : "";
 
         const prepared = data.map((coverage, index) => {
             const count = coverage.testcases ? coverage.testcases.length : 0;
@@ -54,9 +54,9 @@ export default class extends React.Component {
                     <Td column=""><a href={Constants.getJamaAddress(coverage.node.jamaId, coverage.node.projectId)} target="_blank">
                         <img src="img/jama-logo.png" className="tableImg" /></a>
                     </Td>
-                    <Td column="Key" style={{whiteSpace: "nowrap"}}>{coverage.key}</Td>
-                    <Td column="Name"><a onClick={(key) => this.onClick(coverage.key)}>{coverage.name}</a></Td>
-                    <Td column="Type" style={{whiteSpace: "nowrap"}}>{coverage.type}</Td>
+                    {/*<Td column="Key" style={{whiteSpace: "nowrap"}}>{coverage.key}</Td>*/}
+                    <Td column="Name" value={coverage.name}><a onClick={(key) => this.onClick(coverage.key)}>{coverage.name}</a></Td>
+                    <Td column="Type">{coverage.type}</Td>
                     <Td column="Status">{coverage.node.status}</Td>
                     <Td column="Test Cases">{coverage.testcases ? coverage.testcases.length : 0}</Td>
                 </Tr>
@@ -65,11 +65,11 @@ export default class extends React.Component {
 
         return (
             <div>
-                {this.state.isPanelOpen && <div style={{ height: "50vh" }}><GraphPanel /></div>}
+                <div id="container" style={{width: "100%", float: "left", marginRight: "-500px"}}><div style={{marginRight: "500px", height: height}}><GraphPanel /></div></div>
 
                 { this.props.coverage.status === TEST_COVERAGE_FETCH_START && "Fetching data..."}
 
-                <div style={{overflow: "auto", height: height}}>
+                <div style={{overflow: "auto", float: "right", width: "500", height: height}}>
                     <div className="box box-solid">
 
                         <div className="box-header with-border"><h4>{this.props.searchKey}</h4></div>
@@ -81,7 +81,8 @@ export default class extends React.Component {
                             <div><a onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
                                 <a onClick={(filter) => this.filter(true)}>Show Uncovered</a></div>}
 
-                            <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={true} filterable={['Name', 'Key', 'Status', 'Type']}>
+                            <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name"]}
+                               filterable={['Name', 'Key', 'Status', 'Type']}>
                                 {prepared}
                             </Table>
                         </div>
