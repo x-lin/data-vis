@@ -48,18 +48,34 @@ export default class extends React.Component {
             );
         });
 
+        const linkStyle = {
+            color: "#444",
+            boxShadow: "0 0 0 .03em #ddd",
+            padding: "6px 8px"
+        };
+
+        const activeLinkStyle = {
+            backgroundColor: "#2c3b41",
+            color: "#fff",
+            boxShadow: "0 0 0 .03em #2c3b41",
+            pointerEvents: "none",
+            cursor: "default",
+            padding: "6px 8px"
+        };
+
         return (
             <div className="box box-solid">
                 <div className="box-header with-border"><h4>{this.props.coverage.name}</h4></div>
 
                 <div className="box-body">
                     { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                    `${data.length} result${data.length !== 1 ? "s" : ""} found.`}
-                    {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                    <div><a onClick={(filter) => this.filter(false)}>Show All</a>&nbsp; | &nbsp;
-                        <a onClick={(filter) => this.filter(true)}>Show With No Test Cases</a></div>}
+                    <div style={{float: "left", padding: "10px 0px"}}>{`${data.length} result${data.length !== 1 ? "s" : ""} found.`}</div>}
 
-                    <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name"]}
+                    {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
+                    <div style={{float: "right", padding: "10px 0px"}}><a onClick={(filter) => this.filter(false)} style={this.state.filter ? linkStyle : activeLinkStyle}>Show All</a>
+                        <a onClick={(filter) => this.filter(true)} style={this.state.filter ? activeLinkStyle : linkStyle}>Show With No Test Cases</a></div>}
+
+                    <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name", "Test Cases"]}
                            filterable={['Name', 'Key', 'Status', 'Type']}>
                         {prepared}
                     </Table>

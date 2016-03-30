@@ -61527,6 +61527,21 @@
 	                );
 	            });
 
+	            var linkStyle = {
+	                color: "#444",
+	                boxShadow: "0 0 0 .03em #ddd",
+	                padding: "6px 8px"
+	            };
+
+	            var activeLinkStyle = {
+	                backgroundColor: "#2c3b41",
+	                color: "#fff",
+	                boxShadow: "0 0 0 .03em #2c3b41",
+	                pointerEvents: "none",
+	                cursor: "default",
+	                padding: "6px 8px"
+	            };
+
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "box box-solid" },
@@ -61542,29 +61557,32 @@
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "box-body" },
-	                    this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && data.length + " result" + (data.length !== 1 ? "s" : "") + " found.",
 	                    this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && _react2.default.createElement(
 	                        "div",
-	                        null,
+	                        { style: { float: "left", padding: "10px 0px" } },
+	                        data.length + " result" + (data.length !== 1 ? "s" : "") + " found."
+	                    ),
+	                    this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && _react2.default.createElement(
+	                        "div",
+	                        { style: { float: "right", padding: "10px 0px" } },
 	                        _react2.default.createElement(
 	                            "a",
 	                            { onClick: function onClick(filter) {
 	                                    return _this2.filter(false);
-	                                } },
+	                                }, style: this.state.filter ? linkStyle : activeLinkStyle },
 	                            "Show All"
 	                        ),
-	                        "  |  ",
 	                        _react2.default.createElement(
 	                            "a",
 	                            { onClick: function onClick(filter) {
 	                                    return _this2.filter(true);
-	                                } },
+	                                }, style: this.state.filter ? activeLinkStyle : linkStyle },
 	                            "Show With No Test Cases"
 	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactable.Table,
-	                        { className: "table table-bordered table-hover", itemsPerPage: 100, sortable: ["Key", "Status", "Type", "Name"],
+	                        { className: "table table-bordered table-hover", itemsPerPage: 100, sortable: ["Key", "Status", "Type", "Name", "Test Cases"],
 	                            filterable: ['Name', 'Key', 'Status', 'Type'] },
 	                        prepared
 	                    )
