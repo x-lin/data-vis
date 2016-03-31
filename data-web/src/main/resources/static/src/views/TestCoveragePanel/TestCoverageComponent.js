@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 
 import { searchTestCoverage } from "../../actions/aggregated/SearchTestCoverage";
 import { searchNeighbors } from "../../actions/aggregated/SearchNeighbors";
+import { setVisibility } from "../../actions/action-creators/LayoutActions";
 import TestCoverageTable from "./TestCoverageTable";
 
 const mapStateToProps = (state) => {
     return {
-        coverage: state.coverage,
+        coverage: state.coverage
     };
 };
 
@@ -18,6 +19,9 @@ const mapDispatchProps = (dispatch) => {
         },
         searchNeighborsStart: (category, key) => {
             dispatch(searchNeighbors(category, key));
+        },
+        setPanelInvisible: () => {
+            dispatch(setVisibility(false));
         }
     };
 };

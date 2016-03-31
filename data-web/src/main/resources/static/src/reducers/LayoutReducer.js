@@ -38,7 +38,7 @@ const setSidebarVisibility = (state, action) => {
 };
 
 const setSidebarObject = (state, action) => {
-    if(state.sidebar.key !== action.key) {
+    if(action.key && state.sidebar.key !== action.key) {
         let panelObject = null;
         const panels = state.sidebar.sidePanels;
 

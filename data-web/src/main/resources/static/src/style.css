@@ -229,3 +229,21 @@ a, a:hover {
 .reactable-filter-input {
     width: 100%;
 }
+
+th:not(.reactable-header-sortable) {
+    cursor: default;
+}
+
+.btn-flat-custom {
+    border: 0px;
+    border-radius: 0px;
+}
+
+.navbar-space {
+    margin-right: 50px;
+    border-right: 1px solid #eee;
+}
+
+a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-link, a:active.disabled-link {
+    cursor: default;
+}

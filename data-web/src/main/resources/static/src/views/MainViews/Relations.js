@@ -8,17 +8,17 @@ import Draggable from "./Draggable";
 import TestCoverageComponent from "../TestCoveragePanel/TestCoverageComponent";
 import VerticalSplitView from "../widgets/VerticalSplitView";
 
-const Relations = ( { sidebarObject } ) => {
+const Relations = ( { sidebarObject, sidebarVisible } ) => {
+    const height = "calc(100vh - 50px)"
+
     return (
         <div>
-            <VerticalSplitView rightWidth={500}>
-                <div>
+            <VerticalSplitView rightWidth={500} height={height}>
+                <div style={{height: height}}>
                     <SearchBarComponent />
-                    <div style={{height: "100vh"}}>
-                        <GraphPanel />
-                    </div>
+                    <GraphPanel />
                 </div>
-                {sidebarObject}
+                {sidebarVisible && sidebarObject}
             </VerticalSplitView>
         </div>
     );
@@ -26,20 +26,10 @@ const Relations = ( { sidebarObject } ) => {
 
 const mapStateToProps = (state) => {
     return {
-        sidebarObject: state.layout.sidebar.object
+        sidebarObject: state.layout.sidebar.object,
+        sidebarVisible: state.layout.sidebar.visible
     };
 };
-
-//const mapDispatchProps = (dispatch) => {
-//    return {
-//        getStats: (type, key) => {
-//            dispatch(getStats(type, key));
-//        },
-//        getStatsCategory: (type, key) => {
-//            dispatch(getStatsCategory(type, key));
-//        }
-//    };
-//};
 
 export default connect(
     mapStateToProps,

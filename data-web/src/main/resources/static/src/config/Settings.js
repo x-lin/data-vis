@@ -8,7 +8,8 @@ export default [
     {
         name: ADD_TO_GRAPH_ON_SEARCH,
         description: "Add to current graph on new search.",
-        value: false
+        value: false,
+        menuButton: "fa fa-plus"
     }, {
         name: DISABLED_OPACITY_VALUE,
         description: "Set opacity of filtered nodes/edges.",
@@ -18,15 +19,18 @@ export default [
         step: 0.05
     }, {
         name: DISABLE_SELECTION_OF_FILTERED_NODES,
-        description: "Disable event handlers for filtered nodes.",
-        value: false
+        description: "Enable event handlers for filtered nodes.",
+        value: true,
+        menuButton: "fa fa-mail-forward"
     }, {
         name: SET_NODE_POSITIONS_FIXED,
-        description: "Disable floating nodes.",
-        value: false
+        description: "Pin nodes.",
+        value: false,
+        menuButton: "fa fa-thumb-tack"
     }, {
         name: SHOW_CONTEXT_MENU,
         description: "Show custom context menu on right click.",
-        value: true
+        value: true,
+        menuButton: "fa fa-list-alt"
     }
 ];

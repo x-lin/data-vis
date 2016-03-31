@@ -65,9 +65,15 @@ export default class extends React.Component {
 
         return (
             <div className="box box-solid">
-                <div className="box-header with-border"><h4>{this.props.coverage.name}</h4></div>
+                <div className="box-header with-border">
+                    <h3 className="box-title">Test Coverage</h3>
+                    <div className="box-tools pull-right">
+                        <button type="button" className="btn btn-box-tool" onClick={() => this.props.setPanelInvisible()}><i className="fa fa-times"></i></button>
+                    </div>
+                </div>
 
                 <div className="box-body">
+                    <h4>{this.props.coverage.name}</h4>
                     { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
                     <div style={{float: "left", padding: "10px 0px"}}>{`${data.length} result${data.length !== 1 ? "s" : ""} found.`}</div>}
 

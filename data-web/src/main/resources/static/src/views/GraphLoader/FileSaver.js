@@ -10,6 +10,6 @@ export default class extends React.Component {
     }
 
     render() {
-        return <a onClick={(event) => this.handleSave(event)}>&nbsp;<span className="fa fa-save" /></a>
+        return <a title="Save Current Graph" onClick={(event) => this.handleSave(event)}>&nbsp;<span className="fa fa-save" /></a>
     }
 }

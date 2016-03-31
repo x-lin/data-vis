@@ -8,7 +8,8 @@ import SettingsSideBarComponent from "./Settings/SettingsSideBarComponent";
 import SearchBarComponent from "../views/SearchBar/SearchBarComponent";
 import FileLoaderComponent from "../views/GraphLoader/FileLoaderComponent";
 import FileSaverComponent from "../views/GraphLoader/FileSaverComponent";
-import NewFileComponent from "GraphLoader/NewGraphComponent";
+import NewGraphComponent from "../views/GraphLoader/NewGraphComponent";
+import MenuComponent from "../views/Menu/MenuComponent";
 
 export default class Main extends React.Component {
 
@@ -18,9 +19,9 @@ export default class Main extends React.Component {
                 <LanePicker />
                 <header className="main-header">
 
-                    <a href="index.html" className="logo ">
+                    <a name="Frequentis Logo" className="logo disabled-link">
                         &nbsp;
-                        {/*<img src="img/frequentis-logo.gif" width="160px" />*/}
+                        <img src="img/frequentis-logo.gif" width="120px" />
                     </a>
 
                     <nav className="navbar navbar-static-top">
@@ -37,12 +38,7 @@ export default class Main extends React.Component {
                             </div>
 
                             <div className="navbar-custom-menu">
-                                <ul className="nav navbar-nav">
-                                    <li><NewFileComponent /></li>
-                                    <li><a href="#"><FileLoaderComponent hasLabel={false} /></a></li>
-                                    <li style={{marginRight: "100px", borderRight: "1px solid #eee"}}><FileSaverComponent /></li>
-                                    <li><a href="#" data-toggle="control-sidebar"><i className="fa fa-gears" /></a></li>
-                                </ul>
+                                <MenuComponent />
                             </div>
                     </nav>
                 </header>

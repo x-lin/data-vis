@@ -8,6 +8,6 @@ export default class extends React.Component {
     }
 
     render() {
-        return <a onClick={() => this.handleClick()}><i className="fa fa-file-o" /></a>
+        return <a title="Create New Graph" onClick={() => this.handleClick()}><i className="fa fa-file-o" /></a>
     }
 }

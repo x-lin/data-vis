@@ -7,3 +7,10 @@ export const setTestCoverageVisibility = (visible) => {
         visible
     }
 };
+
+export const setVisibility = (visible) => {
+    return {
+        type: SET_SIDEBAR_PANEL,
+        visible
+    }
+};
