@@ -1,14 +1,8 @@
 import React from "react";
 
-import GraphLoaderPresentation from "./GraphLoaderPresentation";
+import FileLoadingButton from "../widgets/FileLoadingButton";
 
 export default class extends React.Component {
-    handleSave(event) {
-        const blob = new Blob([JSON.stringify(this.props.graph)], {type: "text/plain;charset=utf-8"});
-        const filename = `graph-${Date.now()}.json`;
-        saveAs(blob, filename);
-    }
-
     handleLoad(event) {
         const { updateGraph } = this.props;
 
@@ -40,11 +34,11 @@ export default class extends React.Component {
     }
 
     render() {
-        return (
-            <GraphLoaderPresentation
-                onSave={(event) => this.handleSave(event)}
-                onLoad={(event) => this.handleLoad(event)}
-            />
-        )
+        return <FileLoadingButton
+            buttonClass="btn-file"
+            iconClass="fa fa-folder-open"
+            onChange={(event) => this.handleLoad(event)}
+            title={this.props.hasLabel ? "Load Graph" : ""}
+        />
     }
 }

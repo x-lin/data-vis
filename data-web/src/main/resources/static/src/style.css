@@ -31,34 +31,49 @@ a, a:hover {
     background-color: #EEEEEE;
 }
 
-.skin-black .main-header .logo {
-    background-color: #EFEFEF;
-}
+/*.skin-black .main-header .logo {*/
+    /*background-color: #EFEFEF;*/
+/*}*/
 
-.skin-black .main-header .navbar {
-    background-color: #EFEFEF;
-}
+/*.skin-black .main-header .navbar {*/
+    /*background-color: #EFEFEF;*/
+/*}*/
 
-.skin-black .main-header > .navbar .nav > li > a {
-    /*text-transform: uppercase;*/
-    background-color: #EFEFEF;
-    font-weight: 700;
-    color: #333333;
-    border-right: 1px solid #CCCCCC;
-    border-left: 1px solid #CCCCCC;
-}
+/*.skin-black .main-header > .navbar .nav > li > a {*/
+    /*!*text-transform: uppercase;*!*/
+    /*background-color: #EFEFEF;*/
+    /*font-weight: 700;*/
+    /*color: #333333;*/
+    /*border-right: 1px solid #CCCCCC;*/
+    /*border-left: 1px solid #CCCCCC;*/
+/*}*/
 
-.skin-black .main-header > .navbar .nav .open > a:focus, .skin-black .main-header > .navbar .nav > .active > a {
-    /*text-transform: uppercase;*/
-    background-color: #EFEFEF;
-    color: #3366CC;
-}
+/*.skin-black .main-header > .navbar .nav .open > a:focus, .skin-black .main-header > .navbar .nav > .active > a {*/
+    /*!*text-transform: uppercase;*!*/
+    /*background-color: #EFEFEF;*/
+    /*color: #3366CC;*/
+/*}*/
 
-.skin-black .main-header > .navbar .nav > li > a:hover, a:active, a:focus {
-    /*text-transform: uppercase;*/
-    background-color: #EFEFEF;
-    color: #3366CC;
-}
+/*.skin-black .main-header > .navbar .nav > li > a:hover, a:active, a:focus {*/
+    /*!*text-transform: uppercase;*!*/
+    /*background-color: #EFEFEF;*/
+    /*color: #3366CC;*/
+/*}*/
+
+/*.navbar-brand,*/
+/*.navbar-nav li a {*/
+    /*line-height: 70px;*/
+    /*height: 70px;*/
+    /*padding-top: 0;*/
+/*}*/
+
+
+/*@media (min-width: 768px) {*/
+    /*.navbar-nav > li > a {*/
+        /*padding-top: 12px;*/
+        /*padding-bottom: 12px;*/
+    /*}*/
+/*}*/
 
 .sidebar-padding {
     padding: 10px 10px 0px 10px;

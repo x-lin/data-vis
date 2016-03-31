@@ -89,9 +89,6 @@
 	        _react2.default.createElement(
 	            _reactRouter.Route,
 	            { path: "/", component: _Main2.default },
-	            _react2.default.createElement(_reactRouter.Route, { path: "relationships", component: _Relations2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: "tree", component: _Tree2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: "schema/:project", component: _SchemaComponent2.default }),
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Relations2.default }),
 	            " /* default path -> take this, if no other match */"
 	        )
@@ -25997,7 +25994,7 @@
 	            state.edges.length = 0;
 	            state.legend.length = 0;
 
-	            return state;
+	            return _extends({}, state);
 	        case _GraphActionCreators.UPDATE_GRAPH:
 	            console.log("updating graph");
 	            state.nodes.length = 0;
@@ -27881,6 +27878,22 @@
 
 	var _SettingsSideBarComponent2 = _interopRequireDefault(_SettingsSideBarComponent);
 
+	var _SearchBarComponent = __webpack_require__(533);
+
+	var _SearchBarComponent2 = _interopRequireDefault(_SearchBarComponent);
+
+	var _FileLoaderComponent = __webpack_require__(861);
+
+	var _FileLoaderComponent2 = _interopRequireDefault(_FileLoaderComponent);
+
+	var _FileSaverComponent = __webpack_require__(863);
+
+	var _FileSaverComponent2 = _interopRequireDefault(_FileSaverComponent);
+
+	var _NewGraphComponent = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"GraphLoader/NewGraphComponent\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _NewGraphComponent2 = _interopRequireDefault(_NewGraphComponent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27921,50 +27934,7 @@
 	                        React.createElement(
 	                            "div",
 	                            { className: "collapse navbar-collapse pull-left", id: "navbar-collapse" },
-	                            React.createElement(
-	                                "ul",
-	                                { className: "nav navbar-nav" },
-	                                React.createElement(
-	                                    "li",
-	                                    null,
-	                                    React.createElement(
-	                                        "a",
-	                                        { href: "#" },
-	                                        "Graph Navigator ",
-	                                        React.createElement("span", { className: "sr-only" })
-	                                    )
-	                                ),
-	                                React.createElement(
-	                                    "li",
-	                                    null,
-	                                    React.createElement(
-	                                        "a",
-	                                        { href: "#tree" },
-	                                        "Tree ",
-	                                        React.createElement("span", { className: "sr-only" })
-	                                    )
-	                                ),
-	                                React.createElement(
-	                                    "li",
-	                                    null,
-	                                    React.createElement(
-	                                        "a",
-	                                        { href: "#schema/QCUBE" },
-	                                        "Schema ",
-	                                        React.createElement("span", { className: "sr-only" })
-	                                    )
-	                                ),
-	                                React.createElement(
-	                                    "li",
-	                                    null,
-	                                    React.createElement(
-	                                        "a",
-	                                        { href: "#coverage" },
-	                                        "Test Coverage",
-	                                        React.createElement("span", { className: "sr-only" })
-	                                    )
-	                                )
-	                            )
+	                            React.createElement("ul", { className: "nav navbar-nav" })
 	                        ),
 	                        React.createElement(
 	                            "div",
@@ -27972,6 +27942,25 @@
 	                            React.createElement(
 	                                "ul",
 	                                { className: "nav navbar-nav" },
+	                                React.createElement(
+	                                    "li",
+	                                    null,
+	                                    React.createElement(_NewGraphComponent2.default, null)
+	                                ),
+	                                React.createElement(
+	                                    "li",
+	                                    null,
+	                                    React.createElement(
+	                                        "a",
+	                                        { href: "#" },
+	                                        React.createElement(_FileLoaderComponent2.default, { hasLabel: false })
+	                                    )
+	                                ),
+	                                React.createElement(
+	                                    "li",
+	                                    { style: { marginRight: "100px", borderRight: "1px solid #eee" } },
+	                                    React.createElement(_FileSaverComponent2.default, null)
+	                                ),
 	                                React.createElement(
 	                                    "li",
 	                                    null,
@@ -44692,10 +44681,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _GraphLoaderComponent = __webpack_require__(526);
-
-	var _GraphLoaderComponent2 = _interopRequireDefault(_GraphLoaderComponent);
-
 	var _SideBarHeader = __webpack_require__(457);
 
 	var _SideBarHeader2 = _interopRequireDefault(_SideBarHeader);
@@ -44789,9 +44774,7 @@
 	                        "div",
 	                        { className: "sidebar-padding" },
 	                        renderCheckboxes()
-	                    ),
-	                    _react2.default.createElement(_SideBarHeader2.default, { title: "Save to/Load from File", iconClass: "fa fa-file-text" }),
-	                    _react2.default.createElement(_GraphLoaderComponent2.default, null)
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    "div",
@@ -44810,187 +44793,9 @@
 	};
 
 /***/ },
-/* 526 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(257);
-
-	var _GraphLoader = __webpack_require__(527);
-
-	var _GraphLoader2 = _interopRequireDefault(_GraphLoader);
-
-	var _GraphActionCreators = __webpack_require__(236);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        graph: state.graph
-	    };
-	};
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        updateGraph: function updateGraph(data) {
-	            dispatch((0, _GraphActionCreators.updateGraph)(data));
-	        }
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_GraphLoader2.default);
-
-/***/ },
-/* 527 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _GraphLoaderPresentation = __webpack_require__(528);
-
-	var _GraphLoaderPresentation2 = _interopRequireDefault(_GraphLoaderPresentation);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _class = function (_React$Component) {
-	    _inherits(_class, _React$Component);
-
-	    function _class() {
-	        _classCallCheck(this, _class);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
-	    }
-
-	    _createClass(_class, [{
-	        key: "handleSave",
-	        value: function handleSave(event) {
-	            var blob = new Blob([JSON.stringify(this.props.graph)], { type: "text/plain;charset=utf-8" });
-	            var filename = "graph-" + Date.now() + ".json";
-	            saveAs(blob, filename);
-	        }
-	    }, {
-	        key: "handleLoad",
-	        value: function handleLoad(event) {
-	            var updateGraph = this.props.updateGraph;
-
-
-	            var file = event.target.files[0];
-	            if (!file) {
-	                return;
-	            }
-	            var reader = new FileReader();
-	            reader.onload = function (e) {
-	                var graph = JSON.parse(e.target.result);
-
-	                //set isFixed value, as it's not saved in file
-	                graph.nodes = graph.nodes.map(function (node, index) {
-	                    node.isFixed = node.fixed && node.fixed == 1 ? true : false;
-	                    return node;
-	                });
-
-	                //resetting edges to indices, otherwise D3 will not recognize and render the edges
-	                //this way D3 creates the references to the nodes itself
-	                graph.edges = graph.edges.map(function (edge, index) {
-	                    edge.source = edge.source.index;
-	                    edge.target = edge.target.index;
-	                    return edge;
-	                });
-
-	                updateGraph(graph);
-	            };
-	            reader.readAsText(file);
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(_GraphLoaderPresentation2.default, {
-	                onSave: function onSave(event) {
-	                    return _this2.handleSave(event);
-	                },
-	                onLoad: function onLoad(event) {
-	                    return _this2.handleLoad(event);
-	                }
-	            });
-	        }
-	    }]);
-
-	    return _class;
-	}(_react2.default.Component);
-
-	exports.default = _class;
-
-/***/ },
-/* 528 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _FileLoadingButton = __webpack_require__(529);
-
-	var _FileLoadingButton2 = _interopRequireDefault(_FileLoadingButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (_ref) {
-	    var onSave = _ref.onSave;
-	    var onLoad = _ref.onLoad;
-
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(_FileLoadingButton2.default, {
-	            buttonClass: "btn btn-block btn-file sidebar-button",
-	            iconClass: "fa fa-upload",
-	            onChange: function onChange(event) {
-	                return onLoad(event);
-	            },
-	            title: "Load Graph"
-	        }),
-	        _react2.default.createElement(
-	            "div",
-	            { className: "btn btn-block sidebar-button", onClick: onSave },
-	            _react2.default.createElement("span", { className: "fa fa-save" }),
-	            "   Save Graph"
-	        )
-	    );
-	};
-
-/***/ },
+/* 526 */,
+/* 527 */,
+/* 528 */,
 /* 529 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -45108,8 +44913,6 @@
 
 	var Relations = function Relations(_ref) {
 	    var sidebarObject = _ref.sidebarObject;
-
-	    console.log("rerendering");
 
 	    return _react2.default.createElement(
 	        "div",
@@ -83533,7 +83336,7 @@
 /* 852 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -84646,6 +84449,243 @@
 	        visible: visible
 	    };
 	};
+
+/***/ },
+/* 859 */,
+/* 860 */,
+/* 861 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(257);
+
+	var _FileLoader = __webpack_require__(862);
+
+	var _FileLoader2 = _interopRequireDefault(_FileLoader);
+
+	var _GraphActionCreators = __webpack_require__(236);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        graph: state.graph
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        updateGraph: function updateGraph(data) {
+	            dispatch((0, _GraphActionCreators.updateGraph)(data));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_FileLoader2.default);
+
+/***/ },
+/* 862 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _FileLoadingButton = __webpack_require__(529);
+
+	var _FileLoadingButton2 = _interopRequireDefault(_FileLoadingButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    }
+
+	    _createClass(_class, [{
+	        key: "handleLoad",
+	        value: function handleLoad(event) {
+	            var updateGraph = this.props.updateGraph;
+
+
+	            var file = event.target.files[0];
+	            if (!file) {
+	                return;
+	            }
+	            var reader = new FileReader();
+	            reader.onload = function (e) {
+	                var graph = JSON.parse(e.target.result);
+
+	                //set isFixed value, as it's not saved in file
+	                graph.nodes = graph.nodes.map(function (node, index) {
+	                    node.isFixed = node.fixed && node.fixed == 1 ? true : false;
+	                    return node;
+	                });
+
+	                //resetting edges to indices, otherwise D3 will not recognize and render the edges
+	                //this way D3 creates the references to the nodes itself
+	                graph.edges = graph.edges.map(function (edge, index) {
+	                    edge.source = edge.source.index;
+	                    edge.target = edge.target.index;
+	                    return edge;
+	                });
+
+	                updateGraph(graph);
+	            };
+	            reader.readAsText(file);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(_FileLoadingButton2.default, {
+	                buttonClass: "btn-file",
+	                iconClass: "fa fa-folder-open",
+	                onChange: function onChange(event) {
+	                    return _this2.handleLoad(event);
+	                },
+	                title: this.props.hasLabel ? "Load Graph" : ""
+	            });
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
+
+/***/ },
+/* 863 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(257);
+
+	var _FileSaver = __webpack_require__(864);
+
+	var _FileSaver2 = _interopRequireDefault(_FileSaver);
+
+	var _GraphActionCreators = __webpack_require__(236);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        graph: state.graph
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        updateGraph: function updateGraph(data) {
+	            dispatch((0, _GraphActionCreators.updateGraph)(data));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_FileSaver2.default);
+
+/***/ },
+/* 864 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _FileLoadingButton = __webpack_require__(529);
+
+	var _FileLoadingButton2 = _interopRequireDefault(_FileLoadingButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    }
+
+	    _createClass(_class, [{
+	        key: "handleSave",
+	        value: function handleSave(event) {
+	            var blob = new Blob([JSON.stringify(this.props.graph)], { type: "text/plain;charset=utf-8" });
+	            var filename = "graph-" + Date.now() + ".json";
+	            saveAs(blob, filename);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                "a",
+	                { onClick: function onClick(event) {
+	                        return _this2.handleSave(event);
+	                    } },
+	                " ",
+	                _react2.default.createElement("span", { className: "fa fa-save" })
+	            );
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
 
 /***/ }
 /******/ ]);

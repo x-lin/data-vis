@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import GraphLoader from "./GraphLoader";
+import FileLoader from "./FileLoader";
 import { updateGraph } from "../../actions/action-creators/GraphActionCreators";
 
 const mapStateToProps = (state) => {
@@ -21,4 +21,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(GraphLoader);
+)(FileLoader);

@@ -9,8 +9,6 @@ import TestCoverageComponent from "../TestCoveragePanel/TestCoverageComponent";
 import VerticalSplitView from "../widgets/VerticalSplitView";
 
 const Relations = ( { sidebarObject } ) => {
-    console.log("rerendering")
-
     return (
         <div>
             <VerticalSplitView rightWidth={500}>

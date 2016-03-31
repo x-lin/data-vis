@@ -5,11 +5,12 @@ import { connect } from "react-redux";
 import LanePicker from "./LanePicker/LanePicker";
 
 import SettingsSideBarComponent from "./Settings/SettingsSideBarComponent";
+import SearchBarComponent from "../views/SearchBar/SearchBarComponent";
+import FileLoaderComponent from "../views/GraphLoader/FileLoaderComponent";
+import FileSaverComponent from "../views/GraphLoader/FileSaverComponent";
+import NewFileComponent from "GraphLoader/NewGraphComponent";
 
-export default class Main extends React.Component{ //creates react component
-    //pushState() {
-    //    this.props.history.pushState(null, "/relationships/");
-    //};
+export default class Main extends React.Component {
 
     render() {
         return (
@@ -30,21 +31,17 @@ export default class Main extends React.Component{ //creates react component
                                 </button>
                             </div>*/}
 
-
                             <div className="collapse navbar-collapse pull-left" id="navbar-collapse">
                                 <ul className="nav navbar-nav">
-                                    <li><a href="#">Graph Navigator <span className="sr-only"></span></a></li>
-                                    <li><a href="#tree">Tree <span className="sr-only"></span></a></li>
-                                    <li><a href="#schema/QCUBE">Schema <span className="sr-only"></span></a></li>
-                                    <li><a href="#coverage">Test Coverage<span className="sr-only"></span></a></li>
                                 </ul>
                             </div>
 
                             <div className="navbar-custom-menu">
                                 <ul className="nav navbar-nav">
-                                    <li>
-                                        <a href="#" data-toggle="control-sidebar"><i className="fa fa-gears" /></a>
-                                    </li>
+                                    <li><NewFileComponent /></li>
+                                    <li><a href="#"><FileLoaderComponent hasLabel={false} /></a></li>
+                                    <li style={{marginRight: "100px", borderRight: "1px solid #eee"}}><FileSaverComponent /></li>
+                                    <li><a href="#" data-toggle="control-sidebar"><i className="fa fa-gears" /></a></li>
                                 </ul>
                             </div>
                     </nav>

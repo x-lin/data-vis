@@ -9,7 +9,6 @@ import Main from "./views/Main";
 import Relations from "./views/MainViews/Relations";
 import Tree from "./views/TreePanel/Tree";
 import Schema from "./views/MainViews/SchemaComponent";
-import TestCoverage from "./views/MainViews/TestCoverage";
 
 import { polyfill } from "es6-promise";
 
@@ -17,11 +16,9 @@ ReactDOM.render (
     <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/" component={Main}>
-                <Route path="relationships" component={Relations} />
+                {/*<Route path="relationships" component={Relations} />
                 <Route path="tree" component={Tree} />
-                <Route path="schema/:project" component={Schema} />
-                <Route path="coverage" component={TestCoverage} />
-                <Route path="coverage/:key/:type" component={TestCoverage} />
+                <Route path="schema/:project" component={Schema} />*/}
                 <IndexRoute component={Relations} /> /* default path -> take this, if no other match */
             </Route>
         </Router>
