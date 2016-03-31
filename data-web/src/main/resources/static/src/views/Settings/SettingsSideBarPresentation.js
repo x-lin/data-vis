@@ -1,6 +1,5 @@
 import React from "react";
 
-import GraphLoaderComponent from "../GraphLoader/GraphLoaderComponent";
 import SideBarHeader from "../widgets/SideBarHeader";
 import Slider from "../widgets/Slider";
 
@@ -58,8 +57,6 @@ export default ( {
                         <div className="sidebar-padding">
                             {renderCheckboxes()}
                         </div>
-                    <SideBarHeader title="Save to/Load from File" iconClass="fa fa-file-text" />
-                    <GraphLoaderComponent />
                 </div>
 
                 <div className="tab-pane" id="control-sidebar-home-tab">
