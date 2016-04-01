@@ -16,8 +16,7 @@ export default ( {
     } ) => {
     return (
                 <form onSubmit={(event) => submitHandler(event)}>
-            <div className="input-group relative">
-
+            <div className="relative">
 
                 <SearchInputField
                     value={activeInputValue}
@@ -29,7 +28,7 @@ export default ( {
                     items={items}
                 />
 
-                <SearchButton />
+
             </div>
         </form>
     );

@@ -10,11 +10,12 @@ export default ( {
             <input
                 value={value}
                 type="text"
-                className=" form-control"
+                className="form-control"
                 id="search"
                 autoComplete="off"
                 onChange={(event) => onChangeHandler(event)}
                 onKeyDown={(event) => onKeyDownHandler(event)}
+                placeholder="Search..."
             />
         </div>
     );

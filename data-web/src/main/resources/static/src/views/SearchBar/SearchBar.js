@@ -22,6 +22,25 @@ export default class extends React.Component {
         );
     };
 
+    componentDidMount() {
+        // Hide dropdown block on click outside the block
+        window.addEventListener('click', () => this.cancel(), false);
+    }
+
+
+    componentWillUnmount() {
+        // Remove click event listener on component unmount
+        window.removeEventListener('click', () => this.cancel(), false);
+    }
+
+    stopPropagation(e) {
+        e.stopPropagation();
+    }
+
+    cancel() {
+        this.props.clearAllItems();
+    }
+
     renderItems(){
         return this.props.items.map((item, index) => {
             const listgroupClass = " list-group-item cursor"
@@ -53,9 +72,8 @@ export default class extends React.Component {
 
     handleSubmit(event) {
         const { items, selectedIndex, value } = this.props;
+        console.log("props on submit", this.props)
         event.preventDefault(); //done to disable site refreshes
-
-        console.log(items[selectedIndex]);
 
         const item = items[selectedIndex];
         const type = item.type === "Project" ? item.type : "GeneralNode";
@@ -63,13 +81,6 @@ export default class extends React.Component {
         this.props.searchNeighborsStart(type, items[selectedIndex].key);
         this.props.setSearchInputValue("");
         this.resetOnOptionSelection(items[selectedIndex]);
-
-        //if(selectedIndex >= 0) {
-        //    this.resetOnOptionSelection(items[selectedIndex]);
-        //} else {
-        //    this.props.searchNeighborsStart(type, value);
-        //    this.props.setSearchInputValue("")
-        //}
     };
 
     handleChange(event) {
@@ -95,13 +106,21 @@ export default class extends React.Component {
         }
         //up key
         if(event.keyCode === 38) {
-            if(this.props.selectedIndex >= 0) {
+            if(this.props.selectedIndex > 0) {
                 this.props.setSearchSelectedIndex(this.props.selectedIndex-1);
             }
         }
         //ESC key
         if(event.keyCode === 27) {
             this.props.clearAllItems();
+        }
+        //Enter key
+        if (event.keyCode === 13) {
+            //will trigger event listener, if event is not stopped propagating
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.handleSubmit(event);
         }
     }
 }

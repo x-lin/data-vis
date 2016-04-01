@@ -80271,21 +80271,51 @@
 	            });
 	        }
 	    }, {
-	        key: "renderItems",
-	        value: function renderItems() {
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
 	            var _this3 = this;
 
+	            // Hide dropdown block on click outside the block
+	            window.addEventListener('click', function () {
+	                return _this3.cancel();
+	            }, false);
+	        }
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            var _this4 = this;
+
+	            // Remove click event listener on component unmount
+	            window.removeEventListener('click', function () {
+	                return _this4.cancel();
+	            }, false);
+	        }
+	    }, {
+	        key: "stopPropagation",
+	        value: function stopPropagation(e) {
+	            e.stopPropagation();
+	        }
+	    }, {
+	        key: "cancel",
+	        value: function cancel() {
+	            this.props.clearAllItems();
+	        }
+	    }, {
+	        key: "renderItems",
+	        value: function renderItems() {
+	            var _this5 = this;
+
 	            return this.props.items.map(function (item, index) {
-	                var listgroupClass = " list-group-item cursor" + (_this3.props.selectedIndex === index ? " active" : "");
+	                var listgroupClass = " list-group-item cursor" + (_this5.props.selectedIndex === index ? " active" : "");
 
 	                return _react2.default.createElement(
 	                    "li",
 	                    { className: listgroupClass, key: index,
 	                        onClick: function onClick(event) {
-	                            _this3.handleSubmit(event);
+	                            _this5.handleSubmit(event);
 	                        },
 	                        onMouseOver: function onMouseOver() {
-	                            _this3.props.setSearchSelectedIndex(index);
+	                            _this5.props.setSearchSelectedIndex(index);
 	                        } },
 	                    _react2.default.createElement(_CircleSpan2.default, { radius: "8px", color: _Constants2.default.getColor(item.type) }),
 	                    "   ",
@@ -80296,7 +80326,7 @@
 	    }, {
 	        key: "renderCategories",
 	        value: function renderCategories() {
-	            var _this4 = this;
+	            var _this6 = this;
 
 	            var array = [];
 
@@ -80304,7 +80334,7 @@
 	                array.push(_react2.default.createElement(
 	                    "li",
 	                    { key: category, onClick: function onClick() {
-	                            return _this4.props.setSearchCategory(category);
+	                            return _this6.props.setSearchCategory(category);
 	                        } },
 	                    _react2.default.createElement(
 	                        "a",
@@ -80328,9 +80358,8 @@
 	            var selectedIndex = _props.selectedIndex;
 	            var value = _props.value;
 
+	            console.log("props on submit", this.props);
 	            event.preventDefault(); //done to disable site refreshes
-
-	            console.log(items[selectedIndex]);
 
 	            var item = items[selectedIndex];
 	            var type = item.type === "Project" ? item.type : "GeneralNode";
@@ -80338,13 +80367,6 @@
 	            this.props.searchNeighborsStart(type, items[selectedIndex].key);
 	            this.props.setSearchInputValue("");
 	            this.resetOnOptionSelection(items[selectedIndex]);
-
-	            //if(selectedIndex >= 0) {
-	            //    this.resetOnOptionSelection(items[selectedIndex]);
-	            //} else {
-	            //    this.props.searchNeighborsStart(type, value);
-	            //    this.props.setSearchInputValue("")
-	            //}
 	        }
 	    }, {
 	        key: "handleChange",
@@ -80374,13 +80396,21 @@
 	            }
 	            //up key
 	            if (event.keyCode === 38) {
-	                if (this.props.selectedIndex >= 0) {
+	                if (this.props.selectedIndex > 0) {
 	                    this.props.setSearchSelectedIndex(this.props.selectedIndex - 1);
 	                }
 	            }
 	            //ESC key
 	            if (event.keyCode === 27) {
 	                this.props.clearAllItems();
+	            }
+	            //Enter key
+	            if (event.keyCode === 13) {
+	                //will trigger event listener, if event is not stopped propagating
+	                event.preventDefault();
+	                event.stopPropagation();
+
+	                this.handleSubmit(event);
 	            }
 	        }
 	    }]);
@@ -80438,7 +80468,7 @@
 	            } },
 	        _react2.default.createElement(
 	            "div",
-	            { className: "input-group relative" },
+	            { className: "relative" },
 	            _react2.default.createElement(_SearchInputField2.default, {
 	                value: activeInputValue,
 	                onChangeHandler: function onChangeHandler(event) {
@@ -80450,8 +80480,7 @@
 	            }),
 	            _react2.default.createElement(_SearchAutocomplete2.default, {
 	                items: items
-	            }),
-	            _react2.default.createElement(_SearchButton2.default, null)
+	            })
 	        )
 	    );
 	};
@@ -80516,7 +80545,7 @@
 	        _react2.default.createElement("input", {
 	            value: value,
 	            type: "text",
-	            className: " form-control",
+	            className: "form-control",
 	            id: "search",
 	            autoComplete: "off",
 	            onChange: function onChange(event) {
@@ -80524,7 +80553,8 @@
 	            },
 	            onKeyDown: function onKeyDown(event) {
 	                return onKeyDownHandler(event);
-	            }
+	            },
+	            placeholder: "Search..."
 	        })
 	    );
 	};
@@ -80554,7 +80584,7 @@
 	        null,
 	        items.length > 0 ? _react2.default.createElement(
 	            "ul",
-	            { className: "list-group list-z" },
+	            { className: "list-group list-z", style: { right: "5px", left: "5px", top: "39px" } },
 	            items
 	        ) : _react2.default.createElement("span", null)
 	    );
