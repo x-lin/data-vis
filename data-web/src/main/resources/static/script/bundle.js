@@ -28255,7 +28255,8 @@
 	    value: 0.3,
 	    min: 0,
 	    max: 0.5,
-	    step: 0.05
+	    step: 0.05,
+	    menuButton: "fa fa-eye-slash"
 	}, {
 	    name: DISABLE_SELECTION_OF_FILTERED_NODES,
 	    description: "Enable event handlers for filtered nodes.",
@@ -80584,7 +80585,7 @@
 	        null,
 	        items.length > 0 ? _react2.default.createElement(
 	            "ul",
-	            { className: "list-group list-z", style: { right: "5px", left: "5px", top: "39px" } },
+	            { className: "list-group list-z", style: { right: "5px", left: "5px", top: "39px", position: "absolute" } },
 	            items
 	        ) : _react2.default.createElement("span", null)
 	    );
@@ -84067,7 +84068,7 @@
 /* 860 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
