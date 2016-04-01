@@ -41,15 +41,12 @@ export default class ContextMenu extends React.Component {
         </div>;
     }
 
-    renderMenu(key, type, name) {
-        const isProject = type === "Project";
-        const isFeature = type === ("Feature" || "FEAT");
-        const isReq = type === ("SSS" || "SRS" || "PSRS" || "System Requirement" || "Preliminary System Requirement" || "Software Requirement");
+    renderMenu(key, type, d) {
 
         return <div className="dropdown">
             <div className="dropdown-content">
 
-                <a onClick={() => this.showTestCoverage(key, type, name)}>Show Test Coverage</a>
+                <a onClick={() => this.showTestCoverage(key, type, d)}>Show Test Coverage</a>
                 <a onClick={() => this.goUpstream(key, type)}>Show System Decomp. - Upstream</a>
                 <a onClick={() => this.goDownstream(key, type)}>Show System Decomp. - Downstream</a>
                 {/*<a onClick={() => this.showFeatures(key, type)}>Show Features</a>*/}
@@ -58,8 +55,8 @@ export default class ContextMenu extends React.Component {
         </div>
     }
 
-    showTestCoverage(key, category, name) {
-        store.dispatch(searchTestCoverage(category, key, name));
+    showTestCoverage(key, category, d) {
+        store.dispatch(searchTestCoverage(category, key, d));
     }
 
     showFeatures(key, category) {
@@ -117,7 +114,7 @@ export default class ContextMenu extends React.Component {
                                 <div className="row inpadding ">
                                     {this.renderButtons(type, jiraId, jamaId, jamaProjectId)}
                                 </div>
-                                {this.renderMenu(key, type, name)}
+                                {this.renderMenu(key, type, this.props.d)}
                             </div>
                             <div className="tab-pane" id="tab_2">
                                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.

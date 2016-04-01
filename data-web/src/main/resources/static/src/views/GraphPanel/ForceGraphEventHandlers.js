@@ -7,8 +7,6 @@ const EventHandlers = {};
 let isContextOpen = false;
 
 EventHandlers.onClickSvg = () => {
-    //ContextMenuBuilder.removeTooltip();
-    ContextMenuBuilder.removePopup();
     isContextOpen = false;
 };
 

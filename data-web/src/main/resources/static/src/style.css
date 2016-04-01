@@ -247,3 +247,12 @@ th:not(.reactable-header-sortable) {
 a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-link, a:active.disabled-link {
     cursor: default;
 }
+
+.info-box-text {
+    color: #999;
+    padding-left: 15px;
+}
+
+.content-wrapper {
+    /*background-color: #FFF;*/
+}

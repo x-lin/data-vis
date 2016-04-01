@@ -20,6 +20,15 @@ ContextMenuBuilder.createAndShow = (element, d, props) => {
         $("#popover-content")[0]
     );
 
+    //close popover on outside click
+    $('body').on('click', function (e) {
+        $('#popover-content').each(function () {
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                ContextMenuBuilder.removePopup();
+            }
+        });
+    });
+
     return element;
 };
 

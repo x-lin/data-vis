@@ -4,6 +4,7 @@ import { Table, Tr, Td, Thead, Th } from "reactable";
 import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS } from "../../actions/action-creators/TestCoverageActions";
 import GraphPanel from "../GraphPanel/GraphPanel";
 import Constants from "../../config/Constants";
+import CircleSpan from "../widgets/CircleSpan";
 
 export default class extends React.Component {
     constructor(props) {
@@ -66,14 +67,17 @@ export default class extends React.Component {
         return (
             <div className="box box-solid">
                 <div className="box-header with-border">
-                    <h3 className="box-title">Test Coverage</h3>
+                    <p><span className="label label-default">Test Coverage</span></p>
+                    <h3 className="box-title">
+                        <CircleSpan color={Constants.getColor(this.props.coverage.name.type)} radius={"12px"} /> <strong>{this.props.coverage.name.name}</strong> - {this.props.coverage.name.type}
+                    </h3>
                     <div className="box-tools pull-right">
-                        <button type="button" className="btn btn-box-tool" onClick={() => this.props.setPanelInvisible()}><i className="fa fa-times"></i></button>
+                        <button className="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><span className="fa fa-minus" /></button>
+                        <button type="button" className="btn btn-box-tool" onClick={() => this.props.setPanelInvisible()}><span className="fa fa-times" /></button>
                     </div>
                 </div>
 
                 <div className="box-body">
-                    <h4>{this.props.coverage.name}</h4>
                     { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
                     <div style={{float: "left", padding: "10px 0px"}}>{`${data.length} result${data.length !== 1 ? "s" : ""} found.`}</div>}
 

@@ -64,19 +64,19 @@
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _Relations = __webpack_require__(835);
+	var _Relations = __webpack_require__(840);
 
 	var _Relations2 = _interopRequireDefault(_Relations);
 
-	var _Tree = __webpack_require__(840);
+	var _Tree = __webpack_require__(845);
 
 	var _Tree2 = _interopRequireDefault(_Tree);
 
-	var _SchemaComponent = __webpack_require__(843);
+	var _SchemaComponent = __webpack_require__(848);
 
 	var _SchemaComponent2 = _interopRequireDefault(_SchemaComponent);
 
-	var _es6Promise = __webpack_require__(855);
+	var _es6Promise = __webpack_require__(860);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25786,6 +25786,10 @@
 
 	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
 
+	var _StatsPanelComponent = __webpack_require__(863);
+
+	var _StatsPanelComponent2 = _interopRequireDefault(_StatsPanelComponent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Constants = {};
@@ -25826,11 +25830,7 @@
 	    Requirement: "reqs"
 	};
 
-	Constants.sidePanels = {
-	    test: false //test coverage panel
-	};
-
-	Constants.sidePanels = [{ object: _react2.default.createElement(_TestCoverageComponent2.default, null), key: "test" }];
+	Constants.sidePanels = [{ object: _react2.default.createElement(_TestCoverageComponent2.default, null), key: "test" }, { object: _react2.default.createElement(_StatsPanelComponent2.default, null), key: "stats" }];
 
 	Constants.invisible = {
 	    Folder: false,
@@ -28339,6 +28339,10 @@
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
+	var _CircleSpan = __webpack_require__(302);
+
+	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28450,30 +28454,47 @@
 	                    "div",
 	                    { className: "box-header with-border" },
 	                    _react2.default.createElement(
+	                        "p",
+	                        null,
+	                        _react2.default.createElement(
+	                            "span",
+	                            { className: "label label-default" },
+	                            "Test Coverage"
+	                        )
+	                    ),
+	                    _react2.default.createElement(
 	                        "h3",
 	                        { className: "box-title" },
-	                        "Test Coverage"
+	                        _react2.default.createElement(_CircleSpan2.default, { color: _Constants2.default.getColor(this.props.coverage.name.type), radius: "12px" }),
+	                        " ",
+	                        _react2.default.createElement(
+	                            "strong",
+	                            null,
+	                            this.props.coverage.name.name
+	                        ),
+	                        " - ",
+	                        this.props.coverage.name.type
 	                    ),
 	                    _react2.default.createElement(
 	                        "div",
 	                        { className: "box-tools pull-right" },
 	                        _react2.default.createElement(
 	                            "button",
+	                            { className: "btn btn-box-tool", "data-widget": "collapse", "data-toggle": "tooltip", title: "", "data-original-title": "Collapse" },
+	                            _react2.default.createElement("span", { className: "fa fa-minus" })
+	                        ),
+	                        _react2.default.createElement(
+	                            "button",
 	                            { type: "button", className: "btn btn-box-tool", onClick: function onClick() {
 	                                    return _this2.props.setPanelInvisible();
 	                                } },
-	                            _react2.default.createElement("i", { className: "fa fa-times" })
+	                            _react2.default.createElement("span", { className: "fa fa-times" })
 	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "box-body" },
-	                    _react2.default.createElement(
-	                        "h4",
-	                        null,
-	                        this.props.coverage.name
-	                    ),
 	                    this.props.coverage.status === _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS && _react2.default.createElement(
 	                        "div",
 	                        { style: { float: "left", padding: "10px 0px" } },
@@ -45103,6 +45124,15 @@
 	ContextMenuBuilder.createAndShow = function (element, d, props) {
 	    _reactDom2.default.render(_react2.default.createElement(_ContextMenu2.default, _extends({ d: d, target: element[0] }, props)), $("#popover-content")[0]);
 
+	    //close popover on outside click
+	    $('body').on('click', function (e) {
+	        $('#popover-content').each(function () {
+	            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+	                ContextMenuBuilder.removePopup();
+	            }
+	        });
+	    });
+
 	    return element;
 	};
 
@@ -45221,12 +45251,8 @@
 	        }
 	    }, {
 	        key: "renderMenu",
-	        value: function renderMenu(key, type, name) {
+	        value: function renderMenu(key, type, d) {
 	            var _this2 = this;
-
-	            var isProject = type === "Project";
-	            var isFeature = type === ("Feature" || "FEAT");
-	            var isReq = type === ("SSS" || "SRS" || "PSRS" || "System Requirement" || "Preliminary System Requirement" || "Software Requirement");
 
 	            return _react2.default.createElement(
 	                "div",
@@ -45237,7 +45263,7 @@
 	                    _react2.default.createElement(
 	                        "a",
 	                        { onClick: function onClick() {
-	                                return _this2.showTestCoverage(key, type, name);
+	                                return _this2.showTestCoverage(key, type, d);
 	                            } },
 	                        "Show Test Coverage"
 	                    ),
@@ -45267,8 +45293,8 @@
 	        }
 	    }, {
 	        key: "showTestCoverage",
-	        value: function showTestCoverage(key, category, name) {
-	            _ReduxStore.store.dispatch((0, _SearchTestCoverage.searchTestCoverage)(category, key, name));
+	        value: function showTestCoverage(key, category, d) {
+	            _ReduxStore.store.dispatch((0, _SearchTestCoverage.searchTestCoverage)(category, key, d));
 	        }
 	    }, {
 	        key: "showFeatures",
@@ -45375,7 +45401,7 @@
 	                                    { className: "row inpadding " },
 	                                    this.renderButtons(type, jiraId, jamaId, jamaProjectId)
 	                                ),
-	                                this.renderMenu(key, type, name)
+	                                this.renderMenu(key, type, this.props.d)
 	                            ),
 	                            _react2.default.createElement(
 	                                "div",
@@ -63166,8 +63192,6 @@
 	var isContextOpen = false;
 
 	EventHandlers.onClickSvg = function () {
-	    //ContextMenuBuilder.removeTooltip();
-	    _ContextMenuBuilder2.default.removePopup();
 	    isContextOpen = false;
 	};
 
@@ -64632,11 +64656,11 @@
 
 	var _FileSaverComponent2 = _interopRequireDefault(_FileSaverComponent);
 
-	var _NewGraphComponent = __webpack_require__(858);
+	var _NewGraphComponent = __webpack_require__(835);
 
 	var _NewGraphComponent2 = _interopRequireDefault(_NewGraphComponent);
 
-	var _MenuComponent = __webpack_require__(860);
+	var _MenuComponent = __webpack_require__(837);
 
 	var _MenuComponent2 = _interopRequireDefault(_MenuComponent);
 
@@ -80889,6 +80913,313 @@
 
 	var _reactRedux = __webpack_require__(235);
 
+	var _NewGraph = __webpack_require__(836);
+
+	var _NewGraph2 = _interopRequireDefault(_NewGraph);
+
+	var _GraphActionCreators = __webpack_require__(271);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        clearGraph: function clearGraph() {
+	            dispatch((0, _GraphActionCreators.clearGraph)());
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(null, mapDispatchProps)(_NewGraph2.default);
+
+/***/ },
+/* 836 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _FileLoadingButton = __webpack_require__(830);
+
+	var _FileLoadingButton2 = _interopRequireDefault(_FileLoadingButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    }
+
+	    _createClass(_class, [{
+	        key: "handleClick",
+	        value: function handleClick() {
+	            this.props.clearGraph();
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                "a",
+	                { title: "Create New Graph", onClick: function onClick() {
+	                        return _this2.handleClick();
+	                    } },
+	                _react2.default.createElement("i", { className: "fa fa-file-o" })
+	            );
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
+
+/***/ },
+/* 837 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(235);
+
+	var _SettingsActions = __webpack_require__(571);
+
+	var _Menu = __webpack_require__(838);
+
+	var _Menu2 = _interopRequireDefault(_Menu);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        settings: state.settings
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        toggle: function toggle(name) {
+	            dispatch((0, _SettingsActions.toggleSetting)(name));
+	        },
+	        setValue: function setValue(name, value) {
+	            dispatch((0, _SettingsActions.setSettingValue)(name, value));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_Menu2.default);
+
+/***/ },
+/* 838 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _MenuPresentation = __webpack_require__(839);
+
+	var _MenuPresentation2 = _interopRequireDefault(_MenuPresentation);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class(props) {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
+	    }
+
+	    _createClass(_class, [{
+	        key: "handleToggle",
+	        value: function handleToggle(value) {
+	            console.log(value);
+	            this.props.toggle(value);
+	        }
+	    }, {
+	        key: "handleValueChange",
+	        value: function handleValueChange(name, value) {
+	            this.props.setValue(name, value);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(_MenuPresentation2.default, {
+	                toggleHandler: function toggleHandler(value) {
+	                    return _this2.handleToggle(value);
+	                },
+	                valueHandler: function valueHandler(name, value) {
+	                    return _this2.handleValueChange(name, value);
+	                },
+	                settings: this.props.settings
+	            });
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
+
+/***/ },
+/* 839 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SideBarHeader = __webpack_require__(751);
+
+	var _SideBarHeader2 = _interopRequireDefault(_SideBarHeader);
+
+	var _Slider = __webpack_require__(759);
+
+	var _Slider2 = _interopRequireDefault(_Slider);
+
+	var _FileLoaderComponent = __webpack_require__(828);
+
+	var _FileLoaderComponent2 = _interopRequireDefault(_FileLoaderComponent);
+
+	var _FileSaverComponent = __webpack_require__(833);
+
+	var _FileSaverComponent2 = _interopRequireDefault(_FileSaverComponent);
+
+	var _NewGraphComponent = __webpack_require__(835);
+
+	var _NewGraphComponent2 = _interopRequireDefault(_NewGraphComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var toggleHandler = _ref.toggleHandler;
+	    var valueHandler = _ref.valueHandler;
+	    var settings = _ref.settings;
+
+	    var renderEntries = function renderEntries() {
+	        var settingsFiltered = settings.filter(function (setting) {
+	            return setting.menuButton && typeof setting.value === "boolean";
+	        });
+
+	        return settingsFiltered.map(function (setting, index) {
+	            var clazz = setting.value ? "btn btn-default active btn-flat-custom" : "";
+
+	            return _react2.default.createElement(
+	                "li",
+	                { key: index, className: index === settingsFiltered.length - 1 ? "navbar-space" : "" },
+	                _react2.default.createElement(
+	                    "a",
+	                    { title: setting.description, className: clazz, onClick: function onClick(value) {
+	                            return toggleHandler(setting.name);
+	                        } },
+	                    _react2.default.createElement("span", { className: setting.menuButton })
+	                )
+	            );
+	        });
+	    };
+
+	    return _react2.default.createElement(
+	        "ul",
+	        { className: "nav navbar-nav" },
+	        _react2.default.createElement(
+	            "li",
+	            null,
+	            _react2.default.createElement(_NewGraphComponent2.default, null)
+	        ),
+	        _react2.default.createElement(
+	            "li",
+	            null,
+	            _react2.default.createElement(
+	                "a",
+	                { href: "#", title: "Load Graph From File" },
+	                _react2.default.createElement(_FileLoaderComponent2.default, { hasLabel: false })
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "li",
+	            { className: "navbar-space" },
+	            _react2.default.createElement(_FileSaverComponent2.default, null)
+	        ),
+	        renderEntries(),
+	        _react2.default.createElement(
+	            "li",
+	            null,
+	            _react2.default.createElement(
+	                "a",
+	                { href: "#", title: "Settings", "data-toggle": "control-sidebar" },
+	                _react2.default.createElement("i", { className: "fa fa-gears" })
+	            )
+	        )
+	    );
+	};
+
+/***/ },
+/* 840 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(235);
+
 	var _SearchBarComponent = __webpack_require__(820);
 
 	var _SearchBarComponent2 = _interopRequireDefault(_SearchBarComponent);
@@ -80897,11 +81228,11 @@
 
 	var _GraphPanel2 = _interopRequireDefault(_GraphPanel);
 
-	var _ExportToImage = __webpack_require__(836);
+	var _ExportToImage = __webpack_require__(841);
 
 	var _ExportToImage2 = _interopRequireDefault(_ExportToImage);
 
-	var _Draggable = __webpack_require__(837);
+	var _Draggable = __webpack_require__(842);
 
 	var _Draggable2 = _interopRequireDefault(_Draggable);
 
@@ -80909,7 +81240,7 @@
 
 	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
 
-	var _VerticalSplitView = __webpack_require__(839);
+	var _VerticalSplitView = __webpack_require__(844);
 
 	var _VerticalSplitView2 = _interopRequireDefault(_VerticalSplitView);
 
@@ -80948,7 +81279,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(Relations);
 
 /***/ },
-/* 836 */
+/* 841 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -81088,7 +81419,7 @@
 	exports.default = ExportToImage;
 
 /***/ },
-/* 837 */
+/* 842 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -81105,7 +81436,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDraggable = __webpack_require__(838);
+	var _reactDraggable = __webpack_require__(843);
 
 	var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
 
@@ -81192,7 +81523,7 @@
 	exports.default = _class;
 
 /***/ },
-/* 838 */
+/* 843 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -82522,7 +82853,7 @@
 	//# sourceMappingURL=react-draggable.js.map
 
 /***/ },
-/* 839 */
+/* 844 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -82565,7 +82896,7 @@
 	};
 
 /***/ },
-/* 840 */
+/* 845 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -82600,7 +82931,7 @@
 
 	var _DOMSelector2 = _interopRequireDefault(_DOMSelector);
 
-	__webpack_require__(841);
+	__webpack_require__(846);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82829,13 +83160,13 @@
 	exports.default = _class;
 
 /***/ },
-/* 841 */
+/* 846 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(842);
+	var content = __webpack_require__(847);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(306)(content, {});
@@ -82855,7 +83186,7 @@
 	}
 
 /***/ },
-/* 842 */
+/* 847 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(305)();
@@ -82869,7 +83200,7 @@
 
 
 /***/ },
-/* 843 */
+/* 848 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -82884,9 +83215,9 @@
 
 	var _reactRedux = __webpack_require__(235);
 
-	var _SearchSchema = __webpack_require__(844);
+	var _SearchSchema = __webpack_require__(849);
 
-	var _Schema = __webpack_require__(846);
+	var _Schema = __webpack_require__(851);
 
 	var _Schema2 = _interopRequireDefault(_Schema);
 
@@ -82909,7 +83240,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_Schema2.default);
 
 /***/ },
-/* 844 */
+/* 849 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -82919,7 +83250,7 @@
 	});
 	exports.searchSchema = undefined;
 
-	var _GETSchema = __webpack_require__(845);
+	var _GETSchema = __webpack_require__(850);
 
 	var _GraphActionCreators = __webpack_require__(271);
 
@@ -82945,7 +83276,7 @@
 	};
 
 /***/ },
-/* 845 */
+/* 850 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -82980,7 +83311,7 @@
 	};
 
 /***/ },
-/* 846 */
+/* 851 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -82995,15 +83326,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDraggable = __webpack_require__(838);
+	var _reactDraggable = __webpack_require__(843);
 
 	var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
 
-	var _SchemaComponent = __webpack_require__(847);
+	var _SchemaComponent = __webpack_require__(852);
 
 	var _SchemaComponent2 = _interopRequireDefault(_SchemaComponent);
 
-	var _SchemaSideBar = __webpack_require__(854);
+	var _SchemaSideBar = __webpack_require__(859);
 
 	var _SchemaSideBar2 = _interopRequireDefault(_SchemaSideBar);
 
@@ -83066,7 +83397,7 @@
 	exports.default = _class;
 
 /***/ },
-/* 847 */
+/* 852 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -83081,13 +83412,13 @@
 
 	var _reactRedux = __webpack_require__(235);
 
-	var _SearchSchema = __webpack_require__(844);
+	var _SearchSchema = __webpack_require__(849);
 
-	var _Schema = __webpack_require__(848);
+	var _Schema = __webpack_require__(853);
 
 	var _Schema2 = _interopRequireDefault(_Schema);
 
-	__webpack_require__(852);
+	__webpack_require__(857);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -83108,7 +83439,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_Schema2.default);
 
 /***/ },
-/* 848 */
+/* 853 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -83137,7 +83468,7 @@
 
 	var _FilterHelpers2 = _interopRequireDefault(_FilterHelpers);
 
-	__webpack_require__(849);
+	__webpack_require__(854);
 
 	var _D3Utils = __webpack_require__(556);
 
@@ -83147,7 +83478,7 @@
 
 	var _DOMSelector2 = _interopRequireDefault(_DOMSelector);
 
-	var _SchemaEventHandlers = __webpack_require__(851);
+	var _SchemaEventHandlers = __webpack_require__(856);
 
 	var _SchemaEventHandlers2 = _interopRequireDefault(_SchemaEventHandlers);
 
@@ -83467,13 +83798,13 @@
 	exports.default = _class;
 
 /***/ },
-/* 849 */
+/* 854 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(850);
+	var content = __webpack_require__(855);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(306)(content, {});
@@ -83493,7 +83824,7 @@
 	}
 
 /***/ },
-/* 850 */
+/* 855 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(305)();
@@ -83507,7 +83838,7 @@
 
 
 /***/ },
-/* 851 */
+/* 856 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -83555,13 +83886,13 @@
 	exports.default = EventHandlers;
 
 /***/ },
-/* 852 */
+/* 857 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(853);
+	var content = __webpack_require__(858);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(306)(content, {});
@@ -83581,7 +83912,7 @@
 	}
 
 /***/ },
-/* 853 */
+/* 858 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(305)();
@@ -83595,7 +83926,7 @@
 
 
 /***/ },
-/* 854 */
+/* 859 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -83703,10 +84034,10 @@
 	exports.default = _class;
 
 /***/ },
-/* 855 */
+/* 860 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -83836,7 +84167,7 @@
 	    function lib$es6$promise$asap$$attemptVertx() {
 	      try {
 	        var r = require;
-	        var vertx = __webpack_require__(856);
+	        var vertx = __webpack_require__(861);
 	        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
 	        return lib$es6$promise$asap$$useVertxTimer();
 	      } catch(e) {
@@ -84649,7 +84980,7 @@
 	    };
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(857)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(862)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -84664,20 +84995,20 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), (function() { return this; }()), __webpack_require__(611)(module)))
 
 /***/ },
-/* 856 */
+/* 861 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 857 */
+/* 862 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 858 */
+/* 863 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -84692,131 +85023,91 @@
 
 	var _reactRedux = __webpack_require__(235);
 
-	var _NewGraph = __webpack_require__(859);
+	var _GETStats = __webpack_require__(864);
 
-	var _NewGraph2 = _interopRequireDefault(_NewGraph);
+	var _StatsPanel = __webpack_require__(865);
 
-	var _GraphActionCreators = __webpack_require__(271);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        clearGraph: function clearGraph() {
-	            dispatch((0, _GraphActionCreators.clearGraph)());
-	        }
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(null, mapDispatchProps)(_NewGraph2.default);
-
-/***/ },
-/* 859 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _FileLoadingButton = __webpack_require__(830);
-
-	var _FileLoadingButton2 = _interopRequireDefault(_FileLoadingButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _class = function (_React$Component) {
-	    _inherits(_class, _React$Component);
-
-	    function _class() {
-	        _classCallCheck(this, _class);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
-	    }
-
-	    _createClass(_class, [{
-	        key: "handleClick",
-	        value: function handleClick() {
-	            this.props.clearGraph();
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(
-	                "a",
-	                { title: "Create New Graph", onClick: function onClick() {
-	                        return _this2.handleClick();
-	                    } },
-	                _react2.default.createElement("i", { className: "fa fa-file-o" })
-	            );
-	        }
-	    }]);
-
-	    return _class;
-	}(_react2.default.Component);
-
-	exports.default = _class;
-
-/***/ },
-/* 860 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(235);
-
-	var _SettingsActions = __webpack_require__(571);
-
-	var _Menu = __webpack_require__(861);
-
-	var _Menu2 = _interopRequireDefault(_Menu);
+	var _StatsPanel2 = _interopRequireDefault(_StatsPanel);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        settings: state.settings
+	        stats: state.stats.data,
+	        statsKey: state.stats.key,
+	        results: state.stats.results,
+	        status: state.stats.status
 	    };
 	};
 
 	var mapDispatchProps = function mapDispatchProps(dispatch) {
 	    return {
-	        toggle: function toggle(name) {
-	            dispatch((0, _SettingsActions.toggleSetting)(name));
+	        getStats: function getStats(type, key) {
+	            dispatch((0, _GETStats.getStats)(type, key));
 	        },
-	        setValue: function setValue(name, value) {
-	            dispatch((0, _SettingsActions.setSettingValue)(name, value));
+	        getStatsCategory: function getStatsCategory(type, key) {
+	            dispatch((0, _GETStats.getStatsCategory)(type, key));
 	        }
 	    };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_Menu2.default);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_StatsPanel2.default);
 
 /***/ },
-/* 861 */
+/* 864 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.getStatsCategory = exports.getStats = undefined;
+
+	var _axios = __webpack_require__(248);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _StatsActions = __webpack_require__(580);
+
+	var _Constants = __webpack_require__(232);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _LaneReducer = __webpack_require__(269);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var getStats = exports.getStats = function getStats(category, key) {
+	    var endpoint = _Constants2.default.getEndpoint(category);
+
+	    return function (dispatch, getState) {
+	        dispatch((0, _StatsActions.fetchStatsStart)(category, key));
+
+	        return _axios2.default.get("/search/" + endpoint + "/neighborTypes/" + key).then(function (response) {
+	            dispatch((0, _StatsActions.fetchStatsSuccess)(category, key, response.data));
+	        }).catch(function (response) {
+	            dispatch((0, _StatsActions.fetchStatsError)(category, key, response.data));
+	        });
+	    };
+	};
+
+	var getStatsCategory = exports.getStatsCategory = function getStatsCategory(category, key, nodeType) {
+	    var endpoint = _Constants2.default.getEndpoint(category);
+
+	    return function (dispatch, getState) {
+	        dispatch((0, _StatsActions.fetchStatsCategoryStart)(category, key));
+
+	        return _axios2.default.get("/search/" + endpoint + "/neighbors/" + key + "?type=" + nodeType + "&limit=10000").then(function (response) {
+	            dispatch((0, _StatsActions.fetchStatsCategorySuccess)(category, key, response.data));
+	        }).catch(function (response) {
+	            dispatch((0, _StatsActions.fetchStatsCategoryError)(category, key, response.data));
+	        });
+	    };
+	};
+
+/***/ },
+/* 865 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -84831,9 +85122,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _MenuPresentation = __webpack_require__(862);
+	var _StatsActions = __webpack_require__(580);
 
-	var _MenuPresentation2 = _interopRequireDefault(_MenuPresentation);
+	var _GraphPanel = __webpack_require__(291);
+
+	var _GraphPanel2 = _interopRequireDefault(_GraphPanel);
+
+	var _Constants = __webpack_require__(232);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -84849,34 +85146,136 @@
 	    function _class(props) {
 	        _classCallCheck(this, _class);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
+
+	        _this.state = {
+	            filter: false
+	        };
+	        return _this;
 	    }
 
 	    _createClass(_class, [{
-	        key: "handleToggle",
-	        value: function handleToggle(value) {
-	            console.log(value);
-	            this.props.toggle(value);
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            if (this.props.searchType && this.props.searchKey) {
+	                this.props.searchTestCoverage(this.props.searchType, this.props.searchKey);
+	            }
 	        }
 	    }, {
-	        key: "handleValueChange",
-	        value: function handleValueChange(name, value) {
-	            this.props.setValue(name, value);
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (this.props.searchKey !== nextProps.searchKey && nextProps.searchType && nextProps.searchKey) {
+	                this.props.searchTestCoverage(nextProps.searchType, nextProps.searchKey);
+	            }
+	        }
+	    }, {
+	        key: "renderBarChart",
+	        value: function renderBarChart() {
+	            var _this2 = this;
+
+	            return this.props.stats.map(function (coverage, index) {
+	                var count = coverage.testcases ? coverage.testcases.length : 0;
+
+	                return _react2.default.createElement(
+	                    "tr",
+	                    { key: index, className: count ? "" : "bg-red" },
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        _react2.default.createElement(
+	                            "a",
+	                            { href: _Constants2.default.getJamaAddress(coverage.node.jamaId, coverage.node.projectId), target: "_blank" },
+	                            _react2.default.createElement("img", { src: "img/jama-logo.png", className: "tableImg" })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        _react2.default.createElement(
+	                            "a",
+	                            { onClick: function onClick(key) {
+	                                    return _this2.onClick(coverage.key);
+	                                } },
+	                            coverage.key
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        coverage.name
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        coverage.type
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        coverage.testcases ? coverage.testcases.length : 0
+	                    )
+	                );
+	            });
+	        }
+	    }, {
+	        key: "renderTable",
+	        value: function renderTable() {
+	            var _this3 = this;
+
+	            return this.props.results.map(function (coverage, index) {
+	                var count = coverage.testcases ? coverage.testcases.length : 0;
+
+	                return _react2.default.createElement(
+	                    "tr",
+	                    { key: index, className: count ? "" : "bg-red" },
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        _react2.default.createElement(
+	                            "a",
+	                            { href: _Constants2.default.getJamaAddress(coverage.node.jamaId, coverage.node.projectId), target: "_blank" },
+	                            _react2.default.createElement("img", { src: "img/jama-logo.png", className: "tableImg" })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        _react2.default.createElement(
+	                            "a",
+	                            { onClick: function onClick(key) {
+	                                    return _this3.onClick(coverage.key);
+	                                } },
+	                            coverage.key
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        coverage.name
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        coverage.type
+	                    ),
+	                    _react2.default.createElement(
+	                        "td",
+	                        null,
+	                        coverage.testcases ? coverage.testcases.length : 0
+	                    )
+	                );
+	            });
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            var _this2 = this;
+	            var height = "calc(50vh - 50px)";
 
-	            return _react2.default.createElement(_MenuPresentation2.default, {
-	                toggleHandler: function toggleHandler(value) {
-	                    return _this2.handleToggle(value);
-	                },
-	                valueHandler: function valueHandler(name, value) {
-	                    return _this2.handleValueChange(name, value);
-	                },
-	                settings: this.props.settings
-	            });
+	            return _react2.default.createElement(
+	                "div",
+	                { style: { height: "50vh" } },
+	                this.props.status === _StatsActions.STATS_FETCH_START && "Fetching data..."
+	            );
 	        }
 	    }]);
 
@@ -84884,104 +85283,6 @@
 	}(_react2.default.Component);
 
 	exports.default = _class;
-
-/***/ },
-/* 862 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _SideBarHeader = __webpack_require__(751);
-
-	var _SideBarHeader2 = _interopRequireDefault(_SideBarHeader);
-
-	var _Slider = __webpack_require__(759);
-
-	var _Slider2 = _interopRequireDefault(_Slider);
-
-	var _FileLoaderComponent = __webpack_require__(828);
-
-	var _FileLoaderComponent2 = _interopRequireDefault(_FileLoaderComponent);
-
-	var _FileSaverComponent = __webpack_require__(833);
-
-	var _FileSaverComponent2 = _interopRequireDefault(_FileSaverComponent);
-
-	var _NewGraphComponent = __webpack_require__(858);
-
-	var _NewGraphComponent2 = _interopRequireDefault(_NewGraphComponent);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (_ref) {
-	    var toggleHandler = _ref.toggleHandler;
-	    var valueHandler = _ref.valueHandler;
-	    var settings = _ref.settings;
-
-	    var renderEntries = function renderEntries() {
-	        var settingsFiltered = settings.filter(function (setting) {
-	            return setting.menuButton && typeof setting.value === "boolean";
-	        });
-
-	        return settingsFiltered.map(function (setting, index) {
-	            var clazz = setting.value ? "btn btn-default active btn-flat-custom" : "";
-
-	            return _react2.default.createElement(
-	                "li",
-	                { key: index, className: index === settingsFiltered.length - 1 ? "navbar-space" : "" },
-	                _react2.default.createElement(
-	                    "a",
-	                    { title: setting.description, className: clazz, onClick: function onClick(value) {
-	                            return toggleHandler(setting.name);
-	                        } },
-	                    _react2.default.createElement("span", { className: setting.menuButton })
-	                )
-	            );
-	        });
-	    };
-
-	    return _react2.default.createElement(
-	        "ul",
-	        { className: "nav navbar-nav" },
-	        _react2.default.createElement(
-	            "li",
-	            null,
-	            _react2.default.createElement(_NewGraphComponent2.default, null)
-	        ),
-	        _react2.default.createElement(
-	            "li",
-	            null,
-	            _react2.default.createElement(
-	                "a",
-	                { href: "#", title: "Load Graph From File" },
-	                _react2.default.createElement(_FileLoaderComponent2.default, { hasLabel: false })
-	            )
-	        ),
-	        _react2.default.createElement(
-	            "li",
-	            { className: "navbar-space" },
-	            _react2.default.createElement(_FileSaverComponent2.default, null)
-	        ),
-	        renderEntries(),
-	        _react2.default.createElement(
-	            "li",
-	            null,
-	            _react2.default.createElement(
-	                "a",
-	                { href: "#", title: "Settings", "data-toggle": "control-sidebar" },
-	                _react2.default.createElement("i", { className: "fa fa-gears" })
-	            )
-	        )
-	    );
-	};
 
 /***/ }
 /******/ ]);
