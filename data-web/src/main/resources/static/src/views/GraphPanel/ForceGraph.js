@@ -103,6 +103,20 @@ export default class extends React.Component {
         this.state.g = vis;
         svg.call(this.createOnZoomBehavior(vis));
 
+        svg.append("defs").selectAll("marker")
+            .data(["suit", "licensing", "resolved"])
+            .enter().append("marker")
+            .attr("id", function(d) { return d; })
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 45)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+            .style("stroke", "#4679BD");
+
         this.state.links = vis.selectAll(".link");
         this.state.nodes = vis.selectAll(".node");
 
@@ -126,14 +140,6 @@ export default class extends React.Component {
             .links(data.edges)
             .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
             .on("start", () => this.createSpeededUpAnimation());
-
-        //this.state.force = cola.d3adaptor()
-        //    .linkDistance(70)
-        //    .nodes(data.nodes)
-        //    .links(data.edges)
-        //    .avoidOverlaps(true)
-        //    .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
-        //    .on("start", () => this.createSpeededUpAnimation());
     }
 
     updateGraphData(data) {
@@ -142,11 +148,14 @@ export default class extends React.Component {
     }
 
     addLinks() {
-        this.state.links.enter().insert("line", "g")
+        this.state.links
+            .enter()
+            .insert("line", "g")
             .attr("class", "link ");
 
         this.state.links
-            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity});
+            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity})
+            //.style("marker-end",  "url(#suit)");
     }
 
     setVisibilityByFilter(data) {
@@ -194,7 +203,7 @@ export default class extends React.Component {
         g.append("text")
             .attr("class", "force-text  unselectable")
             .text(d => {
-                return d.name.length > 30 ? d.name.substring(0, 30) + "..." : d.name;
+                return d.name.length > 25 ? d.name.substring(0, 25) + "..." : d.name;
             })
             .call(this.getTextBox);
 
@@ -215,12 +224,12 @@ export default class extends React.Component {
     setNodeBehavior() {
         this.state.nodes
             .on("dblclick", (d, props) => {
-                if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                if(d.visible || this.props.enableFiltered) {
                     EventHandlers.onDoubleClickNode(d, this.props);
                 }
             })
             .on("contextmenu", (d) => {
-                if(this.props.showContextMenu && ((this.props.disableFiltered && d.visible) || !this.props.disableFiltered)) {
+                if(this.props.showContextMenu && (d.visible || this.props.enableFiltered)) {
                     EventHandlers.onContextMenuNode(d, this.props);
                 }
             })
@@ -233,17 +242,17 @@ export default class extends React.Component {
             .call(
                 this.state.force.drag()
                     .on("dragstart", (d) => {
-                        if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                        if(d.visible || this.props.enableFiltered) {
                             EventHandlers.onDragStartNode(d);
                         }
                     })
                     .on("drag", (d) => {
-                        if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                        if(d.visible || this.props.enableFiltered) {
                             EventHandlers.onDragNode(d);
                         }
                     })
                     .on("dragend", (d) => {
-                        if((this.props.disableFiltered && d.visible) || !this.props.disableFiltered) {
+                        if(d.visible || this.props.enableFiltered) {
                             EventHandlers.onDragEndNode(d);
                         }
                     })

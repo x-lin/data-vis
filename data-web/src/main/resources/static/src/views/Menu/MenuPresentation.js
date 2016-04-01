@@ -6,24 +6,39 @@ import FileLoaderComponent from "../GraphLoader/FileLoaderComponent";
 import FileSaverComponent from "../GraphLoader/FileSaverComponent";
 import NewGraphComponent from "../GraphLoader/NewGraphComponent";
 
+import { DropdownButton, MenuItem, OverlayTrigger, Popover } from "react-bootstrap";
+
 export default ( {
     toggleHandler,
     valueHandler,
     settings
 } ) => {
     const renderEntries = () => {
-        const settingsFiltered = settings.filter(setting => {
-            return setting.menuButton && typeof setting.value === "boolean";
-        });
+        return settings.map((setting, index) => {
+            if(typeof setting.value === "boolean") {
+                let clazz = setting.value ? "btn btn-default active btn-flat-custom" : "";
 
-        return settingsFiltered.map((setting, index) => {
-            let clazz = setting.value ? "btn btn-default active btn-flat-custom" : "";
+                return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
+                    <a title={setting.description} className={clazz} onClick={(value) => toggleHandler(setting.name)}>
+                        <span className={setting.menuButton} />
+                    </a>
+                </li>;
+            } else {
+                return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}><div style={{minWidth: "200px", paddingTop: "5px"}}><Slider min={setting.min} max={setting.max}
+                                defaultValue={setting.value}
+                                step={setting.step}
+                                onChange={function(value) {
+                                            valueHandler(setting.name, value)}}
+                        /></div></Popover>}>
+                        <a title={setting.description}>
+                            <span className={setting.menuButton} />
+                            <span className="label label-default"><span className="fa fa-caret-down" /></span>
+                        </a>
+                    </OverlayTrigger>
+                </li>;
+            }
 
-            return <li key={index} className={index === settingsFiltered.length-1 ? "navbar-space" : ""}>
-                <a title={setting.description} className={clazz} onClick={(value) => toggleHandler(setting.name)}>
-                    <span className={setting.menuButton} />
-                </a>
-            </li>
         })
     };
 
