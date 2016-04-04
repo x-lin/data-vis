@@ -3,7 +3,8 @@
     position: absolute;
     padding: 15px;
     font-size: 11px;
-    /*background-color: #999;*/
+    background: rgba(255, 255, 255, .9);
+    margin: 1px;
     /*border: 1px solid #CCC;*/
     /*width: 100px;*/
     /*height: 100px;*/

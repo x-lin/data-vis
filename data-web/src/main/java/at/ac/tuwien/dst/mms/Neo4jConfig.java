@@ -20,7 +20,7 @@ public class Neo4jConfig extends Neo4jConfiguration {
 	}
 
 	@Bean(destroyMethod = "shutdown")
-	GraphDatabaseService graphDatabaseService() {
+	static GraphDatabaseService graphDatabaseService() {
 		//return new SpringCypherRestGraphDatabase(Config.NEO4J_HOST);
 		return new GraphDatabaseFactory()
 				.newEmbeddedDatabaseBuilder("app.db")

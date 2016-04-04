@@ -81,8 +81,7 @@ export default class ContextMenu extends React.Component {
     }
 
     render() {
-
-        let { jiraId, key, jamaId, jamaProjectId, type, name } = this.props.d;
+        let { jiraId, key, jamaId, projectId, type, name } = this.props.d;
 
         //TODO fix that for extraction -> add jiraId
         if(type === "User" || type === "Project") {
@@ -111,9 +110,6 @@ export default class ContextMenu extends React.Component {
                         <div className="tab-content overflow-scroll">
 
                             <div className="tab-pane active" id="tab_1">
-                                <div className="row inpadding ">
-                                    {this.renderButtons(type, jiraId, jamaId, jamaProjectId)}
-                                </div>
                                 {this.renderMenu(key, type, this.props.d)}
                             </div>
                             <div className="tab-pane" id="tab_2">
@@ -127,6 +123,9 @@ export default class ContextMenu extends React.Component {
                     {/*<Group1 id="group1" openGroupId={this.state.openGroupId} clickHandler={(id) => this.setGroup("group1")} />
                         <Group2 id="group2" openGroupId={this.state.openGroupId} clickHandler={(id) => this.setGroup("group2")} />
                         <Group3 id="group3" openGroupId={this.state.openGroupId} clickHandler={(id) => this.setGroup("group3")} />*/}
+                    <div className="row inpadding ">
+                        {this.renderButtons(type, jiraId, jamaId, projectId)}
+                    </div>
                 </Popover>
             </Overlay>
         )

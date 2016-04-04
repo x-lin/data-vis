@@ -1,15 +1,12 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
+import at.ac.tuwien.dst.mms.dal.ProjectDataReader;
 import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
-import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
-import at.ac.tuwien.dst.mms.model.ModelEntity;
 import at.ac.tuwien.dst.mms.model.Project;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +17,7 @@ import java.util.Map;
  * Created by xlin on 15.01.2016.
  */
 @Service
-public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
-
-	@Autowired
-	RepositoryService repositoryService;
-
+public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> implements ProjectDataReader {
 	@Override
 	public List<Project> findAll(Integer limit) {
 		return ((ProjectRepository)this.getRepository()).findAll(limit);
@@ -43,7 +36,6 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 	}
 
 	@Transactional
-	@Override
 	public ProjectSchema getSchema(String key) {
 		ProjectSchema schema = new ProjectSchema();
 		ProjectRepository repo = (ProjectRepository)this.getRepository();
@@ -55,7 +47,6 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 	}
 
 	@Transactional
-	@Override
 	public ProjectSchema getSchema(String key, String relation) {
 		ProjectSchema schema = new ProjectSchema();
 		ProjectRepository repo = (ProjectRepository)this.getRepository();
@@ -75,18 +66,14 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> {
 		return testCoverage;
 	}
 
-	@Autowired
-	protected Neo4jOperations neo4jOperations;
-
 	@Override
 	@Transactional
 	public Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit, List type) {
 		Project node = this.find(key);
-		Iterable<Map<String, Object>> nodes = null;
+		node.setCount(((ProjectRepository)this.getRepository()).countNeighbors(key));
+		Iterable<Map<String, Object>> nodes = ((ProjectRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit, type);
 
-		((ProjectRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit, type);
-
-		List<ModelEntity> neighbors = this.getNeighbors(nodes);
+		List<Map<String, Object>> neighbors = this.getNeighbors(nodes);
 
 		Neighbors returnVal = new Neighbors();
 		returnVal.setNode(node);

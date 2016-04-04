@@ -25,7 +25,8 @@ export default class extends React.Component {
             translate: [0,0],
             scale: 1,
             zoom: {},
-            selector: "#" + this.props.divId
+            selector: "#" + this.props.divId,
+            localG: {}
         }
     }
 
@@ -127,6 +128,7 @@ export default class extends React.Component {
         this.state.nodes.exit().remove();
         this.state.links.exit().remove();
         this.state.force.start();
+        this.addNeighborCount(this.state.localG);
     }
 
     createForceLayout(data) {
@@ -191,12 +193,40 @@ export default class extends React.Component {
             .attr("r", 20)
             .attr("id", (d) => { return ContextMenuBuilder.buildElementId(d.key, d.category);});
 
+        this.state.localG = g;
+
         this.addNodeText(g);
 
         this.state.nodes
             .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity;});
 
         this.setNodeBehavior();
+    }
+
+    addNeighborCount(g) {
+        const padding = 2;
+
+        const g1 = g.append("g")
+            .attr("transform", "translate(11,14)")
+            .style("fill", d => Constants.getColor(d.type ? d.type : d.category));
+
+        g1.append("text")
+            .attr("class", "unselectable force-text-label")
+            .text((d) => {
+                const count = d.count - (d.weight || 1);
+
+                return (count && count > 0 ) ? `+${count}` : ""
+            })
+            .call(this.getTextBox);
+
+        g1.insert("rect","text")
+            .attr("x", function(d){return d.bbox.x - padding })
+            .attr("y", function(d){return d.bbox.y - padding })
+            .attr("width", function(d){return d.bbox.width + (d.bbox.width ? padding*2 : 0)})
+            .attr("height", function(d){return d.bbox.height + (d.bbox.height ? padding*2 : 0)})
+            .attr("rx", 3)
+            .attr("ry", 3)
+            .style("fill", function(d){return Constants.getColor(d.type)});
     }
 
     addNodeText(g) {

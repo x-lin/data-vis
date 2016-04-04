@@ -62,8 +62,6 @@ public class NeighborQueryBuilder {
 			caseString += " END as sortOrder";
 		}
 
-		caseString += " RETURN n";
-
 		if(priority != null && priority.size() > 0) {
 			caseString += " ORDER BY sortOrder";
 		}
@@ -97,6 +95,6 @@ public class NeighborQueryBuilder {
 	}
 
 	private String buildLimit(Integer limit) {
-		return limit != null ? " LIMIT " + limit : "";
+		return limit != null ? " MATCH (n)-[]-(o:GeneralNode) RETURN DISTINCT n AS node, count(o) AS count LIMIT " + limit : "";
 	}
 }

@@ -25794,32 +25794,21 @@
 
 	var Constants = {};
 
-	//Constants.colorMap = {
-	//    Project: "#716eb9",
-	//    Ticket : "#4d9ecd",
-	//    User : "#f39c12",
-	//    Requirement : "#00b73f",
-	//    //Other : "rgb(150, 150, 150)"
-	//};
-
 	Constants.getColor = function (category) {
 	    return (0, _stringToColor2.default)(category);
 	    //return Constants.colorMap[category] ? Constants.colorMap[category] : Constants.DEFAULT_COLOR;
 	};
 
-	Constants.colorMap = {
-	    Project: Constants.getColor("Project"),
-	    Ticket: Constants.getColor("Ticket"),
-	    User: Constants.getColor("User"),
-	    Requirement: Constants.getColor("Requirement")
+	Constants.hexadecToDecimal = function (hex) {
+	    return parseInt(hex, 16);
 	};
 
-	//Other : "rgb(150, 150, 150)"
-	Constants.reversePropertyMap = {
-	    Project: "Project",
-	    GeneralNode: "GeneralNode",
-	    //Project : "Project",
-	    Set: "Set"
+	Constants.getContrastColor = function (hexcode) {
+	    var red = Constants.hexadecToDecimal(hexcode.substring(1, 3));
+	    var green = Constants.hexadecToDecimal(hexcode.substring(3, 5));
+	    var blue = Constants.hexadecToDecimal(hexcode.substring(5, 7));
+
+	    return red * 0.299 + green * 0.587 + blue * 0.114 > 186 ? "#444" : "#FFF";
 	};
 
 	Constants.endpoints = {
@@ -25858,10 +25847,6 @@
 	    } else {
 	        return Constants.endpoints.GeneralNode;
 	    }
-	};
-
-	Constants.getKeyIdentifier = function (category) {
-	    return Constants.keyMap[category];
 	};
 
 	Constants.getJiraAddress = function (type, key) {
@@ -28461,6 +28446,12 @@
 	                            "span",
 	                            { className: "label label-default" },
 	                            "Test Coverage"
+	                        ),
+	                        " ",
+	                        _react2.default.createElement(
+	                            "span",
+	                            { className: "label", style: { backgroundColor: _Constants2.default.getColor(this.props.coverage.name.type), color: _Constants2.default.getContrastColor(_Constants2.default.getColor(this.props.coverage.name.type)) } },
+	                            this.props.coverage.name.type
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -28472,9 +28463,7 @@
 	                            "strong",
 	                            null,
 	                            this.props.coverage.name.name
-	                        ),
-	                        " - ",
-	                        this.props.coverage.name.type
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        "div",
@@ -39885,7 +39874,8 @@
 	            translate: [0, 0],
 	            scale: 1,
 	            zoom: {},
-	            selector: "#" + _this.props.divId
+	            selector: "#" + _this.props.divId,
+	            localG: {}
 	        };
 	        return _this;
 	    }
@@ -39987,6 +39977,7 @@
 	            this.state.nodes.exit().remove();
 	            this.state.links.exit().remove();
 	            this.state.force.start();
+	            this.addNeighborCount(this.state.localG);
 	        }
 	    }, {
 	        key: "createForceLayout",
@@ -40051,6 +40042,8 @@
 	                return _ContextMenuBuilder2.default.buildElementId(d.key, d.category);
 	            });
 
+	            this.state.localG = g;
+
 	            this.addNodeText(g);
 
 	            this.state.nodes.attr("opacity", function (d) {
@@ -40058,6 +40051,33 @@
 	            });
 
 	            this.setNodeBehavior();
+	        }
+	    }, {
+	        key: "addNeighborCount",
+	        value: function addNeighborCount(g) {
+	            var padding = 2;
+
+	            var g1 = g.append("g").attr("transform", "translate(11,14)").style("fill", function (d) {
+	                return _Constants2.default.getColor(d.type ? d.type : d.category);
+	            });
+
+	            g1.append("text").attr("class", "unselectable force-text-label").text(function (d) {
+	                var count = d.count - (d.weight || 1);
+
+	                return count && count > 0 ? "+" + count : "";
+	            }).call(this.getTextBox);
+
+	            g1.insert("rect", "text").attr("x", function (d) {
+	                return d.bbox.x - padding;
+	            }).attr("y", function (d) {
+	                return d.bbox.y - padding;
+	            }).attr("width", function (d) {
+	                return d.bbox.width + (d.bbox.width ? padding * 2 : 0);
+	            }).attr("height", function (d) {
+	                return d.bbox.height + (d.bbox.height ? padding * 2 : 0);
+	            }).attr("rx", 3).attr("ry", 3).style("fill", function (d) {
+	                return _Constants2.default.getColor(d.type);
+	            });
 	        }
 	    }, {
 	        key: "addNodeText",
@@ -45330,7 +45350,7 @@
 	            var jiraId = _props$d.jiraId;
 	            var key = _props$d.key;
 	            var jamaId = _props$d.jamaId;
-	            var jamaProjectId = _props$d.jamaProjectId;
+	            var projectId = _props$d.projectId;
 	            var type = _props$d.type;
 	            var name = _props$d.name;
 
@@ -45397,11 +45417,6 @@
 	                            _react2.default.createElement(
 	                                "div",
 	                                { className: "tab-pane active", id: "tab_1" },
-	                                _react2.default.createElement(
-	                                    "div",
-	                                    { className: "row inpadding " },
-	                                    this.renderButtons(type, jiraId, jamaId, jamaProjectId)
-	                                ),
 	                                this.renderMenu(key, type, this.props.d)
 	                            ),
 	                            _react2.default.createElement(
@@ -45415,6 +45430,11 @@
 	                                "Some other text."
 	                            )
 	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "row inpadding " },
+	                        this.renderButtons(type, jiraId, jamaId, projectId)
 	                    )
 	                )
 	            );
@@ -63227,7 +63247,9 @@
 
 	EventHandlers.onDoubleClickNode = function (d, props) {
 	    d3.event.stopPropagation();
-	    props.searchNeighbors(d.category, d.key);
+	    if (d.count - d.weight > 0) {
+	        props.searchNeighbors(d.category, d.key);
+	    }
 	};
 
 	EventHandlers.onDragStartNode = function (d) {
@@ -63332,7 +63354,7 @@
 
 
 	// module
-	exports.push([module.id, ".force-graph .circle {\r\n    stroke: #fff;\r\n    stroke-width: 1.5px;\r\n    cursor: pointer\r\n}\r\n\r\n.force-graph .link {\r\n    stroke: #999;\r\n}\r\n\r\n.force-graph {\r\n    cursor: move;\r\n    background: #FFF;\r\n}\r\n\r\n.force-text {\r\n    font: 9px sans-serif;\r\n    fill: black;\r\n    text-anchor: middle;\r\n    cursor: pointer;\r\n}\r\n\r\n.force-graph .g {\r\n    outline: 0;\r\n}", ""]);
+	exports.push([module.id, ".force-graph .circle {\r\n    stroke: #fff;\r\n    stroke-width: 1.5px;\r\n    cursor: pointer\r\n}\r\n\r\n.force-graph .link {\r\n    stroke: #999;\r\n}\r\n\r\n.force-graph {\r\n    cursor: move;\r\n    background: #FFF;\r\n}\r\n\r\n.force-text {\r\n    font: 9px sans-serif;\r\n    fill: black;\r\n    text-anchor: middle;\r\n    cursor: pointer;\r\n}\r\n\r\n.force-text-label {\r\n    font: 6px sans-serif;\r\n    fill: white;\r\n    text-anchor: middle;\r\n    cursor: pointer;\r\n}\r\n\r\n.force-graph .g {\r\n    outline: 0;\r\n}", ""]);
 
 	// exports
 
@@ -63660,7 +63682,7 @@
 
 
 	// module
-	exports.push([module.id, "#graph-legend {\r\n    z-index: 1;\r\n    position: absolute;\r\n    padding: 15px;\r\n    font-size: 11px;\r\n    /*background-color: #999;*/\r\n    /*border: 1px solid #CCC;*/\r\n    /*width: 100px;*/\r\n    /*height: 100px;*/\r\n}\r\n\r\n.graph-legend-g {\r\n    cursor: pointer;\r\n}\r\n\r\n.graph-legend-g text {\r\n    -moz-user-select: none; /* Firefox */\r\n    -ms-user-select: none; /* Internet Explorer */\r\n    -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */\r\n    -webkit-user-select: none; /* Chrome, Safari, and Opera */\r\n    -webkit-touch-callout: none; /* Disable Android and iOS*/\r\n}", ""]);
+	exports.push([module.id, "#graph-legend {\r\n    z-index: 1;\r\n    position: absolute;\r\n    padding: 15px;\r\n    font-size: 11px;\r\n    background: rgba(255, 255, 255, .9);\r\n    margin: 1px;\r\n    /*border: 1px solid #CCC;*/\r\n    /*width: 100px;*/\r\n    /*height: 100px;*/\r\n}\r\n\r\n.graph-legend-g {\r\n    cursor: pointer;\r\n}\r\n\r\n.graph-legend-g text {\r\n    -moz-user-select: none; /* Firefox */\r\n    -ms-user-select: none; /* Internet Explorer */\r\n    -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */\r\n    -webkit-user-select: none; /* Chrome, Safari, and Opera */\r\n    -webkit-touch-callout: none; /* Disable Android and iOS*/\r\n}", ""]);
 
 	// exports
 
@@ -64157,10 +64179,10 @@
 
 	            var node = action.neighbors.node;
 
-	            var index = graph.addNode(new _Node2.default(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId, node.jiraId));
+	            var index = graph.addNode(node);
 
 	            action.neighbors.neighbors.forEach(function (neighbor) {
-	                var neighborIndex = graph.addNode(new _Node2.default(neighbor.key, neighbor.name, "GeneralNode", neighbor.type, neighbor.jamaId, neighbor.projectId, neighbor.jiraId));
+	                var neighborIndex = graph.addNode(neighbor);
 	                graph.addEdge(new _Edge2.default(index, neighborIndex));
 	            });
 
@@ -64967,7 +64989,6 @@
 	            return React.createElement(
 	                "div",
 	                null,
-	                React.createElement(_LanePicker2.default, null),
 	                React.createElement(
 	                    "header",
 	                    { className: "main-header" },
@@ -80595,9 +80616,20 @@
 	                        onMouseOver: function onMouseOver() {
 	                            _this5.props.setSearchSelectedIndex(index);
 	                        } },
-	                    _react2.default.createElement(_CircleSpan2.default, { radius: "8px", color: _Constants2.default.getColor(item.type) }),
-	                    "   ",
-	                    item.type + " | " + item.key + " | " + item.name
+	                    _react2.default.createElement(
+	                        "span",
+	                        { className: "label",
+	                            style: { backgroundColor: _Constants2.default.getColor(item.type), color: _Constants2.default.getContrastColor(_Constants2.default.getColor(item.type)) } },
+	                        item.type
+	                    ),
+	                    "  ",
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        item.name
+	                    ),
+	                    " | ",
+	                    item.key
 	                );
 	            });
 	        }
@@ -80636,7 +80668,6 @@
 	            var selectedIndex = _props.selectedIndex;
 	            var value = _props.value;
 
-	            console.log("props on submit", this.props);
 	            event.preventDefault(); //done to disable site refreshes
 
 	            var item = items[selectedIndex];
@@ -81531,6 +81562,20 @@
 	            "li",
 	            { className: "navbar-space" },
 	            _react2.default.createElement(_FileSaverComponent2.default, null)
+	        ),
+	        _react2.default.createElement(
+	            "li",
+	            { className: "navbar-space" },
+	            _react2.default.createElement(
+	                "a",
+	                { title: "" },
+	                _react2.default.createElement("span", { className: "fa fa-filter" }),
+	                _react2.default.createElement(
+	                    "span",
+	                    { className: "label label-default" },
+	                    _react2.default.createElement("span", { className: "fa fa-caret-down" })
+	                )
+	            )
 	        ),
 	        renderEntries(),
 	        _react2.default.createElement(
@@ -84378,7 +84423,7 @@
 /* 863 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license

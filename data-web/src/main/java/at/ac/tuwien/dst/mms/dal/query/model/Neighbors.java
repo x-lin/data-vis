@@ -3,6 +3,7 @@ package at.ac.tuwien.dst.mms.dal.query.model;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by XLin on 16.03.2016.
@@ -10,7 +11,7 @@ import java.util.List;
 public class Neighbors {
 	private ModelEntity node;
 
-	private List<ModelEntity> neighbors;
+	private List<Map<String, Object>> neighbors;
 
 
 	public ModelEntity getNode() {
@@ -21,11 +22,11 @@ public class Neighbors {
 		this.node = node;
 	}
 
-	public List<ModelEntity> getNeighbors() {
+	public List<Map<String, Object>> getNeighbors() {
 		return neighbors;
 	}
 
-	public void setNeighbors(List<ModelEntity> neighbors) {
+	public void setNeighbors(List<Map<String, Object>> neighbors) {
 		this.neighbors = neighbors;
 	}
 }

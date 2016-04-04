@@ -4,7 +4,6 @@ import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.GeneralNodeJamaIndex;
-import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
@@ -19,8 +18,6 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 	@Query("START  a=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX +"(key = {0}) RETURN a")
 	GeneralNode findByKey(String key);
 
-	List<GeneralNode> findByProject(Project project);
-
 	//TODO fix some issues with duplicate entries
 	@Query("MATCH (p:Project)--(a:GeneralNode)--(b:GeneralNodeType) WHERE a.name={0} AND (b.key='BUG' OR b.key='WP') AND p.key={1} RETURN a LIMIT 1")
 	GeneralNode findbyName(String name, String projectKey);
@@ -32,9 +29,7 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 
 	List<GeneralNode> findAllByKey(String key);
 
-	@Query("START b=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key = {0}) MATCH (a)-[]-(b) RETURN b")
-	Iterable<Map<String, Object>> findNeighbors(String key);
-
+	@Override
 	Iterable<Map<String, Object>> findNeighbors(String key, boolean upstream, boolean downstream, List<String> excluded,
 												List<String> priority, Integer limit, List<String> type);
 
@@ -52,12 +47,18 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 	List<TestCoverage> getTestCoverage(String key);
 
 	@Query("START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
+			"MATCH (n)-[]-(o:GeneralNode) " +
+			"WHERE (NOT EXISTS(o.jiraStatus) OR o.jiraStatus <> 'Closed')" +
+			"RETURN count(n)")
+	long countNeighbors(String key);
+
+	@Query("START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)-[:DOWNSTREAM]->(o)-[:NODE_TYPE]-(p) " +
-			"RETURN p AS node, count(p) AS count, 'UPSTREAM' AS relationship " +
+			"RETURN p AS node, count(p) AS count, 'DOWNSTREAM' AS relationship " +
 			"UNION " +
 			"START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)<-[:DOWNSTREAM]-(o)-[:NODE_TYPE]-(p) " +
-			"RETURN p AS node, count(p) AS count, 'DOWNSTREAM' AS relationship " +
+			"RETURN p AS node, count(p) AS count, 'UPSTREAM' AS relationship " +
 			"UNION " +
 			"START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)-[:UNCLASSIFIED]-(o)-[:NODE_TYPE]-(p) " +

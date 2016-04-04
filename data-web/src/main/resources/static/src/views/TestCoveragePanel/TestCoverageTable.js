@@ -67,9 +67,12 @@ export default class extends React.Component {
         return (
             <div className="box box-solid">
                 <div className="box-header with-border">
-                    <p><span className="label label-default">Test Coverage</span></p>
+                    <p>
+                        <span className="label label-default">Test Coverage</span>&nbsp;
+                        <span className="label" style={{backgroundColor: Constants.getColor(this.props.coverage.name.type), color: Constants.getContrastColor(Constants.getColor(this.props.coverage.name.type))}}>{this.props.coverage.name.type}</span>
+                    </p>
                     <h3 className="box-title">
-                        <CircleSpan color={Constants.getColor(this.props.coverage.name.type)} radius={"12px"} /> <strong>{this.props.coverage.name.name}</strong> - {this.props.coverage.name.type}
+                        <CircleSpan color={Constants.getColor(this.props.coverage.name.type)} radius={"12px"} /> <strong>{this.props.coverage.name.name}</strong>
                     </h3>
                     <div className="box-tools pull-right">
                         <button className="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><span className="fa fa-minus" /></button>

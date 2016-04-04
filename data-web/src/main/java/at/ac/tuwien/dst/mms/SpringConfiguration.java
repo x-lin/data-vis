@@ -1,12 +1,11 @@
 package at.ac.tuwien.dst.mms;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.jama.JamaRestClient;
-import at.ac.tuwien.dst.mms.dal.jira.JiraRestClient;
 import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
 import at.ac.tuwien.dst.mms.dal.jama.JamaExtractor;
+import at.ac.tuwien.dst.mms.dal.jama.JamaRestClient;
 import at.ac.tuwien.dst.mms.dal.jira.JiraExtractor;
-import at.ac.tuwien.dst.mms.dal.util.RepositoryService;
+import at.ac.tuwien.dst.mms.dal.jira.JiraRestClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -43,10 +42,5 @@ public class SpringConfiguration {
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
-	}
-
-	@Bean
-	public RepositoryService repositoryService() {
-		return new RepositoryService();
 	}
 }

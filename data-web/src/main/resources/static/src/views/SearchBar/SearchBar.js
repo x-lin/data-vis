@@ -50,7 +50,9 @@ export default class extends React.Component {
                 <li className={listgroupClass} key={index}
                     onClick={(event) => {this.handleSubmit(event)}}
                     onMouseOver={() => {this.props.setSearchSelectedIndex(index)}}>
-                    <CircleSpan radius="8px" color={Constants.getColor(item.type)}/> &nbsp; {item.type  + " | " + item.key + " | " + item.name}
+                    <span className="label"
+                          style={{backgroundColor: Constants.getColor(item.type), color: Constants.getContrastColor(Constants.getColor(item.type))}}>{item.type}</span>
+                    &nbsp; <strong>{item.name}</strong> | {item.key}
                 </li>
             );
         });
@@ -72,7 +74,6 @@ export default class extends React.Component {
 
     handleSubmit(event) {
         const { items, selectedIndex, value } = this.props;
-        console.log("props on submit", this.props)
         event.preventDefault(); //done to disable site refreshes
 
         const item = items[selectedIndex];

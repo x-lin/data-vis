@@ -1,11 +1,11 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
+import at.ac.tuwien.dst.mms.dal.GeneralNodeDataReader;
 import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeRepository;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
-import at.ac.tuwien.dst.mms.model.ModelEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by xlin on 15.01.2016.
  */
 @Service
-public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<GeneralNode> {
+public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<GeneralNode> implements GeneralNodeDataReader {
 	@Override
 	public List<GeneralNode> findAll(Integer limit) {
 		return ((GeneralNodeRepository)this.getRepository()).findAll(limit);
@@ -36,9 +36,10 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 	@Transactional
 	public Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit, List type) {
 		GeneralNode node = this.find(key);
+		node.setCount(((GeneralNodeRepository)this.getRepository()).countNeighbors(key));
 		Iterable<Map<String, Object>> nodes = ((GeneralNodeRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit, type);
 
-		List<ModelEntity> neighbors = this.getNeighbors(nodes);
+		List<Map<String, Object>> neighbors = this.getNeighbors(nodes);
 
 		Neighbors returnVal = new Neighbors();
 		returnVal.setNode(node);

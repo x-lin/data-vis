@@ -20,6 +20,13 @@
     cursor: pointer;
 }
 
+.force-text-label {
+    font: 6px sans-serif;
+    fill: white;
+    text-anchor: middle;
+    cursor: pointer;
+}
+
 .force-graph .g {
     outline: 0;
 }

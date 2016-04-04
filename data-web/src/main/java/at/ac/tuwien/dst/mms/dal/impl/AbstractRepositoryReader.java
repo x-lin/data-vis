@@ -1,9 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
-import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
-import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
 import at.ac.tuwien.dst.mms.dal.repo.TextIndexRepository;
+import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
 import at.ac.tuwien.dst.mms.model.NodeType;
 import at.ac.tuwien.dst.mms.util.Config;
@@ -16,6 +15,7 @@ import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,34 +73,6 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 		return repository.count();
 	}
 
-	@Override
-	public Neighbors getNeighbors(String key) {
-		T node = this.find(key);
-
-		List<ModelEntity> neighbors = this.getNeighbors(node.getNeighborsLimited());
-
-		Neighbors returnVal = new Neighbors();
-		returnVal.setNode(node);
-		returnVal.setNeighbors(neighbors);
-
-		return returnVal;
-	}
-
-	//TODO limit not factored in yet -> map is by default restricted to 20
-	@Override
-	@Transactional
-	public Neighbors getNeighbors(String key, int limit) {
-		T node = this.find(key);
-
-		List<ModelEntity> neighbors = this.getNeighbors(node.getNeighborsLimited());
-
-		Neighbors returnVal = new Neighbors();
-		returnVal.setNode(node);
-		returnVal.setNeighbors(neighbors);
-
-		return returnVal;
-	}
-
 	public GraphRepository<T> getRepository() {
 		return repository;
 	}
@@ -109,43 +81,46 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 	protected Neo4jOperations neo4jOperations;
 
 	@Transactional
-	protected List<ModelEntity> getNeighbors(Iterable<Map<String, Object>> neighbors) {
-		List<ModelEntity> results = new ArrayList<>();
+	protected List<Map<String, Object>> getNeighbors(Iterable<Map<String, Object>> neighbors) {
+		List<Map<String, Object>> results = new ArrayList<>();
 
 		if(neighbors != null) {
 			for(Map<String, Object> entry : neighbors) {
-				//System.out.println("result before: " + result);
-				//we know that each return entry is only one object (neighbor node), thus take the first key
-				String key = entry.keySet().iterator().next();
+				Map<String, Object> map = new HashMap<>();
 
-				Node node = neo4jOperations.convert(entry.get(key), Node.class);
+				for(String key : entry.keySet()) {
 
-				//a node may have multiple labels: check one for one, if the label is mapped to a type
-				//until the object was mapped
-				for(Label label : node.getLabels()) {
+					if(key.equals("node")) {
+						Node node = neo4jOperations.convert(entry.get(key), Node.class);
 
-					if(NodeType.getClass(label.name()) != null) {
-						ModelEntity o = neo4jOperations.convert(node, NodeType.getClass(label.name()));
-
-						if(o != null) {
-							results.add(o);
-							break;
+						//a node may have multiple labels: check one for one, if the label is mapped to a type
+						//until the object was mapped
+						for(String prop : node.getPropertyKeys()) {
+							map.put(prop, node.getProperty(prop));
 						}
+
+						for(Label label : node.getLabels()) {
+
+							if(NodeType.getClass(label.name()) != null) {
+								GeneralNode o = (GeneralNode) neo4jOperations.convert(node, NodeType.getClass(label.name()));
+
+								if(o != null) {
+									map.put("type", o.getType().getName());
+									map.put("projectId", o.getProjectId());
+									break;
+								}
+							}
+						}
+
+					} else if(key.equals("count")) {
+						map.put("count", entry.get(key));
 					}
 				}
+
+				results.add(map);
 			}
 		}
 
 		return results;
-	}
-
-	@Override
-	public ProjectSchema getSchema(String projectKey) {
-		return null;
-	}
-
-	@Override
-	public ProjectSchema getSchema(String projectKey, String relation) {
-		return null;
 	}
 }

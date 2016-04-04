@@ -2,35 +2,25 @@ import React from "react";
 
 import stringToColor from "../utils/stringToColor";
 import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageComponent";
+import StatsPanelComponent from "../views/StatsPanel/StatsPanelComponent";
 
 const Constants = {};
-
-//Constants.colorMap = {
-//    Project: "#716eb9",
-//    Ticket : "#4d9ecd",
-//    User : "#f39c12",
-//    Requirement : "#00b73f",
-//    //Other : "rgb(150, 150, 150)"
-//};
 
 Constants.getColor = (category) => {
     return stringToColor(category);
     //return Constants.colorMap[category] ? Constants.colorMap[category] : Constants.DEFAULT_COLOR;
 };
 
-Constants.colorMap = {
-    Project: Constants.getColor("Project"),
-    Ticket : Constants.getColor("Ticket"),
-    User : Constants.getColor("User"),
-    Requirement : Constants.getColor("Requirement"),
-    //Other : "rgb(150, 150, 150)"
+Constants.hexadecToDecimal = (hex) => {
+    return parseInt(hex, 16);
 };
 
-Constants.reversePropertyMap= {
-    Project : "Project",
-    GeneralNode: "GeneralNode",
-    //Project : "Project",
-    Set: "Set"
+Constants.getContrastColor = (hexcode) => {
+    const red = Constants.hexadecToDecimal(hexcode.substring(1,3));
+    const green = Constants.hexadecToDecimal(hexcode.substring(3,5));
+    const blue = Constants.hexadecToDecimal(hexcode.substring(5,7));
+
+    return (red*0.299 + green*0.587 + blue*0.114) > 186 ? "#444" : "#FFF";
 };
 
 Constants.endpoints = {
@@ -41,12 +31,9 @@ Constants.endpoints = {
     Requirement: "reqs"
 };
 
-Constants.sidePanels = {
-    test: false //test coverage panel
-};
-
 Constants.sidePanels = [
-    {object: <TestCoverageComponent />, key: "test"}
+    {object: <TestCoverageComponent />, key: "test"},
+    {object: <StatsPanelComponent />, key: "stats"}
 ];
 
 Constants.invisible = {
@@ -67,10 +54,6 @@ Constants.getEndpoint = (type) => {
     } else {
         return Constants.endpoints.GeneralNode;
     }
-}
-
-Constants.getKeyIdentifier = (category) => {
-    return Constants.keyMap[category];
 };
 
 Constants.getJiraAddress = (type, key) => {

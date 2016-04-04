@@ -14,12 +14,14 @@ action) => {
 
     switch (action.type) {
         case CLEAR_GRAPH:
+            console.log("clearing graph");
             state.nodes.length = 0;
             state.edges.length = 0;
             state.legend.length = 0;
 
-            return state;
+            return Object.assign({}, state);
         case UPDATE_GRAPH:
+            console.log("updating graph");
             state.nodes.length = 0;
             state.edges.length = 0;
             state.legend.length = 0;
@@ -31,16 +33,15 @@ action) => {
 
             return Object.assign({}, state);
         case NEIGHBORS_FETCH_SUCCESS:
+            console.log("fetching neighbors");
             const graph = new D3Graph(state.nodes, state.edges, state.legend);
 
             const node = action.neighbors.node;
 
-            console.log("node", node);
-
-            const index = graph.addNode(new Node(node.key, node.name, "GeneralNode", node.type, node.jamaId, node.projectId, node.jiraId));
+            const index = graph.addNode(node);
 
             action.neighbors.neighbors.forEach((neighbor) => {
-                const neighborIndex = graph.addNode(new Node(neighbor.key, neighbor.name, "GeneralNode", neighbor.type, neighbor.jamaId, neighbor.projectId, neighbor.jiraId));
+                const neighborIndex = graph.addNode(neighbor);
                 graph.addEdge(new Edge(index, neighborIndex));
             });
 

@@ -14,15 +14,15 @@ import java.util.Map;
  */
 public interface GeneralNodeTypeRepository extends GraphRepository<GeneralNodeType> {
 	@Query("START  a=node:" + GeneralNodeType.GENERAL_NODE_TYPE_KEY_INDEX +"(key = {0}) RETURN a")
-	public GeneralNodeType findByKey(String key);
+	GeneralNodeType findByKey(String key);
 
 	@Query("MATCH (a:GeneralNodeType) RETURN a")
-	public List<GeneralNodeType> findAll(int limit);
+	List<GeneralNodeType> findAll(int limit);
 
-	public List<GeneralNode> findAllByKey(String key, Pageable pageable);
+	List<GeneralNode> findAllByKey(String key, Pageable pageable);
 
-	public List<GeneralNode> findAllByKey(String key);
+	List<GeneralNode> findAllByKey(String key);
 
 	@Query("START b=node:" + GeneralNodeType.GENERAL_NODE_TYPE_KEY_INDEX + "(key = {0}) MATCH (a)-[]-(b) RETURN b")
-	public Iterable<Map<String, Object>> findNeighbors(String key);
+	Iterable<Map<String, Object>> findNeighbors(String key);
 }
