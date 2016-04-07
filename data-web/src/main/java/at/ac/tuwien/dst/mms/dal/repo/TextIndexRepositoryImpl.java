@@ -16,6 +16,7 @@ public class TextIndexRepositoryImpl implements TextIndexRepositoryCustom {
 	@Override
 	public Iterable<Map<String, Object>> findBySearchText(String searchText, int limit) {
 		String concatString = this.concat(this.split(searchText));
+		String limitString = limit == -1 ? "" : "LIMIT " + limit;
 
 		String query = "START a=node:" + TextIndex.TEXT_INDEX_KEY_INDEX + "('key: (" + concatString + ")') " +
 				"MATCH (a)-[]-(b:Project) " +
@@ -24,10 +25,9 @@ public class TextIndexRepositoryImpl implements TextIndexRepositoryCustom {
 				"UNION " +
 				"START a=node:" + TextIndex.TEXT_INDEX_KEY_INDEX + "('key: (" + concatString + ")') " +
 				"MATCH (a)-[]-(b:GeneralNode)-[:NODE_TYPE]-(c) " +
+				"WHERE (NOT EXISTS(b.jiraStatus) OR b.jiraStatus <> 'Closed') " +
 				"RETURN b.key AS key, b.name AS name, c.key AS typeKey, c.name AS type " +
-				"LIMIT " + limit;
-
-		System.out.println("query: " + query);
+				limitString;
 
 		return template.query(query, null);
 	}

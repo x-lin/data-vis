@@ -2,7 +2,6 @@ import React from "react";
 
 import stringToColor from "../utils/stringToColor";
 import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageComponent";
-import StatsPanelComponent from "../views/StatsPanel/StatsPanelComponent";
 
 const Constants = {};
 
@@ -32,8 +31,7 @@ Constants.endpoints = {
 };
 
 Constants.sidePanels = [
-    {object: <TestCoverageComponent />, key: "test"},
-    {object: <StatsPanelComponent />, key: "stats"}
+    {object: <TestCoverageComponent />, key: "test"}
 ];
 
 Constants.invisible = {

@@ -1,5 +1,6 @@
 import { createStore as createReduxStore, combineReducers, applyMiddleware } from "redux";
 import thunkMiddleware from 'redux-thunk';
+import undoable from 'redux-undo';
 
 import { itemReducer } from "../reducers/ItemReducer";
 import { neighborsReducer } from "../reducers/NeighborsReducer";
@@ -10,8 +11,8 @@ import { schemaReducer } from "../reducers/SchemaReducer";
 import LaneReducer from "../reducers/LaneReducer";
 import TestCoverageReducer from "../reducers/TestCoverageReducer";
 import NodeTypeReducer from "../reducers/NodeTypeReducer";
-import StatsReducer from "../reducers/StatsReducer";
 import LayoutReducer from "../reducers/LayoutReducer";
+import ContextMenuReducer from "../reducers/ContextMenuReducer";
 
 export const createStore = () => {
     const allReducers = combineReducers({
@@ -24,8 +25,8 @@ export const createStore = () => {
         lanes: LaneReducer,
         coverage: TestCoverageReducer,
         nodeTypes: NodeTypeReducer,
-        stats: StatsReducer,
-        layout: LayoutReducer
+        layout: LayoutReducer,
+        contextmenu: ContextMenuReducer
     });
 
     return createReduxStore(allReducers, applyMiddleware(

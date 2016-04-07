@@ -14,9 +14,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        searchTestCoverage: (type, key) => {
-            dispatch(searchTestCoverage(type, key));
-        },
         searchNeighborsStart: (category, key) => {
             dispatch(searchNeighbors(category, key));
         },

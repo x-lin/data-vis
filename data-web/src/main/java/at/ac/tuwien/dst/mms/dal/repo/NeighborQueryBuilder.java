@@ -13,7 +13,7 @@ public class NeighborQueryBuilder {
 							 List<String> excluded, List<String> priority, Integer limit, List<String> type) {
 		String query = this.buildStart(indexName, key) + this.buildMatch(downstream, upstream) +
 				"-[:NODE_TYPE]-(m:GeneralNodeType)" + this.buildOthers() + this.buildType(type) + this.buildExclude(excluded) + this.buildPriority(priority) +
-				this.buildLimit(limit);
+				this.filterClosed() + this.buildLimit(limit);
 
 		System.out.println("query: " + query);
 
@@ -94,7 +94,11 @@ public class NeighborQueryBuilder {
 		return isDownstream ? ">" : "";
 	}
 
+	private String filterClosed() {
+		return " OPTIONAL MATCH (n)-[]-(o:GeneralNode) WHERE (NOT EXISTS(o.jiraStatus) OR o.jiraStatus <> 'Closed') RETURN DISTINCT n AS node, count(o) AS count ";
+	}
+
 	private String buildLimit(Integer limit) {
-		return limit != null ? " MATCH (n)-[]-(o:GeneralNode) RETURN DISTINCT n AS node, count(o) AS count LIMIT " + limit : "";
+		return (limit == null || limit == -1) ? "" : ("LIMIT " + limit);
 	}
 }

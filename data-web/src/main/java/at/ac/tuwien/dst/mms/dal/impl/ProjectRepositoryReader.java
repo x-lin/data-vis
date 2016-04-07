@@ -1,10 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.ProjectDataReader;
-import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
-import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
-import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+import at.ac.tuwien.dst.mms.dal.query.model.*;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.stereotype.Service;

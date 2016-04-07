@@ -36,7 +36,7 @@
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-releasetrain</artifactId>
-                <version>Fowler-SR2</version>
+                <version>Gosling-SR4</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>

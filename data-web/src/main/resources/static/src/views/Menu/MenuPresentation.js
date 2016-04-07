@@ -5,6 +5,7 @@ import Slider from "../widgets/Slider";
 import FileLoaderComponent from "../GraphLoader/FileLoaderComponent";
 import FileSaverComponent from "../GraphLoader/FileSaverComponent";
 import NewGraphComponent from "../GraphLoader/NewGraphComponent";
+import Label from "../widgets/Label";
 
 import { DropdownButton, MenuItem, OverlayTrigger, Popover } from "react-bootstrap";
 
@@ -33,7 +34,7 @@ export default ( {
                         /></div></Popover>}>
                         <a title={setting.description}>
                             <span className={setting.menuButton} />
-                            <span className="label label-default"><span className="fa fa-caret-down" /></span>
+                            <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
                         </a>
                     </OverlayTrigger>
                 </li>;
@@ -47,6 +48,13 @@ export default ( {
             <li><NewGraphComponent /></li>
             <li><a href="#" title="Load Graph From File"><FileLoaderComponent hasLabel={false} /></a></li>
             <li className="navbar-space"><FileSaverComponent /></li>
+
+            <li className="navbar-space">
+                <a title="">
+                    <span className="fa fa-filter" />
+                    <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
+                </a>
+            </li>
 
             {renderEntries()}
 

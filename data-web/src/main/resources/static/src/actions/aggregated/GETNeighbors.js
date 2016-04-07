@@ -5,8 +5,6 @@ import Constants from "../../config/Constants";
 import { PRIORITIZED, EXCLUDED } from "../../reducers/LaneReducer";
 
 export const getNeighbors = (category, key, paramsString) => {
-    console.log("params", category, key, paramsString);
-
     const endpoint = Constants.getEndpoint(category);
     return (dispatch, getState) => {
         let params = null;
@@ -17,8 +15,6 @@ export const getNeighbors = (category, key, paramsString) => {
 
             let excluded = null;
             let priority = null;
-            //TODO add downstream/upstream option
-            //TODO add limit option
 
             lanes.forEach((lane) => {
                 if(lane.key === PRIORITIZED) {

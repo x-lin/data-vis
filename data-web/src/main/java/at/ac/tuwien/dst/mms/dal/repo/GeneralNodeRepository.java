@@ -43,7 +43,7 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 			"WHERE ALL(x IN nodes[1..] WHERE (x.key='SSS' OR x.key='SRS' OR x.key='PSRS' OR x.key='FEAT' OR x.key='WP')) " +
 			"AND NOT EXISTS((n)-[:DOWNSTREAM]->(:GeneralNode)-->(:GeneralNodeType{key: 'SSS'})) " +
 			"OPTIONAL MATCH (n)-[:DOWNSTREAM]->(tc:GeneralNode)-->(:GeneralNodeType {key: 'TC'}) " +
-			"RETURN n.key AS key, n.name AS name, n1.name + ' (' + n1.key + ')' AS type, COLLECT(tc.key) AS testcases, n AS node")
+			"RETURN n.key AS key, n.name AS name, n1.name AS type, COLLECT(tc.key) AS testcases, n AS node")
 	List<TestCoverage> getTestCoverage(String key);
 
 	@Query("START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
@@ -54,14 +54,17 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 
 	@Query("START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)-[:DOWNSTREAM]->(o)-[:NODE_TYPE]-(p) " +
-			"RETURN p AS node, count(p) AS count, 'DOWNSTREAM' AS relationship " +
+			"RETURN p AS node, count(p) AS count, ['DOWNSTREAM'] AS relationship " +
+			"ORDER BY count DESC " +
 			"UNION " +
 			"START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)<-[:DOWNSTREAM]-(o)-[:NODE_TYPE]-(p) " +
-			"RETURN p AS node, count(p) AS count, 'UPSTREAM' AS relationship " +
+			"RETURN p AS node, count(p) AS count, ['UPSTREAM'] AS relationship " +
+			"ORDER BY count DESC " +
 			"UNION " +
 			"START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)-[:UNCLASSIFIED]-(o)-[:NODE_TYPE]-(p) " +
-			"RETURN p AS node, count(p) AS count, 'UNCLASSIFIED' AS relationship")
+			"RETURN p AS node, count(p) AS count, ['UPSTREAM', 'DOWNSTREAM'] AS relationship " +
+			"ORDER BY count DESC")
 	List<NeighborType> getNeighborTypes(String key);
 }

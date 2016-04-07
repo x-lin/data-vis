@@ -16,7 +16,7 @@ export default class Main extends React.Component {
     render() {
         return (
             <div>
-                <LanePicker />
+                {/*<LanePicker />*/}
                 <header className="main-header">
 
                     <a name="Frequentis Logo" className="logo disabled-link">
@@ -25,13 +25,6 @@ export default class Main extends React.Component {
                     </a>
 
                     <nav className="navbar navbar-static-top">
-                        {/*<div className="navbar-header">
-                                <a href="../../index2.html" className="navbar-brand"><b>Admin</b>LTE</a>
-                                <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                                    <i className="fa fa-bars"></i>
-                                </button>
-                            </div>*/}
-
                             <div className="collapse navbar-collapse pull-left" id="navbar-collapse">
                                 <ul className="nav navbar-nav">
                                 </ul>

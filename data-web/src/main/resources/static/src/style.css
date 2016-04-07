@@ -140,6 +140,10 @@ a, a:hover {
     margin-bottom: 0;
 }
 
+.popover {
+    max-width: 300px;
+}
+
 .autocomplete {
     background: #FFF;
     /*border: 1px solid;*/
@@ -187,8 +191,12 @@ a, a:hover {
     box-shadow: 0 0 0 .03em #2c3b41;
 }
 
-.reactable-page-button, .reactable-next-page, .reactable-previous-page {
+.sidebar-table .reactable-page-button, .sidebar-table .reactable-next-page, .sidebar-table .reactable-previous-page {
     padding: 6px 8px;
+}
+
+.contextmenu-table .reactable-page-button, .contextmenu-table .reactable-next-page, .contextmenu-table .reactable-previous-page {
+    padding: 6px 4px;
 }
 
 .reactable-page-button:not(.reactable-current-page), .reactable-next-page, .reactable-previous-page {
@@ -252,4 +260,53 @@ a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-l
 
 .content-wrapper {
     /*background-color: #FFF;*/
+}
+
+.btn-app {
+    background-color: #FFF;
+    border-radius: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    min-width: 50px;
+    margin: 0px;
+}
+
+.btn-app.active {
+    background-color: #f4f4f4;
+}
+
+.footer {
+    background-color:#f4f4f4;
+    margin: 0px;
+    border-top: 1px solid #DDD;
+}
+
+.btn-footer {
+    border: 0px;
+}
+.bar {
+    cursor: pointer;
+}
+
+#stats-menu text {
+    font: 10px sans-serif;
+    cursor: pointer;
+    -webkit-user-select:none;
+    -khtml-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    -o-user-select:none;
+    user-select:none;
+}
+
+.nav-pills>li>a {
+    font-size: 12px;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    font-weight: 400;
+    border-top-color: #F7F7F7;
+    background-color: #F7F7F7;
+    color: #000000;
+    font-size: 12px;
 }

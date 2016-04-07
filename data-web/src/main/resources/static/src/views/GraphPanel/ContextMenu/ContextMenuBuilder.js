@@ -3,6 +3,9 @@ import ReactDOM from "react-dom";
 
 import ContextMenu from "./ContextMenu";
 import Tooltip from "../../widgets/Tooltip";
+import ProviderWrapper from "../../../stores/ProviderWrapper";
+import { Provider } from "react-redux";
+import { store } from "../../../stores/ReduxStore";
 
 const ContextMenuBuilder = {};
 
@@ -16,7 +19,9 @@ ContextMenuBuilder.buildElementId = (key, category) => {
 
 ContextMenuBuilder.createAndShow = (element, d, props) => {
     ReactDOM.render (
-        <ContextMenu d={d} target={element[0]} {...props} />,
+        <ProviderWrapper>
+            <ContextMenu d={d} target={element[0]} {...props} />
+        </ProviderWrapper>,
         $("#popover-content")[0]
     );
 

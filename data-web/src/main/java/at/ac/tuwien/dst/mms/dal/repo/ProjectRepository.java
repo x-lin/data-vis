@@ -1,9 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.repo;
 
-import at.ac.tuwien.dst.mms.dal.query.model.EdgeSchemaObject;
-import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
-import at.ac.tuwien.dst.mms.dal.query.model.NodeSchemaObject;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+import at.ac.tuwien.dst.mms.dal.query.model.*;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
@@ -56,11 +53,12 @@ public interface ProjectRepository extends GraphRepository<Project>, ProjectRepo
 			"WHERE n1.key='SSS' OR n1.key='SRS' OR n1.key='PSRS' " +
 			"AND NOT EXISTS((n)-[:DOWNSTREAM]->(:GeneralNode)-->(:GeneralNodeType{key: 'SSS'})) " +
 			"OPTIONAL MATCH (n)-[:DOWNSTREAM]->(tc:GeneralNode)-->(:GeneralNodeType {key: 'TC'}) " +
-			"RETURN n.key AS key, n.name AS name, n1.name + ' (' + n1.key + ')' AS type, COLLECT(tc.key) AS testcases, n AS node ")
+			"RETURN n.key AS key, n.name AS name, n1.name AS type, COLLECT(tc.key) AS testcases, n AS node ")
 	List<TestCoverage> getTestCoverage(String projectKey);
 
 	@Query("START n=node:" + Project.PROJECT_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)-[:PROJECT]->(o)-[:NODE_TYPE]-(p) " +
-			"RETURN p AS node, count(p) AS count, 'PROJECT' AS relationship")
+			"RETURN p AS node, count(p) AS count, ['DOWNSTREAM'] AS relationship " +
+			"ORDER BY count DESC")
 	List<NeighborType> getNeighborTypes(String projectKey);
 }

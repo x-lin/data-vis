@@ -16,7 +16,7 @@ public class NeighborType {
 	private int count;
 
 	@ResultColumn("relationship")
-	private String relationship;
+	private String[] relationship;
 
 	public GeneralNodeType getNode() {
 		return node;
@@ -34,11 +34,11 @@ public class NeighborType {
 		this.count = count;
 	}
 
-	public String getRelationship() {
+	public String[] getRelationship() {
 		return relationship;
 	}
 
-	public void setRelationship(String relationship) {
+	public void setRelationship(String[] relationship) {
 		this.relationship = relationship;
 	}
 }

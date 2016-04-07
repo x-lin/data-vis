@@ -5,6 +5,7 @@ import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS } from "../../ac
 import GraphPanel from "../GraphPanel/GraphPanel";
 import Constants from "../../config/Constants";
 import CircleSpan from "../widgets/CircleSpan";
+import Label from "../widgets/Label";
 
 export default class extends React.Component {
     constructor(props) {
@@ -42,7 +43,7 @@ export default class extends React.Component {
                     </Td>
                     {/*<Td column="Key" style={{whiteSpace: "nowrap"}}>{coverage.key}</Td>*/}
                     <Td column="Name" value={coverage.name}><a onClick={(key) => this.onClick(coverage.key)}>{coverage.name}</a></Td>
-                    <Td column="Type">{coverage.type}</Td>
+                    <Td column="Type" value={coverage.type}><Label bgColor={Constants.getColor(coverage.type)}>{coverage.type}</Label></Td>
                     <Td column="Status">{coverage.node.status}</Td>
                     <Td column="Test Cases">{coverage.testcases ? coverage.testcases.length : 0}</Td>
                 </Tr>
@@ -88,7 +89,7 @@ export default class extends React.Component {
                     <div style={{float: "right", padding: "10px 0px"}}><a onClick={(filter) => this.filter(false)} style={this.state.filter ? linkStyle : activeLinkStyle}>Show All</a>
                         <a onClick={(filter) => this.filter(true)} style={this.state.filter ? activeLinkStyle : linkStyle}>Show With No Test Cases</a></div>}
 
-                    <Table className="table table-bordered table-hover" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name", "Test Cases"]}
+                    <Table className="table table-bordered table-hover sidebar-table" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name", "Test Cases"]}
                            filterable={['Name', 'Key', 'Status', 'Type']}>
                         {prepared}
                     </Table>

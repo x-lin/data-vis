@@ -2,6 +2,7 @@ export const ADD_TO_GRAPH = "ADD_TO_GRAPH";
 export const REMOVE_FROM_GRAPH = "REMOVE_FROM_GRAPH";
 export const UPDATE_GRAPH = "UPDATE_GRAPH";
 export const CLEAR_GRAPH = "CLEAR_GRAPH";
+export const EXPAND_NODE = "EXPAND_NODE";
 
 export const addToGraph = (data) => {
     return {
@@ -29,3 +30,11 @@ export const clearGraph = () => {
         type: CLEAR_GRAPH
     }
 };
+
+export const expandNode = (key, toNode) => {
+    return {
+        type: EXPAND_NODE,
+        key,
+        toNode
+    }
+}

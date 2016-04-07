@@ -213,7 +213,7 @@ export default class extends React.Component {
         g1.append("text")
             .attr("class", "unselectable force-text-label")
             .text((d) => {
-                const count = d.count - (d.weight || 1);
+                const count = d.count - (parseInt(d.weight) || 0);
 
                 return (count && count > 0 ) ? `+${count}` : ""
             })
