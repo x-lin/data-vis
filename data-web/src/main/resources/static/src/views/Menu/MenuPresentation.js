@@ -6,6 +6,9 @@ import FileLoaderComponent from "../GraphLoader/FileLoaderComponent";
 import FileSaverComponent from "../GraphLoader/FileSaverComponent";
 import NewGraphComponent from "../GraphLoader/NewGraphComponent";
 import Label from "../widgets/Label";
+import LanePicker from "../LanePicker/LanePicker";
+import BasicOptionsComponent from "../GraphPanel/FilterSideBar/BasicOptionsComponent";
+import NeighborExpansionComponent from "../GraphPanel/FilterSideBar/NeighborExpansionComponent";
 
 import { DropdownButton, MenuItem, OverlayTrigger, Popover } from "react-bootstrap";
 
@@ -49,11 +52,49 @@ export default ( {
             <li><a href="#" title="Load Graph From File"><FileLoaderComponent hasLabel={false} /></a></li>
             <li className="navbar-space"><FileSaverComponent /></li>
 
+            <li>
+                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"lanepicker"}><div style={{height: $(document).height() - 100}}><LanePicker /></div></Popover>}>
+                    <a title="">
+                        <span className="fa fa-building-o" />
+                        <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
+                    </a>
+                </OverlayTrigger>
+            </li>
+            <li>
+                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"basicoptions"}>
+                <div className={`box box-custom`}>
+                    <div className="box-header cursor" data-widget="collapse">
+                        <h3 className="box-title box-title-custom">Edge directions</h3>
+                        <span className="fa fa-angle-left pull-right" />
+                    </div>
+                    <div className="box-body box-content-custom">
+                        <BasicOptionsComponent />
+                    </div>
+                </div>
+                </Popover>}>
+                    <a title="Edge directions">
+                        <span className="fa fa-exchange" />
+                        <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
+                    </a>
+                </OverlayTrigger>
+            </li>
             <li className="navbar-space">
-                <a title="">
-                    <span className="fa fa-filter" />
-                    <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
-                </a>
+                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"neighborexpansion"}>
+                    <div className={`box box-custom`}>
+                        <div className="box-header cursor" data-widget="collapse">
+                            <h3 className="box-title box-title-custom">Edge directions</h3>
+                            <span className="fa fa-angle-left pull-right" />
+                        </div>
+                        <div className="box-body box-content-custom">
+                            <NeighborExpansionComponent />
+                        </div>
+                    </div>
+                </Popover>}>
+                    <a title="Limit for rendering of neighbor nodes">
+                        <span className="fa fa-pencil-square-o" />
+                        <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
+                    </a>
+                </OverlayTrigger>
             </li>
 
             {renderEntries()}

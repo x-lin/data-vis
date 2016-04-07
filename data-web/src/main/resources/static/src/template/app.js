@@ -75,7 +75,7 @@ $.AdminLTE.options = {
   },
   //Box Widget Plugin. Enable this plugin
   //to allow boxes to be collapsed and/or removed
-  enableBoxWidget: true,
+  enableBoxWidget: false,
   //Box Widget plugin options
   boxWidgetOptions: {
     boxWidgetIcons: {
@@ -313,34 +313,32 @@ function _init() {
       //Get the screen sizes
       var screenSizes = $.AdminLTE.options.screenSizes;
 
-      //Enable sidebar toggle
-      $(toggleBtn).on('click', function (e) {
-        e.preventDefault();
+      ////Enable sidebar toggle
+      //$(toggleBtn).on('click', function (e) {
+      //  e.preventDefault();
+      //
+      //  //Enable sidebar push menu
+      //  if ($("body").hasClass('sidebar-collapse')) {
+      //    $("body").removeClass('sidebar-collapse').trigger('expanded.pushMenu');
+      //  } else {
+      //    $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
+      //  }
+      //  ////Handle sidebar push menu for small screens
+      //  //else {
+      //  //  if ($("body").hasClass('sidebar-open')) {
+      //  //    $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
+      //  //  } else {
+      //  //    $("body").addClass('sidebar-open').trigger('expanded.pushMenu');
+      //  //  }
+      //  //}
+      //});
 
-        //Enable sidebar push menu
-        if ($(window).width() > (screenSizes.sm - 1)) {
-          if ($("body").hasClass('sidebar-collapse')) {
-            $("body").removeClass('sidebar-collapse').trigger('expanded.pushMenu');
-          } else {
-            $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
-          }
-        }
-        //Handle sidebar push menu for small screens
-        else {
-          if ($("body").hasClass('sidebar-open')) {
-            $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
-          } else {
-            $("body").addClass('sidebar-open').trigger('expanded.pushMenu');
-          }
-        }
-      });
-
-      $(".content-wrapper").click(function () {
-        //Enable hide menu when clicking on the content-wrapper on small screens
-        if ($(window).width() <= (screenSizes.sm - 1) && $("body").hasClass("sidebar-open")) {
-          $("body").removeClass('sidebar-open');
-        }
-      });
+      //$(".content-wrapper").click(function () {
+      //  //Enable hide menu when clicking on the content-wrapper on small screens
+      //  if ($(window).width() <= (screenSizes.sm - 1) && $("body").hasClass("sidebar-open")) {
+      //    $("body").removeClass('sidebar-open');
+      //  }
+      //});
 
       //Enable expand on hover for sidebar mini
       if ($.AdminLTE.options.sidebarExpandOnHover
