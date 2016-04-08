@@ -52,6 +52,40 @@ export default class extends React.Component {
         this.updateGraph(Object.assign({}, this.props.graph));
     }
 
+    /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    circleLayout(nodes) {
+        const radius = nodes.length * 10;
+        const offsetX = DOMSelector.getWidth(this.state.selector)/2;
+        const offsetY = DOMSelector.getHeight(this.state.selector)/2;
+
+        nodes.sort((node1, node2) => {
+            if(node1.type !== node2.type) {
+                return node1.type.localeCompare(node2.type);
+            } else {
+                return node1.name.localeCompare(node2.name);
+            }
+        });
+
+        // use to scale node index to theta value
+        var scale = d3.scale.linear()
+            .domain([0, nodes.length])
+            .range([0, 2 * Math.PI]);
+
+        // calculate theta for each node
+        nodes.forEach(function(d, i) {
+            // calculate polar coordinates
+            var theta  = scale(i);
+            var radial = radius;
+
+            // convert to cartesian coordinates
+            d.x = radial * Math.sin(theta) + offsetX;
+            d.y = radial * Math.cos(theta) + offsetY;
+        });
+    }
+    /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     renderGraph(data) {
         this.createForceLayout(data);
         this.state.zoom = D3Utils.createZoom(this.state.scale, this.state.translate);
@@ -64,10 +98,23 @@ export default class extends React.Component {
         this.createSvg();
         this.updateGraphData(data);
         this.setVisibilityByFilter(data);
-        this.addLinks();
-        this.addNodes();
 
+        /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        data.edges.forEach(function(d, i) {
+            d.source = isNaN(d.source) ? d.source : data.nodes[d.source];
+            d.target = isNaN(d.target) ? d.target : data.nodes[d.target];
+        });
+
+        this.circleLayout(data.nodes);
+        /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+        this.addNodes();
+        this.addLinks();
         this.updateForceLayout(data);
+
         this.createConnectedIndex(data);
     }
 
@@ -81,6 +128,7 @@ export default class extends React.Component {
         data.edges.forEach((d) => {
             this.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
         });
+
     }
 
     connectedNodes(d, state, props, thiz) {
@@ -126,7 +174,7 @@ export default class extends React.Component {
         this.state.g
             .transition()
             .duration(0)
-            .attr('transform', 'translate(' + this.state.zoom.translate() + ') scale(' + this.state.zoom.scale() + ')');
+            .attr('transform', 'translate(' + this.state.zoom.translate() +') scale(' + this.state.zoom.scale() + ')');
 
         return this.state.zoom;
     }
@@ -183,8 +231,7 @@ export default class extends React.Component {
             .linkDistance(70)
             .nodes(data.nodes)
             .links(data.edges)
-            .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
-            .on("start", () => this.createSpeededUpAnimation());
+            .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)]);
     }
 
     updateGraphData(data) {
@@ -196,11 +243,15 @@ export default class extends React.Component {
         this.state.links
             .enter()
             .insert("line", "g")
-            .attr("class", "link ");
+            .attr("class", "link ")
+            .attr("x1", function(d) { return d.source.x; })/////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            .attr("y1", function(d) { return d.source.y; })/////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            .attr("x2", function(d) { return d.target.x; })/////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            .attr("y2", function(d) { return d.target.y; });/////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         this.state.links
             .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity})
-            //.style("marker-end",  "url(#suit)");
+        //.style("marker-end",  "url(#suit)");
     }
 
     setVisibilityByFilter(data) {
@@ -227,6 +278,7 @@ export default class extends React.Component {
     addNodes() {
         const g = this.state.nodes.enter().append("g")
             .attr("class", "g")
+            .attr("transform", d => `translate(${d.x},${d.y})`)/////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             .style("fill", (d) => {
                 return Constants.getColor(d.type ? d.type : d.category)
             });
@@ -299,6 +351,7 @@ export default class extends React.Component {
         const props = this.props;
         const connectedNodes = this.connectedNodes;
 
+
         this.state.nodes
             .on("dblclick", (d, props) => {
                 if(d.visible || this.props.enableFiltered) {
@@ -310,14 +363,14 @@ export default class extends React.Component {
                     EventHandlers.onContextMenuNode(d, this.props);
                 }
             })
+            .on("click", function(d) {
+                connectedNodes(d, state, props, this);
+            })
             .on("mouseover", (d) => {
                 EventHandlers.onMouseOver(d);
             })
             .on("mouseleave", (d) => {
                 EventHandlers.onMouseLeave(d);
-            })
-            .on("click", function(d) {
-                connectedNodes(d, state, props, this);
             })
             .call(
                 this.state.force.drag()
@@ -350,41 +403,6 @@ export default class extends React.Component {
             d3.select(selector).select("svg")
                 .attr("width", width)
                 .attr("height", height);
-        }
-    }
-
-    createSpeededUpAnimation() {
-        requestAnimationFrame(() => {
-            this.createAnimation();
-        });
-    }
-
-    createAnimation() {
-        const TICKS_PER_RENDER = 10;
-        const ALPHA_THRESHOLD = 0.03;
-
-        this.passOverTicks(TICKS_PER_RENDER);
-
-        D3Utils.moveLinks(this.state.links);
-        D3Utils.moveNodes(this.state.nodes);
-        this.animateIfNotFinished(ALPHA_THRESHOLD);
-    }
-
-    passOverTicks(ticksPerRender) {
-        for(var j = 0; j < ticksPerRender; j++) {
-            this.state.force.tick();
-        }
-    }
-
-    animateIfNotFinished(alphaThreshold) {
-        if (this.state.force.alpha() > alphaThreshold) {
-            this.createSpeededUpAnimation();
-        } else {
-            this.state.force.stop();
-
-            this.state.nodes.attr("fixed", (d) => {
-                d.fixed = this.props.isFixed ? true : d.isFixed;
-            });
         }
     }
 }

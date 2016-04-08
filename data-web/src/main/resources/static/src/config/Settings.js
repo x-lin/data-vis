@@ -3,6 +3,11 @@ export const DISABLED_OPACITY_VALUE = "DISABLED_OPACITY_VALUE";
 export const ENABLE_SELECTION_OF_FILTERED_NODES = "ENABLE_SELECTION_OF_FILTERED_NODES";
 export const SET_NODE_POSITIONS_FIXED = "SET_NODE_POSITIONS_FIXED";
 export const SHOW_CONTEXT_MENU = "SHOW_CONTEXT_MENU";
+export const CHANGE_GRAPH_LAYOUT ="CHANGE_GRAPH_LAYOUT";
+
+export const FORCE_GRAPH_LAYOUT = "FORCE_GRAPH_LAYOUT";
+export const CIRCULAR_LAYOUT = "CIRCULAR_LAYOUT";
+export const TREE_LAYOUT = "TREE_LAYOUT";
 
 export default [
     {
@@ -33,5 +38,14 @@ export default [
         description: "Show custom context menu on right click.",
         value: true,
         menuButton: "fa fa-list-alt"
+    }, {
+        name: CHANGE_GRAPH_LAYOUT,
+        description: "Change the layout of the graph visualization.",
+        value: FORCE_GRAPH_LAYOUT,
+        options: [
+            {key: FORCE_GRAPH_LAYOUT, description: "Force-directed"},
+            {key: CIRCULAR_LAYOUT, description: "Circular (experimental)"}
+        ],
+        menuButton: "fa fa-picture-o"
     }
 ];

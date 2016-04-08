@@ -19,17 +19,17 @@ export default ( {
                             {setting.description}
                         </label>
                         :
-                        <div>
+                    <div>
                             <label className="control-sidebar-subheading cursor">
                                 {setting.description}
                             </label>
                             <div>
-                                <Slider min={setting.min} max={setting.max}
+                                {/*<Slider min={setting.min} max={setting.max}
                                         defaultValue={setting.value}
                                         step={setting.step}
                                         onChange={function(value) {
                                             valueHandler(setting.name, value)}}
-                                />
+                                />*/}
                             </div>
                         </div>
                     }

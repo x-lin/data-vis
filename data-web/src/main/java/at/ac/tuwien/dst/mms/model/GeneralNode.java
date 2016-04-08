@@ -53,17 +53,14 @@ public class GeneralNode extends ModelEntity {
 	private GeneralNodeType type;
 
 	@JsonIgnore
-	//@Fetch
 	@RelatedTo(type = "PARENT", direction = Direction.INCOMING)
 	private GeneralNode parent;
 
 	@JsonIgnore
-	//@Fetch
 	@RelatedTo(type = "PARENT", direction = Direction.OUTGOING)
 	private Set<GeneralNode> children;
 
 	@JsonIgnore
-	//@Fetch
 	@RelatedTo(type = "DOWNSTREAM", direction = Direction.OUTGOING)
 	private Set<GeneralNode> downstream;
 
@@ -72,7 +69,6 @@ public class GeneralNode extends ModelEntity {
 	private Set<GeneralNode> unclassified;
 
 	@JsonIgnore
-	//@Fetch
 	@RelatedTo(type = "TEXT_INDEX", direction = Direction.OUTGOING)
 	private Set<TextIndex> textIndex;
 

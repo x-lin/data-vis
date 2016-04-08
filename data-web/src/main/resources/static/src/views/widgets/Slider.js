@@ -3,6 +3,7 @@ import Slider from "rc-slider";
 import "./Slider.css";
 
 export default ( { min, max, defaultValue, step, onChange }) => {
+    console.log(defaultValue)
     return (
         <div>
             <Slider defaultValue={defaultValue} min={min} max={max} onChange={onChange} step={step} />

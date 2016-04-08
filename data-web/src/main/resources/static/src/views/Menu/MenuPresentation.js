@@ -15,7 +15,8 @@ import { DropdownButton, MenuItem, OverlayTrigger, Popover } from "react-bootstr
 export default ( {
     toggleHandler,
     valueHandler,
-    settings
+    settings,
+    layout
 } ) => {
     const renderEntries = () => {
         return settings.map((setting, index) => {
@@ -27,7 +28,7 @@ export default ( {
                         <span className={setting.menuButton} />
                     </a>
                 </li>;
-            } else {
+            } else if(!isNaN(parseFloat(setting.value))) {
                 return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
                     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}><div style={{minWidth: "200px", paddingTop: "5px"}}><Slider min={setting.min} max={setting.max}
                                 defaultValue={setting.value}
@@ -41,8 +42,23 @@ export default ( {
                         </a>
                     </OverlayTrigger>
                 </li>;
+            } else {
+                return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}><div style={{margin: "-9px -14px"}}>
+                        {setting.options.map((entry, index) => {
+                        console.log(layout, entry.key);
+                        return <div className={`dropdown-content-item dropdown-content-item-hover cursor ${layout === entry.key ? "active" : ""}`} key={index} onClick={() => valueHandler(setting.name, entry.key)}>
+                            {entry.description}
+                        </div>
+                        })}
+</div></Popover>}>
+                        <a title={setting.description}>
+                            <span className={setting.menuButton} />
+                            <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
+                        </a>
+                    </OverlayTrigger>
+                </li>;
             }
-
         })
     };
 

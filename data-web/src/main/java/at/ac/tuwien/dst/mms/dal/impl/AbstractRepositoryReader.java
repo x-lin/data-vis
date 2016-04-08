@@ -96,7 +96,9 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 						//a node may have multiple labels: check one for one, if the label is mapped to a type
 						//until the object was mapped
 						for(String prop : node.getPropertyKeys()) {
-							map.put(prop, node.getProperty(prop));
+							if(!prop.equals("count")) {
+								map.put(prop, node.getProperty(prop));
+							}
 						}
 
 						for(Label label : node.getLabels()) {

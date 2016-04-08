@@ -6,7 +6,7 @@ import { updateGraph } from "../../actions/action-creators/GraphActionCreators";
 
 const mapStateToProps = (state) => {
     return {
-        graph: state.graph
+        graph: state.graph.present
     };
 };
 

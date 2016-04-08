@@ -37,8 +37,8 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 	public Neighbors getNeighbors(String key, boolean upstream, boolean downstream, List priority, List excluded, Integer limit, List type) {
 		GeneralNode node = this.find(key);
 		node.setCount(((GeneralNodeRepository)this.getRepository()).countNeighbors(key));
-		Iterable<Map<String, Object>> nodes = ((GeneralNodeRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit, type);
 
+		Iterable<Map<String, Object>> nodes = ((GeneralNodeRepository)this.getRepository()).findNeighbors(key, upstream, downstream, excluded, priority, limit, type);
 		List<Map<String, Object>> neighbors = this.getNeighbors(nodes);
 
 		Neighbors returnVal = new Neighbors();

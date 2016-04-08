@@ -7,7 +7,6 @@ import "./LanePicker.css";
 
 import SideBarHeader from "../widgets/SideBarHeader";
 import "../widgets/SideBarHeader.css";
-import FilterSideBar from "../GraphPanel/FilterSideBar/filterSideBar";
 
 class LanePicker extends React.Component {
   render() {

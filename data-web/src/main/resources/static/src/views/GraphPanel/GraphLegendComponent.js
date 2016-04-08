@@ -8,7 +8,7 @@ import GraphLegend from "./GraphLegend";
 const mapStateToProps = (state) => {
     return {
         visibilityFilters: state.visibilityFilters,
-        legend: state.graph
+        legend: state.graph.present
     };
 };
 

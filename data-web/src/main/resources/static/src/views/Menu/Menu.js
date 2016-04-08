@@ -1,6 +1,7 @@
 import React from "react";
 
 import MenuPresentation from "./MenuPresentation";
+import { CHANGE_GRAPH_LAYOUT } from "../../config/Settings";
 
 export default class extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export default class extends React.Component {
                 toggleHandler={(value) => this.handleToggle(value)}
                 valueHandler={(name, value) => this.handleValueChange(name, value)}
                 settings={this.props.settings}
+                layout={this.props.layout}
             />
         )
     }

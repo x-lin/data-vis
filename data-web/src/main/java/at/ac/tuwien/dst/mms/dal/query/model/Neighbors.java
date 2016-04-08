@@ -13,7 +13,6 @@ public class Neighbors {
 
 	private List<Map<String, Object>> neighbors;
 
-
 	public ModelEntity getNode() {
 		return node;
 	}
@@ -28,5 +27,13 @@ public class Neighbors {
 
 	public void setNeighbors(List<Map<String, Object>> neighbors) {
 		this.neighbors = neighbors;
+	}
+
+	@Override
+	public String toString() {
+		return "Neighbors{" +
+				"node=" + node +
+				", neighbors=" + neighbors +
+				'}';
 	}
 }

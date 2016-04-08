@@ -6,7 +6,7 @@ import { clearGraph, updateGraph } from "../../actions/action-creators/GraphActi
 import { DISABLED_OPACITY_VALUE, SET_NODE_POSITIONS_FIXED, SHOW_CONTEXT_MENU, ENABLE_SELECTION_OF_FILTERED_NODES }
     from "../../config/Settings";
 
-import ForceGraph from "./ForceGraph";
+import CircularGraph from "./CircularGraph";
 
 const mapStateToProps = (state) => {
     const settings = (() => {
@@ -40,4 +40,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(ForceGraph);
+)(CircularGraph);

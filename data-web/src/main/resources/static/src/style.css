@@ -310,3 +310,28 @@ a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-l
     color: #000000;
     font-size: 12px;
 }
+
+.dropdown-content {
+    width: 100%;
+}
+
+.dropdown-content-item {
+    padding: 12px 16px;
+    display: block;
+    /*background-color: #f9f9f9;*/
+    border-top: 1px solid #DDD;
+    max-height: 500px;
+    overflow-y: auto;
+    /*margin: 2px 0px;*/
+}
+
+.dropdown-content-item-hover:hover {background-color: #f1f1f1}
+
+.dropdown-content-item.active {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
