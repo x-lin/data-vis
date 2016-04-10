@@ -21,7 +21,7 @@ export default (
             return state;
         case REHYDRATE:
             state.sidebar.sidePanels.forEach((sidePanel) => {
-                if(action.payload.layout.sidebar.key === sidePanel.key) {
+                if(action.payload.layout && action.payload.layout.sidebar.key === sidePanel.key) {
                     state.sidebar = Object.assign({}, state.sidebar, {
                         obj: sidePanel.obj,
                         key: sidePanel.key,
@@ -60,7 +60,6 @@ const setSidebarObject = (state, action) => {
         for(let i = 0; i < panels.length; i++) {
             if(panels[i].key === action.key) {
                 panelObject = panels[i].obj;
-                console.log(panelObject)
                 break;
             }
         }
