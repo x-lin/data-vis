@@ -4,14 +4,11 @@ import { connect } from "react-redux";
 import SearchBarComponent from "../SearchBar/SearchBarComponent";
 import GraphPanel from "../GraphPanel/GraphPanel";
 import ExportToImage from "../GraphPanel/ExportToImage"
-import Draggable from "./Draggable";
 import TestCoverageComponent from "../TestCoveragePanel/TestCoverageComponent";
 import VerticalSplitView from "../widgets/VerticalSplitView";
 
 const Relations = ( { sidebarObject, sidebarVisible } ) => {
     const height = "calc(100vh - 50px)"
-
-    console.log(sidebarObject);
 
     return (
         <div>
@@ -21,6 +18,7 @@ const Relations = ( { sidebarObject, sidebarVisible } ) => {
                     <GraphPanel />
                 </div>
                 {sidebarVisible && sidebarObject}
+
             </VerticalSplitView>
         </div>
     );

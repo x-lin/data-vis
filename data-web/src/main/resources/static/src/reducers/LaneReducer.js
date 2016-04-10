@@ -31,7 +31,6 @@ export default (
                 switch (lane) {
                     case EXCLUDED:
                         cachedExcluded = state.lanes[index];
-                        console.log(cachedExcluded)
                         return getInit(excluded, lane, index);
                     case UNORDERED:
                         return getInit(unordered, lane, index);

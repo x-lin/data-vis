@@ -5,7 +5,6 @@ import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
 import { REHYDRATE } from "redux-persist/constants";
 import Constants from "../config/Constants";
 import Edge from "../utils/graph/Edge";
-import Node from "../utils/graph/Node";
 import D3Graph from "../utils/graph/D3Graph";
 
 const UNDO_LIMIT = 20;

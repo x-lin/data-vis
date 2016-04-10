@@ -7,7 +7,6 @@ import { Provider, connect } from "react-redux";
 
 import Main from "./views/Main";
 import Relations from "./views/MainViews/Relations";
-import Tree from "./views/TreePanel/Tree";
 
 import { polyfill } from "es6-promise";
 
@@ -15,9 +14,7 @@ ReactDOM.render (
     <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/" component={Main}>
-                {/*<Route path="relationships" component={Relations} />
-                <Route path="tree" component={Tree} />
-                <Route path="schema/:project" component={Schema} />*/}
+                {/*<Route path="relationships" component={Relations} />*/}
                 <IndexRoute component={Relations} /> /* default path -> take this, if no other match */
             </Route>
         </Router>
