@@ -38,6 +38,20 @@ export default ( {
                             and may cause the Drag and Drop component to break. The same issue may also occur with some other browser native right click events. To resolve the issue for now, when it occurs: <strong>Refresh page.</strong>
                         </div>
                     </div>
+                    <div className="box box-default">
+                        <div className="box-body">
+                            <p>
+                                <strong>About the data</strong>
+                            </p>
+
+                            <ul style={{paddingLeft: "1.2em"}}>
+                                <li>Pulled from Jama and JIRA. Stored in Neo4j.</li>
+                                <li>Items with status "Deleted" in Jama or status "Closed" in JIRA are not stored / will be deleted.</li>
+                                <li>Relationships from Jama are stored as unidirectional edges, relationships from JIRA as bidirectional edges. Relationships that exist in both use Jama mappings.</li>
+                                <li>Parent/children relationships are treated equally to upstream/downstream relationships (i.e., no difference in querying).</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </aside>
             <div className="control-sidebar-bg"></div>
