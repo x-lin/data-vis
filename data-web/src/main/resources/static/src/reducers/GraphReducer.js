@@ -2,6 +2,7 @@ import { ADD_TO_GRAPH, REMOVE_FROM_GRAPH, UPDATE_GRAPH, CLEAR_GRAPH, EXPAND_NODE
     from "../actions/action-creators/GraphActionCreators";
 import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
     from "../actions/action-creators/FetchNeighborsActionCreators";
+import { REHYDRATE } from "redux-persist/constants";
 import Constants from "../config/Constants";
 import Edge from "../utils/graph/Edge";
 import Node from "../utils/graph/Node";
@@ -123,6 +124,20 @@ action) => {
                 present: Object.assign({}, state.present),
                 future: state.future.slice(1)
             };
+        case REHYDRATE:
+            const { graph } = action.payload;
+            console.log(action.payload);
+            if(graph) {
+                push(state.present, prepareWithoutParse(graph.present));
+
+                return {
+                    past: graph.past,
+                    future: graph.future,
+                    present: Object.assign({}, state.present)
+                };
+            } else {
+                return state;
+            }
         default:
             return state;
     }
@@ -142,9 +157,7 @@ function reset(graph) {
     graph.legend.length = 0;
 }
 
-function prepare(graph) {
-    graph = JSON.parse(graph);
-
+function prepareWithoutParse(graph) {
     //set isFixed value, as it's not saved in file
     graph.nodes = graph.nodes.map((node, index) => {
         node.isFixed = (node.fixed && node.fixed==1) ? true : false;
@@ -163,4 +176,10 @@ function prepare(graph) {
     });
 
     return graph;
+}
+
+function prepare(graph) {
+    graph = JSON.parse(graph);
+
+    return prepareWithoutParse(graph);
 }

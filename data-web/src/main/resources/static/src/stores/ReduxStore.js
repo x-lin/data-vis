@@ -1,6 +1,7 @@
-import { createStore as createReduxStore, combineReducers, applyMiddleware } from "redux";
+import { createStore as createReduxStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunkMiddleware from 'redux-thunk';
 import undoable from 'redux-undo';
+import {persistStore, autoRehydrate} from 'redux-persist';
 
 import { itemReducer } from "../reducers/ItemReducer";
 import { neighborsReducer } from "../reducers/NeighborsReducer";
@@ -13,6 +14,9 @@ import TestCoverageReducer from "../reducers/TestCoverageReducer";
 import NodeTypeReducer from "../reducers/NodeTypeReducer";
 import LayoutReducer from "../reducers/LayoutReducer";
 import ContextMenuReducer from "../reducers/ContextMenuReducer";
+
+//Loading pre-configured data from server
+import { getNodeTypes } from "../actions/aggregated/GETNodeTypes";
 
 export const createStore = () => {
     const allReducers = combineReducers({
@@ -29,9 +33,15 @@ export const createStore = () => {
         contextmenu: ContextMenuReducer
     });
 
-    return createReduxStore(allReducers, applyMiddleware(
-        thunkMiddleware // lets us dispatch() asynchronous functions
-    ));
+    return createReduxStore(allReducers,
+        compose(
+            autoRehydrate(),
+            applyMiddleware(thunkMiddleware)
+        ));
 };
 
 export const store = createStore();
+
+store.dispatch(getNodeTypes());
+
+persistStore(store);

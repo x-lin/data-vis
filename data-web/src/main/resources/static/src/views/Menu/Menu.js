@@ -8,10 +8,6 @@ export default class extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
-        this.props.getNodeTypes();
-    }
-
     handleToggle(value) {
         this.props.toggle(value);
     }

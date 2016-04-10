@@ -8,7 +8,6 @@ import { Provider, connect } from "react-redux";
 import Main from "./views/Main";
 import Relations from "./views/MainViews/Relations";
 import Tree from "./views/TreePanel/Tree";
-import Schema from "./views/MainViews/SchemaComponent";
 
 import { polyfill } from "es6-promise";
 

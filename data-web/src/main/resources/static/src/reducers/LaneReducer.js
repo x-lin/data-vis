@@ -24,16 +24,58 @@ export default (
                 }
             });
 
+            let cachedExcluded = state.lanes[EXCLUDED],
+                cachedPrioritized = state.lanes[PRIORITIZED];
+
             const lanes2 = array.map((lane, index) => {
                 switch (lane) {
                     case EXCLUDED:
+                        cachedExcluded = state.lanes[index];
+                        console.log(cachedExcluded)
                         return getInit(excluded, lane, index);
                     case UNORDERED:
                         return getInit(unordered, lane, index);
-                    default:
+                    case PRIORITIZED:
+                        cachedPrioritized = state.lanes[index];
                         return getInit([], lane, index);
                 }
             });
+
+            function addIfNotExists(array, check) {
+                check.forEach((item) => {
+                    for(let i = 0; i < array.length; i++) {
+                        if(array[i].key === item.key) {
+                            return;
+                        }
+                    }
+
+                    array.push(item);
+                });
+            }
+
+            function removeIfExists(array, check) {
+                check.forEach((item, index) => {
+                    for(let i = 0; i < array.length; i++) {
+                        if(array[i].key === item.key) {
+                            return;
+                        }
+                    }
+
+                    array.splice(index,1);
+                });
+            }
+
+            if(cachedExcluded) {
+                addIfNotExists(lanes2[EXCLUDED], cachedExcluded);
+                removeIfExists(lanes2[PRIORITIZED], cachedExcluded);
+                removeIfExists(lanes2[UNORDERED], cachedExcluded);
+            }
+
+            if(cachedPrioritized) {
+                addIfNotExists(lanes2[PRIORITIZED], cachedPrioritized);
+                removeIfExists(lanes2[EXCLUDED], cachedPrioritized);
+                removeIfExists(lanes2[UNORDERED], cachedPrioritized);
+            }
 
             return Object.assign({}, state, {
                 lanes: lanes2

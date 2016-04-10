@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { toggleSetting, setSettingValue } from "../../actions/action-creators/SettingsActions";
 import { CHANGE_GRAPH_LAYOUT } from "../../config/Settings";
-import { getNodeTypes } from "../../actions/aggregated/GETNodeTypes";
 
 import Menu from "./Menu";
 
@@ -29,9 +28,6 @@ const mapDispatchProps = (dispatch) => {
         },
         setValue: (name, value) => {
             dispatch(setSettingValue(name, value));
-        },
-        getNodeTypes: () => {
-            dispatch(getNodeTypes())
         }
     };
 };

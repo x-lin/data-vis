@@ -1,10 +1,11 @@
 import { SET_SIDEBAR_PANEL } from "../actions/action-creators/LayoutActions";
 import Constants from "../config/Constants";
+import { REHYDRATE } from "redux-persist/constants";
 
 export default (
     state = {
         sidebar : {
-            object: null,
+            obj: null,
             visible: false,
             key: null,
             sidePanels: Constants.sidePanels
@@ -18,6 +19,20 @@ export default (
             state = setSidebarObject(state, action);
 
             return state;
+        case REHYDRATE:
+            state.sidebar.sidePanels.forEach((sidePanel) => {
+                if(action.payload.layout.sidebar.key === sidePanel.key) {
+                    state.sidebar = Object.assign({}, state.sidebar, {
+                        obj: sidePanel.obj,
+                        key: sidePanel.key,
+                        visible: action.payload.layout.sidebar.visible
+                    });
+                }
+            });
+
+            return Object.assign({}, state, {
+                sidebar: state.sidebar
+            });
         default:
             return state;
     }
@@ -44,14 +59,15 @@ const setSidebarObject = (state, action) => {
 
         for(let i = 0; i < panels.length; i++) {
             if(panels[i].key === action.key) {
-                panelObject = panels[i].object;
+                panelObject = panels[i].obj;
+                console.log(panelObject)
                 break;
             }
         }
 
         const newSidebar = Object.assign({}, state.sidebar, {
             key: action.key,
-            object: panelObject
+            obj: panelObject
         });
 
         return Object.assign({}, state, {

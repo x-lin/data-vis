@@ -11,6 +11,8 @@ import VerticalSplitView from "../widgets/VerticalSplitView";
 const Relations = ( { sidebarObject, sidebarVisible } ) => {
     const height = "calc(100vh - 50px)"
 
+    console.log(sidebarObject);
+
     return (
         <div>
             <VerticalSplitView rightWidth={500} height={height}>
@@ -26,7 +28,7 @@ const Relations = ( { sidebarObject, sidebarVisible } ) => {
 
 const mapStateToProps = (state) => {
     return {
-        sidebarObject: state.layout.sidebar.object,
+        sidebarObject: state.layout.sidebar.obj,
         sidebarVisible: state.layout.sidebar.visible
     };
 };

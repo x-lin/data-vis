@@ -31,7 +31,7 @@ Constants.endpoints = {
 };
 
 Constants.sidePanels = [
-    {object: <TestCoverageComponent />, key: "test"}
+    {obj: <TestCoverageComponent />, key: "test"}
 ];
 
 Constants.invisible = {
