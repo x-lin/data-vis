@@ -2,6 +2,7 @@ import { createStore as createReduxStore, combineReducers, applyMiddleware, comp
 import thunkMiddleware from 'redux-thunk';
 import undoable from 'redux-undo';
 import {persistStore, autoRehydrate} from 'redux-persist';
+import localforage from "localforage";
 
 import { itemReducer } from "../reducers/ItemReducer";
 import { neighborsReducer } from "../reducers/NeighborsReducer";
@@ -44,4 +45,4 @@ export const store = createStore();
 
 store.dispatch(getNodeTypes());
 
-persistStore(store);
+persistStore(store, {storage: localforage});

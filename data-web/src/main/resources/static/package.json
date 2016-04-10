@@ -15,6 +15,7 @@
     "axios": "^0.9.1",
     "classnames": "^2.2.3",
     "d3": "^3.5.15",
+    "localforage": "^1.4.0",
     "lodash": "^4.6.1",
     "normalize.css": "^3.0.3",
     "rc-slider": "^3.3.2",
