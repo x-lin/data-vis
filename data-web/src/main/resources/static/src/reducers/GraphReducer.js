@@ -7,7 +7,7 @@ import Constants from "../config/Constants";
 import Edge from "../utils/graph/Edge";
 import D3Graph from "../utils/graph/D3Graph";
 
-const UNDO_LIMIT = 20;
+const UNDO_LIMIT = 10;
 
 function updateHistory(history, graph) {
     let past;
