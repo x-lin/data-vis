@@ -12,7 +12,7 @@ public class NeighborQueryBuilder {
 	public String buildQuery(String indexName, String key, boolean upstream, boolean downstream,
 							 List<String> excluded, List<String> priority, Integer limit, List<String> type) {
 		String query = this.buildStart(indexName, key) + this.buildMatch(downstream, upstream) +
-				"-[:NODE_TYPE]-(m:GeneralNodeType)" + this.buildOthers() + this.buildType(type) + this.buildExclude(excluded) + this.buildPriority(priority) +
+				"-[:NODE_TYPE]-(m:GeneralNodeType)" + this.buildOthers() + this.buildType(type) + this.buildExclude(excluded) + this.buildPriority(priority, limit) +
 				this.filterClosed() + this.buildLimit(limit);
 
 		System.out.println("query: " + query);
@@ -21,7 +21,7 @@ public class NeighborQueryBuilder {
 	}
 
 	private String buildMatch(boolean downstream, boolean upstream) {
-		return " MATCH (p)" + this.buildUpstream(upstream) + "-[]-" + this.buildDownstream(downstream) + "(n:GeneralNode)";
+		return " MATCH (p)" + this.buildUpstream(upstream) + "-[r]-" + this.buildDownstream(downstream) + "(n:GeneralNode)";
 	}
 
 	private String buildStart(String indexName, String key) {
@@ -45,11 +45,11 @@ public class NeighborQueryBuilder {
 		return typeString;
 	}
 
-	private String buildPriority(List<String> priority) {
+	private String buildPriority(List<String> priority, Integer limit) {
 		String caseString = "";
 
 		if(priority != null && priority.size() > 0) {
-			caseString += " WITH m,n,p, ";
+			caseString += " WITH m,n,p,r, ";
 			caseString += " CASE m.key";
 			int i = 0;
 
@@ -60,17 +60,18 @@ public class NeighborQueryBuilder {
 
 			caseString += " ELSE " + priority.size();
 			caseString += " END as sortOrder";
-		}
-
-		if(priority != null && priority.size() > 0) {
 			caseString += " ORDER BY sortOrder";
+
+			if(limit != null && limit >= 0) {
+				caseString += " LIMIT " + limit;
+			}
 		}
 
 		return caseString;
 	}
 
 	private String buildOthers() {
-		return " WHERE (NOT EXISTS(n.jiraStatus) OR n.jiraStatus <> 'Closed') ";
+		return " WHERE true ";
 	}
 
 	private String buildExclude(List<String> excluded) {
@@ -95,7 +96,12 @@ public class NeighborQueryBuilder {
 	}
 
 	private String filterClosed() {
-		return " OPTIONAL MATCH (n)-[]-(o:GeneralNode) WHERE (NOT EXISTS(o.jiraStatus) OR o.jiraStatus <> 'Closed') RETURN DISTINCT n AS node, count(o) AS count ";
+		return " OPTIONAL MATCH (n)-[]-(o:GeneralNode) RETURN DISTINCT n AS node, count(o) AS count, CASE " +
+				"WHEN (type(r)='DOWNSTREAM' AND (startnode(r) = p) = true) OR type(r)='PROJECT' " +
+				"THEN 'DOWNSTREAM' " +
+				"WHEN type(r)='UNCLASSIFIED' " +
+				"THEN null " +
+				"ELSE 'UPSTREAM' END AS direction ";
 	}
 
 	private String buildLimit(Integer limit) {

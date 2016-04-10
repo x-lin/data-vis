@@ -36,7 +36,7 @@ class UndoRedo extends React.Component {
     }
 
     render() {
-        return <div style={{bottom: "20px", right: "20px", position: "absolute", zIndex: "10"}}>
+        return <div style={{bottom: "20px", left: "20px", position: "absolute", zIndex: "10"}}>
             {this.renderUndo()}
             {this.renderRedo()}
         </div>

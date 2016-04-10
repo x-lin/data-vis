@@ -42,43 +42,45 @@ public class NeoRepositoryWriter implements DataWriter {
 	public void storeIssues(Collection<JiraIssueDTO> issues) {
 		try (Transaction tx = graphDatabase.beginTx()) {
 			for(JiraIssueDTO issue : issues) {
-				GeneralNode dbIssue = generalNodeRepository.findbyName(issue.getName(), issue.getProject().getKey());
-				GeneralNodeType userType = new GeneralNodeType("USER", "User");
+				if(!issue.getStatus().equals("Closed")) {
+					GeneralNode dbIssue = generalNodeRepository.findbyName(issue.getName(), issue.getProject().getKey());
+					GeneralNodeType userType = new GeneralNodeType("USER", "User");
 
-				if(dbIssue != null && (dbIssue.getType().getKey().equals("BUG") || dbIssue.getType().getKey().equals("WP") )) {
+					if(dbIssue != null && (dbIssue.getType().getKey().equals("BUG") || dbIssue.getType().getKey().equals("WP") )) {
 
-					dbIssue.setJiraId(issue.getKey());
+						dbIssue.setJiraId(issue.getKey());
 
-					if(issue.getUser() != null && issue.getUser().getKey() != null && issue.getUser().getName() != null) {
-						GeneralNode user = new GeneralNode(issue.getUser().getKey(), issue.getUser().getName());
-						user.setType(userType);
-						dbIssue.setJiraStatus(issue.getStatus());
+						if(issue.getUser() != null && issue.getUser().getKey() != null && issue.getUser().getName() != null) {
+							GeneralNode user = new GeneralNode(issue.getUser().getKey(), issue.getUser().getName());
+							user.setType(userType);
+							dbIssue.setJiraStatus(issue.getStatus());
 
-						if(dbIssue.getUnclassified() == null) {
-							dbIssue.setUnclassified(new HashSet<>());
+							if(dbIssue.getUnclassified() == null) {
+								dbIssue.setUnclassified(new HashSet<>());
+							}
+
+							dbIssue.addUnclassified(user);
+						} else {
+							logger.warn("User assignee for issue " + dbIssue + " was " + issue.getUser());
 						}
 
-						dbIssue.addUnclassified(user);
+						generalNodeRepository.save(dbIssue);
 					} else {
-						logger.warn("User assignee for issue " + dbIssue + " was " + issue.getUser());
-					}
+						logger.warn("Issue not found in Db..." + (dbIssue == null ? "name was " + issue.getName() : "type wrong, was " + dbIssue.getType().getKey() ));
 
-					generalNodeRepository.save(dbIssue);
-				} else {
-					logger.warn("Issue not found in Db..." + (dbIssue == null ? "name was " + issue.getName() : "type wrong, was " + dbIssue.getType().getKey() ));
+						dbIssue = new GeneralNode(issue.getKey(), issue.getName());
 
-					dbIssue = new GeneralNode(issue.getKey(), issue.getName());
-
-					if(issue.getUser() != null && issue.getUser().getKey() != null && issue.getUser().getName() != null) {
-						GeneralNode user = new GeneralNode(issue.getUser().getKey(), issue.getUser().getName());
-						user.setType(userType);
-						dbIssue.setJiraStatus(issue.getStatus());
-						dbIssue.setUnclassified(new HashSet<>());
-						dbIssue.addUnclassified(user);
-						Project project = projectRepository.findByKey(issue.getProject().getKey());
-						dbIssue.setProject(project);
-					} else {
-						logger.warn("User assignee for issue " + dbIssue + " was " + issue.getUser());
+						if(issue.getUser() != null && issue.getUser().getKey() != null && issue.getUser().getName() != null) {
+							GeneralNode user = new GeneralNode(issue.getUser().getKey(), issue.getUser().getName());
+							user.setType(userType);
+							dbIssue.setJiraStatus(issue.getStatus());
+							dbIssue.setUnclassified(new HashSet<>());
+							dbIssue.addUnclassified(user);
+							Project project = projectRepository.findByKey(issue.getProject().getKey());
+							dbIssue.setProject(project);
+						} else {
+							logger.warn("User assignee for issue " + dbIssue + " was " + issue.getUser());
+						}
 					}
 				}
 			}
@@ -236,8 +238,8 @@ public class NeoRepositoryWriter implements DataWriter {
 	public void addIndex() {
 		this.addIndexForProjects();
 		logger.info("text index added for projects");
-		//this.addIndexforGeneralNodes();
-		//logger.info("text index added for general nodes");
+		this.addIndexforGeneralNodes();
+		logger.info("text index added for general nodes");
 	}
 
 	@Transactional

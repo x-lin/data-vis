@@ -4,6 +4,7 @@ export const ENABLE_SELECTION_OF_FILTERED_NODES = "ENABLE_SELECTION_OF_FILTERED_
 export const SET_NODE_POSITIONS_FIXED = "SET_NODE_POSITIONS_FIXED";
 export const SHOW_CONTEXT_MENU = "SHOW_CONTEXT_MENU";
 export const CHANGE_GRAPH_LAYOUT ="CHANGE_GRAPH_LAYOUT";
+export const SHOW_EDGE_DIRECTION = "SHOW_EDGE_DIRECTION";
 
 export const FORCE_GRAPH_LAYOUT = "FORCE_GRAPH_LAYOUT";
 export const CIRCULAR_LAYOUT = "CIRCULAR_LAYOUT";
@@ -23,6 +24,11 @@ export default [
         max: 0.5,
         step: 0.05,
         menuButton: "fa fa-eye-slash"
+    }, {
+        name: SHOW_EDGE_DIRECTION,
+        description: "Show direction of edges.",
+        value: false,
+        menuButton: "fa fa-arrows-v"
     }, {
         name: ENABLE_SELECTION_OF_FILTERED_NODES,
         description: "Enable event handlers for filtered nodes.",

@@ -21,6 +21,7 @@ export default class extends React.Component {
             force: {},
             nodes: {},
             links: {},
+            svg: {},
             g: {},
             translate: [0,0],
             scale: 1,
@@ -137,8 +138,11 @@ export default class extends React.Component {
 
     createSvg() {
         const svg = D3Utils.createSvg(this.state.selector)
-            .attr("class", "force-graph")
+            .attr("class", "force-graph");
+
+        svg
             .on("click", (d) => EventHandlers.onClickSvg(d));
+            //.on("contextmenu", function(){d3.event.preventDefault();}); //disabled context menu because of D3 bug with drag(still exists e.g. in Chrome when a force graph is initialized: 1. right click on a DOM element in the Developer Tools, 2. click on the SVG panel -> the graph now magically moves around and React DnD (Lane Picker) won't work anymore)
 
         const vis = svg
             .append('svg:g')
@@ -147,19 +151,7 @@ export default class extends React.Component {
         this.state.g = vis;
         svg.call(this.createOnZoomBehavior(vis));
 
-        svg.append("defs").selectAll("marker")
-            .data(["suit", "licensing", "resolved"])
-            .enter().append("marker")
-            .attr("id", function(d) { return d; })
-            .attr("viewBox", "0 -5 10 10")
-            .attr("refX", 45)
-            .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-            .style("stroke", "#4679BD");
+        this.addMarkers(svg);
 
         this.state.links = vis.selectAll(".link");
         this.state.nodes = vis.selectAll(".node");
@@ -184,7 +176,7 @@ export default class extends React.Component {
             .nodes(data.nodes)
             .links(data.edges)
             .size([DOMSelector.getWidth(this.state.selector), DOMSelector.getHeight(this.state.selector)])
-            .on("start", () => this.createSpeededUpAnimation());
+            .on("start", () => this.createSpeededUpAnimation())
     }
 
     updateGraphData(data) {
@@ -200,7 +192,15 @@ export default class extends React.Component {
 
         this.state.links
             .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity})
-            //.style("marker-end",  "url(#suit)");
+            .style("stroke-dasharray", (d) => {
+                return (this.props.showEdgeDirection && d.direction === null) ? "5,2" : "";
+            })
+            .style("marker-start", (d) => {
+                return (this.props.showEdgeDirection && d.direction === "DOWNSTREAM") ? "url(#marker-start)" : "";
+            })
+            .style("marker-end", (d) => {
+                return (this.props.showEdgeDirection && d.direction === "UPSTREAM") ? "url(#marker-end)" : "";
+            });
     }
 
     setVisibilityByFilter(data) {
@@ -386,5 +386,35 @@ export default class extends React.Component {
                 d.fixed = this.props.isFixed ? true : d.isFixed;
             });
         }
+    }
+
+    addMarkers(svg) {
+        const marker = svg.append("defs");
+
+        marker
+            .append("marker")
+            .attr("id", "marker-start")
+            .attr("viewBox", "-10 -5 10 10")
+            .attr("refX", -44)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,5L10,0L0,5 L-10,0 L0, -5 Z")
+            .style("fill", "#999");
+
+        marker
+            .append("marker")
+            .attr("id", "marker-end")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 44)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,5L10,0L0,5 L10,0 L0, -5 Z")
+            .style("fill", "#999");
     }
 }

@@ -115,7 +115,8 @@ export default ( {
 
             {renderEntries()}
 
-            <li><a href="#" title="Settings" data-toggle="control-sidebar"><i className="fa fa-gears" /></a></li>
+            {/*<li><a href="#" title="Settings" data-toggle="control-sidebar"><i className="fa fa-gears" /></a></li>*/}
+            <li><a href="#" title="Information" data-toggle="control-sidebar"><i className="fa fa-info" /></a></li>
         </ul>
     );
 };

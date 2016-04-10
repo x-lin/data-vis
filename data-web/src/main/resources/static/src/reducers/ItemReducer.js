@@ -11,7 +11,6 @@ export const itemReducer = (state = {
     data: [],
     error: {},
     selectedIndex: -1,
-    categories: Constants.reversePropertyMap,
     item: {},
     type: "GeneralNode",
     value: ""
@@ -51,13 +50,13 @@ const searchBarReducer = (state, action) => {
             });
         case SET_SEARCH_SELECTED_INDEX:
             return Object.assign({}, state, {
-                selectedIndex: action.value
+                selectedIndex: action.value,
+                value: action.value >=0 ? state.data[action.value].key : state.value
             });
         case SET_SEARCH_INPUT_VALUE:
             return Object.assign({}, state, {
                 value: action.value
             });
-        //case SET_ACTIVE_ITEM:
         default:
             return state;
     }

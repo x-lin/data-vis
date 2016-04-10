@@ -195,19 +195,7 @@ export default class extends React.Component {
         this.state.g = vis;
         svg.call(this.createOnZoomBehavior(vis));
 
-        svg.append("defs").selectAll("marker")
-            .data(["suit", "licensing", "resolved"])
-            .enter().append("marker")
-            .attr("id", function(d) { return d; })
-            .attr("viewBox", "0 -5 10 10")
-            .attr("refX", 45)
-            .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-            .style("stroke", "#4679BD");
+        this.addMarkers(svg);
 
         this.state.links = vis.selectAll(".link");
         this.state.nodes = vis.selectAll(".node");
@@ -251,7 +239,15 @@ export default class extends React.Component {
 
         this.state.links
             .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity})
-        //.style("marker-end",  "url(#suit)");
+            .style("stroke-dasharray", (d) => {
+                return (this.props.showEdgeDirection && d.direction === null) ? "5,2" : "";
+            })
+            .style("marker-start", (d) => {
+                return (this.props.showEdgeDirection && d.direction === "DOWNSTREAM") ? "url(#marker-start)" : "";
+            })
+            .style("marker-end", (d) => {
+                return (this.props.showEdgeDirection && d.direction === "UPSTREAM") ? "url(#marker-end)" : "";
+            });
     }
 
     setVisibilityByFilter(data) {
@@ -404,5 +400,35 @@ export default class extends React.Component {
                 .attr("width", width)
                 .attr("height", height);
         }
+    }
+
+    addMarkers(svg) {
+        const marker = svg.append("defs");
+
+        marker
+            .append("marker")
+            .attr("id", "marker-start")
+            .attr("viewBox", "-10 -5 10 10")
+            .attr("refX", -44)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,5L10,0L0,5 L-10,0 L0, -5 Z")
+            .style("fill", "#999");
+
+        marker
+            .append("marker")
+            .attr("id", "marker-end")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 44)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,5L10,0L0,5 L10,0 L0, -5 Z")
+            .style("fill", "#999");
     }
 }

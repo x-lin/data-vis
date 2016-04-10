@@ -7,22 +7,21 @@ import Edge from "../utils/graph/Edge";
 import Node from "../utils/graph/Node";
 import D3Graph from "../utils/graph/D3Graph";
 
-//export const undoRedoReducer = ({
-//    past: [],
-//    present: {},
-//    future: []
-//}, action) => {
-//    switch(action.type) {
-//        case UNDO_GRAPH_ACTION:
-//            return state;
-//        case REDO_GRAPH_ACTION:
-//            return state;
-//        default:
-//            return state;
-//            //pass to graphReducer
-//            //check for difference of return state
-//    }
-//};
+const UNDO_LIMIT = 20;
+
+function updateHistory(history, graph) {
+    let past;
+
+    if(history.length < UNDO_LIMIT) {
+        past = [...history, JSON.stringify(graph)];
+    } else {
+        past = [...history.slice(1), JSON.stringify(graph)];
+    }
+
+    return past;
+}
+
+const graphActions = [CLEAR_GRAPH, UPDATE_GRAPH, ADD_TO_GRAPH, NEIGHBORS_FETCH_SUCCESS, REMOVE_FROM_GRAPH];
 
 export const graphReducer = (
 state = {
@@ -31,13 +30,15 @@ state = {
     present: new D3Graph()
 },
 action) => {
-    let past = [...state.past, JSON.stringify(state.present)];
+    let past;
+
+    if(graphActions.indexOf(action.type) > -1) {
+        past = updateHistory(state.past, state.present);
+    }
 
     switch (action.type) {
         case CLEAR_GRAPH:
-            state.present.nodes.length = 0;
-            state.present.edges.length = 0;
-            state.present.legend.length = 0;
+            reset(state.present);
 
             return Object.assign({}, state, {
                 past,
@@ -45,14 +46,8 @@ action) => {
                 future: []
             });
         case UPDATE_GRAPH:
-            state.present.nodes.length = 0;
-            state.present.edges.length = 0;
-            state.present.legend.length = 0;
-
-            Array.prototype.push.apply(state.present.nodes, action.data.nodes);
-            Array.prototype.push.apply(state.present.edges, action.data.edges);
-
-            Array.prototype.push.apply(state.present.legend, new D3Graph(action.data.nodes, action.data.edges).legend);
+            reset(state.present);
+            push(state.present, action.data);
 
             return Object.assign({}, state, {
                 past,
@@ -84,46 +79,32 @@ action) => {
             });
 
         case NEIGHBORS_FETCH_SUCCESS:
-            //TODO don't add to history, if no neighbors
-            const graph = new D3Graph(state.present.nodes, state.present.edges, state.present.legend);
+            if(action.neighbors.neighbors.length > 0 || state.present.nodes.length == 0) {
+                const graph = new D3Graph(state.present.nodes, state.present.edges, state.present.legend);
 
-            const node = action.neighbors.node;
+                const node = action.neighbors.node;
 
-            const index = graph.addNode(node);
+                const index = graph.addNode(node);
 
-            action.neighbors.neighbors.forEach((neighbor) => {
-                const neighborIndex = graph.addNode(neighbor);
-                graph.addEdge(new Edge(index, neighborIndex));
-            });
+                action.neighbors.neighbors.forEach((neighbor) => {
+                    const neighborIndex = graph.addNode(neighbor);
+                    graph.addEdge(new Edge(index, neighborIndex, neighbor.direction));
+                });
 
-            return Object.assign({}, state, {
-                present: graph,
-                past,
-                future: []
-            });
-        case EXPAND_NODE:
-            const graph1 = new D3Graph(state.present.nodes, state.present.edges, state.present.legend);
-            const fromIndex = graph1.indexOfNode(action.key);
-            const toIndex = graph1.addNode(action.toNode);
-
-            graph1.addEdge(new Edge(fromIndex, toIndex));
-
-            return Object.assign({}, state, {
-                present: graph1,
-                past,
-                future: []
-            });
+                return Object.assign({}, state, {
+                    present: graph,
+                    past,
+                    future: []
+                });
+            } else {
+                return state;
+            }
         case UNDO_GRAPH_ACTION:
             let previous = prepare(state.past[state.past.length-1]);
             let snapshot1 = JSON.stringify(state.present);
 
-            state.present.nodes.length = 0;
-            state.present.edges.length = 0;
-            state.present.legend.length = 0;
-
-            Array.prototype.push.apply(state.present.nodes, previous.nodes);
-            Array.prototype.push.apply(state.present.edges, previous.edges);
-            Array.prototype.push.apply(state.present.legend, new D3Graph(previous.nodes, previous.edges).legend);
+            reset(state.present);
+            push(state.present, previous);
 
             return {
                 past: state.past.slice(0, state.past.length - 1),
@@ -134,13 +115,8 @@ action) => {
             let next = prepare(state.future[0]);
             let snapshot = JSON.stringify(state.present);
 
-            state.present.nodes.length = 0;
-            state.present.edges.length = 0;
-            state.present.legend.length = 0;
-
-            Array.prototype.push.apply(state.present.nodes, next.nodes);
-            Array.prototype.push.apply(state.present.edges, next.edges);
-            Array.prototype.push.apply(state.present.legend, new D3Graph(next.nodes, next.edges).legend);
+            reset(state.present);
+            push(state.present, next);
 
             return {
                 past: [...state.past, snapshot],
@@ -151,6 +127,20 @@ action) => {
             return state;
     }
 };
+
+function push(graph, newGraph) {
+    if(newGraph) {
+        Array.prototype.push.apply(graph.nodes, newGraph.nodes);
+        Array.prototype.push.apply(graph.edges, newGraph.edges);
+        Array.prototype.push.apply(graph.legend, new D3Graph(newGraph.nodes, newGraph.edges).legend);
+    }
+}
+
+function reset(graph) {
+    graph.nodes.length = 0;
+    graph.edges.length = 0;
+    graph.legend.length = 0;
+}
 
 function prepare(graph) {
     graph = JSON.parse(graph);

@@ -25,7 +25,6 @@ public class TextIndexRepositoryImpl implements TextIndexRepositoryCustom {
 				"UNION " +
 				"START a=node:" + TextIndex.TEXT_INDEX_KEY_INDEX + "('key: (" + concatString + ")') " +
 				"MATCH (a)-[]-(b:GeneralNode)-[:NODE_TYPE]-(c) " +
-				"WHERE (NOT EXISTS(b.jiraStatus) OR b.jiraStatus <> 'Closed') " +
 				"RETURN b.key AS key, b.name AS name, c.key AS typeKey, c.name AS type " +
 				limitString;
 

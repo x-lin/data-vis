@@ -48,7 +48,6 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 
 	@Query("START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH (n)-[]-(o:GeneralNode) " +
-			"WHERE (NOT EXISTS(o.jiraStatus) OR o.jiraStatus <> 'Closed')" +
 			"RETURN count(n)")
 	long countNeighbors(String key);
 

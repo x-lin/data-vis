@@ -116,6 +116,8 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 
 					} else if(key.equals("count")) {
 						map.put("count", entry.get(key));
+					} else if(key.equals("direction")) {
+						map.put("direction", entry.get(key));
 					}
 				}
 
