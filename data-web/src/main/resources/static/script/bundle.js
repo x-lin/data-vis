@@ -40409,17 +40409,7 @@
 	    }, {
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
-	            var _this2 = this;
-
 	            this.renderGraph(_extends({}, this.props.graph));
-	            window.addEventListener('resize', function (event) {
-	                return _this2.resizePanel(event);
-	            });
-	        }
-	    }, {
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            window.removeEventListener("resize", this.resizePanel);
 	        }
 	    }, {
 	        key: "componentDidUpdate",
@@ -40450,7 +40440,7 @@
 	    }, {
 	        key: "createConnectedIndex",
 	        value: function createConnectedIndex(data) {
-	            var _this3 = this;
+	            var _this2 = this;
 
 	            this.state.linkedByIndex = {};
 
@@ -40459,7 +40449,7 @@
 	                this.state.linkedByIndex[i + "," + i] = 1;
 	            };
 	            data.edges.forEach(function (d) {
-	                _this3.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
+	                _this2.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
 	            });
 	        }
 	    }, {
@@ -40519,7 +40509,7 @@
 	    }, {
 	        key: "createSvg",
 	        value: function createSvg() {
-	            var svg = _D3Utils2.default.createSvg(this.state.selector).attr("class", "force-graph");
+	            var svg = _D3Utils2.default.createSvg(this.state.selector).attr("class", "force-graph").attr("width", "100%").attr("height", "100%");
 
 	            svg.on("click", function (d) {
 	                return _ForceGraphEventHandlers2.default.onClickSvg(d);
@@ -40549,14 +40539,14 @@
 	    }, {
 	        key: "createForceLayout",
 	        value: function createForceLayout(data) {
-	            var _this4 = this;
+	            var _this3 = this;
 
 	            this.state.force = _d2.default.layout.force().charge(-700)
 	            //.chargeDistance(300)
 	            //.friction(0.5)
 	            //.gravity(0.2)
 	            .linkDistance(70).nodes(data.nodes).links(data.edges).size([_DOMSelector2.default.getWidth(this.state.selector), _DOMSelector2.default.getHeight(this.state.selector)]).on("start", function () {
-	                return _this4.createSpeededUpAnimation();
+	                return _this3.createSpeededUpAnimation();
 	            });
 	        }
 	    }, {
@@ -40568,19 +40558,23 @@
 	    }, {
 	        key: "addLinks",
 	        value: function addLinks() {
-	            var _this5 = this;
+	            var _this4 = this;
 
 	            this.state.links.enter().insert("line", "g").attr("class", "link ");
 
 	            this.state.links.attr("opacity", function (d) {
-	                return d.visible ? "1" : _this5.props.disabledOpacity;
-	            }).style("stroke-dasharray", function (d) {
-	                return _this5.props.showEdgeDirection && d.direction === null ? "5,2" : "";
-	            }).style("marker-start", function (d) {
-	                return _this5.props.showEdgeDirection && d.direction === "DOWNSTREAM" ? "url(#marker-start)" : "";
-	            }).style("marker-end", function (d) {
-	                return _this5.props.showEdgeDirection && d.direction === "UPSTREAM" ? "url(#marker-end)" : "";
+	                return d.visible ? "1" : _this4.props.disabledOpacity;
 	            });
+
+	            if (this.props.showEdgeDirection) {
+	                this.state.links.style("stroke-dasharray", function (d) {
+	                    return d.direction === null ? "5,2" : "";
+	                }).style("marker-start", function (d) {
+	                    return d.direction === "DOWNSTREAM" ? "url(#marker-start)" : "";
+	                }).style("marker-end", function (d) {
+	                    return d.direction === "UPSTREAM" ? "url(#marker-end)" : "";
+	                });
+	            }
 	        }
 	    }, {
 	        key: "setVisibilityByFilter",
@@ -40604,7 +40598,7 @@
 	    }, {
 	        key: "addNodes",
 	        value: function addNodes() {
-	            var _this6 = this;
+	            var _this5 = this;
 
 	            var g = this.state.nodes.enter().append("g").attr("class", "g").style("fill", function (d) {
 	                return _Constants2.default.getColor(d.type ? d.type : d.category);
@@ -40619,7 +40613,7 @@
 	            this.addNodeText(g);
 
 	            this.state.nodes.attr("opacity", function (d) {
-	                return d.visible ? "1" : _this6.props.disabledOpacity;
+	                return d.visible ? "1" : _this5.props.disabledOpacity;
 	            });
 
 	            this.setNodeBehavior();
@@ -40678,19 +40672,19 @@
 	    }, {
 	        key: "setNodeBehavior",
 	        value: function setNodeBehavior() {
-	            var _this7 = this;
+	            var _this6 = this;
 
 	            var state = this.state;
 	            var props = this.props;
 	            var connectedNodes = this.connectedNodes;
 
 	            this.state.nodes.on("dblclick", function (d, props) {
-	                if (d.visible || _this7.props.enableFiltered) {
-	                    _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this7.props);
+	                if (d.visible || _this6.props.enableFiltered) {
+	                    _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this6.props);
 	                }
 	            }).on("contextmenu", function (d) {
-	                if (_this7.props.showContextMenu && (d.visible || _this7.props.enableFiltered)) {
-	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d, _this7.props);
+	                if (_this6.props.showContextMenu && (d.visible || _this6.props.enableFiltered)) {
+	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d, _this6.props);
 	                }
 	            }).on("mouseover", function (d) {
 	                _ForceGraphEventHandlers2.default.onMouseOver(d);
@@ -40699,40 +40693,26 @@
 	            }).on("click", function (d) {
 	                connectedNodes(d, state, props, this);
 	            }).call(this.state.force.drag().on("dragstart", function (d) {
-	                if (d.visible || _this7.props.enableFiltered) {
+	                if (d.visible || _this6.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onDragStartNode(d);
 	                }
 	            }).on("drag", function (d) {
-	                if (d.visible || _this7.props.enableFiltered) {
+	                if (d.visible || _this6.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onDragNode(d);
 	                }
 	            }).on("dragend", function (d) {
-	                if (d.visible || _this7.props.enableFiltered) {
+	                if (d.visible || _this6.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onDragEndNode(d);
 	                }
 	            }));
 	        }
 	    }, {
-	        key: "resizePanel",
-	        value: function resizePanel(e) {
-	            var selector = this.state.selector;
-
-
-	            if ($(selector)) {
-	                var width = _DOMSelector2.default.getWidth(selector);
-	                var height = _DOMSelector2.default.getHeight(selector);
-
-	                this.state.force.size([width, height]).resume();
-	                _d2.default.select(selector).select("svg").attr("width", width).attr("height", height);
-	            }
-	        }
-	    }, {
 	        key: "createSpeededUpAnimation",
 	        value: function createSpeededUpAnimation() {
-	            var _this8 = this;
+	            var _this7 = this;
 
 	            requestAnimationFrame(function () {
-	                _this8.createAnimation();
+	                _this7.createAnimation();
 	            });
 	        }
 	    }, {
@@ -40757,7 +40737,7 @@
 	    }, {
 	        key: "animateIfNotFinished",
 	        value: function animateIfNotFinished(alphaThreshold) {
-	            var _this9 = this;
+	            var _this8 = this;
 
 	            if (this.state.force.alpha() > alphaThreshold) {
 	                this.createSpeededUpAnimation();
@@ -40765,7 +40745,7 @@
 	                this.state.force.stop();
 
 	                this.state.nodes.attr("fixed", function (d) {
-	                    d.fixed = _this9.props.isFixed ? true : d.isFixed;
+	                    d.fixed = _this8.props.isFixed ? true : d.isFixed;
 	                });
 	            }
 	        }
@@ -65101,17 +65081,7 @@
 	    }, {
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
-	            var _this2 = this;
-
 	            this.renderGraph(_extends({}, this.props.graph));
-	            window.addEventListener('resize', function (event) {
-	                return _this2.resizePanel(event);
-	            });
-	        }
-	    }, {
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            window.removeEventListener("resize", this.resizePanel);
 	        }
 	    }, {
 	        key: "componentDidUpdate",
@@ -65190,7 +65160,7 @@
 	    }, {
 	        key: "createConnectedIndex",
 	        value: function createConnectedIndex(data) {
-	            var _this3 = this;
+	            var _this2 = this;
 
 	            this.state.linkedByIndex = {};
 
@@ -65199,7 +65169,7 @@
 	                this.state.linkedByIndex[i + "," + i] = 1;
 	            };
 	            data.edges.forEach(function (d) {
-	                _this3.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
+	                _this2.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
 	            });
 	        }
 	    }, {
@@ -65259,7 +65229,7 @@
 	    }, {
 	        key: "createSvg",
 	        value: function createSvg() {
-	            var svg = _D3Utils2.default.createSvg(this.state.selector).attr("class", "force-graph").on("click", function (d) {
+	            var svg = _D3Utils2.default.createSvg(this.state.selector).attr("class", "force-graph").attr("width", "100%").attr("height", "100%").on("click", function (d) {
 	                return _ForceGraphEventHandlers2.default.onClickSvg(d);
 	            });
 
@@ -65301,7 +65271,7 @@
 	    }, {
 	        key: "addLinks",
 	        value: function addLinks() {
-	            var _this4 = this;
+	            var _this3 = this;
 
 	            this.state.links.enter().insert("line", "g").attr("class", "link ").attr("x1", function (d) {
 	                return d.source.x;
@@ -65317,13 +65287,13 @@
 	            }); /////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	            this.state.links.attr("opacity", function (d) {
-	                return d.visible ? "1" : _this4.props.disabledOpacity;
+	                return d.visible ? "1" : _this3.props.disabledOpacity;
 	            }).style("stroke-dasharray", function (d) {
-	                return _this4.props.showEdgeDirection && d.direction === null ? "5,2" : "";
+	                return _this3.props.showEdgeDirection && d.direction === null ? "5,2" : "";
 	            }).style("marker-start", function (d) {
-	                return _this4.props.showEdgeDirection && d.direction === "DOWNSTREAM" ? "url(#marker-start)" : "";
+	                return _this3.props.showEdgeDirection && d.direction === "DOWNSTREAM" ? "url(#marker-start)" : "";
 	            }).style("marker-end", function (d) {
-	                return _this4.props.showEdgeDirection && d.direction === "UPSTREAM" ? "url(#marker-end)" : "";
+	                return _this3.props.showEdgeDirection && d.direction === "UPSTREAM" ? "url(#marker-end)" : "";
 	            });
 	        }
 	    }, {
@@ -65348,7 +65318,7 @@
 	    }, {
 	        key: "addNodes",
 	        value: function addNodes() {
-	            var _this5 = this;
+	            var _this4 = this;
 
 	            var g = this.state.nodes.enter().append("g").attr("class", "g").attr("transform", function (d) {
 	                return "translate(" + d.x + "," + d.y + ")";
@@ -65366,7 +65336,7 @@
 	            this.addNodeText(g);
 
 	            this.state.nodes.attr("opacity", function (d) {
-	                return d.visible ? "1" : _this5.props.disabledOpacity;
+	                return d.visible ? "1" : _this4.props.disabledOpacity;
 	            });
 
 	            this.setNodeBehavior();
@@ -65425,19 +65395,19 @@
 	    }, {
 	        key: "setNodeBehavior",
 	        value: function setNodeBehavior() {
-	            var _this6 = this;
+	            var _this5 = this;
 
 	            var state = this.state;
 	            var props = this.props;
 	            var connectedNodes = this.connectedNodes;
 
 	            this.state.nodes.on("dblclick", function (d, props) {
-	                if (d.visible || _this6.props.enableFiltered) {
-	                    _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this6.props);
+	                if (d.visible || _this5.props.enableFiltered) {
+	                    _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this5.props);
 	                }
 	            }).on("contextmenu", function (d) {
-	                if (_this6.props.showContextMenu && (d.visible || _this6.props.enableFiltered)) {
-	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d, _this6.props);
+	                if (_this5.props.showContextMenu && (d.visible || _this5.props.enableFiltered)) {
+	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d, _this5.props);
 	                }
 	            }).on("click", function (d) {
 	                connectedNodes(d, state, props, this);
@@ -65446,32 +65416,18 @@
 	            }).on("mouseleave", function (d) {
 	                _ForceGraphEventHandlers2.default.onMouseLeave(d);
 	            }).call(this.state.force.drag().on("dragstart", function (d) {
-	                if (d.visible || _this6.props.enableFiltered) {
+	                if (d.visible || _this5.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onDragStartNode(d);
 	                }
 	            }).on("drag", function (d) {
-	                if (d.visible || _this6.props.enableFiltered) {
+	                if (d.visible || _this5.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onDragNode(d);
 	                }
 	            }).on("dragend", function (d) {
-	                if (d.visible || _this6.props.enableFiltered) {
+	                if (d.visible || _this5.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onDragEndNode(d);
 	                }
 	            }));
-	        }
-	    }, {
-	        key: "resizePanel",
-	        value: function resizePanel(e) {
-	            var selector = this.state.selector;
-
-
-	            if ($(selector)) {
-	                var width = _DOMSelector2.default.getWidth(selector);
-	                var height = _DOMSelector2.default.getHeight(selector);
-
-	                this.state.force.size([width, height]).resume();
-	                _d2.default.select(selector).select("svg").attr("width", width).attr("height", height);
-	            }
 	        }
 	    }, {
 	        key: "addMarkers",
@@ -83676,8 +83632,6 @@
 
 	    var height = "calc(100vh - 50px)";
 
-	    console.log(sidebarObject);
-
 	    return _react2.default.createElement(
 	        "div",
 	        null,
@@ -83882,6 +83836,8 @@
 	        value: function render() {
 	            var _this2 = this;
 
+	            console.log("rendering draggable");
+
 	            var drags = { onStart: function onStart() {
 	                    return _this2.onStart();
 	                }, onStop: function onStop() {
@@ -83911,7 +83867,7 @@
 	                            _react2.default.createElement(
 	                                "div",
 	                                { className: "box-body" },
-	                                "dfsdfs"
+	                                "ffdsf"
 	                            )
 	                        )
 	                    )
@@ -85641,7 +85597,7 @@
 /* 868 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license

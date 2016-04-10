@@ -41,11 +41,6 @@ export default class extends React.Component {
 
     componentDidMount() {
         this.renderGraph(Object.assign({}, this.props.graph));
-        window.addEventListener('resize', (event) => this.resizePanel(event));
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.resizePanel);
     }
 
     componentDidUpdate() {
@@ -186,6 +181,8 @@ export default class extends React.Component {
     createSvg() {
         const svg = D3Utils.createSvg(this.state.selector)
             .attr("class", "force-graph")
+            .attr("width", "100%")
+            .attr("height", "100%")
             .on("click", (d) => EventHandlers.onClickSvg(d));
 
         const vis = svg
@@ -386,20 +383,6 @@ export default class extends React.Component {
                         }
                     })
             );
-    }
-
-    resizePanel(e) {
-        const { selector } = this.state;
-
-        if ($(selector)) {
-            const width = DOMSelector.getWidth(selector);
-            const height = DOMSelector.getHeight(selector);
-
-            this.state.force.size([width, height]).resume();
-            d3.select(selector).select("svg")
-                .attr("width", width)
-                .attr("height", height);
-        }
     }
 
     addMarkers(svg) {

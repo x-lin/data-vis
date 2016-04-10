@@ -42,11 +42,6 @@ export default class extends React.Component {
 
     componentDidMount() {
         this.renderGraph(Object.assign({}, this.props.graph));
-        window.addEventListener('resize', (event) => this.resizePanel(event));
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.resizePanel);
     }
 
     componentDidUpdate() {
@@ -138,7 +133,9 @@ export default class extends React.Component {
 
     createSvg() {
         const svg = D3Utils.createSvg(this.state.selector)
-            .attr("class", "force-graph");
+            .attr("class", "force-graph")
+            .attr("width", "100%")
+            .attr("height", "100%");
 
         svg
             .on("click", (d) => EventHandlers.onClickSvg(d));
@@ -191,16 +188,21 @@ export default class extends React.Component {
             .attr("class", "link ");
 
         this.state.links
-            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity})
-            .style("stroke-dasharray", (d) => {
-                return (this.props.showEdgeDirection && d.direction === null) ? "5,2" : "";
-            })
-            .style("marker-start", (d) => {
-                return (this.props.showEdgeDirection && d.direction === "DOWNSTREAM") ? "url(#marker-start)" : "";
-            })
-            .style("marker-end", (d) => {
-                return (this.props.showEdgeDirection && d.direction === "UPSTREAM") ? "url(#marker-end)" : "";
-            });
+            .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity});
+
+        if(this.props.showEdgeDirection) {
+            this.state.links
+                .style("stroke-dasharray", (d) => {
+                    return d.direction === null ? "5,2" : "";
+                })
+                .style("marker-start", (d) => {
+                    return d.direction === "DOWNSTREAM" ? "url(#marker-start)" : "";
+                })
+                .style("marker-end", (d) => {
+                    return d.direction === "UPSTREAM" ? "url(#marker-end)" : "";
+                });
+        }
+
     }
 
     setVisibilityByFilter(data) {
@@ -337,20 +339,6 @@ export default class extends React.Component {
                         }
                     })
             );
-    }
-
-    resizePanel(e) {
-        const { selector } = this.state;
-
-        if ($(selector)) {
-            const width = DOMSelector.getWidth(selector);
-            const height = DOMSelector.getHeight(selector);
-
-            this.state.force.size([width, height]).resume();
-            d3.select(selector).select("svg")
-                .attr("width", width)
-                .attr("height", height);
-        }
     }
 
     createSpeededUpAnimation() {
