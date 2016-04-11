@@ -24803,6 +24803,7 @@
 
 	store.dispatch((0, _GETNodeTypes.getNodeTypes)());
 
+	//persistStore(store, {storage: localforage}).purgeAll();
 	(0, _reduxPersist.persistStore)(store, { storage: _localforage2.default });
 
 /***/ },
@@ -35741,7 +35742,6 @@
 	var DISABLED_OPACITY_VALUE = exports.DISABLED_OPACITY_VALUE = "DISABLED_OPACITY_VALUE";
 	var ENABLE_SELECTION_OF_FILTERED_NODES = exports.ENABLE_SELECTION_OF_FILTERED_NODES = "ENABLE_SELECTION_OF_FILTERED_NODES";
 	var SET_NODE_POSITIONS_FIXED = exports.SET_NODE_POSITIONS_FIXED = "SET_NODE_POSITIONS_FIXED";
-	var SHOW_CONTEXT_MENU = exports.SHOW_CONTEXT_MENU = "SHOW_CONTEXT_MENU";
 	var CHANGE_GRAPH_LAYOUT = exports.CHANGE_GRAPH_LAYOUT = "CHANGE_GRAPH_LAYOUT";
 	var SHOW_EDGE_DIRECTION = exports.SHOW_EDGE_DIRECTION = "SHOW_EDGE_DIRECTION";
 
@@ -35752,11 +35752,13 @@
 	exports.default = [{
 	    name: ADD_TO_GRAPH_ON_SEARCH,
 	    description: "Add to current graph on new search.",
+	    shortDescription: "Re-render on search",
 	    value: false,
 	    menuButton: "fa fa-plus"
 	}, {
 	    name: DISABLED_OPACITY_VALUE,
 	    description: "Set opacity of filtered nodes/edges.",
+	    shortDescription: "Filtered opacity",
 	    value: 0.3,
 	    min: 0,
 	    max: 0.5,
@@ -35765,26 +35767,25 @@
 	}, {
 	    name: SHOW_EDGE_DIRECTION,
 	    description: "Show direction of edges.",
+	    shortDescipriont: "Show direction of edges",
 	    value: false,
 	    menuButton: "fa fa-arrows-v"
 	}, {
 	    name: ENABLE_SELECTION_OF_FILTERED_NODES,
 	    description: "Enable event handlers for filtered nodes.",
+	    shortDescription: "Event handlers on filtered nodes",
 	    value: true,
 	    menuButton: "fa fa-mail-forward"
 	}, {
 	    name: SET_NODE_POSITIONS_FIXED,
 	    description: "Pin nodes.",
+	    shortDescription: "Pin nodes",
 	    value: false,
 	    menuButton: "fa fa-thumb-tack"
 	}, {
-	    name: SHOW_CONTEXT_MENU,
-	    description: "Show custom context menu on right click.",
-	    value: true,
-	    menuButton: "fa fa-list-alt"
-	}, {
 	    name: CHANGE_GRAPH_LAYOUT,
 	    description: "Change the layout of the graph visualization.",
+	    shortDescription: "Graph Layout",
 	    value: FORCE_GRAPH_LAYOUT,
 	    options: [{ key: FORCE_GRAPH_LAYOUT, description: "Force-directed" }, { key: CIRCULAR_LAYOUT, description: "Circular (experimental)" }],
 	    menuButton: "fa fa-picture-o"
@@ -47365,7 +47366,6 @@
 	        visibilityFilters: state.visibilityFilters,
 	        disabledOpacity: settings[_Settings.DISABLED_OPACITY_VALUE],
 	        isFixed: settings[_Settings.SET_NODE_POSITIONS_FIXED],
-	        showContextMenu: settings[_Settings.SHOW_CONTEXT_MENU],
 	        enableFiltered: settings[_Settings.ENABLE_SELECTION_OF_FILTERED_NODES],
 	        showEdgeDirection: settings[_Settings.SHOW_EDGE_DIRECTION]
 	    };
@@ -47752,7 +47752,7 @@
 	                    _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this6.props);
 	                }
 	            }).on("contextmenu", function (d) {
-	                if (_this6.props.showContextMenu && (d.visible || _this6.props.enableFiltered)) {
+	                if (d.visible || _this6.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d, _this6.props);
 	                }
 	            }).on("mouseover", function (d) {
@@ -72038,7 +72038,6 @@
 	        visibilityFilters: state.visibilityFilters,
 	        disabledOpacity: settings[_Settings.DISABLED_OPACITY_VALUE],
 	        isFixed: settings[_Settings.SET_NODE_POSITIONS_FIXED],
-	        showContextMenu: settings[_Settings.SHOW_CONTEXT_MENU],
 	        enableFiltered: settings[_Settings.ENABLE_SELECTION_OF_FILTERED_NODES],
 	        showEdgeDirection: settings[_Settings.SHOW_EDGE_DIRECTION]
 	    };
@@ -72475,7 +72474,7 @@
 	                    _ForceGraphEventHandlers2.default.onDoubleClickNode(d, _this5.props);
 	                }
 	            }).on("contextmenu", function (d) {
-	                if (_this5.props.showContextMenu && (d.visible || _this5.props.enableFiltered)) {
+	                if (d.visible || _this5.props.enableFiltered) {
 	                    _ForceGraphEventHandlers2.default.onContextMenuNode(d, _this5.props);
 	                }
 	            }).on("click", function (d) {
@@ -82305,16 +82304,15 @@
 
 	    return _react2.default.createElement(
 	        "div",
-	        { className: "box box-custom" + (collapsed ? " collapsed-box" : "") },
+	        { className: "box box-custom" },
 	        _react2.default.createElement(
 	            "div",
-	            { className: "box-header cursor", "data-widget": "collapse" },
+	            { className: "box-header cursor" },
 	            _react2.default.createElement(
 	                "h3",
 	                { className: "box-title box-title-custom" },
 	                title
-	            ),
-	            _react2.default.createElement("span", { className: "fa fa-angle-left pull-right" })
+	            )
 	        ),
 	        _react2.default.createElement(
 	            "div",
@@ -82359,7 +82357,7 @@
 
 
 	// module
-	exports.push([module.id, ".box-custom {\r\n    background-color: transparent;\r\n    color: #b8c7ce;\r\n    border-left: 3px solid transparent;\r\n    border-top: 0px;\r\n    margin-bottom: 0px;\r\n}\r\n\r\n\r\n\r\n.box-header .box-title-custom {\r\n    color: #CCC;\r\n    font-size: 14px;\r\n}\r\n\r\n.box-custom .box-content-custom {\r\n    background-color: #2c3b41;\r\n    font-size: 12px;\r\n    padding: 0px;\r\n}", ""]);
+	exports.push([module.id, ".box-custom {\r\n    color: #b8c7ce;\r\n    background-color: #2c3b41;\r\n    border-left: 3px solid transparent;\r\n    border-right: 3px solid transparent;\r\n    border-bottom: 3px solid transparent;\r\n    border-top: 0px;\r\n    margin-bottom: 3px;\r\n}\r\n\r\n\r\n\r\n.box-header .box-title-custom {\r\n    color: #CCC;\r\n    font-size: 14px;\r\n}\r\n\r\n.box-custom .box-content-custom {\r\n    background-color: #2c3b41;\r\n    font-size: 12px;\r\n    padding: 0px;\r\n}", ""]);
 
 	// exports
 
@@ -82968,10 +82966,9 @@
 	    var step = _ref.step;
 	    var onChange = _ref.onChange;
 
-	    console.log(defaultValue);
 	    return _react2.default.createElement(
 	        "div",
-	        null,
+	        { style: { paddingTop: "5px" } },
 	        _react2.default.createElement(_rcSlider2.default, { defaultValue: defaultValue, min: min, max: max, onChange: onChange, step: step }),
 	        _react2.default.createElement(
 	            "span",
@@ -89022,7 +89019,7 @@
 
 
 	// module
-	exports.push([module.id, ".rc-slider {\r\n  position: relative;\r\n  height: 4px;\r\n  width: 100%;\r\n  border-radius: 6px;\r\n  background-color: #e9e9e9;\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-slider * {\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-slider-track {\r\n  position: absolute;\r\n  left: 0;\r\n  height: 4px;\r\n  border-radius: 6px;\r\n  background-color: #abe2fb;\r\n  z-index: 1;\r\n}\r\n.rc-slider-handle {\r\n  position: absolute;\r\n  margin-left: -7px;\r\n  margin-top: -5px;\r\n  width: 14px;\r\n  height: 14px;\r\n  cursor: pointer;\r\n  border-radius: 50%;\r\n  border: solid 2px #96dbfa;\r\n  background-color: #fff;\r\n  z-index: 2;\r\n}\r\n.rc-slider-handle:hover {\r\n  border-color: #57c5f7;\r\n}\r\n.rc-slider-handle-active:active {\r\n  border-color: #57c5f7;\r\n  box-shadow: 0 0 5px #57c5f7;\r\n}\r\n.rc-slider-mark {\r\n  position: absolute;\r\n  top: 10px;\r\n  left: 0;\r\n  width: 100%;\r\n  font-size: 12px;\r\n  z-index: 3;\r\n}\r\n.rc-slider-mark-text {\r\n  position: absolute;\r\n  display: inline-block;\r\n  vertical-align: middle;\r\n  text-align: center;\r\n  cursor: pointer;\r\n  color: #999;\r\n}\r\n.rc-slider-mark-text-active {\r\n  color: #666;\r\n}\r\n.rc-slider-step {\r\n  position: absolute;\r\n  width: 100%;\r\n  height: 4px;\r\n  background: transparent;\r\n  z-index: 1;\r\n}\r\n.rc-slider-dot {\r\n  position: absolute;\r\n  top: -2px;\r\n  margin-left: -4px;\r\n  width: 8px;\r\n  height: 8px;\r\n  border: 2px solid #e9e9e9;\r\n  background-color: #fff;\r\n  cursor: pointer;\r\n  border-radius: 50%;\r\n  vertical-align: middle;\r\n}\r\n.rc-slider-dot:first-child {\r\n  margin-left: -4px;\r\n}\r\n.rc-slider-dot:last-child {\r\n  margin-left: -4px;\r\n}\r\n.rc-slider-dot-active {\r\n  border-color: #96dbfa;\r\n}\r\n.rc-slider-disabled {\r\n  background-color: #e9e9e9;\r\n}\r\n.rc-slider-disabled .rc-slider-track {\r\n  background-color: #ccc;\r\n}\r\n.rc-slider-disabled .rc-slider-handle,\r\n.rc-slider-disabled .rc-slider-dot {\r\n  border-color: #ccc;\r\n  background-color: #fff;\r\n  cursor: not-allowed;\r\n}\r\n.rc-slider-disabled .rc-slider-mark-text,\r\n.rc-slider-disabled .rc-slider-dot {\r\n  cursor: not-allowed !important;\r\n}\r\n.rc-slider-tooltip-zoom-down-enter,\r\n.rc-slider-tooltip-zoom-down-appear {\r\n  -webkit-animation-duration: .3s;\r\n          animation-duration: .3s;\r\n  -webkit-animation-fill-mode: both;\r\n          animation-fill-mode: both;\r\n  display: block !important;\r\n  -webkit-animation-play-state: paused;\r\n          animation-play-state: paused;\r\n}\r\n.rc-slider-tooltip-zoom-down-leave {\r\n  -webkit-animation-duration: .3s;\r\n          animation-duration: .3s;\r\n  -webkit-animation-fill-mode: both;\r\n          animation-fill-mode: both;\r\n  display: block !important;\r\n  -webkit-animation-play-state: paused;\r\n          animation-play-state: paused;\r\n}\r\n.rc-slider-tooltip-zoom-down-enter.rc-slider-tooltip-zoom-down-enter-active,\r\n.rc-slider-tooltip-zoom-down-appear.rc-slider-tooltip-zoom-down-appear-active {\r\n  -webkit-animation-name: rcSliderTooltipZoomDownIn;\r\n          animation-name: rcSliderTooltipZoomDownIn;\r\n  -webkit-animation-play-state: running;\r\n          animation-play-state: running;\r\n}\r\n.rc-slider-tooltip-zoom-down-leave.rc-slider-tooltip-zoom-down-leave-active {\r\n  -webkit-animation-name: rcSliderTooltipZoomDownOut;\r\n          animation-name: rcSliderTooltipZoomDownOut;\r\n  -webkit-animation-play-state: running;\r\n          animation-play-state: running;\r\n}\r\n.rc-slider-tooltip-zoom-down-enter,\r\n.rc-slider-tooltip-zoom-down-appear {\r\n  -webkit-transform: scale(0, 0);\r\n          transform: scale(0, 0);\r\n  -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);\r\n          animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);\r\n}\r\n.rc-slider-tooltip-zoom-down-leave {\r\n  -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\r\n          animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\r\n}\r\n@-webkit-keyframes rcSliderTooltipZoomDownIn {\r\n  0% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n  100% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n}\r\n@keyframes rcSliderTooltipZoomDownIn {\r\n  0% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n  100% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n}\r\n@-webkit-keyframes rcSliderTooltipZoomDownOut {\r\n  0% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n  100% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n}\r\n@keyframes rcSliderTooltipZoomDownOut {\r\n  0% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n  100% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n}\r\n.rc-tooltip {\r\n  position: absolute;\r\n  left: -9999px;\r\n  top: -9999px;\r\n  z-index: 9999;\r\n  visibility: visible;\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-tooltip * {\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-tooltip-hidden {\r\n  display: none;\r\n}\r\n.rc-tooltip-placement-top {\r\n  padding: 4px 0 8px 0;\r\n}\r\n.rc-tooltip-inner {\r\n  padding: 6px 2px;\r\n  min-width: 24px;\r\n  height: 24px;\r\n  font-size: 12px;\r\n  line-height: 1;\r\n  color: #fff;\r\n  text-align: center;\r\n  text-decoration: none;\r\n  background-color: #6c6c6c;\r\n  border-radius: 6px;\r\n  box-shadow: 0 0 4px #d9d9d9;\r\n}\r\n.rc-tooltip-arrow {\r\n  position: absolute;\r\n  width: 0;\r\n  height: 0;\r\n  border-color: transparent;\r\n  border-style: solid;\r\n}\r\n.rc-tooltip-placement-top .rc-tooltip-arrow {\r\n  bottom: 4px;\r\n  left: 50%;\r\n  margin-left: -4px;\r\n  border-width: 4px 4px 0;\r\n  border-top-color: #6c6c6c;\r\n}\r\n", ""]);
+	exports.push([module.id, ".rc-slider {\r\n  position: relative;\r\n  height: 4px;\r\n  width: 100%;\r\n  border-radius: 6px;\r\n  background-color: #e9e9e9;\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-slider * {\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-slider-track {\r\n  position: absolute;\r\n  left: 0;\r\n  height: 4px;\r\n  border-radius: 6px;\r\n  background-color: #2c3b41;\r\n  z-index: 1;\r\n}\r\n.rc-slider-handle {\r\n  position: absolute;\r\n  margin-left: -7px;\r\n  margin-top: -5px;\r\n  width: 14px;\r\n  height: 14px;\r\n  cursor: pointer;\r\n  border-radius: 50%;\r\n  border: solid 2px #2c3b41;\r\n  background-color: #fff;\r\n  z-index: 2;\r\n}\r\n.rc-slider-handle:hover {\r\n  border-color: #7BA9BB;\r\n}\r\n.rc-slider-handle-active:active {\r\n  border-color: #7BA9BB;\r\n  box-shadow: 0 0 5px #57c5f7;\r\n}\r\n.rc-slider-mark {\r\n  position: absolute;\r\n  top: 10px;\r\n  left: 0;\r\n  width: 100%;\r\n  font-size: 12px;\r\n  z-index: 3;\r\n}\r\n.rc-slider-mark-text {\r\n  position: absolute;\r\n  display: inline-block;\r\n  vertical-align: middle;\r\n  text-align: center;\r\n  cursor: pointer;\r\n  color: #999;\r\n}\r\n.rc-slider-mark-text-active {\r\n  color: #666;\r\n}\r\n.rc-slider-step {\r\n  position: absolute;\r\n  width: 100%;\r\n  height: 4px;\r\n  background: transparent;\r\n  z-index: 1;\r\n}\r\n.rc-slider-dot {\r\n  position: absolute;\r\n  top: -2px;\r\n  margin-left: -4px;\r\n  width: 8px;\r\n  height: 8px;\r\n  border: 2px solid #e9e9e9;\r\n  background-color: #fff;\r\n  cursor: pointer;\r\n  border-radius: 50%;\r\n  vertical-align: middle;\r\n}\r\n.rc-slider-dot:first-child {\r\n  margin-left: -4px;\r\n}\r\n.rc-slider-dot:last-child {\r\n  margin-left: -4px;\r\n}\r\n.rc-slider-dot-active {\r\n  border-color: #96dbfa;\r\n}\r\n.rc-slider-disabled {\r\n  background-color: #e9e9e9;\r\n}\r\n.rc-slider-disabled .rc-slider-track {\r\n  background-color: #ccc;\r\n}\r\n.rc-slider-disabled .rc-slider-handle,\r\n.rc-slider-disabled .rc-slider-dot {\r\n  border-color: #ccc;\r\n  background-color: #fff;\r\n  cursor: not-allowed;\r\n}\r\n.rc-slider-disabled .rc-slider-mark-text,\r\n.rc-slider-disabled .rc-slider-dot {\r\n  cursor: not-allowed !important;\r\n}\r\n.rc-slider-tooltip-zoom-down-enter,\r\n.rc-slider-tooltip-zoom-down-appear {\r\n  -webkit-animation-duration: .3s;\r\n          animation-duration: .3s;\r\n  -webkit-animation-fill-mode: both;\r\n          animation-fill-mode: both;\r\n  display: block !important;\r\n  -webkit-animation-play-state: paused;\r\n          animation-play-state: paused;\r\n}\r\n.rc-slider-tooltip-zoom-down-leave {\r\n  -webkit-animation-duration: .3s;\r\n          animation-duration: .3s;\r\n  -webkit-animation-fill-mode: both;\r\n          animation-fill-mode: both;\r\n  display: block !important;\r\n  -webkit-animation-play-state: paused;\r\n          animation-play-state: paused;\r\n}\r\n.rc-slider-tooltip-zoom-down-enter.rc-slider-tooltip-zoom-down-enter-active,\r\n.rc-slider-tooltip-zoom-down-appear.rc-slider-tooltip-zoom-down-appear-active {\r\n  -webkit-animation-name: rcSliderTooltipZoomDownIn;\r\n          animation-name: rcSliderTooltipZoomDownIn;\r\n  -webkit-animation-play-state: running;\r\n          animation-play-state: running;\r\n}\r\n.rc-slider-tooltip-zoom-down-leave.rc-slider-tooltip-zoom-down-leave-active {\r\n  -webkit-animation-name: rcSliderTooltipZoomDownOut;\r\n          animation-name: rcSliderTooltipZoomDownOut;\r\n  -webkit-animation-play-state: running;\r\n          animation-play-state: running;\r\n}\r\n.rc-slider-tooltip-zoom-down-enter,\r\n.rc-slider-tooltip-zoom-down-appear {\r\n  -webkit-transform: scale(0, 0);\r\n          transform: scale(0, 0);\r\n  -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);\r\n          animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);\r\n}\r\n.rc-slider-tooltip-zoom-down-leave {\r\n  -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\r\n          animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\r\n}\r\n@-webkit-keyframes rcSliderTooltipZoomDownIn {\r\n  0% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n  100% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n}\r\n@keyframes rcSliderTooltipZoomDownIn {\r\n  0% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n  100% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n}\r\n@-webkit-keyframes rcSliderTooltipZoomDownOut {\r\n  0% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n  100% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n}\r\n@keyframes rcSliderTooltipZoomDownOut {\r\n  0% {\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(1, 1);\r\n            transform: scale(1, 1);\r\n  }\r\n  100% {\r\n    opacity: 0;\r\n    -webkit-transform-origin: 50% 100%;\r\n            transform-origin: 50% 100%;\r\n    -webkit-transform: scale(0, 0);\r\n            transform: scale(0, 0);\r\n  }\r\n}\r\n.rc-tooltip {\r\n  position: absolute;\r\n  left: -9999px;\r\n  top: -9999px;\r\n  z-index: 9999;\r\n  visibility: visible;\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-tooltip * {\r\n  box-sizing: border-box;\r\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n.rc-tooltip-hidden {\r\n  display: none;\r\n}\r\n.rc-tooltip-placement-top {\r\n  padding: 4px 0 8px 0;\r\n}\r\n.rc-tooltip-inner {\r\n  padding: 6px 2px;\r\n  min-width: 24px;\r\n  height: 24px;\r\n  font-size: 12px;\r\n  line-height: 1;\r\n  color: #fff;\r\n  text-align: center;\r\n  text-decoration: none;\r\n  background-color: #6c6c6c;\r\n  border-radius: 6px;\r\n  box-shadow: 0 0 4px #d9d9d9;\r\n}\r\n.rc-tooltip-arrow {\r\n  position: absolute;\r\n  width: 0;\r\n  height: 0;\r\n  border-color: transparent;\r\n  border-style: solid;\r\n}\r\n.rc-tooltip-placement-top .rc-tooltip-arrow {\r\n  bottom: 4px;\r\n  left: 50%;\r\n  margin-left: -4px;\r\n  border-width: 4px 4px 0;\r\n  border-top-color: #6c6c6c;\r\n}\r\n", ""]);
 
 	// exports
 
@@ -90132,13 +90129,17 @@
 
 	var _LanePicker2 = _interopRequireDefault(_LanePicker);
 
-	var _BasicOptionsComponent = __webpack_require__(858);
+	var _BasicOptionsComponent = __webpack_require__(869);
 
 	var _BasicOptionsComponent2 = _interopRequireDefault(_BasicOptionsComponent);
 
-	var _NeighborExpansionComponent = __webpack_require__(860);
+	var _NeighborExpansionComponent = __webpack_require__(871);
 
 	var _NeighborExpansionComponent2 = _interopRequireDefault(_NeighborExpansionComponent);
+
+	var _Header = __webpack_require__(868);
+
+	var _Header2 = _interopRequireDefault(_Header);
 
 	var _reactBootstrap = __webpack_require__(314);
 
@@ -90177,12 +90178,17 @@
 	                                { id: index },
 	                                _react2.default.createElement(
 	                                    "div",
-	                                    { style: { minWidth: "200px", paddingTop: "5px" } },
+	                                    { style: { minWidth: "200px" } },
+	                                    _react2.default.createElement(
+	                                        _Header2.default,
+	                                        null,
+	                                        setting.shortDescription
+	                                    ),
 	                                    _react2.default.createElement(_Slider2.default, { min: setting.min, max: setting.max,
 	                                        defaultValue: setting.value,
 	                                        step: setting.step,
-	                                        onChange: function onChange(value) {
-	                                            valueHandler(setting.name, value);
+	                                        onChange: function onChange() {
+	                                            return valueHandler(setting.name, value);
 	                                        }
 	                                    })
 	                                )
@@ -90209,19 +90215,27 @@
 	                                _reactBootstrap.Popover,
 	                                { id: index },
 	                                _react2.default.createElement(
-	                                    "div",
-	                                    { style: { margin: "-9px -14px" } },
-	                                    setting.options.map(function (entry, index) {
-	                                        console.log(layout, entry.key);
-	                                        return _react2.default.createElement(
-	                                            "div",
-	                                            { className: "dropdown-content-item dropdown-content-item-hover cursor " + (layout === entry.key ? "active" : ""), key: index, onClick: function onClick() {
-	                                                    return valueHandler(setting.name, entry.key);
-	                                                } },
+	                                    _Header2.default,
+	                                    null,
+	                                    setting.shortDescription
+	                                ),
+	                                setting.options.map(function (entry, index) {
+	                                    return _react2.default.createElement(
+	                                        "div",
+	                                        { className: "cursor", style: { paddingBottom: "5px" }, onClick: function onClick() {
+	                                                return valueHandler(setting.name, entry.key);
+	                                            }, key: index },
+	                                        _react2.default.createElement(
+	                                            "span",
+	                                            { style: { marginRight: "5px" } },
 	                                            entry.description
-	                                        );
-	                                    })
-	                                )
+	                                        ),
+	                                        _react2.default.createElement("input", { type: "radio", className: "pull-right",
+	                                            checked: layout === entry.key,
+	                                            onChange: function onChange() {}
+	                                        })
+	                                    );
+	                                })
 	                            ) },
 	                        _react2.default.createElement(
 	                            "a",
@@ -90277,7 +90291,7 @@
 	                    ) },
 	                _react2.default.createElement(
 	                    "a",
-	                    { title: "" },
+	                    { title: "Group items" },
 	                    _react2.default.createElement("span", { className: "fa fa-building-o" }),
 	                    _react2.default.createElement(
 	                        _Label2.default,
@@ -90296,24 +90310,11 @@
 	                        _reactBootstrap.Popover,
 	                        { id: "basicoptions" },
 	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "box box-custom" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "box-header cursor", "data-widget": "collapse" },
-	                                _react2.default.createElement(
-	                                    "h3",
-	                                    { className: "box-title box-title-custom" },
-	                                    "Edge directions"
-	                                ),
-	                                _react2.default.createElement("span", { className: "fa fa-angle-left pull-right" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "box-body box-content-custom" },
-	                                _react2.default.createElement(_BasicOptionsComponent2.default, null)
-	                            )
-	                        )
+	                            _Header2.default,
+	                            null,
+	                            "Edge Directions"
+	                        ),
+	                        _react2.default.createElement(_BasicOptionsComponent2.default, null)
 	                    ) },
 	                _react2.default.createElement(
 	                    "a",
@@ -90336,24 +90337,11 @@
 	                        _reactBootstrap.Popover,
 	                        { id: "neighborexpansion" },
 	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "box box-custom" },
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "box-header cursor", "data-widget": "collapse" },
-	                                _react2.default.createElement(
-	                                    "h3",
-	                                    { className: "box-title box-title-custom" },
-	                                    "Edge directions"
-	                                ),
-	                                _react2.default.createElement("span", { className: "fa fa-angle-left pull-right" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "div",
-	                                { className: "box-body box-content-custom" },
-	                                _react2.default.createElement(_NeighborExpansionComponent2.default, null)
-	                            )
-	                        )
+	                            _Header2.default,
+	                            null,
+	                            "Single Rendering Limit"
+	                        ),
+	                        _react2.default.createElement(_NeighborExpansionComponent2.default, null)
 	                    ) },
 	                _react2.default.createElement(
 	                    "a",
@@ -90381,239 +90369,10 @@
 	};
 
 /***/ },
-/* 858 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(251);
-
-	var _LaneActions = __webpack_require__(286);
-
-	var _BasicOptions = __webpack_require__(859);
-
-	var _BasicOptions2 = _interopRequireDefault(_BasicOptions);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        upstream: state.lanes.filters.upstream,
-	        downstream: state.lanes.filters.downstream,
-	        limit: state.lanes.filters.limit
-	    };
-	};
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        setFilterValue: function setFilterValue(name, value) {
-	            dispatch((0, _LaneActions.setFilterValue)(name, value));
-	        }
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_BasicOptions2.default);
-
-/***/ },
-/* 859 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _class = function (_React$Component) {
-	    _inherits(_class, _React$Component);
-
-	    function _class() {
-	        _classCallCheck(this, _class);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
-	    }
-
-	    _createClass(_class, [{
-	        key: "setFilterValue",
-	        value: function setFilterValue(name, value) {
-	            this.props.setFilterValue(name, value);
-	        }
-	    }, {
-	        key: "renderCheckbox",
-	        value: function renderCheckbox(name, checked) {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(
-	                "label",
-	                { className: "control-sidebar-subheading cursor", key: name },
-	                name,
-	                _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor",
-	                    checked: checked,
-	                    onChange: function onChange() {
-	                        return _this2.setFilterValue(name.toLowerCase(), !checked);
-	                    }
-	                })
-	            );
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "form",
-	                null,
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "form-group sidebar-padding" },
-	                    this.renderCheckbox("Upstream", this.props.upstream),
-	                    this.renderCheckbox("Downstream", this.props.downstream)
-	                )
-	            );
-	        }
-	    }]);
-
-	    return _class;
-	}(_react2.default.Component);
-
-	exports.default = _class;
-
-/***/ },
-/* 860 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(251);
-
-	var _LaneActions = __webpack_require__(286);
-
-	var _NeighborExpansion = __webpack_require__(861);
-
-	var _NeighborExpansion2 = _interopRequireDefault(_NeighborExpansion);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        limit: state.lanes.filters.limit
-	    };
-	};
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        setFilterValue: function setFilterValue(name, value) {
-	            dispatch((0, _LaneActions.setFilterValue)(name, value));
-	        }
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_NeighborExpansion2.default);
-
-/***/ },
-/* 861 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Slider = __webpack_require__(780);
-
-	var _Slider2 = _interopRequireDefault(_Slider);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _class = function (_React$Component) {
-	    _inherits(_class, _React$Component);
-
-	    function _class() {
-	        _classCallCheck(this, _class);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
-	    }
-
-	    _createClass(_class, [{
-	        key: "setFilterValue",
-	        value: function setFilterValue(value) {
-	            this.props.setFilterValue("limit", value);
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(
-	                "form",
-	                null,
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "form-group sidebar-padding" },
-	                    _react2.default.createElement(
-	                        "label",
-	                        { className: "control-sidebar-subheading" },
-	                        "Limit for Graph Rendering"
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { style: { marginTop: "10px" } },
-	                        _react2.default.createElement(_Slider2.default, { min: 0, max: 100, defaultValue: this.props.limit, onChange: function onChange(val) {
-	                                return _this2.setFilterValue(val);
-	                            } })
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return _class;
-	}(_react2.default.Component);
-
-	exports.default = _class;
-
-/***/ },
+/* 858 */,
+/* 859 */,
+/* 860 */,
+/* 861 */,
 /* 862 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -91839,6 +91598,219 @@
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
+
+/***/ },
+/* 868 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var children = _ref.children;
+
+	    return _react2.default.createElement(
+	        "div",
+	        { style: { color: "#CCC", textTransform: "uppercase", paddingBottom: "5px" } },
+	        children
+	    );
+	};
+
+/***/ },
+/* 869 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(251);
+
+	var _LaneActions = __webpack_require__(286);
+
+	var _BasicOptions = __webpack_require__(870);
+
+	var _BasicOptions2 = _interopRequireDefault(_BasicOptions);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        upstream: state.lanes.filters.upstream,
+	        downstream: state.lanes.filters.downstream,
+	        limit: state.lanes.filters.limit
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        setFilterValue: function setFilterValue(name, value) {
+	            dispatch((0, _LaneActions.setFilterValue)(name, value));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_BasicOptions2.default);
+
+/***/ },
+/* 870 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    }
+
+	    _createClass(_class, [{
+	        key: "setFilterValue",
+	        value: function setFilterValue(name, value) {
+	            this.props.setFilterValue(name, value);
+	        }
+	    }, {
+	        key: "renderCheckbox",
+	        value: function renderCheckbox(name, checked) {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                "label",
+	                { className: "control-sidebar-subheading cursor", key: name },
+	                name,
+	                _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor",
+	                    checked: checked,
+	                    onChange: function onChange() {
+	                        return _this2.setFilterValue(name.toLowerCase(), !checked);
+	                    }
+	                })
+	            );
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "" },
+	                this.renderCheckbox("Upstream", this.props.upstream),
+	                this.renderCheckbox("Downstream", this.props.downstream)
+	            );
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
+
+/***/ },
+/* 871 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(251);
+
+	var _LaneActions = __webpack_require__(286);
+
+	var _NeighborExpansion = __webpack_require__(872);
+
+	var _NeighborExpansion2 = _interopRequireDefault(_NeighborExpansion);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        limit: state.lanes.filters.limit
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        setFilterValue: function setFilterValue(name, value) {
+	            dispatch((0, _LaneActions.setFilterValue)(name, value));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_NeighborExpansion2.default);
+
+/***/ },
+/* 872 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Slider = __webpack_require__(780);
+
+	var _Slider2 = _interopRequireDefault(_Slider);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var setFilterValue = _ref.setFilterValue;
+	    var limit = _ref.limit;
+
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(_Slider2.default, { min: 0, max: 100, defaultValue: limit, onChange: function onChange(val) {
+	                return setFilterValue("limit", val);
+	            } })
+	    );
+	};
 
 /***/ }
 /******/ ]);

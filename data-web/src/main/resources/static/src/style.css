@@ -335,3 +335,10 @@ a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-l
     background-color: #3e8e41;
 }
 
+.rc-slider-handle {
+    border: 2px solid #2c3b41;
+}
+
+.rc-slider-track {
+    background-color: #2c3b41;
+}

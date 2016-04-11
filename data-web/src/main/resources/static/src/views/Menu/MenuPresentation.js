@@ -7,8 +7,9 @@ import FileSaverComponent from "../GraphLoader/FileSaverComponent";
 import NewGraphComponent from "../GraphLoader/NewGraphComponent";
 import Label from "../widgets/Label";
 import LanePicker from "../LanePicker/LanePicker";
-import BasicOptionsComponent from "../GraphPanel/FilterSideBar/BasicOptionsComponent";
-import NeighborExpansionComponent from "../GraphPanel/FilterSideBar/NeighborExpansionComponent";
+import BasicOptionsComponent from "./BasicOptionsComponent";
+import NeighborExpansionComponent from "./NeighborExpansionComponent";
+import Header from "../widgets/Header";
 
 import { DropdownButton, MenuItem, OverlayTrigger, Popover } from "react-bootstrap";
 
@@ -30,11 +31,12 @@ export default ( {
                 </li>;
             } else if(!isNaN(parseFloat(setting.value))) {
                 return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}><div style={{minWidth: "200px", paddingTop: "5px"}}><Slider min={setting.min} max={setting.max}
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}><div style={{minWidth: "200px"}}>
+                    <Header>{setting.shortDescription}</Header>
+                    <Slider min={setting.min} max={setting.max}
                                 defaultValue={setting.value}
                                 step={setting.step}
-                                onChange={function(value) {
-                                            valueHandler(setting.name, value)}}
+                                onChange={() => valueHandler(setting.name, value)}
                         /></div></Popover>}>
                         <a title={setting.description}>
                             <span className={setting.menuButton} />
@@ -44,14 +46,19 @@ export default ( {
                 </li>;
             } else {
                 return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}><div style={{margin: "-9px -14px"}}>
-                        {setting.options.map((entry, index) => {
-                        console.log(layout, entry.key);
-                        return <div className={`dropdown-content-item dropdown-content-item-hover cursor ${layout === entry.key ? "active" : ""}`} key={index} onClick={() => valueHandler(setting.name, entry.key)}>
-                            {entry.description}
-                        </div>
-                        })}
-</div></Popover>}>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}>
+                            <Header>{setting.shortDescription}</Header>
+                            {setting.options.map((entry, index) => {
+                                return <div className="cursor" style={{paddingBottom: "5px"}} onClick={() => valueHandler(setting.name, entry.key)} key={index}>
+                                    <span style={{marginRight: "5px"}}>{entry.description}</span>
+                                    <input type="radio" className="pull-right"
+                                           checked={layout === entry.key}
+                                           onChange={() => {}}
+                                    />
+                                </div>
+                                })
+                            }
+</Popover>}>
                         <a title={setting.description}>
                             <span className={setting.menuButton} />
                             <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
@@ -70,7 +77,7 @@ export default ( {
 
             <li>
                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"lanepicker"}><div style={{height: $(document).height() - 100}}><LanePicker /></div></Popover>}>
-                    <a title="">
+                    <a title="Group items">
                         <span className="fa fa-building-o" />
                         <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
                     </a>
@@ -78,15 +85,8 @@ export default ( {
             </li>
             <li>
                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"basicoptions"}>
-                <div className={`box box-custom`}>
-                    <div className="box-header cursor" data-widget="collapse">
-                        <h3 className="box-title box-title-custom">Edge directions</h3>
-                        <span className="fa fa-angle-left pull-right" />
-                    </div>
-                    <div className="box-body box-content-custom">
-                        <BasicOptionsComponent />
-                    </div>
-                </div>
+                    <Header>Edge Directions</Header>
+                    <BasicOptionsComponent />
                 </Popover>}>
                     <a title="Edge directions">
                         <span className="fa fa-exchange" />
@@ -96,15 +96,8 @@ export default ( {
             </li>
             <li className="navbar-space">
                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"neighborexpansion"}>
-                    <div className={`box box-custom`}>
-                        <div className="box-header cursor" data-widget="collapse">
-                            <h3 className="box-title box-title-custom">Edge directions</h3>
-                            <span className="fa fa-angle-left pull-right" />
-                        </div>
-                        <div className="box-body box-content-custom">
-                            <NeighborExpansionComponent />
-                        </div>
-                    </div>
+                    <Header>Single Rendering Limit</Header>
+                    <NeighborExpansionComponent />
                 </Popover>}>
                     <a title="Limit for rendering of neighbor nodes">
                         <span className="fa fa-pencil-square-o" />

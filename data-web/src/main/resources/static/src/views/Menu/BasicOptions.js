@@ -17,12 +17,10 @@ export default class extends React.Component {
 
     render() {
         return (
-        <form>
-            <div className="form-group sidebar-padding">
-                {this.renderCheckbox("Upstream", this.props.upstream)}
-                {this.renderCheckbox("Downstream", this.props.downstream)}
-            </div>
-        </form>
+        <div className="">
+            {this.renderCheckbox("Upstream", this.props.upstream)}
+            {this.renderCheckbox("Downstream", this.props.downstream)}
+        </div>
         );
     };
 }

@@ -3,9 +3,8 @@ import Slider from "rc-slider";
 import "./Slider.css";
 
 export default ( { min, max, defaultValue, step, onChange }) => {
-    console.log(defaultValue)
     return (
-        <div>
+        <div style={{paddingTop: "5px"}}>
             <Slider defaultValue={defaultValue} min={min} max={max} onChange={onChange} step={step} />
             <span>{min}</span>
             <span className="pull-right">{max}</span>

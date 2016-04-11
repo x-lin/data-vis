@@ -8,10 +8,9 @@ export default ({
     collapsed
     }) => {
     return (
-        <div className={`box box-custom${collapsed ? " collapsed-box" : ""}`}>
-            <div className="box-header cursor" data-widget="collapse">
+        <div className={"box box-custom"}>
+            <div className="box-header cursor">
                 <h3 className="box-title box-title-custom">{title}</h3>
-                <span className="fa fa-angle-left pull-right" />
             </div>
             <div className="box-body box-content-custom">
                 {children}

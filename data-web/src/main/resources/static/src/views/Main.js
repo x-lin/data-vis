@@ -16,7 +16,6 @@ export default class Main extends React.Component {
     render() {
         return (
             <div>
-                {/*<LanePicker />*/}
                 <header className="main-header">
 
                     <a name="Frequentis Logo" className="logo disabled-link">

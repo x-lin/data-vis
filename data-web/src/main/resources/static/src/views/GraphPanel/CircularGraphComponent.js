@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { getNeighbors } from "../../actions/aggregated/GETNeighbors";
 import { clearGraph, updateGraph } from "../../actions/action-creators/GraphActionCreators";
-import { DISABLED_OPACITY_VALUE, SET_NODE_POSITIONS_FIXED, SHOW_CONTEXT_MENU, ENABLE_SELECTION_OF_FILTERED_NODES, SHOW_EDGE_DIRECTION }
+import { DISABLED_OPACITY_VALUE, SET_NODE_POSITIONS_FIXED, ENABLE_SELECTION_OF_FILTERED_NODES, SHOW_EDGE_DIRECTION }
     from "../../config/Settings";
 
 import CircularGraph from "./CircularGraph";
@@ -24,7 +24,6 @@ const mapStateToProps = (state) => {
         visibilityFilters: state.visibilityFilters,
         disabledOpacity: settings[DISABLED_OPACITY_VALUE],
         isFixed: settings[SET_NODE_POSITIONS_FIXED],
-        showContextMenu: settings[SHOW_CONTEXT_MENU],
         enableFiltered: settings[ENABLE_SELECTION_OF_FILTERED_NODES],
         showEdgeDirection: settings[SHOW_EDGE_DIRECTION]
     };

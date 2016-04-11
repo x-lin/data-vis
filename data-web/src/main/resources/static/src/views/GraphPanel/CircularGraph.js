@@ -352,7 +352,7 @@ export default class extends React.Component {
                 }
             })
             .on("contextmenu", (d) => {
-                if(this.props.showContextMenu && (d.visible || this.props.enableFiltered)) {
+                if(d.visible || this.props.enableFiltered) {
                     EventHandlers.onContextMenuNode(d, this.props);
                 }
             })

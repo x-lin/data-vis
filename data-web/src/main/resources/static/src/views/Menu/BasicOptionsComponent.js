@@ -1,12 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { setFilterValue } from "../../../actions/action-creators/LaneActions";
+import { setFilterValue } from "../../actions/action-creators/LaneActions";
 
-import NeighborExpansion from "./NeighborExpansion";
+import BasicOptions from "./BasicOptions";
 
 const mapStateToProps = (state) => {
     return {
+        upstream: state.lanes.filters.upstream,
+        downstream: state.lanes.filters.downstream,
         limit: state.lanes.filters.limit
     };
 };
@@ -22,4 +24,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(NeighborExpansion);
+)(BasicOptions);
