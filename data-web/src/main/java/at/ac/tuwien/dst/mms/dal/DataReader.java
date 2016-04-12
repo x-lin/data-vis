@@ -32,4 +32,6 @@ public interface DataReader<T> {
 	List<TestCoverage> getTestCoverage(String projectKey);
 
 	List<NeighborType> getNeighborTypes(String key);
+
+	List<Map<String, Object>> getNeighborsSingle(String key);
 }

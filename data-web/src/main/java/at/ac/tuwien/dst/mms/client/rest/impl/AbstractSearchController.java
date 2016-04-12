@@ -57,6 +57,13 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 	}
 
 	@Override
+	public List<Map<String, Object>> getNeighborsSingle(
+			@PathVariable String key
+	) {
+		return reader.getNeighborsSingle(key);
+	}
+
+	@Override
 	public List<T> getByNeighborKey(
 			@RequestParam String key,
 			@RequestParam String value,

@@ -1,6 +1,9 @@
 package at.ac.tuwien.dst.mms.dal.repo;
 
-import at.ac.tuwien.dst.mms.dal.query.model.*;
+import at.ac.tuwien.dst.mms.dal.query.model.EdgeSchemaObject;
+import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
+import at.ac.tuwien.dst.mms.dal.query.model.NodeSchemaObject;
+import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
@@ -60,4 +63,11 @@ public interface ProjectRepository extends GraphRepository<Project>, ProjectRepo
 			"RETURN p AS node, count(p) AS count, ['DOWNSTREAM'] AS relationship " +
 			"ORDER BY count DESC")
 	List<NeighborType> getNeighborTypes(String projectKey);
+
+	@Query("START p=node:" + Project.PROJECT_KEY_INDEX + "(key={0}) " +
+			"MATCH (p)<-[r]->(n:GeneralNode) " +
+			"OPTIONAL MATCH (n)-[]-(o:GeneralNode) " +
+			"RETURN DISTINCT n AS node, count(o) AS count, " +
+			"'DOWNSTREAM' AS direction")
+	Iterable<Map<String, Object>> findNeighborsSingle(String key);
 }

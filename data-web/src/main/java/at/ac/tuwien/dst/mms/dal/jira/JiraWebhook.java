@@ -52,6 +52,6 @@ public class JiraWebhook {
 
 	@RequestMapping(path="/index", method=RequestMethod.GET)
 	public void textIndex() {
-		//neoWriter.addIndex();
+		neoWriter.addIndex();
 	}
 }

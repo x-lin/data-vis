@@ -62,4 +62,16 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 	public List<NeighborType> getNeighborTypes(String key) {
 		return ((GeneralNodeRepository)this.getRepository()).getNeighborTypes(key);
 	}
+
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getNeighborsSingle(String key) {
+		GeneralNode node = this.find(key);
+		node.setCount(((GeneralNodeRepository)this.getRepository()).countNeighbors(key));
+
+		Iterable<Map<String, Object>> nodes = ((GeneralNodeRepository)this.getRepository()).findNeighborsSingle(key);
+		List<Map<String, Object>> neighbors = this.getNeighbors(nodes);
+
+		return neighbors;
+	}
 }

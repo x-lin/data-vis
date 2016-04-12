@@ -1,13 +1,11 @@
 package at.ac.tuwien.dst.mms.dal.jama;
 
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
-import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeJamaIndexRepository;
-import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeRepository;
-import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeTypeRepository;
-import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
+import at.ac.tuwien.dst.mms.dal.repo.*;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.GeneralNodeJamaIndex;
 import at.ac.tuwien.dst.mms.model.Project;
+import at.ac.tuwien.dst.mms.model.TextIndex;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,9 @@ public class JamaDataWriter {
 
 	@Autowired
 	private ProjectRepository projectRepository;
+
+	@Autowired
+	private TextIndexRepository textIndexRepository;
 
 	@Autowired(required = false)
 	private Logger logger;
@@ -130,7 +131,34 @@ public class JamaDataWriter {
 
 	@Transactional
 	public void storeProjects(Collection<Project> projects) {
+		for(Project project : projects) {
+			project.setTextIndex(this.createIndices(project));
+		}
+
 		projectRepository.save(projects);
+	}
+
+	private Set<TextIndex> createIndices(Project project) {
+		Set<TextIndex> indices = new HashSet<>();
+
+		TextIndex indexKey = this.getTextIndex(project.getKey());
+		TextIndex indexName = this.getTextIndex(project.getName());
+
+		indices.add(indexKey);
+		indices.add(indexName);
+
+		return indices;
+	}
+
+	private TextIndex getTextIndex(String key) {
+		TextIndex indexKey = textIndexRepository.findByKey(key);
+
+		if(indexKey == null) {
+			indexKey = new TextIndex(key);
+			textIndexRepository.save(indexKey);
+		}
+
+		return indexKey;
 	}
 
 	@Transactional

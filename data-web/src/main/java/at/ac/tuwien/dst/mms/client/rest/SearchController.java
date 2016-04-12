@@ -41,6 +41,11 @@ public interface SearchController<T> {
 			@RequestParam Integer limit,
 			@RequestParam List<String> type);
 
+	@RequestMapping(value = "/neighborsSingle/{key}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	Iterable<Map<String, Object>> getNeighborsSingle(
+			@PathVariable String key);
+
+
 	@RequestMapping(value = "/indirect", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	List<T> getByNeighborKey(
 			@RequestParam String key,

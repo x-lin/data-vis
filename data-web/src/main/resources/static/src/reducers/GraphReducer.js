@@ -21,7 +21,7 @@ function updateHistory(history, graph) {
     return past;
 }
 
-const graphActions = [CLEAR_GRAPH, UPDATE_GRAPH, ADD_TO_GRAPH, NEIGHBORS_FETCH_SUCCESS, REMOVE_FROM_GRAPH];
+const graphActions = [CLEAR_GRAPH, UPDATE_GRAPH, ADD_TO_GRAPH, NEIGHBORS_FETCH_SUCCESS, REMOVE_FROM_GRAPH, EXPAND_NODE];
 
 export const graphReducer = (
 state = {
@@ -99,6 +99,18 @@ action) => {
             } else {
                 return state;
             }
+        case EXPAND_NODE:
+            const graph1 = new D3Graph(state.present.nodes, state.present.edges, state.present.legend);
+
+            const index = graph1.indexOfNode(action.key);
+            const neighborIndex = graph1.addNode(action.toNode);
+            graph1.addEdge(new Edge(index, neighborIndex, action.toNode.direction));
+
+            return Object.assign({}, state, {
+                present: graph1,
+                past,
+                future: []
+            });
         case UNDO_GRAPH_ACTION:
             let previous = prepare(state.past[state.past.length-1]);
             let snapshot1 = JSON.stringify(state.present);

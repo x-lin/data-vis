@@ -64,11 +64,11 @@
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _Relations = __webpack_require__(862);
+	var _Relations = __webpack_require__(863);
 
 	var _Relations2 = _interopRequireDefault(_Relations);
 
-	var _es6Promise = __webpack_require__(865);
+	var _es6Promise = __webpack_require__(866);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33342,6 +33342,7 @@
 	        hash = str.charCodeAt(i) + ((hash << 5) - hash);
 	    }
 	    var color = '#';
+
 	    for (var i = 0; i < 3; i++) {
 	        var value = hash >> i * 8 & 0xFF;
 	        color += ('00' + value.toString(16)).substr(-2);
@@ -35997,8 +35998,6 @@
 	                    _react2.default.createElement(
 	                        "h3",
 	                        { className: "box-title" },
-	                        _react2.default.createElement(_CircleSpan2.default, { color: _Constants2.default.getColor(this.props.coverage.name.type), radius: "12px" }),
-	                        " ",
 	                        _react2.default.createElement(
 	                            "strong",
 	                            null,
@@ -70341,7 +70340,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    "a",
-	                    { type: "button", className: "btn btn-app " + (context === _ContextMenuActions.STATS_CONTEXT && "active"), title: "Statistics", onClick: function onClick() {
+	                    { type: "button", className: "btn btn-app " + (context === _ContextMenuActions.STATS_CONTEXT && "active") + " disabled", title: "Statistics", onClick: function onClick() {
 	                            activateContext(_ContextMenuActions.STATS_CONTEXT);
 	                        } },
 	                    _react2.default.createElement("span", { className: "fa fa-bar-chart" }),
@@ -70493,6 +70492,18 @@
 
 	var _GraphActionCreators = __webpack_require__(287);
 
+	var _ExpandSearchMenu = __webpack_require__(869);
+
+	var _ExpandSearchMenu2 = _interopRequireDefault(_ExpandSearchMenu);
+
+	var _ExpandStatsBasedMenu = __webpack_require__(870);
+
+	var _ExpandStatsBasedMenu2 = _interopRequireDefault(_ExpandStatsBasedMenu);
+
+	var _ExpandConfiguredMenu = __webpack_require__(871);
+
+	var _ExpandConfiguredMenu2 = _interopRequireDefault(_ExpandConfiguredMenu);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70501,9 +70512,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var UPSTREAM = "UPSTREAM";
-	var DOWNSTREAM = "DOWNSTREAM";
-	var BOTH = "BOTH";
+	var PREDEFINED = "PREDEFINED";
+	var STATSBASED = "STATSBASED";
+	var SEARCH = "SEARCH";
 
 	var ExpandMenu = function (_React$Component) {
 	    _inherits(ExpandMenu, _React$Component);
@@ -70514,17 +70525,13 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ExpandMenu).call(this, props));
 
 	        _this.state = {
-	            clicked: BOTH
+	            menu: PREDEFINED,
+	            activeKey: 1
 	        };
 	        return _this;
 	    }
 
 	    _createClass(ExpandMenu, [{
-	        key: "setClicked",
-	        value: function setClicked(direction) {
-	            this.setState({ clicked: direction });
-	        }
-	    }, {
 	        key: "goUpstream",
 	        value: function goUpstream(key, category) {
 	            var paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&downstream=false&limit=500";
@@ -70539,64 +70546,52 @@
 	            this.props.getNeighbors(category, key, paramsString);
 	        }
 	    }, {
+	        key: "setMenuType",
+	        value: function setMenuType(number) {
+	            switch (number) {
+	                case 1:
+	                    this.setState({ menu: PREDEFINED, activeKey: number });
+	                    break;
+	                case 2:
+	                    this.setState({ menu: STATSBASED, activeKey: number });
+	                    break;
+	                case 3:
+	                    this.setState({ menu: SEARCH, activeKey: number });
+	                    break;
+	            }
+	        }
+	    }, {
+	        key: "renderMenu",
+	        value: function renderMenu() {
+	            if (this.state.menu === PREDEFINED) {
+	                return _react2.default.createElement(_ExpandConfiguredMenu2.default, { d: this.props.d });
+	            } else if (this.state.menu === STATSBASED) {
+	                return _react2.default.createElement(_ExpandStatsBasedMenu2.default, { d: this.props.d });
+	            } else if (this.state.menu === SEARCH) {
+	                return _react2.default.createElement(_ExpandSearchMenu2.default, { d: this.props.d });
+	            }
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            var _this2 = this;
-
-	            var _props$d = this.props.d;
-	            var key = _props$d.key;
-	            var type = _props$d.type;
-
-
-	            var prepared = this.props.coverage.data.map(function (coverage, index) {
-	                var count = coverage.testcases ? coverage.testcases.length : 0;
-
-	                return _react2.default.createElement(
-	                    _reactable.Tr,
-	                    { key: index, className: count ? "" : "bg-red" },
-	                    _react2.default.createElement(
-	                        _reactable.Td,
-	                        { column: "Name", value: coverage.name },
-	                        _react2.default.createElement(
-	                            "a",
-	                            { onClick: function onClick(key) {
-	                                    return _this2.onClick(coverage.key);
-	                                } },
-	                            _react2.default.createElement(_CircleSpan2.default, { radius: "8px", color: _Constants2.default.getColor(coverage.type) }),
-	                            " ",
-	                            coverage.name
-	                        )
-	                    )
-	                );
-	            });
-
-	            var linkStyle = {
-	                color: "#444",
-	                boxShadow: "0 0 0 .03em #ddd",
-	                padding: "6px 12px"
-	            };
-
-	            var activeLinkStyle = {
-	                backgroundColor: "#2c3b41",
-	                color: "#fff",
-	                boxShadow: "0 0 0 .03em #2c3b41",
-	                pointerEvents: "none",
-	                cursor: "default",
-	                padding: "6px 12px"
-	            };
 
 	            return _react2.default.createElement(
 	                "div",
 	                null,
 	                _react2.default.createElement(
 	                    _reactBootstrap.Nav,
-	                    { bsStyle: "pills", justified: true, activeKey: 1, onSelect: function onSelect(e) {
-	                            console.log(e);
+	                    { bsStyle: "pills", justified: true, activeKey: this.state.activeKey, onSelect: function onSelect(number) {
+	                            return _this2.setMenuType(number);
 	                        } },
 	                    _react2.default.createElement(
 	                        _reactBootstrap.NavItem,
 	                        { eventKey: 1, title: "Pre-configured expansion options" },
-	                        "Configured"
+	                        _react2.default.createElement(
+	                            "span",
+	                            { style: { whiteSpace: "nowrap" } },
+	                            "Pre-defined"
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.NavItem,
@@ -70616,63 +70611,7 @@
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "dropdown" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "dropdown-content-item" },
-	                        _react2.default.createElement(
-	                            "div",
-	                            { style: { float: "right", padding: "10px 0px" } },
-	                            _react2.default.createElement(
-	                                "a",
-	                                { onClick: function onClick(direction) {
-	                                        return _this2.setClicked(BOTH);
-	                                    },
-	                                    style: this.state.clicked === BOTH ? activeLinkStyle : linkStyle,
-	                                    title: "Search in both directions" },
-	                                _react2.default.createElement("span", { className: "fa fa-arrows-v" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "a",
-	                                { onClick: function onClick(direction) {
-	                                        return _this2.setClicked(UPSTREAM);
-	                                    },
-	                                    style: this.state.clicked === UPSTREAM ? activeLinkStyle : linkStyle,
-	                                    title: "Search upstream" },
-	                                _react2.default.createElement("span", { className: "fa fa-long-arrow-up" })
-	                            ),
-	                            _react2.default.createElement(
-	                                "a",
-	                                { onClick: function onClick(direction) {
-	                                        return _this2.setClicked(DOWNSTREAM);
-	                                    },
-	                                    style: this.state.clicked === DOWNSTREAM ? activeLinkStyle : linkStyle,
-	                                    title: "Search downstream" },
-	                                _react2.default.createElement("span", { className: "fa fa-long-arrow-down" })
-	                            )
-	                        ),
-	                        this.props.coverage && _react2.default.createElement(
-	                            _reactable.Table,
-	                            { className: "table table-sm table-hover contextmenu-table", itemsPerPage: 10, sortable: ["Name"],
-	                                filterable: ['Name'], pageButtonLimit: 5 },
-	                            prepared
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "dropdown-content-item dropdown-content-item-hover cursor", onClick: function onClick() {
-	                                return _this2.goUpstream(key, type);
-	                            } },
-	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-up" }),
-	                        " Upstr. Feature Decomposition"
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "dropdown-content-item dropdown-content-item-hover cursor", onClick: function onClick() {
-	                                return _this2.goDownstream(key, type);
-	                            } },
-	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-down" }),
-	                        " Downstr. Feature Decomposition"
-	                    )
+	                    this.renderMenu()
 	                )
 	            );
 	        }
@@ -71119,7 +71058,7 @@
 
 
 	// module
-	exports.push([module.id, ".dropdown-content {\r\n    width: 100%;\r\n}\r\n\r\n.dropdown-content-item {\r\n    padding: 12px 16px;\r\n    display: block;\r\n    /*background-color: #f9f9f9;*/\r\n    border-top: 1px solid #DDD;\r\n    max-height: 500px;\r\n    overflow-y: auto;\r\n    /*margin: 2px 0px;*/\r\n}\r\n\r\n.dropdown-content-item-hover:hover {background-color: #f1f1f1}\r\n\r\n.dropdown-content-item a {\r\n    text-decoration: none;\r\n}\r\n\r\n.dropdown:hover .dropbtn {\r\n    background-color: #3e8e41;\r\n}", ""]);
+	exports.push([module.id, ".dropdown-content {\r\n    width: 100%;\r\n}\r\n\r\n.dropdown-content-item {\r\n    padding: 12px 16px;\r\n    display: block;\r\n    /*background-color: #f9f9f9;*/\r\n    border-top: 1px solid #DDD;\r\n    max-height: 300px;\r\n    overflow-y: auto;\r\n    /*margin: 2px 0px;*/\r\n}\r\n\r\n.dropdown-content-item-hover:hover {background-color: #f1f1f1}\r\n\r\n.dropdown-content-item a {\r\n    text-decoration: none;\r\n}\r\n\r\n.dropdown:hover .dropbtn {\r\n    background-color: #3e8e41;\r\n}", ""]);
 
 	// exports
 
@@ -72817,7 +72756,7 @@
 	    return past;
 	}
 
-	var graphActions = [_GraphActionCreators.CLEAR_GRAPH, _GraphActionCreators.UPDATE_GRAPH, _GraphActionCreators.ADD_TO_GRAPH, _FetchNeighborsActionCreators.NEIGHBORS_FETCH_SUCCESS, _GraphActionCreators.REMOVE_FROM_GRAPH];
+	var graphActions = [_GraphActionCreators.CLEAR_GRAPH, _GraphActionCreators.UPDATE_GRAPH, _GraphActionCreators.ADD_TO_GRAPH, _FetchNeighborsActionCreators.NEIGHBORS_FETCH_SUCCESS, _GraphActionCreators.REMOVE_FROM_GRAPH, _GraphActionCreators.EXPAND_NODE];
 
 	var graphReducer = exports.graphReducer = function graphReducer() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
@@ -72901,6 +72840,18 @@
 	            } else {
 	                return state;
 	            }
+	        case _GraphActionCreators.EXPAND_NODE:
+	            var graph1 = new _D3Graph2.default(state.present.nodes, state.present.edges, state.present.legend);
+
+	            var index = graph1.indexOfNode(action.key);
+	            var neighborIndex = graph1.addNode(action.toNode);
+	            graph1.addEdge(new _Edge2.default(index, neighborIndex, action.toNode.direction));
+
+	            return _extends({}, state, {
+	                present: graph1,
+	                past: past,
+	                future: []
+	            });
 	        case _GraphActionCreators.UNDO_GRAPH_ACTION:
 	            var previous = prepare(state.past[state.past.length - 1]);
 	            var snapshot1 = JSON.stringify(state.present);
@@ -73656,9 +73607,13 @@
 
 	var _SearchNeighborTypesActions = __webpack_require__(567);
 
+	var _SearchNeighborsSingleActions = __webpack_require__(872);
+
 	var initialState = {
 	    context: _ContextMenuActions.EXPAND_CONTEXT,
 	    search: [],
+	    searchNode: {},
+	    searchStatus: null,
 	    filterDirection: null,
 	    neighborTypes: { data: [], node: null, rawData: [] }
 	};
@@ -73679,17 +73634,12 @@
 	            }
 	        case _ContextMenuActions.DEACTIVATE_CONTEXT:
 	            return _extends({}, state, {
-	                context: null,
-	                search: []
+	                context: null
 	            });
 	        case _ContextMenuActions.CLEAR_STATE:
-	            return _extends({}, state, {
-	                context: initialState.context,
-	                search: initialState.search,
-	                neighborTypes: initialState.neighborTypes,
-	                filterDirection: null
-	            });
+	            return _extends({}, initialState);
 	        case _ContextMenuActions.FILTER_NEIGHBOR_TYPES:
+	            //for stats
 	            var neighborTypes = state.neighborTypes;
 	            neighborTypes.data = prepare(neighborTypes.rawData, action.filterDirection);
 
@@ -73697,6 +73647,22 @@
 	                neighborTypes: neighborTypes,
 	                filterDirection: action.filterDirection
 	            });
+	        case _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_START:
+	            //for search
+	            return _extends({}, state, {
+	                searchNode: action.node,
+	                search: initialState.search,
+	                searchStatus: _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_START
+	            });
+	        case _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS:
+	            if (action.node.key === state.searchNode.key) {
+	                return _extends({}, state, {
+	                    search: action.data,
+	                    searchStatus: _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS
+	                });
+	            } else {
+	                return state;
+	            }
 	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_ERROR:
 	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START:
 	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_SUCCESS:
@@ -90129,15 +90095,15 @@
 
 	var _LanePicker2 = _interopRequireDefault(_LanePicker);
 
-	var _BasicOptionsComponent = __webpack_require__(869);
+	var _BasicOptionsComponent = __webpack_require__(858);
 
 	var _BasicOptionsComponent2 = _interopRequireDefault(_BasicOptionsComponent);
 
-	var _NeighborExpansionComponent = __webpack_require__(871);
+	var _NeighborExpansionComponent = __webpack_require__(860);
 
 	var _NeighborExpansionComponent2 = _interopRequireDefault(_NeighborExpansionComponent);
 
-	var _Header = __webpack_require__(868);
+	var _Header = __webpack_require__(862);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
@@ -90369,11 +90335,220 @@
 	};
 
 /***/ },
-/* 858 */,
-/* 859 */,
-/* 860 */,
-/* 861 */,
+/* 858 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(251);
+
+	var _LaneActions = __webpack_require__(286);
+
+	var _BasicOptions = __webpack_require__(859);
+
+	var _BasicOptions2 = _interopRequireDefault(_BasicOptions);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        upstream: state.lanes.filters.upstream,
+	        downstream: state.lanes.filters.downstream,
+	        limit: state.lanes.filters.limit
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        setFilterValue: function setFilterValue(name, value) {
+	            dispatch((0, _LaneActions.setFilterValue)(name, value));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_BasicOptions2.default);
+
+/***/ },
+/* 859 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	    _inherits(_class, _React$Component);
+
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    }
+
+	    _createClass(_class, [{
+	        key: "setFilterValue",
+	        value: function setFilterValue(name, value) {
+	            this.props.setFilterValue(name, value);
+	        }
+	    }, {
+	        key: "renderCheckbox",
+	        value: function renderCheckbox(name, checked) {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                "label",
+	                { className: "control-sidebar-subheading cursor", key: name },
+	                name,
+	                _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor",
+	                    checked: checked,
+	                    onChange: function onChange() {
+	                        return _this2.setFilterValue(name.toLowerCase(), !checked);
+	                    }
+	                })
+	            );
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "" },
+	                this.renderCheckbox("Upstream", this.props.upstream),
+	                this.renderCheckbox("Downstream", this.props.downstream)
+	            );
+	        }
+	    }]);
+
+	    return _class;
+	}(_react2.default.Component);
+
+	exports.default = _class;
+
+/***/ },
+/* 860 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(251);
+
+	var _LaneActions = __webpack_require__(286);
+
+	var _NeighborExpansion = __webpack_require__(861);
+
+	var _NeighborExpansion2 = _interopRequireDefault(_NeighborExpansion);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        limit: state.lanes.filters.limit
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        setFilterValue: function setFilterValue(name, value) {
+	            dispatch((0, _LaneActions.setFilterValue)(name, value));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_NeighborExpansion2.default);
+
+/***/ },
+/* 861 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Slider = __webpack_require__(780);
+
+	var _Slider2 = _interopRequireDefault(_Slider);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var setFilterValue = _ref.setFilterValue;
+	    var limit = _ref.limit;
+
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(_Slider2.default, { min: 0, max: 100, defaultValue: limit, onChange: function onChange(val) {
+	                return setFilterValue("limit", val);
+	            } })
+	    );
+	};
+
+/***/ },
 /* 862 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var children = _ref.children;
+
+	    return _react2.default.createElement(
+	        "div",
+	        { style: { color: "#CCC", textTransform: "uppercase", paddingBottom: "5px" } },
+	        children
+	    );
+	};
+
+/***/ },
+/* 863 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -90396,7 +90571,7 @@
 
 	var _GraphPanel2 = _interopRequireDefault(_GraphPanel);
 
-	var _ExportToImage = __webpack_require__(863);
+	var _ExportToImage = __webpack_require__(864);
 
 	var _ExportToImage2 = _interopRequireDefault(_ExportToImage);
 
@@ -90404,7 +90579,7 @@
 
 	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
 
-	var _VerticalSplitView = __webpack_require__(864);
+	var _VerticalSplitView = __webpack_require__(865);
 
 	var _VerticalSplitView2 = _interopRequireDefault(_VerticalSplitView);
 
@@ -90443,7 +90618,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(Relations);
 
 /***/ },
-/* 863 */
+/* 864 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -90583,7 +90758,7 @@
 	exports.default = ExportToImage;
 
 /***/ },
-/* 864 */
+/* 865 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -90626,10 +90801,10 @@
 	};
 
 /***/ },
-/* 865 */
+/* 866 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -90759,7 +90934,7 @@
 	    function lib$es6$promise$asap$$attemptVertx() {
 	      try {
 	        var r = require;
-	        var vertx = __webpack_require__(866);
+	        var vertx = __webpack_require__(867);
 	        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
 	        return lib$es6$promise$asap$$useVertxTimer();
 	      } catch(e) {
@@ -91572,7 +91747,7 @@
 	    };
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(867)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(868)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -91587,43 +91762,17 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), (function() { return this; }()), __webpack_require__(236)(module)))
 
 /***/ },
-/* 866 */
+/* 867 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 867 */
+/* 868 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
-
-/***/ },
-/* 868 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (_ref) {
-	    var children = _ref.children;
-
-	    return _react2.default.createElement(
-	        "div",
-	        { style: { color: "#CCC", textTransform: "uppercase", paddingBottom: "5px" } },
-	        children
-	    );
-	};
 
 /***/ },
 /* 869 */
@@ -91635,37 +91784,210 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRedux = __webpack_require__(251);
 
-	var _LaneActions = __webpack_require__(286);
+	var _reactBootstrap = __webpack_require__(314);
 
-	var _BasicOptions = __webpack_require__(870);
+	var _reactable = __webpack_require__(291);
 
-	var _BasicOptions2 = _interopRequireDefault(_BasicOptions);
+	var _Constants = __webpack_require__(248);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _CircleSpan = __webpack_require__(559);
+
+	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
+
+	var _Label = __webpack_require__(560);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	var _GETNeighbors = __webpack_require__(284);
+
+	var _SearchNeighborsSingle = __webpack_require__(873);
+
+	var _GraphActionCreators = __webpack_require__(287);
+
+	var _SearchNeighborsSingleActions = __webpack_require__(872);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UPSTREAM = "UPSTREAM";
+	var DOWNSTREAM = "DOWNSTREAM";
+	var BOTH = "BOTH";
+
+	var ExpandSearchMenu = function (_React$Component) {
+	    _inherits(ExpandSearchMenu, _React$Component);
+
+	    function ExpandSearchMenu(props) {
+	        _classCallCheck(this, ExpandSearchMenu);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ExpandSearchMenu).call(this, props));
+
+	        _this.state = {
+	            clicked: BOTH
+	        };
+	        return _this;
+	    }
+
+	    _createClass(ExpandSearchMenu, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            this.props.getNeighborsSingle(this.props.d);
+	        }
+	    }, {
+	        key: "setClicked",
+	        value: function setClicked(direction) {
+	            this.setState({ clicked: direction });
+	        }
+	    }, {
+	        key: "onClick",
+	        value: function onClick(key, toNode) {
+	            this.props.expandNode(key, toNode);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            var data = this.props.data;
+
+	            if (this.state.clicked != BOTH) {
+	                data = data.filter(function (node) {
+	                    return !node.direction || node.direction === _this2.state.clicked;
+	                });
+	            }
+
+	            data = data.map(function (node, index) {
+	                return _react2.default.createElement(
+	                    _reactable.Tr,
+	                    { key: index },
+	                    _react2.default.createElement(
+	                        _reactable.Td,
+	                        { column: "Name", value: node.name },
+	                        _react2.default.createElement(
+	                            "a",
+	                            { onClick: function onClick(key) {
+	                                    return _this2.onClick(_this2.props.d.key, node);
+	                                } },
+	                            node.name,
+	                            " ",
+	                            _react2.default.createElement(
+	                                _Label2.default,
+	                                { bgColor: _Constants2.default.getColor(node.type) },
+	                                node.type
+	                            )
+	                        )
+	                    )
+	                );
+	            });
+
+	            var linkStyle = {
+	                color: "#444",
+	                boxShadow: "0 0 0 .03em #ddd",
+	                padding: "6px 12px"
+	            };
+
+	            var activeLinkStyle = {
+	                backgroundColor: "#2c3b41",
+	                color: "#fff",
+	                boxShadow: "0 0 0 .03em #2c3b41",
+	                pointerEvents: "none",
+	                cursor: "default",
+	                padding: "6px 12px"
+	            };
+
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "dropdown-content-item" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { style: { float: "right", padding: "10px 0px" } },
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick(direction) {
+	                                return _this2.setClicked(BOTH);
+	                            },
+	                            style: this.state.clicked === BOTH ? activeLinkStyle : linkStyle,
+	                            title: "Search in both directions" },
+	                        _react2.default.createElement("span", { className: "fa fa-arrows-v" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick(direction) {
+	                                return _this2.setClicked(UPSTREAM);
+	                            },
+	                            style: this.state.clicked === UPSTREAM ? activeLinkStyle : linkStyle,
+	                            title: "Search upstream" },
+	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-up" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick(direction) {
+	                                return _this2.setClicked(DOWNSTREAM);
+	                            },
+	                            style: this.state.clicked === DOWNSTREAM ? activeLinkStyle : linkStyle,
+	                            title: "Search downstream" },
+	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-down" })
+	                    )
+	                ),
+	                this.props.status === _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_START && "Loading...",
+	                this.props.status === _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS && _react2.default.createElement(
+	                    "div",
+	                    { style: { float: "left", padding: "10px 0px" } },
+	                    data.length + " result" + (data.length !== 1 ? "s" : "") + " found."
+	                ),
+	                this.props.status === _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS && _react2.default.createElement(
+	                    _reactable.Table,
+	                    { className: "table table-sm table-hover contextmenu-table", itemsPerPage: 10, sortable: ["Name"],
+	                        filterable: ['Name'], pageButtonLimit: 5 },
+	                    data
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ExpandSearchMenu;
+	}(_react2.default.Component);
+
+	exports.default = ExpandSearchMenu;
+
+
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        upstream: state.lanes.filters.upstream,
-	        downstream: state.lanes.filters.downstream,
-	        limit: state.lanes.filters.limit
+	        data: state.contextmenu.search,
+	        status: state.contextmenu.searchStatus
+	        //coverage: state.coverage
 	    };
 	};
 
 	var mapDispatchProps = function mapDispatchProps(dispatch) {
 	    return {
-	        setFilterValue: function setFilterValue(name, value) {
-	            dispatch((0, _LaneActions.setFilterValue)(name, value));
+	        getNeighborsSingle: function getNeighborsSingle(node) {
+	            dispatch((0, _SearchNeighborsSingle.searchNeighborsSingle)(node));
+	        },
+	        getNeighbors: function getNeighbors(category, key, paramsString) {
+	            dispatch((0, _GETNeighbors.getNeighbors)(category, key, paramsString));
+	        },
+	        expandNode: function expandNode(key, toNode) {
+	            dispatch((0, _GraphActionCreators.expandNode)(key, toNode));
 	        }
 	    };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_BasicOptions2.default);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(ExpandSearchMenu);
 
 /***/ },
 /* 870 */
@@ -91683,6 +92005,34 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _d = __webpack_require__(308);
+
+	var _d2 = _interopRequireDefault(_d);
+
+	var _reactBootstrap = __webpack_require__(314);
+
+	var _reactRedux = __webpack_require__(251);
+
+	var _Constants = __webpack_require__(248);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _CircleSpan = __webpack_require__(559);
+
+	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
+
+	var _Label = __webpack_require__(560);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	var _GETNeighborTypes = __webpack_require__(566);
+
+	var _ContextMenuActions = __webpack_require__(563);
+
+	var _GETNeighbors = __webpack_require__(284);
+
+	var _SearchNeighborTypesActions = __webpack_require__(567);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -91691,53 +92041,262 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _class = function (_React$Component) {
-	    _inherits(_class, _React$Component);
+	var UPSTREAM = "UPSTREAM";
+	var DOWNSTREAM = "DOWNSTREAM";
 
-	    function _class() {
-	        _classCallCheck(this, _class);
+	var StatsBasedMenu = function (_React$Component) {
+	    _inherits(StatsBasedMenu, _React$Component);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+	    function StatsBasedMenu(props) {
+	        _classCallCheck(this, StatsBasedMenu);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StatsBasedMenu).call(this, props));
+
+	        _this.state = {
+	            width: 0,
+	            height: 0
+	        };
+	        return _this;
 	    }
 
-	    _createClass(_class, [{
-	        key: "setFilterValue",
-	        value: function setFilterValue(name, value) {
-	            this.props.setFilterValue(name, value);
+	    _createClass(StatsBasedMenu, [{
+	        key: "componentWillMount",
+	        value: function componentWillMount() {
+	            if (this.props.d !== this.props.node) {
+	                this.props.getNeighborTypes(this.props.d);
+	            }
 	        }
 	    }, {
-	        key: "renderCheckbox",
-	        value: function renderCheckbox(name, checked) {
-	            var _this2 = this;
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            var bbox = $("#" + "stats-menu")[0].getBoundingClientRect();;
 
-	            return _react2.default.createElement(
-	                "label",
-	                { className: "control-sidebar-subheading cursor", key: name },
-	                name,
-	                _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor",
-	                    checked: checked,
-	                    onChange: function onChange() {
-	                        return _this2.setFilterValue(name.toLowerCase(), !checked);
-	                    }
-	                })
-	            );
+	            this.setState({
+	                width: bbox.width,
+	                height: bbox.height
+	            });
+	        }
+	    }, {
+	        key: "setFilterDirection",
+	        value: function setFilterDirection(direction) {
+	            this.props.filterNeighborTypes(direction);
+	        }
+	    }, {
+	        key: "getNeighbors",
+	        value: function getNeighbors(typeKey) {
+	            var _props = this.props;
+	            var node = _props.node;
+	            var filterDirection = _props.filterDirection;
+
+	            var paramsString = "type=" + typeKey;
+	            if (filterDirection) {
+	                if (filterDirection === UPSTREAM) {
+	                    paramsString += "&downstream=false";
+	                } else if (filterDirection === DOWNSTREAM) {
+	                    paramsString += "&upstream=false";
+	                }
+	            }
+
+	            this.props.getNeighbors(node.type, node.key, paramsString);
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
+	            var _this2 = this;
+
+	            var _state = this.state;
+	            var width = _state.width;
+	            var height = _state.height;
+	            var data = this.props.data;
+
+
+	            var chart = undefined,
+	                count = 0;
+
+	            var translate = "translate(150,0)";
+
+	            if (width - 150 > 0 && data && data.length > 0) {
+	                (function () {
+	                    var max = _d2.default.max(data, function (entry) {
+	                        return entry.count;
+	                    });
+
+	                    var x = _d2.default.scale.linear().domain([0, max]).range([10, width - 150]);
+
+	                    chart = data.map(function (entry, index) {
+	                        return _react2.default.createElement(
+	                            "g",
+	                            { key: index },
+	                            _react2.default.createElement(
+	                                _reactBootstrap.OverlayTrigger,
+	                                { placement: "right", overlay: _react2.default.createElement(
+	                                        _reactBootstrap.Tooltip,
+	                                        { id: index },
+	                                        entry.node.name
+	                                    ) },
+	                                _react2.default.createElement(
+	                                    "g",
+	                                    {
+	                                        className: "tick axis",
+	                                        transform: "translate(0, " + (10.5 + 14 * index) + ")" },
+	                                    _react2.default.createElement(
+	                                        "text",
+	                                        {
+	                                            dy: ".32em", x: "-6", y: "0",
+	                                            style: { textAnchor: "end" },
+	                                            onDoubleClick: function onDoubleClick() {
+	                                                return _this2.getNeighbors(entry.node.key);
+	                                            }
+	                                        },
+	                                        entry.node.name.length > 24 ? entry.node.name.substring(0, 24) + "..." : entry.node.name
+	                                    )
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                _reactBootstrap.OverlayTrigger,
+	                                { placement: "right", overlay: _react2.default.createElement(
+	                                        _reactBootstrap.Tooltip,
+	                                        { id: index },
+	                                        entry.count
+	                                    ) },
+	                                _react2.default.createElement(
+	                                    "g",
+	                                    null,
+	                                    _react2.default.createElement("rect", {
+	                                        className: "bar",
+	                                        fill: _Constants2.default.getColor(entry.node.name),
+	                                        x: "0",
+	                                        y: 4 + index * 14,
+	                                        width: x(entry.count) - x(0) + 10,
+	                                        height: "13",
+	                                        onDoubleClick: function onDoubleClick() {
+	                                            return _this2.getNeighbors(entry.node.key);
+	                                        }
+	                                    }),
+	                                    _react2.default.createElement(
+	                                        "text",
+	                                        {
+	                                            transform: "translate(1, " + (14 + index * 14) + ")",
+	                                            fill: _Constants2.default.getContrastColor(_Constants2.default.getColor(entry.node.name)),
+	                                            onDoubleClick: function onDoubleClick() {
+	                                                return _this2.getNeighbors(entry.node.key);
+	                                            }
+	                                        },
+	                                        entry.count
+	                                    )
+	                                )
+	                            )
+	                        );
+	                    });
+
+	                    count = data.reduce(function (count, entry) {
+	                        if (entry.count) {
+	                            return count + entry.count;
+	                        } else {
+	                            return count;
+	                        }
+	                    }, 0);
+	                })();
+	            }
+
+	            var linkStyle = {
+	                color: "#444",
+	                boxShadow: "0 0 0 .03em #ddd",
+	                padding: "6px 12px"
+	            };
+
+	            var activeLinkStyle = {
+	                backgroundColor: "#2c3b41",
+	                color: "#fff",
+	                boxShadow: "0 0 0 .03em #2c3b41",
+	                pointerEvents: "none",
+	                cursor: "default",
+	                padding: "6px 12px"
+	            };
+
 	            return _react2.default.createElement(
 	                "div",
-	                { className: "" },
-	                this.renderCheckbox("Upstream", this.props.upstream),
-	                this.renderCheckbox("Downstream", this.props.downstream)
+	                { style: { width: "100%", height: "100%", padding: "10px" }, className: "dropdown-content-item" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { style: { float: "left", padding: "10px 0px" } },
+	                    count + " node" + (count !== 1 ? "s" : "") + " found."
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { style: { float: "right", padding: "10px 0px" } },
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick(direction) {
+	                                return _this2.setFilterDirection(null);
+	                            },
+	                            style: this.props.filterDirection === null ? activeLinkStyle : linkStyle,
+	                            title: "Show stats for both directions" },
+	                        _react2.default.createElement("span", { className: "fa fa-arrows-v" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick(direction) {
+	                                return _this2.setFilterDirection(UPSTREAM);
+	                            },
+	                            style: this.props.filterDirection === UPSTREAM ? activeLinkStyle : linkStyle,
+	                            title: "Show upstream" },
+	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-up" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "a",
+	                        { onClick: function onClick(direction) {
+	                                return _this2.setFilterDirection(DOWNSTREAM);
+	                            },
+	                            style: this.props.filterDirection === DOWNSTREAM ? activeLinkStyle : linkStyle,
+	                            title: "Show downstream" },
+	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-down" })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { id: "stats-menu" },
+	                    _react2.default.createElement(
+	                        "svg",
+	                        { width: "100%", height: data.length * 14 + 10 },
+	                        _react2.default.createElement(
+	                            "g",
+	                            { transform: translate },
+	                            chart
+	                        )
+	                    )
+	                )
 	            );
 	        }
 	    }]);
 
-	    return _class;
+	    return StatsBasedMenu;
 	}(_react2.default.Component);
 
-	exports.default = _class;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        status: state.contextmenu.status,
+	        data: state.contextmenu.neighborTypes.data,
+	        node: state.contextmenu.neighborTypes.node,
+	        filterDirection: state.contextmenu.filterDirection
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        getNeighbors: function getNeighbors(type, key, params) {
+	            dispatch((0, _GETNeighbors.getNeighbors)(type, key, params));
+	        },
+	        getNeighborTypes: function getNeighborTypes(node) {
+	            dispatch((0, _GETNeighborTypes.getNeighborTypes)(node));
+	        },
+	        filterNeighborTypes: function filterNeighborTypes(direction) {
+	            dispatch((0, _ContextMenuActions.filterNeighborTypes)(direction));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(StatsBasedMenu);
 
 /***/ },
 /* 871 */
@@ -91749,38 +92308,154 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRedux = __webpack_require__(251);
 
-	var _LaneActions = __webpack_require__(286);
+	var _reactBootstrap = __webpack_require__(314);
 
-	var _NeighborExpansion = __webpack_require__(872);
+	var _reactable = __webpack_require__(291);
 
-	var _NeighborExpansion2 = _interopRequireDefault(_NeighborExpansion);
+	var _Constants = __webpack_require__(248);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _CircleSpan = __webpack_require__(559);
+
+	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
+
+	var _Label = __webpack_require__(560);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	var _GETNeighbors = __webpack_require__(284);
+
+	var _GraphActionCreators = __webpack_require__(287);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ExpandConfiguredMenu = function (_React$Component) {
+	    _inherits(ExpandConfiguredMenu, _React$Component);
+
+	    function ExpandConfiguredMenu() {
+	        _classCallCheck(this, ExpandConfiguredMenu);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ExpandConfiguredMenu).apply(this, arguments));
+	    }
+
+	    _createClass(ExpandConfiguredMenu, [{
+	        key: "goUpstream",
+	        value: function goUpstream(key, category) {
+	            var paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&downstream=false&limit=500";
+
+	            this.props.getNeighbors(category, key, paramsString);
+	        }
+	    }, {
+	        key: "goDownstream",
+	        value: function goDownstream(key, category) {
+	            var paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&upstream=false&limit=500";
+
+	            this.props.getNeighbors(category, key, paramsString);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "dropdown-content-item dropdown-content-item-hover cursor", onClick: function onClick() {
+	                            return _this2.goUpstream(key, type);
+	                        } },
+	                    _react2.default.createElement("span", { className: "fa fa-long-arrow-up" }),
+	                    " Upstr. Feature Decomposition"
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "dropdown-content-item dropdown-content-item-hover cursor", onClick: function onClick() {
+	                            return _this2.goDownstream(key, type);
+	                        } },
+	                    _react2.default.createElement("span", { className: "fa fa-long-arrow-down" }),
+	                    " Downstr. Feature Decomposition"
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ExpandConfiguredMenu;
+	}(_react2.default.Component);
+
+	exports.default = ExpandConfiguredMenu;
+
+
 	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        limit: state.lanes.filters.limit
-	    };
+	    return {};
 	};
 
 	var mapDispatchProps = function mapDispatchProps(dispatch) {
 	    return {
-	        setFilterValue: function setFilterValue(name, value) {
-	            dispatch((0, _LaneActions.setFilterValue)(name, value));
+	        getNeighbors: function getNeighbors(category, key, paramsString) {
+	            dispatch((0, _GETNeighbors.getNeighbors)(category, key, paramsString));
+	        },
+	        expandNode: function expandNode(key, toNode) {
+	            dispatch((0, _GraphActionCreators.expandNode)(key, toNode));
 	        }
 	    };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(_NeighborExpansion2.default);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchProps)(ExpandConfiguredMenu);
 
 /***/ },
 /* 872 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var NEIGHBORS_SINGLE_FETCH_START = exports.NEIGHBORS_SINGLE_FETCH_START = "NEIGHBORS_SINGLE_FETCH_START";
+	var NEIGHBORS_SINGLE_FETCH_SUCCESS = exports.NEIGHBORS_SINGLE_FETCH_SUCCESS = "NEIGHBORS_SINGLE_FETCH_SUCCESS";
+	var NEIGHBORS_SINGLE_FETCH_ERROR = exports.NEIGHBORS_SINGLE_FETCH_ERROR = "NEIGHBORS_SINGLE_FETCH_ERROR";
+
+	var fetchNeighborsSingleStart = exports.fetchNeighborsSingleStart = function fetchNeighborsSingleStart(node) {
+	    return {
+	        type: NEIGHBORS_SINGLE_FETCH_START,
+	        node: node
+	    };
+	};
+
+	var fetchNeighborsSingleSuccess = exports.fetchNeighborsSingleSuccess = function fetchNeighborsSingleSuccess(node, data) {
+	    return {
+	        type: NEIGHBORS_SINGLE_FETCH_SUCCESS,
+	        data: data,
+	        node: node
+	    };
+	};
+
+	var fetchNeighborsSingleError = exports.fetchNeighborsSingleError = function fetchNeighborsSingleError(node, error) {
+	    return {
+	        type: NEIGHBORS_SINGLE_FETCH_ERROR,
+	        error: error,
+	        node: node
+	    };
+	};
+
+/***/ },
+/* 873 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -91788,28 +92463,53 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.searchNeighborsSingle = undefined;
 
-	var _react = __webpack_require__(1);
+	var _GETNeighborsSingle = __webpack_require__(874);
 
-	var _react2 = _interopRequireDefault(_react);
+	var searchNeighborsSingle = exports.searchNeighborsSingle = function searchNeighborsSingle(node) {
+	    return function (dispatch, getState) {
+	        if (!getState().contextmenu.searchNode.hasOwnProperty("key") || getState().contextmenu.searchNode.hasOwnProperty("key") && getState().contextmenu.searchNode.key !== node.key) {
+	            return dispatch((0, _GETNeighborsSingle.getNeighborsSingle)(node));
+	        } else {
+	            return dispatch(function () {});
+	        }
+	    };
+	};
 
-	var _Slider = __webpack_require__(780);
+/***/ },
+/* 874 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var _Slider2 = _interopRequireDefault(_Slider);
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.getNeighborsSingle = undefined;
+
+	var _axios = __webpack_require__(264);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _SearchNeighborsSingleActions = __webpack_require__(872);
+
+	var _Constants = __webpack_require__(248);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function (_ref) {
-	    var setFilterValue = _ref.setFilterValue;
-	    var limit = _ref.limit;
+	var getNeighborsSingle = exports.getNeighborsSingle = function getNeighborsSingle(node) {
+	    return function (dispatch) {
+	        dispatch((0, _SearchNeighborsSingleActions.fetchNeighborsSingleStart)(node));
 
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(_Slider2.default, { min: 0, max: 100, defaultValue: limit, onChange: function onChange(val) {
-	                return setFilterValue("limit", val);
-	            } })
-	    );
+	        return _axios2.default.get("/search/" + _Constants2.default.getEndpoint(node.type) + "/neighborsSingle/" + node.key).then(function (response) {
+	            dispatch((0, _SearchNeighborsSingleActions.fetchNeighborsSingleSuccess)(node, response.data));
+	        }).catch(function (response) {
+	            dispatch((0, _SearchNeighborsSingleActions.fetchNeighborsSingleError)(node, response.data));
+	        });
+	    };
 	};
 
 /***/ }

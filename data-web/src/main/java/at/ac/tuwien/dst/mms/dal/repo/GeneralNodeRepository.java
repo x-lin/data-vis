@@ -66,4 +66,14 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 			"RETURN p AS node, count(p) AS count, ['UPSTREAM', 'DOWNSTREAM'] AS relationship " +
 			"ORDER BY count DESC")
 	List<NeighborType> getNeighborTypes(String key);
+
+	@Query("MATCH (n)-[:NODE_TYPE]->(m) WHERE m.key = 'USER' OR m.key = 'BUG' RETURN n")
+	List<GeneralNode> getJiraStuff();
+
+	@Query("START p=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
+			"MATCH (p)<-[r]->(n:GeneralNode) " +
+			"OPTIONAL MATCH (n)-[]-(o:GeneralNode) " +
+			"RETURN DISTINCT n AS node, count(o) AS count, " +
+			"CASE WHEN (type(r)='DOWNSTREAM' AND (startnode(r) = p) = true) OR type(r)='PROJECT' THEN 'DOWNSTREAM' WHEN type(r)='UNCLASSIFIED' THEN null ELSE 'UPSTREAM' END AS direction")
+	Iterable<Map<String, Object>> findNeighborsSingle(String key);
 }

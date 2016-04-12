@@ -122,6 +122,10 @@ public class NeoRepositoryWriter implements DataWriter {
 				dbProject.setName(project.getName());
 			}
 
+			System.out.println("setting text index");
+
+			dbProject.setTextIndex(this.createIndices(project));
+
 			projectRepository.save(dbProject);
 		}
 		logger.info(projects.length + " projects saved.");
@@ -184,6 +188,8 @@ public class NeoRepositoryWriter implements DataWriter {
 
 			if(node.getProjectId() != null && project != null)  {
 				node.setProject(project);
+				node.setTextIndex(this.createIndices(node));
+
 				generalNodeRepository.save(node);
 			} else {
 				logger.warn("No project information found for general node.");
@@ -236,18 +242,17 @@ public class NeoRepositoryWriter implements DataWriter {
 
 	@Override
 	public void addIndex() {
-		this.addIndexForProjects();
-		logger.info("text index added for projects");
 		this.addIndexforGeneralNodes();
 		logger.info("text index added for general nodes");
 	}
 
 	@Transactional
 	private void addIndexforGeneralNodes() {
-		List<GeneralNode> nodes = generalNodeRepository.findAll(100000);
+		List<GeneralNode> nodes = generalNodeRepository.getJiraStuff();
 
 		for(GeneralNode node : nodes) {
-			if(node.getJiraId() == null) {
+
+			if(node.getTextIndex().size() == 0) {
 				Set<TextIndex> indices = new HashSet<>();
 				node.setTextIndex(indices);
 
@@ -257,9 +262,34 @@ public class NeoRepositoryWriter implements DataWriter {
 				indices.add(indexKey);
 				indices.add(indexName);
 			}
-		}
 
-		generalNodeRepository.save(nodes);
+			generalNodeRepository.save(node);
+		}
+	}
+
+	private Set<TextIndex> createIndices(Project project) {
+		Set<TextIndex> indices = new HashSet<>();
+
+		TextIndex indexKey = this.getTextIndex(project.getKey());
+		TextIndex indexName = this.getTextIndex(project.getName());
+
+		indices.add(indexKey);
+		indices.add(indexName);
+
+		return indices;
+	}
+
+	private Set<TextIndex> createIndices(GeneralNode node) {
+		Set<TextIndex> indices = new HashSet<>();
+		node.setTextIndex(indices);
+
+		TextIndex indexKey = this.getTextIndex(node.getKey());
+		TextIndex indexName = this.getTextIndex(node.getName());
+
+		indices.add(indexKey);
+		indices.add(indexName);
+
+		return indices;
 	}
 
 	private TextIndex getTextIndex(String key) {

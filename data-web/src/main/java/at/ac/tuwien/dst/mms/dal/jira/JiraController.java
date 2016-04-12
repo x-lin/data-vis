@@ -24,8 +24,9 @@ public class JiraController {
 
 	@RequestMapping(path="/tickets", method= RequestMethod.GET)
 	public void getTickets() {
-		//extractor.extractTickets("PVCSB");
+		extractor.extractTickets("PVCSB");
 		extractor.extractTickets("PVCSC");
+		extractor.extractTickets("PDIV");
 	}
 
 	/**

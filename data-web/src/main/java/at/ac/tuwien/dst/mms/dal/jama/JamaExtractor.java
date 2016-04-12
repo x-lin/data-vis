@@ -101,16 +101,15 @@ public class JamaExtractor {
 			}
 
 			dataWriter.storeProjects(projects);
-			this.extractItems(0);
 
-//			for (Project project : projects) {
-//				try {
-//
-//				} catch (Exception e) {
-//					logger.error("Exception occurred: ", e);
-//					output.write(e.getMessage());
-//				}
-//			}
+			for (Project project : projects) {
+				try {
+					this.extractItems(project.getJamaId());
+				} catch (Exception e) {
+					logger.error("Exception occurred: ", e);
+					output.write(e.getMessage());
+				}
+			}
 
 			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
 		} catch(IOException e) {

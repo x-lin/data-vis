@@ -31,7 +31,7 @@ class ContextMenuButtonMenu extends React.Component {
                 <span className="fa fa-remove" />
                 Remove
             </a>
-            <a type="button" className={`btn btn-app ${context === STATS_CONTEXT && "active"}`} title="Statistics" onClick={() => {activateContext(STATS_CONTEXT)}}>
+            <a type="button" className={`btn btn-app ${context === STATS_CONTEXT && "active"} disabled`} title="Statistics" onClick={() => {activateContext(STATS_CONTEXT)}}>
                 <span className="fa fa-bar-chart" />
                 Stats
             </a>

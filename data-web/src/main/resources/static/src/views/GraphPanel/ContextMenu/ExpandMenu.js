@@ -9,21 +9,22 @@ import Label from "../../widgets/Label";
 import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
 import { expandNode } from "../../../actions/action-creators/GraphActionCreators";
 
-const UPSTREAM = "UPSTREAM";
-const DOWNSTREAM = "DOWNSTREAM";
-const BOTH ="BOTH";
+import ExpandSearchMenu from "./ExpandSearchMenu";
+import ExpandStatsBasedMenu from "./ExpandStatsBasedMenu";
+import ExpandConfiguredMenu from "./ExpandConfiguredMenu";
+
+const PREDEFINED = "PREDEFINED";
+const STATSBASED = "STATSBASED";
+const SEARCH = "SEARCH";
 
 export default class ExpandMenu extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            clicked: BOTH
+            menu: PREDEFINED,
+            activeKey: 1
         }
-    }
-
-    setClicked(direction) {
-        this.setState({clicked: direction});
     }
 
     goUpstream(key, category) {
@@ -38,83 +39,42 @@ export default class ExpandMenu extends React.Component {
         this.props.getNeighbors(category, key, paramsString);
     }
 
+    setMenuType(number) {
+        switch(number) {
+            case 1:
+                this.setState({menu: PREDEFINED, activeKey: number});
+                break;
+            case 2:
+                this.setState({menu: STATSBASED, activeKey: number});
+                break;
+            case 3:
+                this.setState({menu: SEARCH, activeKey: number});
+                break;
+        }
+    }
+
+    renderMenu() {
+        if(this.state.menu === PREDEFINED) {
+            return <ExpandConfiguredMenu d={this.props.d} />;
+        } else if(this.state.menu === STATSBASED) {
+            return <ExpandStatsBasedMenu d={this.props.d} />;
+        } else if(this.state.menu === SEARCH) {
+            return <ExpandSearchMenu d={this.props.d} />;
+        }
+    }
+
     render() {
-        const { key, type } = this.props.d;
-
-        const prepared = this.props.coverage.data.map((coverage, index) => {
-            const count = coverage.testcases ? coverage.testcases.length : 0;
-
-            return (
-                <Tr key={index} className = { count ? "" :  "bg-red"}>
-                    <Td column="Name" value={coverage.name}>
-                        <a onClick={(key) => this.onClick(coverage.key)}>
-                            <CircleSpan radius="8px" color={Constants.getColor(coverage.type)} />&nbsp;
-                            {coverage.name}
-                        </a>
-                    </Td>
-                </Tr>
-            );
-        });
-
-        const linkStyle = {
-            color: "#444",
-            boxShadow: "0 0 0 .03em #ddd",
-            padding: "6px 12px"
-        };
-
-        const activeLinkStyle = {
-            backgroundColor: "#2c3b41",
-            color: "#fff",
-            boxShadow: "0 0 0 .03em #2c3b41",
-            pointerEvents: "none",
-            cursor: "default",
-            padding: "6px 12px"
-        };
-
         return (
             <div>
-
-                <Nav bsStyle="pills" justified activeKey={1} onSelect={(e) => {console.log(e)}}>
-                    <NavItem eventKey={1} title="Pre-configured expansion options">Configured</NavItem>
+                <Nav bsStyle="pills" justified activeKey={this.state.activeKey} onSelect={(number) => this.setMenuType(number)}>
+                    <NavItem eventKey={1} title="Pre-configured expansion options"><span style={{whiteSpace: "nowrap"}}>Pre-defined</span></NavItem>
                     <NavItem eventKey={2} title="Stats based expansions"><span style={{whiteSpace: "nowrap"}}>Stats-based</span></NavItem>
                     <NavItem eventKey={3} title="Search for single nodes">Search</NavItem>
                 </Nav>
-        <div className="dropdown">
-            <div className="dropdown-content-item">
-                <div style={{float: "right", padding: "10px 0px"}}>
-                    <a onClick={(direction) => this.setClicked(BOTH)}
-                       style={this.state.clicked === BOTH ? activeLinkStyle : linkStyle}
-                       title="Search in both directions">
-                        <span className="fa fa-arrows-v"/>
-                    </a>
-                    <a onClick={(direction) => this.setClicked(UPSTREAM)}
-                       style={this.state.clicked === UPSTREAM ? activeLinkStyle : linkStyle}
-                       title="Search upstream">
-                        <span className="fa fa-long-arrow-up"/>
-                    </a>
-                    <a onClick={(direction) => this.setClicked(DOWNSTREAM)}
-                       style={this.state.clicked === DOWNSTREAM ? activeLinkStyle : linkStyle}
-                       title="Search downstream">
-                        <span className="fa fa-long-arrow-down"/>
-                    </a>
+                <div className="dropdown">
+                    {this.renderMenu()}
                 </div>
-
-                {this.props.coverage &&
-                    <Table className="table table-sm table-hover contextmenu-table" itemsPerPage={10} sortable={["Name"]}
-                           filterable={['Name']} pageButtonLimit={5}>
-                        {prepared}
-                    </Table>
-                    }
             </div>
-
-            <div className="dropdown-content-item dropdown-content-item-hover cursor" onClick={() => this.goUpstream(key, type)}>
-                <span className="fa fa-long-arrow-up"/>&nbsp;Upstr. Feature Decomposition
-            </div>
-            <div className="dropdown-content-item dropdown-content-item-hover cursor" onClick={() => this.goDownstream(key, type)}>
-                <span className="fa fa-long-arrow-down"/>&nbsp;Downstr. Feature Decomposition
-            </div>
-        </div>
-</div>
         );
     }
 }
