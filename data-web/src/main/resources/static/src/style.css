@@ -342,3 +342,26 @@ a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-l
 .rc-slider-track {
     background-color: #2c3b41;
 }
+
+.vertical-label {
+    text-transform: uppercase;
+    -webkit-transform: rotate(-90deg);
+    -webkit-transform-origin: left bottom;
+    -moz-transform: rotate(-90deg);
+    -moz-transform-origin: left bottom;
+    -ms-transform: rotate(-90deg);
+    -ms-transform-origin: left bottom;
+    -o-transform: rotate(-90deg);
+    -o-transform-origin: left bottom;
+    transform: rotate(-90deg);
+    transform-origin: left bottom;
+    display:inline-block;
+    color: #FFFFFF;
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 190px;
+    font-size: 9px;
+    padding: 1px;
+    opacity: 0.8;
+    /*left: 30px;*/
+}

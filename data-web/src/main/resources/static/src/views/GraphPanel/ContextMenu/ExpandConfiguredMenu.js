@@ -23,6 +23,8 @@ export default class ExpandConfiguredMenu extends React.Component {
     }
 
     render() {
+        const {key, type} = this.props.d;
+
         return (
             <div>
                 <div className="dropdown-content-item dropdown-content-item-hover cursor" onClick={() => this.goUpstream(key, type)}>
