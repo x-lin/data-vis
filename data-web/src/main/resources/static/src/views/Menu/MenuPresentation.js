@@ -36,7 +36,7 @@ export default ( {
                     <Slider min={setting.min} max={setting.max}
                                 defaultValue={setting.value}
                                 step={setting.step}
-                                onChange={() => valueHandler(setting.name, value)}
+                                onChange={(value) => valueHandler(setting.name, value)}
                         /></div></Popover>}>
                         <a title={setting.description}>
                             <span className={setting.menuButton} />

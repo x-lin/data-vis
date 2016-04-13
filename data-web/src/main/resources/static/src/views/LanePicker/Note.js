@@ -5,20 +5,50 @@ import flow from "lodash/flow";
 import Constants from "../../config/Constants";
 import CircleSpan from "../widgets/CircleSpan";
 
+const design = ["PRD", "UC", "SSDD", "HWC_IF", "SUSY_IF", "STY", "UIDD", "CSC_IF", "SUSY_IF"];
+const test = ["BUG", "TC", "WP", "TA", "TTC", "TSC"];
+const requirement = ["SSS", "SRS", "FEAT", "CRQ", "BSR", "SAF", "SEC", "HRS", "REQ"];
+
+const getType = (key) => {
+    if(design.indexOf(key) !== -1) {
+        return "DES";
+    } else if(test.indexOf(key) !== -1) {
+        return "TES";
+    } else if(requirement.indexOf(key) !== -1) {
+        return "REQ";
+    } else {
+        return "OTH";
+    }
+};
+
+const getColor = (type) => {
+    switch(type) {
+        case "DES":
+            return "#999";
+        case "TES":
+            return "#555";
+        case "REQ":
+            return "#111";
+        case "OTH":
+            return "#DDD";
+    }
+}
+
 class Note extends React.Component {
 
   render() {
     const {connectDragSource, connectDropTarget, isDragging, editing} = this.props;
     // Pass through if we are editing
     const dragSource = editing ? a => a : connectDragSource;
-
+      const type = getType(this.props.note.key);
     return dragSource(connectDropTarget(
       <li style={{
         opacity: isDragging ? 0 : 1
       }} className={this.props.className}>
+          <span className="vertical-label" style={{backgroundColor: getColor(type)}}>{type}</span>
         <CircleSpan radius="8px" color={Constants.getColor(this.props.note.name)} />
         &nbsp;
-{this.props.note.name.length > 30 ? this.props.note.name.substring(0,30)+"..." : this.props.note.name}</li>
+{this.props.note.name.length > 29 ? this.props.note.name.substring(0,29)+"..." : this.props.note.name}</li>
     ));
   }
 }
