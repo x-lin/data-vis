@@ -1,8 +1,8 @@
 import axios from "axios";
 
-import { fetchNodeTypeStart, fetchNodeTypeError, fetchNodeTypeSuccess } from "../action-creators/FetchNodeTypeActionCreators";
+import { fetchNodeTypeStart, fetchNodeTypeError, fetchNodeTypeSuccess } from "../action-creators/FetchNodeTypeActions";
 import { initLane } from "../action-creators/LaneActions";
-import { initGraphFilter } from "../action-creators/GraphFilterActionCreators";
+import { initGraphFilter } from "../action-creators/GraphFilterActions";
 import Constants from "../../config/Constants";
 
 export const getNodeTypes = () => {

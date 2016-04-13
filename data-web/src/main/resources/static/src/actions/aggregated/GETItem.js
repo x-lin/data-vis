@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { fetchSuccess, fetchError, fetchStart } from "../action-creators/FetchActionCreators";
+import { fetchSuccess, fetchError, fetchStart } from "../action-creators/FetchActions";
 import Constants from "../../config/Constants";
 
 export const getItem = (category, key) => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { fetchStart, fetchSuccess, fetchError } from "../action-creators/FetchSchemaCreators";
+import { fetchStart, fetchSuccess, fetchError } from "../action-creators/FetchSchemaActions";
 import Constants from "../../config/Constants";
 
 export const getSchema = (key) => {

@@ -8,7 +8,7 @@ import ForceGraphComponent from "./ForceGraphComponent";
 import GraphLegendComponent from "./GraphLegendComponent";
 import "./GraphLegend.css";
 import "./ForceGraphComponent.css"
-import { undoGraphAction, redoGraphAction } from "../../actions/action-creators/GraphActionCreators";
+import { undoGraphAction, redoGraphAction } from "../../actions/action-creators/GraphActions";
 
 class UndoRedo extends React.Component {
     renderUndo() {

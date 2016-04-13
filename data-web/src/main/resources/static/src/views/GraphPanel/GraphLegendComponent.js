@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { toggleFilterItemCategory } from "../../actions/action-creators/GraphFilterActionCreators";
+import { toggleFilterItemCategory } from "../../actions/action-creators/GraphFilterActions";
 
 import GraphLegend from "./GraphLegend";
 

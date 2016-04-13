@@ -7,7 +7,7 @@ import Constants from "../../../config/Constants";
 import CircleSpan from "../../widgets/CircleSpan";
 import Label from "../../widgets/Label";
 import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
-import { expandNode } from "../../../actions/action-creators/GraphActionCreators";
+import { expandNode } from "../../../actions/action-creators/GraphActions";
 
 export default class ExpandConfiguredMenu extends React.Component {
     goUpstream(key, category) {

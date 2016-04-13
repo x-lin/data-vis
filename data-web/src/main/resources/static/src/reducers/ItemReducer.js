@@ -1,7 +1,7 @@
 import { ITEM_FETCH_START, ITEM_FETCH_SUCCESS, ITEM_FETCH_ERROR, ITEMS_CLEAR }
-    from "../actions/action-creators/FetchActionCreators";
+    from "../actions/action-creators/FetchActions";
 import { NEIGHBORS_FETCH_START }
-    from "../actions/action-creators/FetchNeighborsActionCreators";
+    from "../actions/action-creators/FetchNeighborsActions";
 import { SET_SEARCH_CATEGORY, SET_SEARCH_SELECTED_INDEX, SET_SEARCH_INPUT_VALUE }
     from "../actions/action-creators/SearchBarActions";
 

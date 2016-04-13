@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import FileLoader from "./FileLoader";
-import { updateGraph } from "../../actions/action-creators/GraphActionCreators";
+import { updateGraph } from "../../actions/action-creators/GraphActions";
 
 const mapStateToProps = (state) => {
     return {

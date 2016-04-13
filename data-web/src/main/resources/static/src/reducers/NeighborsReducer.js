@@ -1,5 +1,5 @@
 import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
-    from "../actions/action-creators/FetchNeighborsActionCreators";
+    from "../actions/action-creators/FetchNeighborsActions";
 
 export const neighborsReducer = (state = {data: []}, action) => {
     switch (action.type) {

@@ -59,7 +59,7 @@ class ContextMenu extends React.Component {
                     </div>
                 </Popover>
             </Overlay>
-        )
+        );
     }
 };
 

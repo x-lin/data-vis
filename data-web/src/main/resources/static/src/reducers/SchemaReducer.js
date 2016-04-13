@@ -1,5 +1,5 @@
 import { SCHEMA_FETCH_ERROR, SCHEMA_FETCH_START, SCHEMA_FETCH_SUCCESS }
-    from "../actions/action-creators/FetchSchemaCreators";
+    from "../actions/action-creators/FetchSchemaActions";
 
 export const schemaReducer = (state = {edges: [], nodes: []}, action) => {
     switch (action.type) {

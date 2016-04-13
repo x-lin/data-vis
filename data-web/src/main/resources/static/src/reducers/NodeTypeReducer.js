@@ -1,5 +1,5 @@
 import { NODETYPE_FETCH_START, NODETYPE_FETCH_ERROR, NODETYPE_FETCH_SUCCESS }
-    from "../actions/action-creators/FetchNodeTypeActionCreators";
+    from "../actions/action-creators/FetchNodeTypeActions";
 
 export default (state = {data: []}, action) => {
     switch (action.type) {

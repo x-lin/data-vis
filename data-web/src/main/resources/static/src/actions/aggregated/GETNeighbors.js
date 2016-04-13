@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { fetchNeighborsSuccess, fetchNeighborsError, fetchNeighborsStart } from "../action-creators/FetchNeighborsActionCreators";
+import { fetchNeighborsSuccess, fetchNeighborsError, fetchNeighborsStart } from "../action-creators/FetchNeighborsActions";
 import Constants from "../../config/Constants";
 import { PRIORITIZED, EXCLUDED } from "../../reducers/LaneReducer";
 

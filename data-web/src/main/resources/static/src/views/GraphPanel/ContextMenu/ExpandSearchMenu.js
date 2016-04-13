@@ -8,7 +8,7 @@ import CircleSpan from "../../widgets/CircleSpan";
 import Label from "../../widgets/Label";
 import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
 import { searchNeighborsSingle } from "../../../actions/aggregated/SearchNeighborsSingle";
-import { expandNode } from "../../../actions/action-creators/GraphActionCreators";
+import { expandNode } from "../../../actions/action-creators/GraphActions";
 import { NEIGHBORS_SINGLE_FETCH_ERROR, NEIGHBORS_SINGLE_FETCH_START, NEIGHBORS_SINGLE_FETCH_SUCCESS }
     from "../../../actions/action-creators/SearchNeighborsSingleActions";
 

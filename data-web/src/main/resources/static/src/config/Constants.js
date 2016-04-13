@@ -1,13 +1,13 @@
 import React from "react";
 
 import stringToColor from "../utils/stringToColor";
+import getContrastColor from "../utils/getContrastColor";
 import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageComponent";
 
 const Constants = {};
 
-Constants.getColor = (category) => {
-    return stringToColor(category);
-    //return Constants.colorMap[category] ? Constants.colorMap[category] : Constants.DEFAULT_COLOR;
+Constants.getColor = (string) => {
+    return stringToColor(string);
 };
 
 Constants.hexadecToDecimal = (hex) => {
@@ -15,11 +15,7 @@ Constants.hexadecToDecimal = (hex) => {
 };
 
 Constants.getContrastColor = (hexcode) => {
-    const red = Constants.hexadecToDecimal(hexcode.substring(1,3));
-    const green = Constants.hexadecToDecimal(hexcode.substring(3,5));
-    const blue = Constants.hexadecToDecimal(hexcode.substring(5,7));
-
-    return (red*0.299 + green*0.587 + blue*0.114) > 186 ? "#444" : "#FFF";
+    return getContrastColor(hexcode);
 };
 
 Constants.endpoints = {

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { getNeighbors } from "../../actions/aggregated/GETNeighbors";
-import { clearGraph, updateGraph } from "../../actions/action-creators/GraphActionCreators";
+import { clearGraph, updateGraph } from "../../actions/action-creators/GraphActions";
 import { DISABLED_OPACITY_VALUE, SET_NODE_POSITIONS_FIXED, ENABLE_SELECTION_OF_FILTERED_NODES, SHOW_EDGE_DIRECTION }
     from "../../config/Settings";
 

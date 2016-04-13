@@ -1,7 +1,7 @@
 import { SET_SIDEBAR_PANEL } from "../actions/action-creators/LayoutActions";
 import Constants from "../config/Constants";
 import { REHYDRATE } from "redux-persist/constants";
-
+import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageComponent";
 export default (
     state = {
         sidebar : {
@@ -46,7 +46,7 @@ const setSidebarVisibility = (state, action) => {
 
         return Object.assign({}, state, {
             sidebar: newSidebar
-        })
+        });
     } else {
         return state;
     }
@@ -71,7 +71,7 @@ const setSidebarObject = (state, action) => {
 
         return Object.assign({}, state, {
             sidebar: newSidebar
-        })
+        });
     } else {
         return state;
     }

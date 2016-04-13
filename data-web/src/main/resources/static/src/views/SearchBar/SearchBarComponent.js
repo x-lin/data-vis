@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { getItem } from "../../actions/aggregated/GETItem";
 import { searchNeighbors } from "../../actions/aggregated/SearchNeighbors";
-import { clearItems } from "../../actions/action-creators/FetchActionCreators";
+import { clearItems } from "../../actions/action-creators/FetchActions";
 import { setSearchCategory, setSearchInputValue, setSearchSelectedIndex}
     from "../../actions/action-creators/SearchBarActions";
 

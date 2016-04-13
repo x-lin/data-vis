@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import NewGraph from "./NewGraph";
-import { updateGraph, clearGraph } from "../../actions/action-creators/GraphActionCreators";
+import { updateGraph, clearGraph } from "../../actions/action-creators/GraphActions";
 
 const mapDispatchProps = (dispatch) => {
     return {

@@ -9,6 +9,10 @@ export const FORCE_GRAPH_LAYOUT = "FORCE_GRAPH_LAYOUT";
 export const CIRCULAR_LAYOUT = "CIRCULAR_LAYOUT";
 export const TREE_LAYOUT = "TREE_LAYOUT";
 
+export const DEFAULT_COLOR = "#999999";
+export const DEFAULT_BRIGHT_COLOR = "#FFFFFF";
+export const DEFAULT_DARK_COLOR = "#444444";
+
 export default [
     {
         name: ADD_TO_GRAPH_ON_SEARCH,

@@ -11,7 +11,7 @@ const initialState = {
     searchNode: {},
     searchStatus: null,
     filterDirection: null,
-    neighborTypes: {data: [], node: null, rawData: []},
+    neighborTypes: {data: [], node: null, rawData: []}
 };
 
 export default (state = initialState, action) => {
@@ -46,7 +46,7 @@ export default (state = initialState, action) => {
                 searchNode: action.node,
                 search: initialState.search,
                 searchStatus: NEIGHBORS_SINGLE_FETCH_START
-            })
+            });
         case NEIGHBORS_SINGLE_FETCH_SUCCESS:
             if(action.node.key === state.searchNode.key) {
                 return Object.assign({}, state, {
@@ -115,7 +115,7 @@ const prepare = (data, filterDirection) => {
                 } else {
                     return val;
                 }
-            }, -1)
+            }, -1);
 
             if(index === -1) {
                 array.push(current);
@@ -123,7 +123,7 @@ const prepare = (data, filterDirection) => {
                 array[index] = Object.assign({}, array[index], {
                     count: current.count + array[index].count,
                     relationship: array[index].relationship.concat(current.relationship[0])
-                })
+                });
             }
 
             array.sort((a,b) => {
@@ -132,5 +132,5 @@ const prepare = (data, filterDirection) => {
         }
 
         return array;
-    }, [])
-}
+    }, []);
+};

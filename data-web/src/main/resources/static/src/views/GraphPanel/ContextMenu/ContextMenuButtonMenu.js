@@ -6,7 +6,7 @@ import Constants from "../../../config/Constants";
 import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT } from "../../../actions/action-creators/ContextMenuActions";
 import { searchTestCoverage } from "../../../actions/aggregated/SearchTestCoverage";
 import { activateContext, deactivateContext, clearState } from "../../../actions/action-creators/ContextMenuActions";
-import { removeFromGraph } from "../../../actions/action-creators/GraphActionCreators";
+import { removeFromGraph } from "../../../actions/action-creators/GraphActions";
 import ContextMenuBuilder from "./ContextMenuBuilder";
 
 class ContextMenuButtonMenu extends React.Component {
