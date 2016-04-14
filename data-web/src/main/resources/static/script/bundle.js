@@ -24742,58 +24742,16 @@
 
 	var _localforage2 = _interopRequireDefault(_localforage);
 
-	var _ItemReducer = __webpack_require__(244);
+	var _combined = __webpack_require__(890);
 
-	var _NeighborsReducer = __webpack_require__(598);
-
-	var _GraphReducer = __webpack_require__(599);
-
-	var _SettingsReducer = __webpack_require__(603);
-
-	var _GraphFilterReducer = __webpack_require__(606);
-
-	var _SchemaReducer = __webpack_require__(607);
-
-	var _LaneReducer = __webpack_require__(288);
-
-	var _LaneReducer2 = _interopRequireDefault(_LaneReducer);
-
-	var _TestCoverageReducer = __webpack_require__(609);
-
-	var _TestCoverageReducer2 = _interopRequireDefault(_TestCoverageReducer);
-
-	var _NodeTypeReducer = __webpack_require__(610);
-
-	var _NodeTypeReducer2 = _interopRequireDefault(_NodeTypeReducer);
-
-	var _LayoutReducer = __webpack_require__(612);
-
-	var _LayoutReducer2 = _interopRequireDefault(_LayoutReducer);
-
-	var _ContextMenuReducer = __webpack_require__(613);
-
-	var _ContextMenuReducer2 = _interopRequireDefault(_ContextMenuReducer);
+	var _combined2 = _interopRequireDefault(_combined);
 
 	var _GETNodeTypes = __webpack_require__(614);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var createStore = exports.createStore = function createStore() {
-	    var allReducers = (0, _redux.combineReducers)({
-	        settings: _SettingsReducer.settingsReducer,
-	        items: _ItemReducer.itemReducer,
-	        neighbors: _NeighborsReducer.neighborsReducer,
-	        graph: _GraphReducer.graphReducer,
-	        visibilityFilters: _GraphFilterReducer.graphFilterReducer,
-	        schema: _SchemaReducer.schemaReducer,
-	        lanes: _LaneReducer2.default,
-	        coverage: _TestCoverageReducer2.default,
-	        nodeTypes: _NodeTypeReducer2.default,
-	        layout: _LayoutReducer2.default,
-	        contextmenu: _ContextMenuReducer2.default
-	    });
-
-	    return (0, _redux.createStore)(allReducers, (0, _redux.compose)((0, _reduxPersist.autoRehydrate)(), (0, _redux.applyMiddleware)(_reduxThunk2.default)));
+	    return (0, _redux.createStore)(_combined2.default, (0, _redux.compose)((0, _reduxPersist.autoRehydrate)(), (0, _redux.applyMiddleware)(_reduxThunk2.default)));
 	};
 
 	//Loading pre-configured data from server
@@ -33011,152 +32969,8 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)))
 
 /***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.itemReducer = undefined;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _FetchActions = __webpack_require__(245);
-
-	var _FetchNeighborsActions = __webpack_require__(247);
-
-	var _SearchBarActions = __webpack_require__(248);
-
-	var _Constants = __webpack_require__(249);
-
-	var _Constants2 = _interopRequireDefault(_Constants);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var itemReducer = exports.itemReducer = function itemReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
-	        data: [],
-	        error: {},
-	        selectedIndex: -1,
-	        item: {},
-	        type: "GeneralNode",
-	        value: ""
-	    } : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _SearchBarActions.SET_SEARCH_CATEGORY:
-	        case _SearchBarActions.SET_SEARCH_SELECTED_INDEX:
-	        case _SearchBarActions.SET_SEARCH_INPUT_VALUE:
-	            return searchBarReducer(state, action);
-
-	        case _FetchActions.ITEM_FETCH_START:
-	        case _FetchActions.ITEM_FETCH_SUCCESS:
-	        case _FetchActions.ITEM_FETCH_ERROR:
-	            return fetchItemsReducer(state, action);
-
-	        case _FetchActions.ITEMS_CLEAR:
-	            return _extends({}, state, {
-	                data: [],
-	                error: {},
-	                status: _FetchActions.ITEMS_CLEAR
-	            });
-	        case _FetchNeighborsActions.NEIGHBORS_FETCH_START:
-	            return _extends({}, state, {
-	                data: [],
-	                error: {}
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-	var searchBarReducer = function searchBarReducer(state, action) {
-	    switch (action.type) {
-	        case _SearchBarActions.SET_SEARCH_CATEGORY:
-	            return _extends({}, state, {
-	                category: action.value
-	            });
-	        case _SearchBarActions.SET_SEARCH_SELECTED_INDEX:
-	            return _extends({}, state, {
-	                selectedIndex: action.value,
-	                value: action.value >= 0 ? state.data[action.value].key : state.value
-	            });
-	        case _SearchBarActions.SET_SEARCH_INPUT_VALUE:
-	            return _extends({}, state, {
-	                value: action.value
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-	var fetchItemsReducer = function fetchItemsReducer(state, action) {
-	    switch (action.type) {
-	        case _FetchActions.ITEM_FETCH_START:
-	            return _extends({}, state, {
-	                status: _FetchActions.ITEM_FETCH_START,
-	                error: {}
-	            });
-	        case _FetchActions.ITEM_FETCH_SUCCESS:
-	            return _extends({}, state, {
-	                data: action.data,
-	                error: {},
-	                status: _FetchActions.ITEM_FETCH_SUCCESS
-	            });
-	        case _FetchActions.ITEM_FETCH_ERROR:
-	            return _extends({}, state, {
-	                data: [],
-	                error: action.error,
-	                status: _FetchActions.ITEM_FETCH_ERROR
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.clearItems = exports.fetchError = exports.fetchSuccess = exports.fetchStart = exports.ITEMS_CLEAR = exports.ITEM_FETCH_ERROR = exports.ITEM_FETCH_SUCCESS = exports.ITEM_FETCH_START = undefined;
-
-	var _createAction = __webpack_require__(246);
-
-	var _createAction2 = _interopRequireDefault(_createAction);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ITEM_FETCH_START = exports.ITEM_FETCH_START = "SCHEMA_FETCH_START";
-	var ITEM_FETCH_SUCCESS = exports.ITEM_FETCH_SUCCESS = "ITEM_FETCH_SUCCESS";
-	var ITEM_FETCH_ERROR = exports.ITEM_FETCH_ERROR = "ITEM_FETCH_ERROR";
-
-	var ITEMS_CLEAR = exports.ITEMS_CLEAR = "ITEMS_CLEAR";
-
-	var fetchStart = exports.fetchStart = function fetchStart(category, key) {
-	    return (0, _createAction2.default)(ITEM_FETCH_START, { category: category, key: key });
-	};
-
-	var fetchSuccess = exports.fetchSuccess = function fetchSuccess(category, key, data) {
-	    return (0, _createAction2.default)(ITEM_FETCH_SUCCESS, { category: category, data: data });
-	};
-
-	var fetchError = exports.fetchError = function fetchError(category, key, error) {
-	    return (0, _createAction2.default)(ITEM_FETCH_ERROR, { category: category, key: key, error: error });
-	};
-
-	var clearItems = exports.clearItems = function clearItems() {
-	    return (0, _createAction2.default)(ITEMS_CLEAR);
-	};
-
-/***/ },
+/* 244 */,
+/* 245 */,
 /* 246 */
 /***/ function(module, exports) {
 
@@ -33196,16 +33010,16 @@
 	var NEIGHBORS_FETCH_SUCCESS = exports.NEIGHBORS_FETCH_SUCCESS = "NEIGHBORS_FETCH_SUCCESS";
 	var NEIGHBORS_FETCH_ERROR = exports.NEIGHBORS_FETCH_ERROR = "NEIGHBORS_FETCH_ERROR";
 
-	var fetchNeighborsStart = exports.fetchNeighborsStart = function fetchNeighborsStart(category, key, id) {
-	    return (0, _createAction2.default)(NEIGHBORS_FETCH_START, { category: category, key: key, id: id });
+	var fetchNeighborsStart = exports.fetchNeighborsStart = function fetchNeighborsStart(category, key) {
+	    return (0, _createAction2.default)(NEIGHBORS_FETCH_START, { category: category, key: key });
 	};
 
-	var fetchNeighborsSuccess = exports.fetchNeighborsSuccess = function fetchNeighborsSuccess(category, key, neighbors, rerender, id) {
-	    return (0, _createAction2.default)(NEIGHBORS_FETCH_SUCCESS, { category: category, key: key, neighbors: neighbors, rerender: rerender, id: id });
+	var fetchNeighborsSuccess = exports.fetchNeighborsSuccess = function fetchNeighborsSuccess(category, key, neighbors) {
+	    return (0, _createAction2.default)(NEIGHBORS_FETCH_SUCCESS, { category: category, key: key, neighbors: neighbors });
 	};
 
-	var fetchNeighborsError = exports.fetchNeighborsError = function fetchNeighborsError(category, key, error, id) {
-	    return (0, _createAction2.default)(NEIGHBORS_FETCH_ERROR, { category: category, key: key, error: error, id: id });
+	var fetchNeighborsError = exports.fetchNeighborsError = function fetchNeighborsError(category, key, error) {
+	    return (0, _createAction2.default)(NEIGHBORS_FETCH_ERROR, { category: category, key: key, error: error });
 	};
 
 /***/ },
@@ -35541,7 +35355,7 @@
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
-	var _LaneReducer = __webpack_require__(288);
+	var _laneReducer = __webpack_require__(883);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35558,11 +35372,11 @@
 	            var priority = null;
 
 	            lanes.forEach(function (lane) {
-	                if (lane.key === _LaneReducer.PRIORITIZED) {
+	                if (lane.key === _laneReducer.PRIORITIZED) {
 	                    priority = lane.notes.reduce(function (prevVal, currentVal) {
 	                        return prevVal + "priority=" + currentVal.key + "&";
 	                    }, "");
-	                } else if (lane.key === _LaneReducer.EXCLUDED) {
+	                } else if (lane.key === _laneReducer.EXCLUDED) {
 	                    excluded = lane.notes.reduce(function (prevVal, currentVal) {
 	                        return prevVal + "excluded=" + currentVal.key + "&";
 	                    }, "");
@@ -35588,168 +35402,7 @@
 	};
 
 /***/ },
-/* 288 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.UNORDERED = exports.EXCLUDED = exports.PRIORITIZED = undefined;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _LaneActions = __webpack_require__(289);
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var PRIORITIZED = exports.PRIORITIZED = "PRIORITIZED";
-	var EXCLUDED = exports.EXCLUDED = "EXCLUDED";
-	var UNORDERED = exports.UNORDERED = "UNORDERED";
-
-	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
-	        lanes: [],
-	        filters: { "upstream": true, "downstream": true, "limit": 20 }
-	    } : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _LaneActions.INIT_LANE:
-	            var array = [PRIORITIZED, EXCLUDED, UNORDERED];
-	            var unordered = [];
-	            var excluded = [];
-
-	            action.data.forEach(function (note) {
-	                if (note.key !== "FLD" && note.key !== "SET") {
-	                    unordered.push(note);
-	                } else {
-	                    excluded.push(note);
-	                }
-	            });
-
-	            var cachedExcluded = state.lanes[EXCLUDED],
-	                cachedPrioritized = state.lanes[PRIORITIZED];
-
-	            var lanes2 = array.map(function (lane, index) {
-	                switch (lane) {
-	                    case EXCLUDED:
-	                        cachedExcluded = state.lanes[index];
-	                        return getInit(excluded, lane, index);
-	                    case UNORDERED:
-	                        return getInit(unordered, lane, index);
-	                    case PRIORITIZED:
-	                        cachedPrioritized = state.lanes[index];
-	                        return getInit([], lane, index);
-	                }
-	            });
-
-	            var addIfNotExists = function addIfNotExists(array, check) {
-	                check.forEach(function (item) {
-	                    for (var i = 0; i < array.length; i++) {
-	                        if (array[i].key === item.key) {
-	                            return;
-	                        }
-	                    }
-
-	                    array.push(item);
-	                });
-	            };
-
-	            var removeIfExists = function removeIfExists(array, check) {
-	                check.forEach(function (item, index) {
-	                    for (var i = 0; i < array.length; i++) {
-	                        if (array[i].key === item.key) {
-	                            return;
-	                        }
-	                    }
-
-	                    array.splice(index, 1);
-	                });
-	            };
-
-	            if (cachedExcluded) {
-	                addIfNotExists(lanes2[EXCLUDED], cachedExcluded);
-	                removeIfExists(lanes2[PRIORITIZED], cachedExcluded);
-	                removeIfExists(lanes2[UNORDERED], cachedExcluded);
-	            }
-
-	            if (cachedPrioritized) {
-	                addIfNotExists(lanes2[PRIORITIZED], cachedPrioritized);
-	                removeIfExists(lanes2[EXCLUDED], cachedPrioritized);
-	                removeIfExists(lanes2[UNORDERED], cachedPrioritized);
-	            }
-
-	            return _extends({}, state, {
-	                lanes: lanes2
-	            });
-	        case _LaneActions.ATTACH_TO_LANE:
-	            var lanes1 = state.lanes.map(function (lane) {
-	                if (lane.notes.indexOf(action.note) >= 0) {
-	                    lane.notes = lane.notes.filter(function (note) {
-	                        return note !== action.note;
-	                    });
-	                }
-
-	                if (lane.id === action.laneId) {
-	                    if (lane.notes.indexOf(action.note) >= 0) {
-	                        console.warn('Already attached note to lane', lane);
-	                    } else {
-	                        lane.notes = [action.note].concat(_toConsumableArray(lane.notes));
-	                    }
-	                }
-
-	                return lane;
-	            });
-
-	            return _extends({}, state, {
-	                lanes: lanes1
-	            });
-	        case _LaneActions.MOVE:
-	            var lanes = [].concat(_toConsumableArray(state.lanes));
-
-	            var sourceLane = lanes.filter(function (lane) {
-	                return lane.notes.indexOf(action.sourceNote) >= 0;
-	            })[0];
-	            var targetLane = lanes.filter(function (lane) {
-	                return lane.notes.indexOf(action.targetNote) >= 0;
-	            })[0];
-
-	            var sourceNoteIndex = sourceLane.notes.indexOf(action.sourceNote);
-	            var targetNoteIndex = targetLane.notes.indexOf(action.targetNote);
-
-	            //remove from source index
-	            sourceLane.notes = [].concat(_toConsumableArray(sourceLane.notes.slice(0, sourceNoteIndex)), _toConsumableArray(sourceLane.notes.slice(sourceNoteIndex + 1)));
-
-	            //add at target index
-	            targetLane.notes = [].concat(_toConsumableArray(targetLane.notes.slice(0, targetNoteIndex)), [action.sourceNote], _toConsumableArray(targetLane.notes.slice(targetNoteIndex)));
-
-	            return _extends({}, state, {
-	                lanes: lanes
-	            });
-	        case _LaneActions.SET_FILTER_VALUE:
-	            var filters = state.filters;
-	            filters[action.name] = action.value;
-
-	            return _extends({}, state, {
-	                filters: filters
-	            });
-
-	        default:
-	            return state;
-	    }
-	};
-
-	function getInit(data, lane, index) {
-	    return {
-	        id: index,
-	        key: lane,
-	        notes: data
-	    };
-	}
-
-/***/ },
+/* 288 */,
 /* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -70463,6 +70116,8 @@
 	});
 	exports.filterNeighborTypes = exports.clearState = exports.deactivateContext = exports.activateContext = exports.STATS_CONTEXT = exports.EXPAND_CONTEXT = exports.HIDE_CONTEXT = exports.FILTER_NEIGHBOR_TYPES = exports.CLEAR_STATE = exports.DEACTIVATE_CONTEXT = exports.ACTIVATE_CONTEXT = undefined;
 
+	var _Defaults = __webpack_require__(891);
+
 	var _createAction = __webpack_require__(246);
 
 	var _createAction2 = _interopRequireDefault(_createAction);
@@ -70492,7 +70147,7 @@
 
 	var filterNeighborTypes = exports.filterNeighborTypes = function filterNeighborTypes(filterDirection) {
 	    return (0, _createAction2.default)(FILTER_NEIGHBOR_TYPES, {
-	        filterDirection: filterDirection === "UPSTREAM" || filterDirection === "DOWNSTREAM" ? filterDirection : null
+	        filterDirection: filterDirection === _Defaults.UPSTREAM || filterDirection === _Defaults.DOWNSTREAM ? filterDirection : null
 	    });
 	};
 
@@ -73438,279 +73093,8 @@
 
 
 /***/ },
-/* 598 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.neighborsReducer = undefined;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _FetchNeighborsActions = __webpack_require__(247);
-
-	var neighborsReducer = exports.neighborsReducer = function neighborsReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { data: [] } : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _FetchNeighborsActions.NEIGHBORS_FETCH_START:
-	            return _extends({}, state, {
-	                status: _FetchNeighborsActions.NEIGHBORS_FETCH_START
-	            });
-	        case _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS:
-	            return _extends({}, state, {
-	                data: action.data,
-	                error: {},
-	                status: _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS
-	            });
-	        case _FetchNeighborsActions.NEIGHBORS_FETCH_ERROR:
-	            return _extends({}, state, {
-	                data: [],
-	                error: action.error,
-	                status: _FetchNeighborsActions.NEIGHBORS_FETCH_ERROR
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
-/* 599 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.graphReducer = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _GraphActions = __webpack_require__(290);
-
-	var _FetchNeighborsActions = __webpack_require__(247);
-
-	var _constants = __webpack_require__(600);
-
-	var _Constants = __webpack_require__(249);
-
-	var _Constants2 = _interopRequireDefault(_Constants);
-
-	var _Edge = __webpack_require__(601);
-
-	var _Edge2 = _interopRequireDefault(_Edge);
-
-	var _D3Graph = __webpack_require__(602);
-
-	var _D3Graph2 = _interopRequireDefault(_D3Graph);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var UNDO_LIMIT = 10;
-
-	function updateHistory(history, graph) {
-	    var past = undefined;
-
-	    if (history.length < UNDO_LIMIT) {
-	        past = [].concat(_toConsumableArray(history), [JSON.stringify(graph)]);
-	    } else {
-	        past = [].concat(_toConsumableArray(history.slice(1)), [JSON.stringify(graph)]);
-	    }
-
-	    return past;
-	}
-
-	var graphActions = [_GraphActions.CLEAR_GRAPH, _GraphActions.UPDATE_GRAPH, _GraphActions.ADD_TO_GRAPH, _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS, _GraphActions.REMOVE_FROM_GRAPH, _GraphActions.EXPAND_NODE];
-
-	var graphReducer = exports.graphReducer = function graphReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
-	        past: [],
-	        future: [],
-	        present: new _D3Graph2.default()
-	    } : arguments[0];
-	    var action = arguments[1];
-
-	    var past = undefined;
-
-	    if (graphActions.indexOf(action.type) > -1) {
-	        past = updateHistory(state.past, state.present);
-	    }
-
-	    switch (action.type) {
-	        case _GraphActions.CLEAR_GRAPH:
-	            reset(state.present);
-
-	            return _extends({}, state, {
-	                past: past,
-	                present: _extends({}, state.present),
-	                future: []
-	            });
-	        case _GraphActions.UPDATE_GRAPH:
-	            reset(state.present);
-	            push(state.present, action.data);
-
-	            return _extends({}, state, {
-	                past: past,
-	                present: _extends({}, state.present),
-	                future: []
-	            });
-	        case _GraphActions.REMOVE_FROM_GRAPH:
-	            var edges = state.present.edges;
-	            var nodes = state.present.nodes;
-
-	            for (var i = edges.length - 1; i >= 0; i--) {
-	                if (edges[i].source.key === action.key || edges[i].target.key === action.key) {
-	                    edges.splice(i, 1);
-	                }
-	            }
-
-	            for (var i = 0; i < nodes.length; i++) {
-	                if (nodes[i].key === action.key) {
-	                    nodes.splice(i, 1);
-	                    break;
-	                }
-	            }
-
-	            return _extends({}, state, {
-	                present: new _D3Graph2.default(nodes, edges),
-	                past: past,
-	                future: []
-	            });
-
-	        case _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS:
-	            if (action.neighbors.neighbors.length > 0 || state.present.nodes.length == 0) {
-	                var _ret = function () {
-	                    var graph = new _D3Graph2.default(state.present.nodes, state.present.edges, state.present.legend);
-
-	                    var node = action.neighbors.node;
-
-	                    var index = graph.addNode(node);
-
-	                    action.neighbors.neighbors.forEach(function (neighbor) {
-	                        var neighborIndex = graph.addNode(neighbor);
-	                        graph.addEdge(new _Edge2.default(index, neighborIndex, neighbor.direction));
-	                    });
-
-	                    return {
-	                        v: _extends({}, state, {
-	                            present: graph,
-	                            past: past,
-	                            future: []
-	                        })
-	                    };
-	                }();
-
-	                if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-	            } else {
-	                return state;
-	            }
-	        case _GraphActions.EXPAND_NODE:
-	            var graph1 = new _D3Graph2.default(state.present.nodes, state.present.edges, state.present.legend);
-
-	            var index = graph1.indexOfNode(action.key);
-	            var neighborIndex = graph1.addNode(action.toNode);
-	            graph1.addEdge(new _Edge2.default(index, neighborIndex, action.toNode.direction));
-
-	            return _extends({}, state, {
-	                present: graph1,
-	                past: past,
-	                future: []
-	            });
-	        case _GraphActions.UNDO_GRAPH_ACTION:
-	            var previous = prepare(state.past[state.past.length - 1]);
-	            var snapshot1 = JSON.stringify(state.present);
-
-	            reset(state.present);
-	            push(state.present, previous);
-
-	            return {
-	                past: state.past.slice(0, state.past.length - 1),
-	                present: _extends({}, state.present),
-	                future: [snapshot1].concat(_toConsumableArray(state.future))
-	            };
-	        case _GraphActions.REDO_GRAPH_ACTION:
-	            var next = prepare(state.future[0]);
-	            var snapshot = JSON.stringify(state.present);
-
-	            reset(state.present);
-	            push(state.present, next);
-
-	            return {
-	                past: [].concat(_toConsumableArray(state.past), [snapshot]),
-	                present: _extends({}, state.present),
-	                future: state.future.slice(1)
-	            };
-	        case _constants.REHYDRATE:
-	            var graph = action.payload.graph;
-
-	            console.log(action.payload);
-	            if (graph) {
-	                push(state.present, prepareWithoutParse(graph.present));
-
-	                return {
-	                    past: graph.past,
-	                    future: graph.future,
-	                    present: _extends({}, state.present)
-	                };
-	            } else {
-	                return state;
-	            }
-	        default:
-	            return state;
-	    }
-	};
-
-	function push(graph, newGraph) {
-	    if (newGraph) {
-	        Array.prototype.push.apply(graph.nodes, newGraph.nodes);
-	        Array.prototype.push.apply(graph.edges, newGraph.edges);
-	        Array.prototype.push.apply(graph.legend, new _D3Graph2.default(newGraph.nodes, newGraph.edges).legend);
-	    }
-	}
-
-	function reset(graph) {
-	    graph.nodes.length = 0;
-	    graph.edges.length = 0;
-	    graph.legend.length = 0;
-	}
-
-	function prepareWithoutParse(graph) {
-	    //set isFixed value, as it's not saved in file
-	    graph.nodes = graph.nodes.map(function (node, index) {
-	        node.isFixed = node.fixed && node.fixed == 1 ? true : false;
-	        return node;
-	    });
-
-	    //resetting edges to indices, otherwise D3 will not recognize and render the edges
-	    //this way D3 creates the references to the nodes itself
-	    graph.edges = graph.edges.map(function (edge, index) {
-	        if (typeof edge.source.index !== "undefined" && typeof edge.target.index !== "undefined") {
-	            edge.source = edge.source.index;
-	            edge.target = edge.target.index;
-	        }
-
-	        return edge;
-	    });
-
-	    return graph;
-	}
-
-	function prepare(graph) {
-	    graph = JSON.parse(graph);
-
-	    return prepareWithoutParse(graph);
-	}
-
-/***/ },
+/* 598 */,
+/* 599 */,
 /* 600 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -73872,71 +73256,7 @@
 	exports.default = _class;
 
 /***/ },
-/* 603 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.settingsReducer = undefined;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _SettingsActions = __webpack_require__(604);
-
-	var _Settings = __webpack_require__(251);
-
-	var _Settings2 = _interopRequireDefault(_Settings);
-
-	var _SearchHelpers = __webpack_require__(291);
-
-	var _SearchActions = __webpack_require__(605);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var settingsReducer = exports.settingsReducer = function settingsReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? _Settings2.default : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _SettingsActions.TOGGLE_SETTING:
-	            return toggleSetting(state, action);
-	        case _SettingsActions.SET_SETTING_VALUE:
-	            return setSettingValue(state, action);
-	        default:
-	            return state;
-	    }
-	};
-
-	var toggleSetting = function toggleSetting(state, action) {
-	    var index = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state, action.name, "name");
-	    var newVal = _extends(state[index]);
-	    newVal.value = !newVal.value;
-
-	    if (index !== -1) {
-	        return [].concat(_toConsumableArray(state.slice(0, index)), [newVal], _toConsumableArray(state.slice(index + 1)));
-	    } else {
-	        return state;
-	    }
-	};
-
-	var setSettingValue = function setSettingValue(state, action) {
-	    var index = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state, action.name, "name");
-	    var newVal = _extends(state[index]);
-	    console.log(state);
-	    if (index !== -1 && newVal.value != action.value) {
-	        newVal.value = action.value;
-	        return [].concat(_toConsumableArray(state.slice(0, index)), [newVal], _toConsumableArray(state.slice(index + 1)));
-	    } else {
-	        return state;
-	    }
-	};
-
-/***/ },
+/* 603 */,
 /* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -73965,276 +73285,12 @@
 	};
 
 /***/ },
-/* 605 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.searchNeighborsStart = exports.SEARCH_NEIGHBORS_START = undefined;
-
-	var _createAction = __webpack_require__(246);
-
-	var _createAction2 = _interopRequireDefault(_createAction);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var SEARCH_NEIGHBORS_START = exports.SEARCH_NEIGHBORS_START = "SEARCH_NEIGHBORS_START";
-
-	var searchNeighborsStart = exports.searchNeighborsStart = function searchNeighborsStart(category, key) {
-	    return (0, _createAction2.default)(SEARCH_NEIGHBORS_START, { category: category, key: key });
-	};
-
-/***/ },
-/* 606 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.graphFilterReducer = undefined;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _GraphActions = __webpack_require__(290);
-
-	var _FetchNeighborsActions = __webpack_require__(247);
-
-	var _GraphFilterActions = __webpack_require__(589);
-
-	var _SearchHelpers = __webpack_require__(291);
-
-	var _Constants = __webpack_require__(249);
-
-	var _Constants2 = _interopRequireDefault(_Constants);
-
-	var _ReduxStore = __webpack_require__(216);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	var graphFilterReducer = exports.graphFilterReducer = function graphFilterReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _GraphFilterActions.TOGGLE_FILTER_ITEM_CATEGORY:
-	            if (state.hasOwnProperty(action.category)) {
-	                return _extends({}, state, _defineProperty({}, action.category, !state[action.category]));
-	            } else {
-	                return _extends({}, state, _defineProperty({}, action.category, false));
-	            }
-	        case _GraphFilterActions.INIT_GRAPH_FILTER:
-	            return action.data.reduce(function (previous, currentVal) {
-	                previous[currentVal.name] = true;
-	                return previous;
-	            }, {});
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
-/* 607 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.schemaReducer = undefined;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _FetchSchemaActions = __webpack_require__(608);
-
-	var schemaReducer = exports.schemaReducer = function schemaReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { edges: [], nodes: [] } : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _FetchSchemaActions.SCHEMA_FETCH_START:
-	            return _extends({}, state, {
-	                status: _FetchSchemaActions.SCHEMA_FETCH_START
-	            });
-	        case _FetchSchemaActions.SCHEMA_FETCH_SUCCESS:
-	            state.nodes.length = 0;
-	            state.edges.length = 0;
-
-	            var _action$data = action.data;
-	            var nodes = _action$data.nodes;
-	            var edges = _action$data.edges;
-
-	            var nodeIndex = {};
-	            var edgeTotal = calculateTotalSize(edges);
-	            var nodeTotal = calculateTotalSize(nodes);
-
-	            nodes.forEach(function (node, index) {
-	                nodeIndex[node.key] = index;
-	                node.total = nodeTotal;
-	            });
-
-	            edges.forEach(function (edge) {
-	                edge.source = nodeIndex[edge.source];
-	                edge.target = nodeIndex[edge.target];
-	                edge.total = edgeTotal;
-	            });
-
-	            Array.prototype.push.apply(state.nodes, action.data.nodes);
-	            Array.prototype.push.apply(state.edges, action.data.edges);
-
-	            return _extends({}, state, {
-	                error: {},
-	                status: _FetchSchemaActions.SCHEMA_FETCH_SUCCESS
-	            });
-	        case _FetchSchemaActions.SCHEMA_FETCH_ERROR:
-	            return _extends({}, state, {
-	                data: [],
-	                error: action.error,
-	                status: _FetchSchemaActions.SCHEMA_FETCH_ERROR
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-	function calculateTotalSize(array) {
-	    return array.reduce(function (newVal, obj) {
-	        return obj.count + newVal;
-	    }, 0);
-	}
-
-/***/ },
-/* 608 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.clearSchemas = exports.fetchError = exports.fetchSuccess = exports.fetchStart = exports.SCHEMAS_CLEAR = exports.SCHEMA_FETCH_ERROR = exports.SCHEMA_FETCH_SUCCESS = exports.SCHEMA_FETCH_START = undefined;
-
-	var _createAction = __webpack_require__(246);
-
-	var _createAction2 = _interopRequireDefault(_createAction);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var SCHEMA_FETCH_START = exports.SCHEMA_FETCH_START = "SCHEMA_FETCH_START";
-	var SCHEMA_FETCH_SUCCESS = exports.SCHEMA_FETCH_SUCCESS = "SCHEMA_FETCH_SUCCESS";
-	var SCHEMA_FETCH_ERROR = exports.SCHEMA_FETCH_ERROR = "SCHEMA_FETCH_ERROR";
-
-	var SCHEMAS_CLEAR = exports.SCHEMAS_CLEAR = "SCHEMAS_CLEAR";
-
-	var fetchStart = exports.fetchStart = function fetchStart(key) {
-	    return (0, _createAction2.default)(SCHEMA_FETCH_START, { key: key });
-	};
-
-	var fetchSuccess = exports.fetchSuccess = function fetchSuccess(key, data) {
-	    return (0, _createAction2.default)(SCHEMA_FETCH_SUCCESS, { data: data });
-	};
-
-	var fetchError = exports.fetchError = function fetchError(key, error) {
-	    return (0, _createAction2.default)(SCHEMA_FETCH_ERROR, { key: key, error: error });
-	};
-
-	var clearSchemas = exports.clearSchemas = function clearSchemas() {
-	    return (0, _createAction2.default)(SCHEMAS_CLEAR);
-	};
-
-/***/ },
-/* 609 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _TestCoverageActions = __webpack_require__(284);
-
-	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
-	        name: null,
-	        data: []
-	    } : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _TestCoverageActions.TEST_COVERAGE_FETCH_START:
-	            return _extends({}, state, {
-	                name: action.name,
-	                data: [],
-	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_START
-	            });
-	        case _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS:
-	            return _extends({}, state, {
-	                data: action.data,
-	                error: {},
-	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS
-	            });
-	        case _TestCoverageActions.TEST_COVERAGE_FETCH_ERROR:
-	            return _extends({}, state, {
-	                data: [],
-	                error: action.error,
-	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_ERROR
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
-/* 610 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _FetchNodeTypeActions = __webpack_require__(611);
-
-	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { data: [] } : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _FetchNodeTypeActions.NODETYPE_FETCH_START:
-	            return _extends({}, state, {
-	                status: _FetchNodeTypeActions.NODETYPE_FETCH_START
-	            });
-	        case _FetchNodeTypeActions.NODETYPE_FETCH_SUCCESS:
-	            return _extends({}, state, {
-	                data: action.data,
-	                error: {},
-	                status: _FetchNodeTypeActions.NODETYPE_FETCH_SUCCESS
-	            });
-	        case _FetchNodeTypeActions.NODETYPE_FETCH_ERROR:
-	            return _extends({}, state, {
-	                data: [],
-	                error: action.error,
-	                status: _FetchNodeTypeActions.NODETYPE_FETCH_ERROR
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */,
 /* 611 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -74268,257 +73324,8 @@
 	};
 
 /***/ },
-/* 612 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _LayoutActions = __webpack_require__(285);
-
-	var _Constants = __webpack_require__(249);
-
-	var _Constants2 = _interopRequireDefault(_Constants);
-
-	var _constants = __webpack_require__(600);
-
-	var _TestCoverageComponent = __webpack_require__(253);
-
-	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
-	        sidebar: {
-	            obj: null,
-	            visible: false,
-	            key: null,
-	            sidePanels: _Constants2.default.sidePanels
-	        }
-
-	    } : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _LayoutActions.SET_SIDEBAR_PANEL:
-	            state = setSidebarVisibility(state, action);
-	            state = setSidebarObject(state, action);
-
-	            return state;
-	        case _constants.REHYDRATE:
-	            state.sidebar.sidePanels.forEach(function (sidePanel) {
-	                if (action.payload.layout && action.payload.layout.sidebar.key === sidePanel.key) {
-	                    state.sidebar = _extends({}, state.sidebar, {
-	                        obj: sidePanel.obj,
-	                        key: sidePanel.key,
-	                        visible: action.payload.layout.sidebar.visible
-	                    });
-	                }
-	            });
-
-	            return _extends({}, state, {
-	                sidebar: state.sidebar
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-	var setSidebarVisibility = function setSidebarVisibility(state, action) {
-	    if (state.sidebar.visible !== action.visible) {
-	        var newSidebar = _extends({}, state.sidebar, {
-	            visible: action.visible
-	        });
-
-	        return _extends({}, state, {
-	            sidebar: newSidebar
-	        });
-	    } else {
-	        return state;
-	    }
-	};
-
-	var setSidebarObject = function setSidebarObject(state, action) {
-	    if (action.key && state.sidebar.key !== action.key) {
-	        var panelObject = null;
-	        var panels = state.sidebar.sidePanels;
-
-	        for (var i = 0; i < panels.length; i++) {
-	            if (panels[i].key === action.key) {
-	                panelObject = panels[i].obj;
-	                break;
-	            }
-	        }
-
-	        var newSidebar = _extends({}, state.sidebar, {
-	            key: action.key,
-	            obj: panelObject
-	        });
-
-	        return _extends({}, state, {
-	            sidebar: newSidebar
-	        });
-	    } else {
-	        return state;
-	    }
-	};
-
-/***/ },
-/* 613 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _ContextMenuActions = __webpack_require__(565);
-
-	var _SearchNeighborTypesActions = __webpack_require__(573);
-
-	var _SearchNeighborsSingleActions = __webpack_require__(570);
-
-	var initialState = {
-	    context: _ContextMenuActions.EXPAND_CONTEXT,
-	    search: [],
-	    searchNode: {},
-	    searchStatus: null,
-	    filterDirection: null,
-	    neighborTypes: { data: [], node: null, rawData: [] }
-	};
-
-	exports.default = function () {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
-	    var action = arguments[1];
-
-
-	    switch (action.type) {
-	        case _ContextMenuActions.ACTIVATE_CONTEXT:
-	            if (action.context !== state.context) {
-	                return _extends({}, state, {
-	                    context: action.context
-	                });
-	            } else {
-	                return state;
-	            }
-	        case _ContextMenuActions.DEACTIVATE_CONTEXT:
-	            return _extends({}, state, {
-	                context: null
-	            });
-	        case _ContextMenuActions.CLEAR_STATE:
-	            return _extends({}, initialState);
-	        case _ContextMenuActions.FILTER_NEIGHBOR_TYPES:
-	            //for stats
-	            var neighborTypes = state.neighborTypes;
-	            neighborTypes.data = prepare(neighborTypes.rawData, action.filterDirection);
-
-	            return _extends({}, state, {
-	                neighborTypes: neighborTypes,
-	                filterDirection: action.filterDirection
-	            });
-	        case _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_START:
-	            //for search
-	            return _extends({}, state, {
-	                searchNode: action.node,
-	                search: initialState.search,
-	                searchStatus: _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_START
-	            });
-	        case _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS:
-	            if (action.node.key === state.searchNode.key) {
-	                return _extends({}, state, {
-	                    search: action.data,
-	                    searchStatus: _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS
-	                });
-	            } else {
-	                return state;
-	            }
-	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_ERROR:
-	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START:
-	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_SUCCESS:
-	            return neighborTypesReducer(state, action);
-	        default:
-	            return state;
-	    }
-	};
-
-	var neighborTypesReducer = function neighborTypesReducer(state, action) {
-	    var neighborTypes = undefined;
-
-	    switch (action.type) {
-	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START:
-	            neighborTypes = _extends({}, state.neighborTypes, {
-	                status: _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START,
-	                node: action.node
-	            });
-
-	            return _extends({}, state, {
-	                neighborTypes: neighborTypes
-	            });
-	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_SUCCESS:
-	            neighborTypes = _extends({}, state.neighborTypes, {
-	                rawData: action.data,
-	                data: prepare(action.data),
-	                error: {},
-	                status: _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_SUCCESS
-	            });
-
-	            return _extends({}, state, {
-	                neighborTypes: neighborTypes
-	            });
-	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_ERROR:
-	            neighborTypes = _extends({}, state, {
-	                data: [],
-	                error: action.error,
-	                status: _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_ERROR
-	            });
-
-	            return _extends({}, state.neighborTypes, {
-	                neighborTypes: neighborTypes
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-	var prepare = function prepare(data, filterDirection) {
-	    return data.reduce(function (array, current) {
-	        if (filterDirection && current.relationship.indexOf(filterDirection) !== -1 || !filterDirection) {
-	            var index = array.reduce(function (val, entry, index) {
-	                if (val === -1 && entry.node.key === current.node.key) {
-	                    return index;
-	                } else {
-	                    return val;
-	                }
-	            }, -1);
-
-	            if (index === -1) {
-	                array.push(current);
-	            } else {
-	                array[index] = _extends({}, array[index], {
-	                    count: current.count + array[index].count,
-	                    relationship: array[index].relationship.concat(current.relationship[0])
-	                });
-	            }
-
-	            array.sort(function (a, b) {
-	                return b.count - a.count;
-	            });
-	        }
-
-	        return array;
-	    }, []);
-	};
-
-/***/ },
+/* 612 */,
+/* 613 */,
 /* 614 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -89833,7 +88640,7 @@
 
 	var _SearchNeighbors = __webpack_require__(286);
 
-	var _FetchActions = __webpack_require__(245);
+	var _FetchItemActions = __webpack_require__(877);
 
 	var _SearchBarActions = __webpack_require__(248);
 
@@ -89862,7 +88669,7 @@
 	            dispatch((0, _GETItem.getItem)(category, key));
 	        },
 	        clearAllItems: function clearAllItems() {
-	            dispatch((0, _FetchActions.clearItems)());
+	            dispatch((0, _FetchItemActions.clearItems)());
 	        },
 	        setSearchCategory: function setSearchCategory(value) {
 	            dispatch((0, _SearchBarActions.setSearchCategory)(value));
@@ -89893,7 +88700,7 @@
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _FetchActions = __webpack_require__(245);
+	var _FetchItemActions = __webpack_require__(877);
 
 	var _Constants = __webpack_require__(249);
 
@@ -89904,12 +88711,12 @@
 	var getItem = exports.getItem = function getItem(category, key) {
 	    var endpoint = _Constants2.default.endpoints[category];
 	    return function (dispatch) {
-	        dispatch((0, _FetchActions.fetchStart)(category, key));
+	        dispatch((0, _FetchItemActions.fetchStart)(category, key));
 
 	        return _axios2.default.get("/search/" + endpoint + "/startLike/" + key + "?limit=10").then(function (response) {
-	            dispatch((0, _FetchActions.fetchSuccess)(category, key, response.data));
+	            dispatch((0, _FetchItemActions.fetchSuccess)(category, key, response.data));
 	        }).catch(function (response) {
-	            dispatch((0, _FetchActions.fetchError)(category, key, response.data));
+	            dispatch((0, _FetchItemActions.fetchError)(category, key, response.data));
 	        });
 	    };
 	};
@@ -92596,6 +91403,1138 @@
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
+
+/***/ },
+/* 877 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.clearItems = exports.fetchError = exports.fetchSuccess = exports.fetchStart = exports.ITEMS_CLEAR = exports.ITEM_FETCH_ERROR = exports.ITEM_FETCH_SUCCESS = exports.ITEM_FETCH_START = undefined;
+
+	var _createAction = __webpack_require__(246);
+
+	var _createAction2 = _interopRequireDefault(_createAction);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ITEM_FETCH_START = exports.ITEM_FETCH_START = "SCHEMA_FETCH_START";
+	var ITEM_FETCH_SUCCESS = exports.ITEM_FETCH_SUCCESS = "ITEM_FETCH_SUCCESS";
+	var ITEM_FETCH_ERROR = exports.ITEM_FETCH_ERROR = "ITEM_FETCH_ERROR";
+
+	var ITEMS_CLEAR = exports.ITEMS_CLEAR = "ITEMS_CLEAR";
+
+	var fetchStart = exports.fetchStart = function fetchStart(category, key) {
+	    return (0, _createAction2.default)(ITEM_FETCH_START, { category: category, key: key });
+	};
+
+	var fetchSuccess = exports.fetchSuccess = function fetchSuccess(category, key, data) {
+	    return (0, _createAction2.default)(ITEM_FETCH_SUCCESS, { category: category, data: data, key: key });
+	};
+
+	var fetchError = exports.fetchError = function fetchError(category, key, error) {
+	    return (0, _createAction2.default)(ITEM_FETCH_ERROR, { category: category, key: key, error: error });
+	};
+
+	var clearItems = exports.clearItems = function clearItems() {
+	    return (0, _createAction2.default)(ITEMS_CLEAR);
+	};
+
+/***/ },
+/* 878 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.searchNeighborsStart = exports.SEARCH_NEIGHBORS_START = undefined;
+
+	var _createAction = __webpack_require__(246);
+
+	var _createAction2 = _interopRequireDefault(_createAction);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SEARCH_NEIGHBORS_START = exports.SEARCH_NEIGHBORS_START = "SEARCH_NEIGHBORS_START";
+
+	var searchNeighborsStart = exports.searchNeighborsStart = function searchNeighborsStart(category, key) {
+	    return (0, _createAction2.default)(SEARCH_NEIGHBORS_START, { category: category, key: key });
+	};
+
+/***/ },
+/* 879 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _ContextMenuActions = __webpack_require__(565);
+
+	var _SearchNeighborTypesActions = __webpack_require__(573);
+
+	var _SearchNeighborsSingleActions = __webpack_require__(570);
+
+	var initialState = {
+	    context: _ContextMenuActions.EXPAND_CONTEXT,
+	    search: [],
+	    searchNode: {},
+	    searchStatus: null,
+	    filterDirection: null,
+	    neighborTypes: { data: [], node: null, rawData: [] }
+	};
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	    var action = arguments[1];
+
+
+	    switch (action.type) {
+	        case _ContextMenuActions.ACTIVATE_CONTEXT:
+	            if (action.context !== state.context) {
+	                return _extends({}, state, {
+	                    context: action.context
+	                });
+	            } else {
+	                return state;
+	            }
+	        case _ContextMenuActions.DEACTIVATE_CONTEXT:
+	            return _extends({}, state, {
+	                context: null
+	            });
+	        case _ContextMenuActions.CLEAR_STATE:
+	            return _extends({}, initialState);
+	        case _ContextMenuActions.FILTER_NEIGHBOR_TYPES:
+	            //for stats
+	            var neighborTypes = state.neighborTypes;
+	            neighborTypes.data = prepare(neighborTypes.rawData, action.filterDirection);
+
+	            return _extends({}, state, {
+	                neighborTypes: neighborTypes,
+	                filterDirection: action.filterDirection
+	            });
+	        case _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_START:
+	            //for search
+	            return _extends({}, state, {
+	                searchNode: action.node,
+	                search: initialState.search,
+	                searchStatus: _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_START
+	            });
+	        case _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS:
+	            if (action.node.key === state.searchNode.key) {
+	                return _extends({}, state, {
+	                    search: action.data,
+	                    searchStatus: _SearchNeighborsSingleActions.NEIGHBORS_SINGLE_FETCH_SUCCESS
+	                });
+	            } else {
+	                return state;
+	            }
+	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_ERROR:
+	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START:
+	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_SUCCESS:
+	            return neighborTypesReducer(state, action);
+	        default:
+	            return state;
+	    }
+	};
+
+	var neighborTypesReducer = function neighborTypesReducer(state, action) {
+	    var neighborTypes = undefined;
+
+	    switch (action.type) {
+	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START:
+	            neighborTypes = _extends({}, state.neighborTypes, {
+	                status: _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START,
+	                node: action.node
+	            });
+
+	            return _extends({}, state, {
+	                neighborTypes: neighborTypes
+	            });
+	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_SUCCESS:
+	            neighborTypes = _extends({}, state.neighborTypes, {
+	                rawData: action.data,
+	                data: prepare(action.data),
+	                error: {},
+	                status: _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_SUCCESS
+	            });
+
+	            return _extends({}, state, {
+	                neighborTypes: neighborTypes
+	            });
+	        case _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_ERROR:
+	            neighborTypes = _extends({}, state, {
+	                data: [],
+	                error: action.error,
+	                status: _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_ERROR
+	            });
+
+	            return _extends({}, state.neighborTypes, {
+	                neighborTypes: neighborTypes
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+	var prepare = function prepare(data, filterDirection) {
+	    return data.reduce(function (array, current) {
+	        if (filterDirection && current.relationship.indexOf(filterDirection) !== -1 || !filterDirection) {
+	            var index = array.reduce(function (val, entry, index) {
+	                if (val === -1 && entry.node.key === current.node.key) {
+	                    return index;
+	                } else {
+	                    return val;
+	                }
+	            }, -1);
+
+	            if (index === -1) {
+	                array.push(current);
+	            } else {
+	                array[index] = _extends({}, array[index], {
+	                    count: current.count + array[index].count,
+	                    relationship: array[index].relationship.concat(current.relationship[0])
+	                });
+	            }
+
+	            array.sort(function (a, b) {
+	                return b.count - a.count;
+	            });
+	        }
+
+	        return array;
+	    }, []);
+	};
+
+/***/ },
+/* 880 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _GraphActions = __webpack_require__(290);
+
+	var _FetchNeighborsActions = __webpack_require__(247);
+
+	var _GraphFilterActions = __webpack_require__(589);
+
+	var _SearchHelpers = __webpack_require__(291);
+
+	var _Constants = __webpack_require__(249);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _ReduxStore = __webpack_require__(216);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _GraphFilterActions.TOGGLE_FILTER_ITEM_CATEGORY:
+	            if (state.hasOwnProperty(action.category)) {
+	                return _extends({}, state, _defineProperty({}, action.category, !state[action.category]));
+	            } else {
+	                return _extends({}, state, _defineProperty({}, action.category, false));
+	            }
+	        case _GraphFilterActions.INIT_GRAPH_FILTER:
+	            return action.data.reduce(function (previous, currentVal) {
+	                previous[currentVal.name] = true;
+	                return previous;
+	            }, {});
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 881 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _GraphActions = __webpack_require__(290);
+
+	var _FetchNeighborsActions = __webpack_require__(247);
+
+	var _constants = __webpack_require__(600);
+
+	var _Constants = __webpack_require__(249);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _Edge = __webpack_require__(601);
+
+	var _Edge2 = _interopRequireDefault(_Edge);
+
+	var _D3Graph = __webpack_require__(602);
+
+	var _D3Graph2 = _interopRequireDefault(_D3Graph);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var UNDO_LIMIT = 10;
+
+	function updateHistory(history, graph) {
+	    var past = undefined;
+
+	    if (history.length < UNDO_LIMIT) {
+	        past = [].concat(_toConsumableArray(history), [JSON.stringify(graph)]);
+	    } else {
+	        past = [].concat(_toConsumableArray(history.slice(1)), [JSON.stringify(graph)]);
+	    }
+
+	    return past;
+	}
+
+	var graphActions = [_GraphActions.CLEAR_GRAPH, _GraphActions.UPDATE_GRAPH, _GraphActions.ADD_TO_GRAPH, _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS, _GraphActions.REMOVE_FROM_GRAPH, _GraphActions.EXPAND_NODE];
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        past: [],
+	        future: [],
+	        present: new _D3Graph2.default()
+	    } : arguments[0];
+	    var action = arguments[1];
+
+	    var past = undefined;
+
+	    if (graphActions.indexOf(action.type) > -1) {
+	        past = updateHistory(state.past, state.present);
+	    }
+
+	    switch (action.type) {
+	        case _GraphActions.CLEAR_GRAPH:
+	            reset(state.present);
+
+	            return _extends({}, state, {
+	                past: past,
+	                present: _extends({}, state.present),
+	                future: []
+	            });
+	        case _GraphActions.UPDATE_GRAPH:
+	            reset(state.present);
+	            push(state.present, action.data);
+
+	            return _extends({}, state, {
+	                past: past,
+	                present: _extends({}, state.present),
+	                future: []
+	            });
+	        case _GraphActions.REMOVE_FROM_GRAPH:
+	            var edges = state.present.edges;
+	            var nodes = state.present.nodes;
+
+	            for (var i = edges.length - 1; i >= 0; i--) {
+	                if (edges[i].source.key === action.key || edges[i].target.key === action.key) {
+	                    edges.splice(i, 1);
+	                }
+	            }
+
+	            for (var i = 0; i < nodes.length; i++) {
+	                if (nodes[i].key === action.key) {
+	                    nodes.splice(i, 1);
+	                    break;
+	                }
+	            }
+
+	            return _extends({}, state, {
+	                present: new _D3Graph2.default(nodes, edges),
+	                past: past,
+	                future: []
+	            });
+
+	        case _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS:
+	            if (action.neighbors.neighbors.length > 0 || state.present.nodes.length == 0) {
+	                var _ret = function () {
+	                    var graph = new _D3Graph2.default(state.present.nodes, state.present.edges, state.present.legend);
+
+	                    var node = action.neighbors.node;
+
+	                    var index = graph.addNode(node);
+
+	                    action.neighbors.neighbors.forEach(function (neighbor) {
+	                        var neighborIndex = graph.addNode(neighbor);
+	                        graph.addEdge(new _Edge2.default(index, neighborIndex, neighbor.direction));
+	                    });
+
+	                    return {
+	                        v: _extends({}, state, {
+	                            present: graph,
+	                            past: past,
+	                            future: []
+	                        })
+	                    };
+	                }();
+
+	                if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+	            } else {
+	                return state;
+	            }
+	        case _GraphActions.EXPAND_NODE:
+	            var graph1 = new _D3Graph2.default(state.present.nodes, state.present.edges, state.present.legend);
+
+	            var index = graph1.indexOfNode(action.key);
+	            var neighborIndex = graph1.addNode(action.toNode);
+	            graph1.addEdge(new _Edge2.default(index, neighborIndex, action.toNode.direction));
+
+	            return _extends({}, state, {
+	                present: graph1,
+	                past: past,
+	                future: []
+	            });
+	        case _GraphActions.UNDO_GRAPH_ACTION:
+	            var previous = prepare(state.past[state.past.length - 1]);
+	            var snapshot1 = JSON.stringify(state.present);
+
+	            reset(state.present);
+	            push(state.present, previous);
+
+	            return {
+	                past: state.past.slice(0, state.past.length - 1),
+	                present: _extends({}, state.present),
+	                future: [snapshot1].concat(_toConsumableArray(state.future))
+	            };
+	        case _GraphActions.REDO_GRAPH_ACTION:
+	            var next = prepare(state.future[0]);
+	            var snapshot = JSON.stringify(state.present);
+
+	            reset(state.present);
+	            push(state.present, next);
+
+	            return {
+	                past: [].concat(_toConsumableArray(state.past), [snapshot]),
+	                present: _extends({}, state.present),
+	                future: state.future.slice(1)
+	            };
+	        case _constants.REHYDRATE:
+	            var graph = action.payload.graph;
+
+	            console.log(action.payload);
+	            if (graph) {
+	                push(state.present, prepareWithoutParse(graph.present));
+
+	                return {
+	                    past: graph.past,
+	                    future: graph.future,
+	                    present: _extends({}, state.present)
+	                };
+	            } else {
+	                return state;
+	            }
+	        default:
+	            return state;
+	    }
+	};
+
+	function push(graph, newGraph) {
+	    if (newGraph) {
+	        Array.prototype.push.apply(graph.nodes, newGraph.nodes);
+	        Array.prototype.push.apply(graph.edges, newGraph.edges);
+	        Array.prototype.push.apply(graph.legend, new _D3Graph2.default(newGraph.nodes, newGraph.edges).legend);
+	    }
+	}
+
+	function reset(graph) {
+	    graph.nodes.length = 0;
+	    graph.edges.length = 0;
+	    graph.legend.length = 0;
+	}
+
+	function prepareWithoutParse(graph) {
+	    //set isFixed value, as it's not saved in file
+	    graph.nodes = graph.nodes.map(function (node, index) {
+	        node.isFixed = node.fixed && node.fixed == 1 ? true : false;
+	        return node;
+	    });
+
+	    //resetting edges to indices, otherwise D3 will not recognize and render the edges
+	    //this way D3 creates the references to the nodes itself
+	    graph.edges = graph.edges.map(function (edge, index) {
+	        if (typeof edge.source.index !== "undefined" && typeof edge.target.index !== "undefined") {
+	            edge.source = edge.source.index;
+	            edge.target = edge.target.index;
+	        }
+
+	        return edge;
+	    });
+
+	    return graph;
+	}
+
+	function prepare(graph) {
+	    graph = JSON.parse(graph);
+
+	    return prepareWithoutParse(graph);
+	}
+
+/***/ },
+/* 882 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _FetchItemActions = __webpack_require__(877);
+
+	var _FetchNeighborsActions = __webpack_require__(247);
+
+	var _SearchBarActions = __webpack_require__(248);
+
+	var _Constants = __webpack_require__(249);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        data: [],
+	        error: {},
+	        selectedIndex: -1,
+	        item: {},
+	        type: "GeneralNode",
+	        value: ""
+	    } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _SearchBarActions.SET_SEARCH_CATEGORY:
+	        case _SearchBarActions.SET_SEARCH_SELECTED_INDEX:
+	        case _SearchBarActions.SET_SEARCH_INPUT_VALUE:
+	            return searchBarReducer(state, action);
+
+	        case _FetchItemActions.ITEM_FETCH_START:
+	        case _FetchItemActions.ITEM_FETCH_SUCCESS:
+	        case _FetchItemActions.ITEM_FETCH_ERROR:
+	            return fetchItemsReducer(state, action);
+
+	        case _FetchItemActions.ITEMS_CLEAR:
+	            return _extends({}, state, {
+	                data: [],
+	                error: {},
+	                status: _FetchItemActions.ITEMS_CLEAR
+	            });
+	        case _FetchNeighborsActions.NEIGHBORS_FETCH_START:
+	            return _extends({}, state, {
+	                data: [],
+	                error: {}
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+	var searchBarReducer = function searchBarReducer(state, action) {
+	    switch (action.type) {
+	        case _SearchBarActions.SET_SEARCH_CATEGORY:
+	            return _extends({}, state, {
+	                category: action.value
+	            });
+	        case _SearchBarActions.SET_SEARCH_SELECTED_INDEX:
+	            return _extends({}, state, {
+	                selectedIndex: action.value,
+	                value: action.value >= 0 ? state.data[action.value].key : state.value
+	            });
+	        case _SearchBarActions.SET_SEARCH_INPUT_VALUE:
+	            return _extends({}, state, {
+	                value: action.value
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+	var fetchItemsReducer = function fetchItemsReducer(state, action) {
+	    switch (action.type) {
+	        case _FetchItemActions.ITEM_FETCH_START:
+	            return _extends({}, state, {
+	                status: _FetchItemActions.ITEM_FETCH_START,
+	                error: {}
+	            });
+	        case _FetchItemActions.ITEM_FETCH_SUCCESS:
+	            return _extends({}, state, {
+	                data: action.data,
+	                error: {},
+	                status: _FetchItemActions.ITEM_FETCH_SUCCESS
+	            });
+	        case _FetchItemActions.ITEM_FETCH_ERROR:
+	            return _extends({}, state, {
+	                data: [],
+	                error: action.error,
+	                status: _FetchItemActions.ITEM_FETCH_ERROR
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 883 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.UNORDERED = exports.EXCLUDED = exports.PRIORITIZED = undefined;
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _LaneActions = __webpack_require__(289);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var PRIORITIZED = exports.PRIORITIZED = "PRIORITIZED";
+	var EXCLUDED = exports.EXCLUDED = "EXCLUDED";
+	var UNORDERED = exports.UNORDERED = "UNORDERED";
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        lanes: [],
+	        filters: { "upstream": true, "downstream": true, "limit": 20 }
+	    } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _LaneActions.INIT_LANE:
+	            var array = [PRIORITIZED, EXCLUDED, UNORDERED];
+	            var unordered = [];
+	            var excluded = [];
+
+	            action.data.forEach(function (note) {
+	                if (note.key !== "FLD" && note.key !== "SET") {
+	                    unordered.push(note);
+	                } else {
+	                    excluded.push(note);
+	                }
+	            });
+
+	            var cachedExcluded = state.lanes[EXCLUDED],
+	                cachedPrioritized = state.lanes[PRIORITIZED];
+
+	            var lanes2 = array.map(function (lane, index) {
+	                switch (lane) {
+	                    case EXCLUDED:
+	                        cachedExcluded = state.lanes[index];
+	                        return getInit(excluded, lane, index);
+	                    case UNORDERED:
+	                        return getInit(unordered, lane, index);
+	                    case PRIORITIZED:
+	                        cachedPrioritized = state.lanes[index];
+	                        return getInit([], lane, index);
+	                }
+	            });
+
+	            var addIfNotExists = function addIfNotExists(array, check) {
+	                check.forEach(function (item) {
+	                    for (var i = 0; i < array.length; i++) {
+	                        if (array[i].key === item.key) {
+	                            return;
+	                        }
+	                    }
+
+	                    array.push(item);
+	                });
+	            };
+
+	            var removeIfExists = function removeIfExists(array, check) {
+	                check.forEach(function (item, index) {
+	                    for (var i = 0; i < array.length; i++) {
+	                        if (array[i].key === item.key) {
+	                            return;
+	                        }
+	                    }
+
+	                    array.splice(index, 1);
+	                });
+	            };
+
+	            if (cachedExcluded) {
+	                addIfNotExists(lanes2[EXCLUDED], cachedExcluded);
+	                removeIfExists(lanes2[PRIORITIZED], cachedExcluded);
+	                removeIfExists(lanes2[UNORDERED], cachedExcluded);
+	            }
+
+	            if (cachedPrioritized) {
+	                addIfNotExists(lanes2[PRIORITIZED], cachedPrioritized);
+	                removeIfExists(lanes2[EXCLUDED], cachedPrioritized);
+	                removeIfExists(lanes2[UNORDERED], cachedPrioritized);
+	            }
+
+	            return _extends({}, state, {
+	                lanes: lanes2
+	            });
+	        case _LaneActions.ATTACH_TO_LANE:
+	            var lanes1 = state.lanes.map(function (lane) {
+	                if (lane.notes.indexOf(action.note) >= 0) {
+	                    lane.notes = lane.notes.filter(function (note) {
+	                        return note !== action.note;
+	                    });
+	                }
+
+	                if (lane.id === action.laneId) {
+	                    if (lane.notes.indexOf(action.note) >= 0) {
+	                        console.warn('Already attached note to lane', lane);
+	                    } else {
+	                        lane.notes = [action.note].concat(_toConsumableArray(lane.notes));
+	                    }
+	                }
+
+	                return lane;
+	            });
+
+	            return _extends({}, state, {
+	                lanes: lanes1
+	            });
+	        case _LaneActions.MOVE:
+	            var lanes = [].concat(_toConsumableArray(state.lanes));
+
+	            var sourceLane = lanes.filter(function (lane) {
+	                return lane.notes.indexOf(action.sourceNote) >= 0;
+	            })[0];
+	            var targetLane = lanes.filter(function (lane) {
+	                return lane.notes.indexOf(action.targetNote) >= 0;
+	            })[0];
+
+	            var sourceNoteIndex = sourceLane.notes.indexOf(action.sourceNote);
+	            var targetNoteIndex = targetLane.notes.indexOf(action.targetNote);
+
+	            //remove from source index
+	            sourceLane.notes = [].concat(_toConsumableArray(sourceLane.notes.slice(0, sourceNoteIndex)), _toConsumableArray(sourceLane.notes.slice(sourceNoteIndex + 1)));
+
+	            //add at target index
+	            targetLane.notes = [].concat(_toConsumableArray(targetLane.notes.slice(0, targetNoteIndex)), [action.sourceNote], _toConsumableArray(targetLane.notes.slice(targetNoteIndex)));
+
+	            return _extends({}, state, {
+	                lanes: lanes
+	            });
+	        case _LaneActions.SET_FILTER_VALUE:
+	            var filters = state.filters;
+	            filters[action.name] = action.value;
+
+	            return _extends({}, state, {
+	                filters: filters
+	            });
+
+	        default:
+	            return state;
+	    }
+	};
+
+	function getInit(data, lane, index) {
+	    return {
+	        id: index,
+	        key: lane,
+	        notes: data
+	    };
+	}
+
+/***/ },
+/* 884 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _LayoutActions = __webpack_require__(285);
+
+	var _Constants = __webpack_require__(249);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _constants = __webpack_require__(600);
+
+	var _TestCoverageComponent = __webpack_require__(253);
+
+	var _TestCoverageComponent2 = _interopRequireDefault(_TestCoverageComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        sidebar: {
+	            obj: null,
+	            visible: false,
+	            key: null,
+	            sidePanels: _Constants2.default.sidePanels
+	        }
+
+	    } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _LayoutActions.SET_SIDEBAR_PANEL:
+	            state = setSidebarVisibility(state, action);
+	            state = setSidebarObject(state, action);
+
+	            return state;
+	        case _constants.REHYDRATE:
+	            state.sidebar.sidePanels.forEach(function (sidePanel) {
+	                if (action.payload.layout && action.payload.layout.sidebar.key === sidePanel.key) {
+	                    state.sidebar = _extends({}, state.sidebar, {
+	                        obj: sidePanel.obj,
+	                        key: sidePanel.key,
+	                        visible: action.payload.layout.sidebar.visible
+	                    });
+	                }
+	            });
+
+	            return _extends({}, state, {
+	                sidebar: state.sidebar
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+	var setSidebarVisibility = function setSidebarVisibility(state, action) {
+	    if (state.sidebar.visible !== action.visible) {
+	        var newSidebar = _extends({}, state.sidebar, {
+	            visible: action.visible
+	        });
+
+	        return _extends({}, state, {
+	            sidebar: newSidebar
+	        });
+	    } else {
+	        return state;
+	    }
+	};
+
+	var setSidebarObject = function setSidebarObject(state, action) {
+	    if (action.key && state.sidebar.key !== action.key) {
+	        var panelObject = null;
+	        var panels = state.sidebar.sidePanels;
+
+	        for (var i = 0; i < panels.length; i++) {
+	            if (panels[i].key === action.key) {
+	                panelObject = panels[i].obj;
+	                break;
+	            }
+	        }
+
+	        var newSidebar = _extends({}, state.sidebar, {
+	            key: action.key,
+	            obj: panelObject
+	        });
+
+	        return _extends({}, state, {
+	            sidebar: newSidebar
+	        });
+	    } else {
+	        return state;
+	    }
+	};
+
+/***/ },
+/* 885 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _FetchNeighborsActions = __webpack_require__(247);
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { data: [] } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _FetchNeighborsActions.NEIGHBORS_FETCH_START:
+	            return _extends({}, state, {
+	                status: _FetchNeighborsActions.NEIGHBORS_FETCH_START
+	            });
+	        case _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS:
+	            return _extends({}, state, {
+	                data: action.data,
+	                error: {},
+	                status: _FetchNeighborsActions.NEIGHBORS_FETCH_SUCCESS
+	            });
+	        case _FetchNeighborsActions.NEIGHBORS_FETCH_ERROR:
+	            return _extends({}, state, {
+	                data: [],
+	                error: action.error,
+	                status: _FetchNeighborsActions.NEIGHBORS_FETCH_ERROR
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 886 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _FetchNodeTypeActions = __webpack_require__(611);
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { data: [] } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _FetchNodeTypeActions.NODETYPE_FETCH_START:
+	            return _extends({}, state, {
+	                status: _FetchNodeTypeActions.NODETYPE_FETCH_START
+	            });
+	        case _FetchNodeTypeActions.NODETYPE_FETCH_SUCCESS:
+	            return _extends({}, state, {
+	                data: action.data,
+	                error: {},
+	                status: _FetchNodeTypeActions.NODETYPE_FETCH_SUCCESS
+	            });
+	        case _FetchNodeTypeActions.NODETYPE_FETCH_ERROR:
+	            return _extends({}, state, {
+	                data: [],
+	                error: action.error,
+	                status: _FetchNodeTypeActions.NODETYPE_FETCH_ERROR
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 887 */,
+/* 888 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _SettingsActions = __webpack_require__(604);
+
+	var _Settings = __webpack_require__(251);
+
+	var _Settings2 = _interopRequireDefault(_Settings);
+
+	var _SearchHelpers = __webpack_require__(291);
+
+	var _SearchNeighborsActions = __webpack_require__(878);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? _Settings2.default : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _SettingsActions.TOGGLE_SETTING:
+	            return toggleSetting(state, action);
+	        case _SettingsActions.SET_SETTING_VALUE:
+	            return setSettingValue(state, action);
+	        default:
+	            return state;
+	    }
+	};
+
+	var toggleSetting = function toggleSetting(state, action) {
+	    var index = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state, action.name, "name");
+	    var newVal = _extends(state[index]);
+	    newVal.value = !newVal.value;
+
+	    if (index !== -1) {
+	        return [].concat(_toConsumableArray(state.slice(0, index)), [newVal], _toConsumableArray(state.slice(index + 1)));
+	    } else {
+	        return state;
+	    }
+	};
+
+	var setSettingValue = function setSettingValue(state, action) {
+	    var index = (0, _SearchHelpers.indexOfObjectInArrayByProperty)(state, action.name, "name");
+	    var newVal = _extends(state[index]);
+	    console.log(state);
+	    if (index !== -1 && newVal.value != action.value) {
+	        newVal.value = action.value;
+	        return [].concat(_toConsumableArray(state.slice(0, index)), [newVal], _toConsumableArray(state.slice(index + 1)));
+	    } else {
+	        return state;
+	    }
+	};
+
+/***/ },
+/* 889 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _TestCoverageActions = __webpack_require__(284);
+
+	exports.default = function () {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	        name: null,
+	        data: []
+	    } : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _TestCoverageActions.TEST_COVERAGE_FETCH_START:
+	            return _extends({}, state, {
+	                name: action.name,
+	                data: [],
+	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_START
+	            });
+	        case _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS:
+	            return _extends({}, state, {
+	                data: action.data,
+	                error: {},
+	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_SUCCESS
+	            });
+	        case _TestCoverageActions.TEST_COVERAGE_FETCH_ERROR:
+	            return _extends({}, state, {
+	                data: [],
+	                error: action.error,
+	                status: _TestCoverageActions.TEST_COVERAGE_FETCH_ERROR
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 890 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _redux = __webpack_require__(217);
+
+	var _itemReducer = __webpack_require__(882);
+
+	var _itemReducer2 = _interopRequireDefault(_itemReducer);
+
+	var _neighborsReducer = __webpack_require__(885);
+
+	var _neighborsReducer2 = _interopRequireDefault(_neighborsReducer);
+
+	var _graphReducer = __webpack_require__(881);
+
+	var _graphReducer2 = _interopRequireDefault(_graphReducer);
+
+	var _settingsReducer = __webpack_require__(888);
+
+	var _settingsReducer2 = _interopRequireDefault(_settingsReducer);
+
+	var _graphFilterReducer = __webpack_require__(880);
+
+	var _graphFilterReducer2 = _interopRequireDefault(_graphFilterReducer);
+
+	var _laneReducer = __webpack_require__(883);
+
+	var _laneReducer2 = _interopRequireDefault(_laneReducer);
+
+	var _testCoverageReducer = __webpack_require__(889);
+
+	var _testCoverageReducer2 = _interopRequireDefault(_testCoverageReducer);
+
+	var _nodeTypeReducer = __webpack_require__(886);
+
+	var _nodeTypeReducer2 = _interopRequireDefault(_nodeTypeReducer);
+
+	var _layoutReducer = __webpack_require__(884);
+
+	var _layoutReducer2 = _interopRequireDefault(_layoutReducer);
+
+	var _contextMenuReducer = __webpack_require__(879);
+
+	var _contextMenuReducer2 = _interopRequireDefault(_contextMenuReducer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = (0, _redux.combineReducers)({
+	    settings: _settingsReducer2.default,
+	    items: _itemReducer2.default,
+	    neighbors: _neighborsReducer2.default,
+	    graph: _graphReducer2.default,
+	    visibilityFilters: _graphFilterReducer2.default,
+	    lanes: _laneReducer2.default,
+	    coverage: _testCoverageReducer2.default,
+	    nodeTypes: _nodeTypeReducer2.default,
+	    layout: _layoutReducer2.default,
+	    contextmenu: _contextMenuReducer2.default
+	});
+
+/***/ },
+/* 891 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var UPSTREAM = exports.UPSTREAM = "UPSTREAM";
+	var DOWNSTREAM = exports.DOWNSTREAM = "DOWNSTREAM";
 
 /***/ }
 /******/ ]);

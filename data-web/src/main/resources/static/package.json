@@ -4,8 +4,9 @@
   "description": "",
   "main": "./src/index",
   "scripts": {
-    "test": "babel-tape-runner ./src/**/tests/*.test.js",
-    "test:watch": "watch 'npm test' ./src/",
+    "test": "babel-tape-runner ./src/**/tests/*.test.js | faucet",
+    "test:single": "babel-tape-runner",
+    "test:watch": "watch \"npm test\" src/",
     "serve": "webpack-dev-server --content-base dist/ --no-info",
     "dev": "parallelshell 'npm run test:watch' 'npm run serve'"
   },
@@ -15,7 +16,6 @@
     "axios": "^0.9.1",
     "classnames": "^2.2.3",
     "d3": "^3.5.15",
-    "faucet": "0.0.1",
     "localforage": "^1.4.0",
     "lodash": "^4.6.1",
     "normalize.css": "^3.0.3",
@@ -47,6 +47,7 @@
     "copy-webpack-plugin": "^1.1.1",
     "css-loader": "^0.23.1",
     "es6-promise": "^3.1.2",
+    "faucet": "0.0.1",
     "ignore-styles": "^1.2.0",
     "mocha": "^2.4.5",
     "node-sass": "^3.4.2",

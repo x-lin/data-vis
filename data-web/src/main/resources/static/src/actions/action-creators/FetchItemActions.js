@@ -13,7 +13,7 @@ export const fetchStart = (category, key) => createAction(
 
 export const fetchSuccess = (category, key, data) => createAction(
     ITEM_FETCH_SUCCESS,
-    { category, data }
+    { category, data, key }
 );
 
 export const fetchError = (category, key, error) => createAction(

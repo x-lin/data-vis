@@ -9,12 +9,12 @@ export const setSearchCategory = (value) => createAction(
     { value }
 );
 
-export const setSearchInputValue= (value) => createAction(
+export const setSearchInputValue = (value) => createAction(
     SET_SEARCH_INPUT_VALUE,
     { value }
 );
 
-export const setSearchSelectedIndex= (selectedIndex) => createAction(
+export const setSearchSelectedIndex = (selectedIndex) => createAction(
     SET_SEARCH_SELECTED_INDEX,
     { value: selectedIndex }
 );

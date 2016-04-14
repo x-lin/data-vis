@@ -23,7 +23,7 @@ function updateHistory(history, graph) {
 
 const graphActions = [CLEAR_GRAPH, UPDATE_GRAPH, ADD_TO_GRAPH, NEIGHBORS_FETCH_SUCCESS, REMOVE_FROM_GRAPH, EXPAND_NODE];
 
-export const graphReducer = (
+export default  (
 state = {
     past: [],
     future: [],

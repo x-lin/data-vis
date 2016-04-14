@@ -1,3 +1,4 @@
+import { UPSTREAM, DOWNSTREAM } from "../../config/Defaults";
 import createAction from "./createAction";
 
 export const ACTIVATE_CONTEXT = "ACTIVATE_CONTEXT";
@@ -25,6 +26,7 @@ export const clearState = () => createAction(
 export const filterNeighborTypes = (filterDirection) => createAction(
     FILTER_NEIGHBOR_TYPES,
     {
-        filterDirection: (filterDirection === "UPSTREAM" || filterDirection === "DOWNSTREAM") ? filterDirection : null
+        filterDirection: (filterDirection === UPSTREAM || filterDirection === DOWNSTREAM)
+            ? filterDirection : null
     }
 );

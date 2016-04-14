@@ -5,9 +5,9 @@ import Settings from "../config/Settings";
 import { ADD_TO_GRAPH_ON_SEARCH } from "../config/Settings";
 import { indexOfObjectInArrayByProperty } from "../utils/SearchHelpers";
 
-import { SEARCH_NEIGHBORS_START } from "../actions/action-creators/SearchActions";
+import { SEARCH_NEIGHBORS_START } from "../actions/action-creators/SearchNeighborsActions";
 
-export const settingsReducer = (state = Settings, action) => {
+export default (state = Settings, action) => {
     switch (action.type) {
         case TOGGLE_SETTING:
             return toggleSetting(state, action);

@@ -8,7 +8,7 @@ import { indexOfObjectInArrayByProperty, indexOfObjectInArrayByProperties } from
 import Constants from "../config/Constants";
 import { store } from "../stores/ReduxStore";
 
-export const graphFilterReducer = (state = {}, action) => {
+export default (state = {}, action) => {
     switch(action.type) {
         case TOGGLE_FILTER_ITEM_CATEGORY:
             if(state.hasOwnProperty(action.category)) {

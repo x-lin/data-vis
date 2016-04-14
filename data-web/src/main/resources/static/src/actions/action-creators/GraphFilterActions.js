@@ -27,5 +27,5 @@ export const showAllItemCategories = () => createAction(
 
 export const initGraphFilter = (data) => createAction(
     INIT_GRAPH_FILTER,
-    data
+    { data }
 );

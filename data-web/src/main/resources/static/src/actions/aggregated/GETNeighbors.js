@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { fetchNeighborsSuccess, fetchNeighborsError, fetchNeighborsStart } from "../action-creators/FetchNeighborsActions";
 import Constants from "../../config/Constants";
-import { PRIORITIZED, EXCLUDED } from "../../reducers/LaneReducer";
+import { PRIORITIZED, EXCLUDED } from "../../reducers/laneReducer";
 
 export const getNeighbors = (category, key, paramsString) => {
     const endpoint = Constants.getEndpoint(category);
