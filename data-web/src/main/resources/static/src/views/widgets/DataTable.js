@@ -14,23 +14,10 @@ const DataTable = ({
     filterable,
     mapper,
     filter
-    }) => {
-
-    const mappingObj = mapper.reduce((obj, entry) => {
-        obj[entry.property] = {
-            columnHeader: entry.columnHeader,
-            contentMapping: entry.contentMapping,
-            dataFunction: entry.dataFunction
-        };
-
-        return obj;
-    }, {});
-
-
-
+}) => {
     const d = data.map((node, index) => {
         return (
-            <Tr key={index} className={trClass(node)}>
+            <Tr key={index} className={trClass && trClass(node)}>
                 {
                     mapper.map((map, index2) => {
                         const mappedNode = map.dataFunction ? map.dataFunction(node) : node;
@@ -42,7 +29,7 @@ const DataTable = ({
                 }
             </Tr>
         );
-    })
+    });
 
     return <div>
         {isSuccess &&
