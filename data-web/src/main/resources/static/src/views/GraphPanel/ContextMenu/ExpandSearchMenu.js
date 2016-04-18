@@ -66,6 +66,7 @@ export default class ExpandSearchMenu extends React.Component {
             .setProperty("name")
             .setColumnHeader("Name")
             .setContentMapping((node) => {
+                console.log(node);
                 return <a onClick={(key) => this.onClick(this.props.d.key, node)}>
                     {node.name} <Label bgColor={Constants.getColor(node.type)}>{node.type}</Label>
                 </a>

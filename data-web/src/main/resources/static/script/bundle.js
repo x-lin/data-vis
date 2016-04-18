@@ -33819,9 +33819,9 @@
 
 	var _getContrastColor2 = _interopRequireDefault(_getContrastColor);
 
-	var _TestCoverageContainer = __webpack_require__(253);
+	var _TestCoverageTableContainer = __webpack_require__(868);
 
-	var _TestCoverageContainer2 = _interopRequireDefault(_TestCoverageContainer);
+	var _TestCoverageTableContainer2 = _interopRequireDefault(_TestCoverageTableContainer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33911,7 +33911,7 @@
 	            return _getContrastColor2.default;
 
 	        case "TestCoverageComponent":
-	            return _TestCoverageContainer2.default;
+	            return _TestCoverageTableContainer2.default;
 	    }
 
 	    return undefined;
@@ -34570,191 +34570,7 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(254);
-
-	var _SearchNeighborsActions = __webpack_require__(265);
-
-	var _LayoutActions = __webpack_require__(293);
-
-	var _TestCoverageTable = __webpack_require__(294);
-
-	var _TestCoverageTable2 = _interopRequireDefault(_TestCoverageTable);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        coverage: state.coverage
-	    };
-	};
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        searchNeighborsStart: function searchNeighborsStart(category, key) {
-	            dispatch(_get__("searchNeighbors")(category, key));
-	        },
-	        setPanelInvisible: function setPanelInvisible() {
-	            dispatch(_get__("setVisibility")(false));
-	        }
-	    };
-	};
-
-	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("TestCoverageTable"));
-
-	exports.default = _DefaultExportValue;
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "searchNeighbors":
-	            return _SearchNeighborsActions.searchNeighbors;
-
-	        case "setVisibility":
-	            return _LayoutActions.setVisibility;
-
-	        case "connect":
-	            return _reactRedux.connect;
-
-	        case "mapStateToProps":
-	            return mapStateToProps;
-
-	        case "mapDispatchProps":
-	            return mapDispatchProps;
-
-	        case "TestCoverageTable":
-	            return _TestCoverageTable2.default;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
+/* 253 */,
 /* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -50831,7 +50647,7 @@
 	            //Create an array logging what is connected to what
 	            for (var i = 0; i < data.nodes.length; i++) {
 	                this.state.linkedByIndex[i + "," + i] = 1;
-	            };
+	            }
 	            data.edges.forEach(function (d) {
 	                _this2.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
 	            });
@@ -56566,8 +56382,6 @@
 
 	    return ContextMenu;
 	}(_get__("React").Component);
-
-	;
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
@@ -75844,6 +75658,8 @@
 	            };
 
 	            var mapper = _get__("createMapping")().setProperty("name").setColumnHeader("Name").setContentMapping(function (node) {
+	                console.log(node);
+
 	                var _Label_Component = _get__("Label");
 
 	                return _react2.default.createElement(
@@ -76621,8 +76437,7 @@
 	    }, {
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
-	            var bbox = $("#" + "stats-menu")[0].getBoundingClientRect();;
-
+	            var bbox = $("#" + "stats-menu")[0].getBoundingClientRect();
 	            this.setState({
 	                width: bbox.width,
 	                height: bbox.height
@@ -78771,6 +78586,31 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var GraphLegendContainer = function GraphLegendContainer(_ref) {
+	    var _toggleFilterItemCategory = _ref.toggleFilterItemCategory;
+	    var visibilityFilters = _ref.visibilityFilters;
+	    var legend = _ref.legend;
+	    var divId = _ref.divId;
+
+	    var _GraphLegend_Component = _get__("GraphLegend");
+
+	    return _react2.default.createElement(_GraphLegend_Component, {
+	        toggleFilterItemCategory: function toggleFilterItemCategory(name) {
+	            return _toggleFilterItemCategory(name);
+	        },
+	        visibilityFilters: visibilityFilters,
+	        legend: legend,
+	        divId: divId
+	    });
+	};
+
+	_get__("GraphLegendContainer").propTypes = {
+	    toggleFilterItemCategory: _get__("React").PropTypes.func.isRequired,
+	    visibilityFilters: _get__("React").PropTypes.object.isRequired,
+	    legend: _get__("React").PropTypes.object.isRequired,
+	    divId: _get__("React").PropTypes.string.isRequired
+	};
+
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
 	        visibilityFilters: state.visibilityFilters,
@@ -78786,7 +78626,7 @@
 	    };
 	};
 
-	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("GraphLegend"));
+	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("GraphLegendContainer"));
 
 	exports.default = _DefaultExportValue;
 	var _RewiredData__ = {};
@@ -78816,6 +78656,15 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
+	        case "GraphLegend":
+	            return _GraphLegend2.default;
+
+	        case "GraphLegendContainer":
+	            return GraphLegendContainer;
+
+	        case "React":
+	            return _react2.default;
+
 	        case "toggleFilterItemCategory":
 	            return _GraphFilterActions.toggleFilterItemCategory;
 
@@ -78827,9 +78676,6 @@
 
 	        case "mapDispatchProps":
 	            return mapDispatchProps;
-
-	        case "GraphLegend":
-	            return _GraphLegend2.default;
 	    }
 
 	    return undefined;
@@ -79099,6 +78945,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
 	var _Constants = __webpack_require__(249);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
@@ -79111,31 +78961,37 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _DefaultExportValue = function (_get__$Component) {
-	    _inherits(_DefaultExportValue, _get__$Component);
+	var GraphLegend = function (_get__$Component) {
+	    _inherits(GraphLegend, _get__$Component);
 
-	    function _DefaultExportValue() {
-	        _classCallCheck(this, _DefaultExportValue);
+	    function GraphLegend(props) {
+	        _classCallCheck(this, GraphLegend);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_DefaultExportValue).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GraphLegend).call(this, props));
+
+	        _this.state = {
+	            width: null,
+	            height: null
+	        };
+	        return _this;
 	    }
 
-	    _createClass(_DefaultExportValue, [{
+	    _createClass(GraphLegend, [{
 	        key: "componentDidUpdate",
 	        value: function componentDidUpdate() {
-	            var bbox = $("#" + this.props.divId)[0].getBBox();
-
-	            if (bbox) {
-	                var padding = 15;
-	                var extra = 10;
-
-	                $("#" + this.props.divId).attr("width", bbox.width + 2 * padding + extra).attr("height", bbox.height + 2 * padding + extra);
-	            }
+	            this.updateBBox();
 	        }
 	    }, {
-	        key: "toggleCategoryFilter",
-	        value: function toggleCategoryFilter(name) {
-	            this.props.toggleFilterItemCategory(name);
+	        key: "updateBBox",
+	        value: function updateBBox() {
+	            var bbox = _get__("ReactDOM").findDOMNode(this).getBBox();
+
+	            if (this.state.width !== bbox.width) {
+	                this.setState({
+	                    width: bbox.width,
+	                    height: bbox.height
+	                });
+	            }
 	        }
 	    }, {
 	        key: "createData",
@@ -79152,49 +79008,66 @@
 	            return data;
 	        }
 	    }, {
+	        key: "calcLength",
+	        value: function calcLength(size) {
+	            var padding = 15;
+	            var extra = 10;
+
+	            return size + 2 * padding + extra;
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
-	            var _this2 = this;
+	            var _props = this.props;
+	            var visibilityFilters = _props.visibilityFilters;
+	            var toggleFilterItemCategory = _props.toggleFilterItemCategory;
+	            var divId = _props.divId;
 
-	            var g = function g() {
 
-	                return _this2.createData().map(function (element, index) {
-	                    var yTranslate = index * 25 + 10;
-	                    var opacity = 1;
+	            var g = this.createData().map(function (element, index) {
+	                var yTranslate = index * 25 + 10;
+	                var opacity = !visibilityFilters.hasOwnProperty(element.name) || visibilityFilters[element.name] ? "1" : "0.6";
 
-	                    if (_this2.props.visibilityFilters.hasOwnProperty(element.name)) {
-	                        opacity = _this2.props.visibilityFilters[element.name] ? "1" : "0.6";
-	                    }
-
-	                    return _react2.default.createElement(
-	                        "g",
-	                        { className: "graph-legend-g", key: index, transform: "translate(10," + yTranslate + ")",
-	                            onClick: function onClick(e) {
-	                                return _this2.toggleCategoryFilter(element.name);
-	                            },
-	                            opacity: opacity },
-	                        _react2.default.createElement("circle", { r: "10", fill: element.color }),
-	                        _react2.default.createElement(
-	                            "text",
-	                            { x: "20", y: "5" },
-	                            element.name
-	                        )
-	                    );
-	                });
-	            };
+	                return _react2.default.createElement(
+	                    "g",
+	                    { className: "graph-legend-g", key: index, transform: "translate(10," + yTranslate + ")",
+	                        onClick: function onClick() {
+	                            return toggleFilterItemCategory(element.name);
+	                        },
+	                        opacity: opacity
+	                    },
+	                    _react2.default.createElement("circle", { r: "10", fill: element.color }),
+	                    _react2.default.createElement(
+	                        "text",
+	                        { x: "20", y: "5" },
+	                        element.name
+	                    )
+	                );
+	            });
 
 	            return _react2.default.createElement(
 	                "svg",
-	                { id: this.props.divId },
-	                g()
+	                {
+	                    id: divId,
+	                    width: this.calcLength(this.state.width),
+	                    height: this.calcLength(this.state.height)
+	                },
+	                g
 	            );
 	        }
 	    }]);
 
-	    return _DefaultExportValue;
+	    return GraphLegend;
 	}(_get__("React").Component);
 
-	exports.default = _DefaultExportValue;
+	_get__("GraphLegend").propTypes = {
+	    toggleFilterItemCategory: _get__("React").PropTypes.func.isRequired,
+	    visibilityFilters: _get__("React").PropTypes.object.isRequired,
+	    legend: _get__("React").PropTypes.object.isRequired,
+	    divId: _get__("React").PropTypes.string.isRequired
+	};
+
+	exports.default = _get__("GraphLegend");
 	var _RewiredData__ = {};
 	var _RewireAPI__ = {};
 
@@ -79222,11 +79095,17 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
+	        case "ReactDOM":
+	            return _reactDom2.default;
+
 	        case "Constants":
 	            return _Constants2.default;
 
 	        case "React":
 	            return _react2.default;
+
+	        case "GraphLegend":
+	            return GraphLegend;
 	    }
 
 	    return undefined;
@@ -79291,17 +79170,17 @@
 	    };
 	}
 
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+	var _typeOfOriginalExport = typeof GraphLegend === "undefined" ? "undefined" : _typeof(GraphLegend);
 
 	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
+	    Object.defineProperty(GraphLegend, name, {
 	        value: value,
 	        enumerable: false,
 	        configurable: true
 	    });
 	}
 
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(GraphLegend)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);
@@ -79698,7 +79577,7 @@
 	            //Create an array logging what is connected to what
 	            for (var i = 0; i < data.nodes.length; i++) {
 	                this.state.linkedByIndex[i + "," + i] = 1;
-	            };
+	            }
 	            data.edges.forEach(function (d) {
 	                _this2.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
 	            });
@@ -82000,9 +81879,9 @@
 
 	var _constants = __webpack_require__(595);
 
-	var _TestCoverageContainer = __webpack_require__(253);
+	var _TestCoverageTableContainer = __webpack_require__(868);
 
-	var _TestCoverageContainer2 = _interopRequireDefault(_TestCoverageContainer);
+	var _TestCoverageTableContainer2 = _interopRequireDefault(_TestCoverageTableContainer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82690,17 +82569,17 @@
 
 	var _reactRedux = __webpack_require__(254);
 
-	var _SettingsSideBarContainer = __webpack_require__(607);
+	var _InfoSideBar = __webpack_require__(867);
 
-	var _SettingsSideBarContainer2 = _interopRequireDefault(_SettingsSideBarContainer);
+	var _InfoSideBar2 = _interopRequireDefault(_InfoSideBar);
 
 	var _SearchBarContainer = __webpack_require__(667);
 
 	var _SearchBarContainer2 = _interopRequireDefault(_SearchBarContainer);
 
-	var _MenuComponent = __webpack_require__(682);
+	var _MenuContainer = __webpack_require__(869);
 
-	var _MenuComponent2 = _interopRequireDefault(_MenuComponent);
+	var _MenuContainer2 = _interopRequireDefault(_MenuContainer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82724,9 +82603,9 @@
 	    _createClass(Main, [{
 	        key: "render",
 	        value: function render() {
-	            var _MenuComponent_Component = _get__("MenuComponent");
+	            var _MenuContainer_Component = _get__("MenuContainer");
 
-	            var _SettingsSideBarComponent_Component = _get__("SettingsSideBarComponent");
+	            var _InfoSideBar_Component = _get__("InfoSideBar");
 
 	            return React.createElement(
 	                "div",
@@ -82751,11 +82630,11 @@
 	                        React.createElement(
 	                            "div",
 	                            { className: "navbar-custom-menu" },
-	                            React.createElement(_MenuComponent_Component, null)
+	                            React.createElement(_MenuContainer_Component, null)
 	                        )
 	                    )
 	                ),
-	                React.createElement(_SettingsSideBarComponent_Component, null),
+	                React.createElement(_InfoSideBar_Component, null),
 	                React.createElement(
 	                    "div",
 	                    { className: "content-wrapper" },
@@ -82797,11 +82676,11 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
-	        case "MenuComponent":
-	            return _MenuComponent2.default;
+	        case "MenuContainer":
+	            return _MenuContainer2.default;
 
-	        case "SettingsSideBarComponent":
-	            return _SettingsSideBarContainer2.default;
+	        case "InfoSideBar":
+	            return _InfoSideBar2.default;
 
 	        case "React":
 	            return React;
@@ -82898,677 +82777,9 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 607 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(254);
-
-	var _SettingsActions = __webpack_require__(599);
-
-	var _SettingsSideBar = __webpack_require__(608);
-
-	var _SettingsSideBar2 = _interopRequireDefault(_SettingsSideBar);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        settings: state.settings
-	    };
-	};
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        toggle: function toggle(name) {
-	            dispatch(_get__("toggleSetting")(name));
-	        },
-	        setValue: function setValue(name, value) {
-	            dispatch(_get__("setSettingValue")(name, value));
-	        }
-	    };
-	};
-
-	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("SettingsSideBar"));
-
-	exports.default = _DefaultExportValue;
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "toggleSetting":
-	            return _SettingsActions.toggleSetting;
-
-	        case "setSettingValue":
-	            return _SettingsActions.setSettingValue;
-
-	        case "connect":
-	            return _reactRedux.connect;
-
-	        case "mapStateToProps":
-	            return mapStateToProps;
-
-	        case "mapDispatchProps":
-	            return mapDispatchProps;
-
-	        case "SettingsSideBar":
-	            return _SettingsSideBar2.default;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
-/* 608 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _SettingsSideBarPresentation = __webpack_require__(609);
-
-	var _SettingsSideBarPresentation2 = _interopRequireDefault(_SettingsSideBarPresentation);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _DefaultExportValue = function (_get__$Component) {
-	    _inherits(_DefaultExportValue, _get__$Component);
-
-	    function _DefaultExportValue(props) {
-	        _classCallCheck(this, _DefaultExportValue);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_DefaultExportValue).call(this, props));
-	    }
-
-	    _createClass(_DefaultExportValue, [{
-	        key: "handleToggle",
-	        value: function handleToggle(event) {
-	            this.props.toggle(event.target.value);
-	        }
-	    }, {
-	        key: "handleValueChange",
-	        value: function handleValueChange(name, value) {
-	            this.props.setValue(name, value);
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            var _SettingsSideBarPresentation_Component = _get__("SettingsSideBarPresentation");
-
-	            return _react2.default.createElement(_SettingsSideBarPresentation_Component, {
-	                toggleHandler: function toggleHandler(event) {
-	                    return _this2.handleToggle(event);
-	                },
-	                valueHandler: function valueHandler(name, value) {
-	                    return _this2.handleValueChange(name, value);
-	                },
-	                settings: this.props.settings
-	            });
-	        }
-	    }]);
-
-	    return _DefaultExportValue;
-	}(_get__("React").Component);
-
-	exports.default = _DefaultExportValue;
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "SettingsSideBarPresentation":
-	            return _SettingsSideBarPresentation2.default;
-
-	        case "React":
-	            return _react2.default;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
-/* 609 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _RightToggableSideBar = __webpack_require__(866);
-
-	var _RightToggableSideBar2 = _interopRequireDefault(_RightToggableSideBar);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _DefaultExportValue = function _DefaultExportValue() {
-	    var _RightToggableSideBar_Component = _get__("RightToggableSideBar");
-
-	    return _react2.default.createElement(
-	        _RightToggableSideBar_Component,
-	        { hasPadding: true },
-	        _react2.default.createElement(
-	            "div",
-	            { className: "box box-default", style: { color: "#000000" } },
-	            _react2.default.createElement(
-	                "div",
-	                { className: "box-body" },
-	                _react2.default.createElement(
-	                    "p",
-	                    null,
-	                    _react2.default.createElement(
-	                        "strong",
-	                        null,
-	                        "General graph panel behaviors"
-	                    ),
-	                    _react2.default.createElement("br", null)
-	                ),
-	                _react2.default.createElement(
-	                    "p",
-	                    null,
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "MOUSE WHEEL"
-	                    ),
-	                    ": Zooming. ",
-	                    _react2.default.createElement("br", null),
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "LEFT CLICK"
-	                    ),
-	                    " or ",
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "MOUSE WHEEL"
-	                    ),
-	                    " + ",
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "MOUSE MOVE"
-	                    ),
-	                    ": Panning. ",
-	                    _react2.default.createElement("br", null)
-	                ),
-	                _react2.default.createElement(
-	                    "p",
-	                    null,
-	                    _react2.default.createElement(
-	                        "strong",
-	                        null,
-	                        "Custom node behaviors"
-	                    ),
-	                    _react2.default.createElement("br", null)
-	                ),
-	                _react2.default.createElement(
-	                    "p",
-	                    null,
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "MOUSE HOVER"
-	                    ),
-	                    ": Tooltip. ",
-	                    _react2.default.createElement("br", null),
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "RIGHT CLICK"
-	                    ),
-	                    ": Custom context menu. ",
-	                    _react2.default.createElement("br", null),
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "DOUBLE LEFT CLICK/"
-	                    ),
-	                    ": Node expansion. ",
-	                    _react2.default.createElement("br", null),
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "CTRL + LEFT CLICK"
-	                    ),
-	                    ": Marking connected nodes. To release: ",
-	                    _react2.default.createElement(
-	                        "code",
-	                        null,
-	                        "LEFT CLICK"
-	                    ),
-	                    " on any node. ",
-	                    _react2.default.createElement("br", null)
-	                )
-	            )
-	        ),
-	        _react2.default.createElement(
-	            "div",
-	            { className: "box box-default", style: { color: "#000000" } },
-	            _react2.default.createElement(
-	                "div",
-	                { className: "box-body" },
-	                _react2.default.createElement(
-	                    "p",
-	                    null,
-	                    _react2.default.createElement(
-	                        "strong",
-	                        null,
-	                        "About the data"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "ul",
-	                    { style: { paddingLeft: "1.2em" } },
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        "Pulled from Jama and JIRA."
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        "Items with status \"Deleted\" in Jama or status \"Closed\" in JIRA are not stored / will be deleted."
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        "Relationships from Jama are stored as unidirectional edges, relationships from JIRA as bidirectional edges. Relationships that exist in both use Jama mappings."
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        "Parent/children relationships are treated equally to upstream/downstream relationships (i.e., no difference in querying)."
-	                    )
-	                )
-	            )
-	        )
-	    );
-	};
-
-	exports.default = _DefaultExportValue;
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "RightToggableSideBar":
-	            return _RightToggableSideBar2.default;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
+/* 607 */,
+/* 608 */,
+/* 609 */,
 /* 610 */,
 /* 611 */
 /***/ function(module, exports, __webpack_require__) {
@@ -90137,21 +89348,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _debounce2 = __webpack_require__(675);
+
+	var _debounce3 = _interopRequireDefault(_debounce2);
+
 	var _Constants = __webpack_require__(249);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
-	var _SearchBarPresentation = __webpack_require__(670);
+	var _SearchInputField = __webpack_require__(672);
 
-	var _SearchBarPresentation2 = _interopRequireDefault(_SearchBarPresentation);
+	var _SearchInputField2 = _interopRequireDefault(_SearchInputField);
 
-	var _CircleSpan = __webpack_require__(564);
+	var _SearchAutocomplete = __webpack_require__(673);
 
-	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
-
-	var _debounce2 = __webpack_require__(675);
-
-	var _debounce3 = _interopRequireDefault(_debounce2);
+	var _SearchAutocomplete2 = _interopRequireDefault(_SearchAutocomplete);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -90176,31 +89387,6 @@
 	    }
 
 	    _createClass(_DefaultExportValue, [{
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            var _SearchBarPresent_Component = _get__("SearchBarPresent");
-
-	            return _react2.default.createElement(_SearchBarPresent_Component, {
-	                activeCategory: this.props.type,
-	                categories: this.renderCategories(),
-
-	                activeInputValue: this.props.value,
-	                items: this.renderItems(),
-	                inputChangeHandler: function inputChangeHandler(event) {
-	                    return _this2.handleChange(event);
-	                },
-	                inputKeyDownHandler: function inputKeyDownHandler(event) {
-	                    return _this2.handleKeyDown(event);
-	                },
-
-	                submitHandler: function submitHandler(event) {
-	                    return _this2.handleSubmit(event);
-	                }
-	            });
-	        }
-	    }, {
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
 	            this.searchItemDebounced = _get__("_debounce")(this.searchItem, 200);
@@ -90208,32 +89394,113 @@
 	    }, {
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
-	            var _this3 = this;
+	            var _this2 = this;
 
 	            // Hide dropdown block on click outside the block
-	            window.addEventListener('click', function () {
-	                return _this3.cancel();
+	            window.addEventListener("click", function () {
+	                return _this2.cancel();
 	            }, false);
 	        }
 	    }, {
 	        key: "componentWillUnmount",
 	        value: function componentWillUnmount() {
-	            var _this4 = this;
+	            var _this3 = this;
 
 	            // Remove click event listener on component unmount
-	            window.removeEventListener('click', function () {
-	                return _this4.cancel();
+	            window.removeEventListener("click", function () {
+	                return _this3.cancel();
 	            }, false);
-	        }
-	    }, {
-	        key: "stopPropagation",
-	        value: function stopPropagation(e) {
-	            e.stopPropagation();
 	        }
 	    }, {
 	        key: "cancel",
 	        value: function cancel() {
 	            this.props.clearAllItems();
+	        }
+	    }, {
+	        key: "handleSubmit",
+	        value: function handleSubmit(event) {
+	            var _props = this.props;
+	            var items = _props.items;
+	            var selectedIndex = _props.selectedIndex;
+	            var value = _props.value;
+
+	            event.preventDefault(); // done to disable site refreshes
+
+	            var item = items[selectedIndex];
+	            var type = item.type === "Project" ? item.type : "GeneralNode";
+
+	            this.props.searchNeighborsStart(type, items[selectedIndex].key);
+	            this.props.setSearchInputValue("");
+	            this.props.clearAllItems();
+	        }
+	    }, {
+	        key: "handleChange",
+	        value: function handleChange(event) {
+	            this.applyInputAndResetSelectionList(event.target.value);
+
+	            this.state.eventValue = event.target.value;
+
+	            this.searchItemDebounced(event);
+	        }
+	    }, {
+	        key: "searchItem",
+	        value: function searchItem(event) {
+	            this.props.searchItem(this.props.type, this.state.eventValue);
+	        }
+	    }, {
+	        key: "applyInputAndResetSelectionList",
+	        value: function applyInputAndResetSelectionList(inputValue) {
+	            this.props.setSearchInputValue(inputValue);
+	            this.props.setSearchSelectedIndex(-1);
+	        }
+	    }, {
+	        key: "handleKeyDown",
+	        value: function handleKeyDown(event) {
+	            // down key
+	            if (event.keyCode === 40) {
+	                if (this.props.selectedIndex + 1 < this.props.items.length) {
+	                    this.props.setSearchSelectedIndex(this.props.selectedIndex + 1);
+	                }
+	            }
+	            // up key
+	            if (event.keyCode === 38) {
+	                if (this.props.selectedIndex > 0) {
+	                    this.props.setSearchSelectedIndex(this.props.selectedIndex - 1);
+	                }
+	            }
+	            // ESC key
+	            if (event.keyCode === 27) {
+	                this.props.clearAllItems();
+	            }
+	            // Enter key
+	            if (event.keyCode === 13) {
+	                // will trigger event listener, if event is not stopped propagating
+	                event.preventDefault();
+	                event.stopPropagation();
+
+	                this.handleSubmit(event);
+	            }
+	        }
+	    }, {
+	        key: "renderCategories",
+	        value: function renderCategories() {
+	            var _this4 = this;
+
+	            return Object.keys(this.props.categories).map(function (categoryKey) {
+	                var category = _this4.props.categories[categoryKey];
+
+	                return _react2.default.createElement(
+	                    "li",
+	                    { key: category, onClick: function onClick() {
+	                            return _this4.props.setSearchCategory(category);
+	                        } },
+	                    _react2.default.createElement(
+	                        "a",
+	                        { href: "#" },
+	                        category
+	                    )
+	                );
+	            });
 	        }
 	    }, {
 	        key: "renderItems",
@@ -90270,101 +89537,36 @@
 	            });
 	        }
 	    }, {
-	        key: "renderCategories",
-	        value: function renderCategories() {
+	        key: "render",
+	        value: function render() {
 	            var _this6 = this;
 
-	            var array = [];
+	            var _SearchInputField_Component = _get__("SearchInputField");
 
-	            var _loop = function _loop(category) {
-	                array.push(_react2.default.createElement(
-	                    "li",
-	                    { key: category, onClick: function onClick() {
-	                            return _this6.props.setSearchCategory(category);
-	                        } },
-	                    _react2.default.createElement(
-	                        "a",
-	                        { href: "#" },
-	                        category
-	                    )
-	                ));
-	            };
+	            var _SearchAutocomplete_Component = _get__("SearchAutocomplete");
 
-	            for (var category in this.props.categories) {
-	                _loop(category);
-	            }
-
-	            return array;
-	        }
-	    }, {
-	        key: "handleSubmit",
-	        value: function handleSubmit(event) {
-	            var _props = this.props;
-	            var items = _props.items;
-	            var selectedIndex = _props.selectedIndex;
-	            var value = _props.value;
-
-	            event.preventDefault(); //done to disable site refreshes
-
-	            var item = items[selectedIndex];
-	            var type = item.type === "Project" ? item.type : "GeneralNode";
-
-	            this.props.searchNeighborsStart(type, items[selectedIndex].key);
-	            this.props.setSearchInputValue("");
-	            this.resetOnOptionSelection(items[selectedIndex]);
-	        }
-	    }, {
-	        key: "handleChange",
-	        value: function handleChange(event) {
-	            this.applyInputAndResetSelectionList(event.target.value);
-
-	            this.state.eventValue = event.target.value;
-
-	            this.searchItemDebounced(event);
-	        }
-	    }, {
-	        key: "searchItem",
-	        value: function searchItem(event) {
-	            this.props.searchItem(this.props.type, this.state.eventValue);
-	        }
-	    }, {
-	        key: "resetOnOptionSelection",
-	        value: function resetOnOptionSelection(item) {
-	            this.props.clearAllItems();
-	        }
-	    }, {
-	        key: "applyInputAndResetSelectionList",
-	        value: function applyInputAndResetSelectionList(inputValue) {
-	            this.props.setSearchInputValue(inputValue);
-	            this.props.setSearchSelectedIndex(-1);
-	        }
-	    }, {
-	        key: "handleKeyDown",
-	        value: function handleKeyDown(event) {
-	            //down key
-	            if (event.keyCode === 40) {
-	                if (this.props.selectedIndex + 1 < this.props.items.length) {
-	                    this.props.setSearchSelectedIndex(this.props.selectedIndex + 1);
-	                }
-	            }
-	            //up key
-	            if (event.keyCode === 38) {
-	                if (this.props.selectedIndex > 0) {
-	                    this.props.setSearchSelectedIndex(this.props.selectedIndex - 1);
-	                }
-	            }
-	            //ESC key
-	            if (event.keyCode === 27) {
-	                this.props.clearAllItems();
-	            }
-	            //Enter key
-	            if (event.keyCode === 13) {
-	                //will trigger event listener, if event is not stopped propagating
-	                event.preventDefault();
-	                event.stopPropagation();
-
-	                this.handleSubmit(event);
-	            }
+	            return _react2.default.createElement(
+	                "form",
+	                { onSubmit: function onSubmit(event) {
+	                        return _this6.handleSubmit(event);
+	                    } },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "relative" },
+	                    _react2.default.createElement(_SearchInputField_Component, {
+	                        value: this.props.value,
+	                        onChangeHandler: function onChangeHandler(event) {
+	                            return _this6.handleChange(event);
+	                        },
+	                        onKeyDownHandler: function onKeyDownHandler(event) {
+	                            return _this6.handleKeyDown(event);
+	                        }
+	                    }),
+	                    _react2.default.createElement(_SearchAutocomplete_Component, {
+	                        items: this.renderItems()
+	                    })
+	                )
+	            );
 	        }
 	    }]);
 
@@ -90399,14 +89601,17 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
-	        case "SearchBarPresent":
-	            return _SearchBarPresentation2.default;
-
 	        case "_debounce":
 	            return _debounce3.default;
 
 	        case "Constants":
 	            return _Constants2.default;
+
+	        case "SearchInputField":
+	            return _SearchInputField2.default;
+
+	        case "SearchAutocomplete":
+	            return _SearchAutocomplete2.default;
 
 	        case "React":
 	            return _react2.default;
@@ -90503,7 +89708,9 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 670 */
+/* 670 */,
+/* 671 */,
+/* 672 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -90519,62 +89726,40 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SearchButton = __webpack_require__(671);
-
-	var _SearchButton2 = _interopRequireDefault(_SearchButton);
-
-	var _SearchInputField = __webpack_require__(672);
-
-	var _SearchInputField2 = _interopRequireDefault(_SearchInputField);
-
-	var _SearchAutocomplete = __webpack_require__(673);
-
-	var _SearchAutocomplete2 = _interopRequireDefault(_SearchAutocomplete);
-
-	var _SearchCategoryDropdown = __webpack_require__(674);
-
-	var _SearchCategoryDropdown2 = _interopRequireDefault(_SearchCategoryDropdown);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _DefaultExportValue = function _DefaultExportValue(_ref) {
-	    var activeCategory = _ref.activeCategory;
-	    var activeInputValue = _ref.activeInputValue;
-	    var categories = _ref.categories;
-	    var items = _ref.items;
-	    var inputChangeHandler = _ref.inputChangeHandler;
-	    var inputKeyDownHandler = _ref.inputKeyDownHandler;
-	    var submitHandler = _ref.submitHandler;
-
-	    var _SearchInputField_Component = _get__("SearchInputField");
-
-	    var _SearchAutocomplete_Component = _get__("SearchAutocomplete");
+	var SearchInputField = function SearchInputField(_ref) {
+	    var value = _ref.value;
+	    var onChangeHandler = _ref.onChangeHandler;
+	    var onKeyDownHandler = _ref.onKeyDownHandler;
 
 	    return _react2.default.createElement(
-	        "form",
-	        { onSubmit: function onSubmit(event) {
-	                return submitHandler(event);
-	            } },
-	        _react2.default.createElement(
-	            "div",
-	            { className: "relative" },
-	            _react2.default.createElement(_SearchInputField_Component, {
-	                value: activeInputValue,
-	                onChangeHandler: function onChangeHandler(event) {
-	                    return inputChangeHandler(event);
-	                },
-	                onKeyDownHandler: function onKeyDownHandler(event) {
-	                    return inputKeyDownHandler(event);
-	                }
-	            }),
-	            _react2.default.createElement(_SearchAutocomplete_Component, {
-	                items: items
-	            })
-	        )
+	        "div",
+	        null,
+	        _react2.default.createElement("input", {
+	            value: value,
+	            type: "text",
+	            className: "form-control",
+	            id: "search",
+	            autoComplete: "off",
+	            onChange: function onChange(event) {
+	                return onChangeHandler(event);
+	            },
+	            onKeyDown: function onKeyDown(event) {
+	                return onKeyDownHandler(event);
+	            },
+	            placeholder: "Search..."
+	        })
 	    );
 	};
 
-	exports.default = _DefaultExportValue;
+	_get__("SearchInputField").propTypes = {
+	    value: _get__("React").PropTypes.string,
+	    onChangeHandler: _get__("React").PropTypes.func.isRequired,
+	    onKeyDownHandler: _get__("React").PropTypes.func.isRequired
+	};
+
+	exports.default = _get__("SearchInputField");
 	var _RewiredData__ = {};
 	var _RewireAPI__ = {};
 
@@ -90603,10 +89788,10 @@
 	function _get_original__(variableName) {
 	    switch (variableName) {
 	        case "SearchInputField":
-	            return _SearchInputField2.default;
+	            return SearchInputField;
 
-	        case "SearchAutocomplete":
-	            return _SearchAutocomplete2.default;
+	        case "React":
+	            return _react2.default;
 	    }
 
 	    return undefined;
@@ -90671,17 +89856,17 @@
 	    };
 	}
 
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+	var _typeOfOriginalExport = typeof SearchInputField === "undefined" ? "undefined" : _typeof(SearchInputField);
 
 	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
+	    Object.defineProperty(SearchInputField, name, {
 	        value: value,
 	        enumerable: false,
 	        configurable: true
 	    });
 	}
 
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(SearchInputField)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);
@@ -90700,84 +89885,6 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 671 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
-
-	var _DefaultExportValue = function _DefaultExportValue(_ref) {
-	    _objectDestructuringEmpty(_ref);
-
-	    return _react2.default.createElement(
-	        "span",
-	        { className: "input-group-btn fixed" },
-	        _react2.default.createElement(
-	            "button",
-	            { className: "btn btn-default btn-flat", type: "submit" },
-	            _react2.default.createElement("span", { className: "fa  fa-search", "aria-hidden": "true" }),
-	            " "
-	        )
-	    );
-	};
-
-	exports.default = _DefaultExportValue;
-
-/***/ },
-/* 672 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _DefaultExportValue = function _DefaultExportValue(_ref) {
-	    var value = _ref.value;
-	    var onChangeHandler = _ref.onChangeHandler;
-	    var onKeyDownHandler = _ref.onKeyDownHandler;
-
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement("input", {
-	            value: value,
-	            type: "text",
-	            className: "form-control",
-	            id: "search",
-	            autoComplete: "off",
-	            onChange: function onChange(event) {
-	                return onChangeHandler(event);
-	            },
-	            onKeyDown: function onKeyDown(event) {
-	                return onKeyDownHandler(event);
-	            },
-	            placeholder: "Search..."
-	        })
-	    );
-	};
-
-	exports.default = _DefaultExportValue;
-
-/***/ },
 /* 673 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -90786,6 +89893,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _react = __webpack_require__(1);
 
@@ -90793,54 +89903,154 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _DefaultExportValue = function _DefaultExportValue(_ref) {
+	var SearchAutocomplete = function SearchAutocomplete(_ref) {
 	    var items = _ref.items;
-
 
 	    return _react2.default.createElement(
 	        "div",
 	        null,
 	        items.length > 0 ? _react2.default.createElement(
 	            "ul",
-	            { className: "list-group list-z", style: { right: "5px", left: "5px", top: "39px", position: "absolute" } },
+	            {
+	                className: "list-group list-z",
+	                style: { right: "5px", left: "5px", top: "39px", position: "absolute" }
+	            },
 	            items
 	        ) : _react2.default.createElement("span", null)
 	    );
 	};
 
-	exports.default = _DefaultExportValue;
-
-/***/ },
-/* 674 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _DefaultExportValue = function _DefaultExportValue(_ref) {
-	    var activeCategory = _ref.activeCategory;
-	    var categories = _ref.categories;
-
-
-	    return _react2.default.createElement(
-	        "div",
-	        { className: "input-group-btn" },
-	        _react2.default.createElement("button", { type: "button", className: "btn btn-default btn-flat", "data-toggle": "dropdown" })
-	    );
+	_get__("SearchAutocomplete").propTypes = {
+	    items: _get__("React").PropTypes.arrayOf(_get__("React").PropTypes.object)
 	};
 
-	exports.default = _DefaultExportValue;
+	exports.default = _get__("SearchAutocomplete");
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "SearchAutocomplete":
+	            return SearchAutocomplete;
+
+	        case "React":
+	            return _react2.default;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof SearchAutocomplete === "undefined" ? "undefined" : _typeof(SearchAutocomplete);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(SearchAutocomplete, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(SearchAutocomplete)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
+/* 674 */,
 /* 675 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -91298,404 +90508,8 @@
 
 
 /***/ },
-/* 682 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(254);
-
-	var _SettingsActions = __webpack_require__(599);
-
-	var _Settings = __webpack_require__(251);
-
-	var _Menu = __webpack_require__(683);
-
-	var _Menu2 = _interopRequireDefault(_Menu);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    var layout = state.settings.reduce(function (object, value) {
-	        if (object.length === 0 && value.name === _get__("CHANGE_GRAPH_LAYOUT")) {
-	            return value.value;
-	        } else {
-	            return object;
-	        }
-	    }, "");
-
-	    return {
-	        settings: state.settings,
-	        layout: layout
-	    };
-	};
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        toggle: function toggle(name) {
-	            dispatch(_get__("toggleSetting")(name));
-	        },
-	        setValue: function setValue(name, value) {
-	            dispatch(_get__("setSettingValue")(name, value));
-	        }
-	    };
-	};
-
-	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("Menu"));
-
-	exports.default = _DefaultExportValue;
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "CHANGE_GRAPH_LAYOUT":
-	            return _Settings.CHANGE_GRAPH_LAYOUT;
-
-	        case "toggleSetting":
-	            return _SettingsActions.toggleSetting;
-
-	        case "setSettingValue":
-	            return _SettingsActions.setSettingValue;
-
-	        case "connect":
-	            return _reactRedux.connect;
-
-	        case "mapStateToProps":
-	            return mapStateToProps;
-
-	        case "mapDispatchProps":
-	            return mapDispatchProps;
-
-	        case "Menu":
-	            return _Menu2.default;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
+/* 682 */,
 /* 683 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _MenuPresentation = __webpack_require__(684);
-
-	var _MenuPresentation2 = _interopRequireDefault(_MenuPresentation);
-
-	var _Settings = __webpack_require__(251);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _DefaultExportValue = function (_get__$Component) {
-	    _inherits(_DefaultExportValue, _get__$Component);
-
-	    function _DefaultExportValue(props) {
-	        _classCallCheck(this, _DefaultExportValue);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_DefaultExportValue).call(this, props));
-	    }
-
-	    _createClass(_DefaultExportValue, [{
-	        key: "handleToggle",
-	        value: function handleToggle(value) {
-	            this.props.toggle(value);
-	        }
-	    }, {
-	        key: "handleValueChange",
-	        value: function handleValueChange(name, value) {
-	            this.props.setValue(name, value);
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            var _MenuPresentation_Component = _get__("MenuPresentation");
-
-	            return _react2.default.createElement(_MenuPresentation_Component, {
-	                toggleHandler: function toggleHandler(value) {
-	                    return _this2.handleToggle(value);
-	                },
-	                valueHandler: function valueHandler(name, value) {
-	                    return _this2.handleValueChange(name, value);
-	                },
-	                settings: this.props.settings,
-	                layout: this.props.layout
-	            });
-	        }
-	    }]);
-
-	    return _DefaultExportValue;
-	}(_get__("React").Component);
-
-	exports.default = _DefaultExportValue;
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "MenuPresentation":
-	            return _MenuPresentation2.default;
-
-	        case "React":
-	            return _react2.default;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
-/* 684 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -92179,6 +90993,7 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
+/* 684 */,
 /* 685 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -102765,10 +101580,6 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
 	var _reactRedux = __webpack_require__(254);
 
 	var _LaneActions = __webpack_require__(289);
@@ -102958,16 +101769,16 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _DefaultExportValue = function (_get__$Component) {
-	    _inherits(_DefaultExportValue, _get__$Component);
+	var BasicOptions = function (_get__$Component) {
+	    _inherits(BasicOptions, _get__$Component);
 
-	    function _DefaultExportValue() {
-	        _classCallCheck(this, _DefaultExportValue);
+	    function BasicOptions() {
+	        _classCallCheck(this, BasicOptions);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_DefaultExportValue).apply(this, arguments));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(BasicOptions).apply(this, arguments));
 	    }
 
-	    _createClass(_DefaultExportValue, [{
+	    _createClass(BasicOptions, [{
 	        key: "setFilterValue",
 	        value: function setFilterValue(name, value) {
 	            this.props.setFilterValue(name, value);
@@ -102981,7 +101792,8 @@
 	                "label",
 	                { className: "control-sidebar-subheading cursor", key: name },
 	                name,
-	                _react2.default.createElement("input", { type: "checkbox", className: "pull-right cursor",
+	                _react2.default.createElement("input", { type: "checkbox",
+	                    className: "pull-right cursor",
 	                    checked: checked,
 	                    onChange: function onChange() {
 	                        return _this2.setFilterValue(name.toLowerCase(), !checked);
@@ -103001,10 +101813,16 @@
 	        }
 	    }]);
 
-	    return _DefaultExportValue;
+	    return BasicOptions;
 	}(_get__("React").Component);
 
-	exports.default = _DefaultExportValue;
+	_get__("BasicOptions").propTypes = {
+	    setFilterValue: _get__("React").PropTypes.func.isRequired,
+	    upstream: _get__("React").PropTypes.string.isRequired,
+	    downstream: _get__("React").PropTypes.string.isRequired
+	};
+
+	exports.default = _get__("BasicOptions");
 	var _RewiredData__ = {};
 	var _RewireAPI__ = {};
 
@@ -103034,6 +101852,9 @@
 	    switch (variableName) {
 	        case "React":
 	            return _react2.default;
+
+	        case "BasicOptions":
+	            return BasicOptions;
 	    }
 
 	    return undefined;
@@ -103098,17 +101919,17 @@
 	    };
 	}
 
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+	var _typeOfOriginalExport = typeof BasicOptions === "undefined" ? "undefined" : _typeof(BasicOptions);
 
 	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
+	    Object.defineProperty(BasicOptions, name, {
 	        value: value,
 	        enumerable: false,
 	        configurable: true
 	    });
 	}
 
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(BasicOptions)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);
@@ -103326,22 +102147,23 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _DefaultExportValue = function _DefaultExportValue(_ref) {
+	var NeighborExpansion = function NeighborExpansion(_ref) {
 	    var setFilterValue = _ref.setFilterValue;
 	    var limit = _ref.limit;
 
 	    var _Slider_Component = _get__("Slider");
 
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(_Slider_Component, { min: 0, max: 100, defaultValue: limit, onChange: function onChange(val) {
-	                return setFilterValue("limit", val);
-	            } })
-	    );
+	    return _react2.default.createElement(_Slider_Component, { min: 0, max: 100, defaultValue: limit, onChange: function onChange(val) {
+	            return setFilterValue("limit", val);
+	        } });
 	};
 
-	exports.default = _DefaultExportValue;
+	_get__("NeighborExpansion").propTypes = {
+	    setFilterValue: _get__("React").PropTypes.func.isRequired,
+	    limit: _get__("React").PropTypes.number.isRequired
+	};
+
+	exports.default = _get__("NeighborExpansion");
 	var _RewiredData__ = {};
 	var _RewireAPI__ = {};
 
@@ -103371,6 +102193,12 @@
 	    switch (variableName) {
 	        case "Slider":
 	            return _Slider2.default;
+
+	        case "NeighborExpansion":
+	            return NeighborExpansion;
+
+	        case "React":
+	            return _react2.default;
 	    }
 
 	    return undefined;
@@ -103435,17 +102263,17 @@
 	    };
 	}
 
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+	var _typeOfOriginalExport = typeof NeighborExpansion === "undefined" ? "undefined" : _typeof(NeighborExpansion);
 
 	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
+	    Object.defineProperty(NeighborExpansion, name, {
 	        value: value,
 	        enumerable: false,
 	        configurable: true
 	    });
 	}
 
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(NeighborExpansion)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);
@@ -103648,14 +102476,6 @@
 
 	var _GraphPanel2 = _interopRequireDefault(_GraphPanel);
 
-	var _ExportToImage = __webpack_require__(859);
-
-	var _ExportToImage2 = _interopRequireDefault(_ExportToImage);
-
-	var _TestCoverageContainer = __webpack_require__(253);
-
-	var _TestCoverageContainer2 = _interopRequireDefault(_TestCoverageContainer);
-
 	var _VerticalSplitView = __webpack_require__(860);
 
 	var _VerticalSplitView2 = _interopRequireDefault(_VerticalSplitView);
@@ -103689,6 +102509,11 @@
 	            sidebarVisible && sidebarObject
 	        )
 	    );
+	};
+
+	_get__("Relations").propTypes = {
+	    sidebarObject: _get__("React").PropTypes.object,
+	    sidebarVisible: _get__("React").PropTypes.bool.isRequired
 	};
 
 	var mapStateToProps = function mapStateToProps(state) {
@@ -103737,14 +102562,17 @@
 	        case "GraphPanel":
 	            return _GraphPanel2.default;
 
+	        case "Relations":
+	            return Relations;
+
+	        case "React":
+	            return _react2.default;
+
 	        case "connect":
 	            return _reactRedux.connect;
 
 	        case "mapStateToProps":
 	            return mapStateToProps;
-
-	        case "Relations":
-	            return Relations;
 	    }
 
 	    return undefined;
@@ -103838,272 +102666,7 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 859 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _SearchBarContainer = __webpack_require__(667);
-
-	var _SearchBarContainer2 = _interopRequireDefault(_SearchBarContainer);
-
-	var _GraphPanel = __webpack_require__(312);
-
-	var _GraphPanel2 = _interopRequireDefault(_GraphPanel);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ExportToImage = function (_get__$Component) {
-	    _inherits(ExportToImage, _get__$Component);
-
-	    function ExportToImage(props) {
-	        _classCallCheck(this, ExportToImage);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ExportToImage).call(this, props));
-
-	        _this.state = {
-	            imageData: ""
-	        };
-	        return _this;
-	    }
-
-	    _createClass(ExportToImage, [{
-	        key: "convert",
-	        value: function convert() {
-	            console.log("rendering image");
-	            var svg = document.getElementById('d3box');
-	            var svgData = new XMLSerializer().serializeToString(svg);
-
-	            var canvas = document.createElement("canvas");
-
-	            var svgSize = svg.getBoundingClientRect();
-	            canvas.width = svgSize.width;
-	            canvas.height = svgSize.height;
-
-	            var ctx = canvas.getContext("2d");
-
-	            var img = document.createElement("img");
-
-	            img.onload = function () {
-	                console.log("d rawi ng image ");
-	                console.log(img);
-
-	                ctx.drawImage(img, 0, 0);
-	                var imgsrc = canvas.toDataURL("image/png");
-	                console.log(imgsrc);
-
-	                var a = document.createElement("a");
-	                a.download = container + ".png";
-	                a.href = imgsrc;
-	                a.click();
-	            };
-	            img.setAttribute("onload", function () {
-	                console.log("d rawi ng image ");
-	                console.log(img);
-
-	                ctx.drawImage(img, 0, 0);
-	                var imgsrc = canvas.toDataURL("image/png");
-	                console.log(imgsrc);
-
-	                var a = document.createElement("a");
-	                a.download = container + ".png";
-	                a.href = imgsrc;
-	                a.click();
-	            });
-	            img.setAttribute("src", "data:image/svg+xml;base64," + btoa(svgData));
-
-	            //ctx.drawImage(img, 0, 0);
-	            //
-	            //
-	            //
-	            ////svg sofar
-	            //console.log("data:image/svg+xml;base64," + btoa(svgData))
-
-	            //img.setAttribute( "src", "data:image/svg+xml;base64," + btoa( svgData ) );
-	            //
-	            //img.onload = function() {
-	            //    ctx.drawImage(img, 0, 0);
-	            //    this.setState({imageDate: canvas.toDataURL("image/png")});
-	            //};
-
-	            //var svg  = document.getElementById('d3box'),
-	            //    xml  = new XMLSerializer().serializeToString(svg),
-	            //    data = "data:image/svg+xml;base64," + btoa(xml),
-	            //    img = new Image();
-	            //console.log(data)
-	            //    this.setState({imageData: "data:image/svg+xml;base64," + btoa(xml)});
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(
-	                "div",
-	                null,
-	                _react2.default.createElement(
-	                    "button",
-	                    { className: "btn  btn-default", onClick: function onClick() {
-	                            return _this2.convert();
-	                        } },
-	                    _react2.default.createElement("span", { className: "glyphicon glyphicon-search ", "aria-hidden": "true" }),
-	                    " "
-	                ),
-	                _react2.default.createElement("canvas", null),
-	                _react2.default.createElement("img", { src: "#" }),
-	                this.state.imageData && _react2.default.createElement("img", { src: this.state.imageData })
-	            );
-	        }
-	    }]);
-
-	    return ExportToImage;
-	}(_get__("React").Component);
-
-	exports.default = _get__("ExportToImage");
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "React":
-	            return _react2.default;
-
-	        case "ExportToImage":
-	            return ExportToImage;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof ExportToImage === "undefined" ? "undefined" : _typeof(ExportToImage);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(ExportToImage, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(ExportToImage)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
+/* 859 */,
 /* 860 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -104284,7 +102847,7 @@
 /* 861 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -105289,23 +103852,12 @@
 	    var mapper = _ref.mapper;
 	    var filter = _ref.filter;
 
-
-	    var mappingObj = mapper.reduce(function (obj, entry) {
-	        obj[entry.property] = {
-	            columnHeader: entry.columnHeader,
-	            contentMapping: entry.contentMapping,
-	            dataFunction: entry.dataFunction
-	        };
-
-	        return obj;
-	    }, {});
-
 	    var d = data.map(function (node, index) {
 	        var _Tr_Component = _get__("Tr");
 
 	        return _react2.default.createElement(
 	            _Tr_Component,
-	            { key: index, className: trClass(node) },
+	            { key: index, className: trClass && trClass(node) },
 	            mapper.map(function (map, index2) {
 	                var mappedNode = map.dataFunction ? map.dataFunction(node) : node;
 
@@ -105806,6 +104358,742 @@
 	}
 
 	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(SettingsSideBar)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
+
+/***/ },
+/* 867 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _RightToggableSideBar = __webpack_require__(866);
+
+	var _RightToggableSideBar2 = _interopRequireDefault(_RightToggableSideBar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _DefaultExportValue = function _DefaultExportValue() {
+	    var _RightToggableSideBar_Component = _get__("RightToggableSideBar");
+
+	    return _react2.default.createElement(
+	        _RightToggableSideBar_Component,
+	        { hasPadding: true },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "box box-default", style: { color: "#000000" } },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "box-body" },
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "General graph panel behaviors"
+	                    ),
+	                    _react2.default.createElement("br", null)
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "MOUSE WHEEL"
+	                    ),
+	                    ": Zooming. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "LEFT CLICK"
+	                    ),
+	                    " or ",
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "MOUSE WHEEL"
+	                    ),
+	                    " + ",
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "MOUSE MOVE"
+	                    ),
+	                    ": Panning. ",
+	                    _react2.default.createElement("br", null)
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "Custom node behaviors"
+	                    ),
+	                    _react2.default.createElement("br", null)
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "MOUSE HOVER"
+	                    ),
+	                    ": Tooltip. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "RIGHT CLICK"
+	                    ),
+	                    ": Custom context menu. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "DOUBLE LEFT CLICK/"
+	                    ),
+	                    ": Node expansion. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "CTRL + LEFT CLICK"
+	                    ),
+	                    ": Marking connected nodes. To release: ",
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "LEFT CLICK"
+	                    ),
+	                    " on any node. ",
+	                    _react2.default.createElement("br", null)
+	                )
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "box box-default", style: { color: "#000000" } },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "box-body" },
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "About the data"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "ul",
+	                    { style: { paddingLeft: "1.2em" } },
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Pulled from Jama and JIRA."
+	                    ),
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Items with status \"Deleted\" in Jama or status \"Closed\" in JIRA are not stored / will be deleted."
+	                    ),
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Relationships from Jama are stored as unidirectional edges, relationships from JIRA as bidirectional edges. Relationships that exist in both use Jama mappings."
+	                    ),
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Parent/children relationships are treated equally to upstream/downstream relationships (i.e., no difference in querying)."
+	                    )
+	                )
+	            )
+	        )
+	    );
+	};
+
+	exports.default = _DefaultExportValue;
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "RightToggableSideBar":
+	            return _RightToggableSideBar2.default;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(_DefaultExportValue, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
+
+/***/ },
+/* 868 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(254);
+
+	var _SearchNeighborsActions = __webpack_require__(265);
+
+	var _LayoutActions = __webpack_require__(293);
+
+	var _TestCoverageTable = __webpack_require__(294);
+
+	var _TestCoverageTable2 = _interopRequireDefault(_TestCoverageTable);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        coverage: state.coverage
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        searchNeighborsStart: function searchNeighborsStart(category, key) {
+	            dispatch(_get__("searchNeighbors")(category, key));
+	        },
+	        setPanelInvisible: function setPanelInvisible() {
+	            dispatch(_get__("setVisibility")(false));
+	        }
+	    };
+	};
+
+	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("TestCoverageTable"));
+
+	exports.default = _DefaultExportValue;
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "searchNeighbors":
+	            return _SearchNeighborsActions.searchNeighbors;
+
+	        case "setVisibility":
+	            return _LayoutActions.setVisibility;
+
+	        case "connect":
+	            return _reactRedux.connect;
+
+	        case "mapStateToProps":
+	            return mapStateToProps;
+
+	        case "mapDispatchProps":
+	            return mapDispatchProps;
+
+	        case "TestCoverageTable":
+	            return _TestCoverageTable2.default;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(_DefaultExportValue, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
+
+/***/ },
+/* 869 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(254);
+
+	var _SettingsActions = __webpack_require__(599);
+
+	var _Settings = __webpack_require__(251);
+
+	var _Menu = __webpack_require__(683);
+
+	var _Menu2 = _interopRequireDefault(_Menu);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var MenuContainer = function (_get__$Component) {
+	    _inherits(MenuContainer, _get__$Component);
+
+	    function MenuContainer() {
+	        _classCallCheck(this, MenuContainer);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(MenuContainer).apply(this, arguments));
+	    }
+
+	    _createClass(MenuContainer, [{
+	        key: "handleToggle",
+	        value: function handleToggle(value) {
+	            this.props.toggle(value);
+	        }
+	    }, {
+	        key: "handleValueChange",
+	        value: function handleValueChange(name, value) {
+	            this.props.setValue(name, value);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            var _Menu_Component = _get__("Menu");
+
+	            return _react2.default.createElement(_Menu_Component, {
+	                toggleHandler: function toggleHandler(value) {
+	                    return _this2.handleToggle(value);
+	                },
+	                valueHandler: function valueHandler(name, value) {
+	                    return _this2.handleValueChange(name, value);
+	                },
+	                settings: this.props.settings,
+	                layout: this.props.layout
+	            });
+	        }
+	    }]);
+
+	    return MenuContainer;
+	}(_get__("React").Component);
+
+	_get__("MenuContainer").propTypes = {
+	    toggle: _get__("React").PropTypes.func.isRequired,
+	    setValue: _get__("React").PropTypes.func.isRequired,
+	    settings: _get__("React").PropTypes.any.isRequired,
+	    layout: _get__("React").PropTypes.any.isRequired
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    var layout = state.settings.reduce(function (object, value) {
+	        if (object.length === 0 && value.name === _get__("CHANGE_GRAPH_LAYOUT")) {
+	            return value.value;
+	        } else {
+	            return object;
+	        }
+	    }, "");
+
+	    return {
+	        settings: state.settings,
+	        layout: layout
+	    };
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        toggle: function toggle(name) {
+	            dispatch(_get__("toggleSetting")(name));
+	        },
+	        setValue: function setValue(name, value) {
+	            dispatch(_get__("setSettingValue")(name, value));
+	        }
+	    };
+	};
+
+	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("MenuContainer"));
+
+	exports.default = _DefaultExportValue;
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "Menu":
+	            return _Menu2.default;
+
+	        case "React":
+	            return _react2.default;
+
+	        case "MenuContainer":
+	            return MenuContainer;
+
+	        case "CHANGE_GRAPH_LAYOUT":
+	            return _Settings.CHANGE_GRAPH_LAYOUT;
+
+	        case "toggleSetting":
+	            return _SettingsActions.toggleSetting;
+
+	        case "setSettingValue":
+	            return _SettingsActions.setSettingValue;
+
+	        case "connect":
+	            return _reactRedux.connect;
+
+	        case "mapStateToProps":
+	            return mapStateToProps;
+
+	        case "mapDispatchProps":
+	            return mapDispatchProps;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(_DefaultExportValue, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);

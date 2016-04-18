@@ -3,12 +3,10 @@ import { connect } from "react-redux";
 
 import SearchBarComponent from "../SearchBar/SearchBarContainer";
 import GraphPanel from "../GraphPanel/GraphPanel";
-import ExportToImage from "../GraphPanel/ExportToImage"
-import TestCoverageComponent from "../TestCoveragePanel/TestCoverageContainer";
 import VerticalSplitView from "../widgets/VerticalSplitView";
 
-const Relations = ( { sidebarObject, sidebarVisible } ) => {
-    const height = "calc(100vh - 50px)"
+const Relations = ({ sidebarObject, sidebarVisible }) => {
+    const height = "calc(100vh - 50px)";
 
     return (
         <div>
@@ -22,7 +20,12 @@ const Relations = ( { sidebarObject, sidebarVisible } ) => {
             </VerticalSplitView>
         </div>
     );
-}
+};
+
+Relations.propTypes = {
+    sidebarObject: React.PropTypes.object,
+    sidebarVisible: React.PropTypes.bool.isRequired
+};
 
 const mapStateToProps = (state) => {
     return {

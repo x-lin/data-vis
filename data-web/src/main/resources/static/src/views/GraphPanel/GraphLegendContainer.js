@@ -5,6 +5,29 @@ import { toggleFilterItemCategory } from "../../actions/action-creators/GraphFil
 
 import GraphLegend from "./GraphLegend";
 
+const GraphLegendContainer = ({
+    toggleFilterItemCategory,
+    visibilityFilters,
+    legend,
+    divId
+}) => {
+    return (
+        <GraphLegend
+          toggleFilterItemCategory={(name) => toggleFilterItemCategory(name)}
+          visibilityFilters={visibilityFilters}
+          legend={legend}
+          divId={divId}
+        />
+    );
+};
+
+GraphLegendContainer.propTypes = {
+    toggleFilterItemCategory: React.PropTypes.func.isRequired,
+    visibilityFilters: React.PropTypes.object.isRequired,
+    legend: React.PropTypes.object.isRequired,
+    divId: React.PropTypes.string.isRequired
+};
+
 const mapStateToProps = (state) => {
     return {
         visibilityFilters: state.visibilityFilters,
@@ -23,4 +46,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(GraphLegend);
+)(GraphLegendContainer);

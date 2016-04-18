@@ -1,64 +1,88 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 import Constants from "../../config/Constants";
 
-export default class extends React.Component {
-    componentDidUpdate(){
-        const bbox = $("#"+ this.props.divId)[0].getBBox();
+class GraphLegend extends React.Component {
+    constructor(props) {
+        super(props);
 
-        if (bbox) {
-            const padding = 15;
-            const extra = 10;
+        this.state = {
+            width: null,
+            height: null
+        };
+    }
 
-            $("#"+ this.props.divId)
-                .attr("width", bbox.width + 2*padding + extra)
-                .attr("height", bbox.height + 2*padding + extra);
+    componentDidUpdate() {
+        this.updateBBox();
+    }
+
+    updateBBox() {
+        const bbox = ReactDOM.findDOMNode(this).getBBox();
+
+        if (this.state.width !== bbox.width) {
+            this.setState({
+                width: bbox.width,
+                height: bbox.height
+            });
         }
     }
 
-    toggleCategoryFilter(name) {
-        this.props.toggleFilterItemCategory(name);
-    }
-
     createData() {
-        var data = [];
+        const data = [];
 
         this.props.legend.legend.forEach((legend) => {
             data.push({
                 name: legend,
                 color: Constants.getColor(legend)
-            })
-        })
+            });
+        });
 
         return data;
-    };
+    }
+
+    calcLength(size) {
+        const padding = 15;
+        const extra = 10;
+
+        return size + 2 * padding + extra;
+    }
 
     render() {
-        const g = () => {
+        const { visibilityFilters, toggleFilterItemCategory, divId } = this.props;
 
-            return this.createData().map((element, index) => {
-                const yTranslate = index*25+10;
-                let opacity = 1;
+        const g = this.createData().map((element, index) => {
+            const yTranslate = index * 25 + 10;
+            const opacity = (!visibilityFilters.hasOwnProperty(element.name) || visibilityFilters[element.name]) ?
+                "1" : "0.6";
 
-                if(this.props.visibilityFilters.hasOwnProperty(element.name)) {
-                    opacity = this.props.visibilityFilters[element.name] ? "1" : "0.6";
-                }
-
-                return (
-                    <g className="graph-legend-g" key={index} transform={`translate(10,${yTranslate})`}
-                        onClick={(e) => this.toggleCategoryFilter(element.name)}
-                        opacity={opacity}>
-
-                        <circle r="10" fill={element.color} />
-                        <text x="20" y="5">{element.name}</text>
-                    </g>);
-            });
-        };
+            return (
+                <g className="graph-legend-g" key={index} transform={`translate(10,${yTranslate})`}
+                  onClick={() => toggleFilterItemCategory(element.name)}
+                  opacity={opacity}
+                >
+                    <circle r="10" fill={element.color} />
+                    <text x="20" y="5">{element.name}</text>
+                </g>);
+        });
 
         return (
-                <svg id={this.props.divId}>
-                    {g()}
-                </svg>
+            <svg
+              id={divId}
+              width={this.calcLength(this.state.width)}
+              height={this.calcLength(this.state.height)}
+            >
+                {g}
+            </svg>
         );
-    };
+    }
 }
+
+GraphLegend.propTypes = {
+    toggleFilterItemCategory: React.PropTypes.func.isRequired,
+    visibilityFilters: React.PropTypes.object.isRequired,
+    legend: React.PropTypes.object.isRequired,
+    divId: React.PropTypes.string.isRequired
+};
+
+export default GraphLegend;

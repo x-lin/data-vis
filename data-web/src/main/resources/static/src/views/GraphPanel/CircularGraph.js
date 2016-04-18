@@ -118,7 +118,7 @@ export default class extends React.Component {
         //Create an array logging what is connected to what
         for (let i = 0; i < data.nodes.length; i++) {
             this.state.linkedByIndex[i + "," + i] = 1;
-        };
+        }
         data.edges.forEach((d) => {
             this.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
         });

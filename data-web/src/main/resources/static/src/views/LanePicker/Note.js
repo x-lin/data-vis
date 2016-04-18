@@ -32,7 +32,7 @@ const getColor = (type) => {
         case "OTH":
             return "#DDD";
     }
-}
+};
 
 class Note extends React.Component {
 

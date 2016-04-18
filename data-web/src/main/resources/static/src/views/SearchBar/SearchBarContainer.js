@@ -38,7 +38,7 @@ const mapDispatchProps = (dispatch) => {
         },
         setSearchSelectedIndex: (value) => {
             dispatch(setSearchSelectedIndex(value));
-        },
+        }
     };
 };
 

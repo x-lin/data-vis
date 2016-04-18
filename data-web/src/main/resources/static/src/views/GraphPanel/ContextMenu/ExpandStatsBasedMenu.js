@@ -30,8 +30,7 @@ class StatsBasedMenu extends React.Component {
     }
 
     componentDidMount() {
-        const bbox = $("#"+ "stats-menu")[0].getBoundingClientRect();;
-
+        const bbox = $("#" + "stats-menu")[0].getBoundingClientRect();
         this.setState({
             width: bbox.width ,
             height: bbox.height

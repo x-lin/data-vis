@@ -63,8 +63,7 @@ class ContextMenu extends React.Component {
             </Overlay>
         );
     }
-};
-
+}
 const mapStateToProps = (state) => {
     return {
         context: state.contextmenu.context

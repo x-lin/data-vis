@@ -12,9 +12,9 @@ class D3Panel extends React.Component {
     chooseLayout() {
         switch(this.props.layout) {
             case FORCE_GRAPH_LAYOUT:
-                return <ForceGraphComponent divId={"force-graph-component"} />
+                return <ForceGraphComponent divId={"force-graph-component"} />;
             case CIRCULAR_LAYOUT:
-                return <CircularGraphComponent divId={"force-graph-component"} />
+                return <CircularGraphComponent divId={"force-graph-component"} />;
             case TREE_LAYOUT:
                 return <ForceGraphComponent divId={"force-graph-component"} />
         }

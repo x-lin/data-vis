@@ -108,7 +108,7 @@ const prepare = (data, filterDirection) => {
             !filterDirection
         ) {
             const index = array.reduce((val, entry, index) => {
-                if(val === -1 && entry.node.key === current.node.key) {
+                if (val === -1 && entry.node.key === current.node.key) {
                     return index;
                 } else {
                     return val;

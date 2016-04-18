@@ -84,4 +84,4 @@ const fetchItemsReducer = (state, action) => {
         default:
             return state;
     }
-}
+};

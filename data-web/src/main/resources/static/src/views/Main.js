@@ -3,9 +3,9 @@ import Router from "react-router";
 import { Link } from "react-router";
 import { connect } from "react-redux";
 
-import SettingsSideBarComponent from "./Settings/SettingsSideBarContainer";
+import InfoSideBar from "./Settings/InfoSideBar";
 import SearchBarComponent from "./SearchBar/SearchBarContainer";
-import MenuComponent from "../views/Menu/MenuComponent";
+import MenuContainer from "./Menu/MenuContainer";
 
 export default class Main extends React.Component {
     render() {
@@ -25,12 +25,12 @@ export default class Main extends React.Component {
                             </div>
 
                             <div className="navbar-custom-menu">
-                                <MenuComponent />
+                                <MenuContainer />
                             </div>
                     </nav>
                 </header>
 
-                <SettingsSideBarComponent />
+                <InfoSideBar />
 
                 <div className="content-wrapper">
                     {this.props.children}

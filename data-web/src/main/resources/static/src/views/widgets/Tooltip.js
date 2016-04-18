@@ -19,7 +19,7 @@ const Tooltip = ({ target, tooltip }) => {
             </BootstrapTooltip>
         </Overlay>
     );
-}
+};
 
 Tooltip.propTypes = {
     target: React.PropTypes.any,

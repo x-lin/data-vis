@@ -5,7 +5,7 @@ export default ({notes, move}) => {
     const withItems = {
         padding: "0px",
         margin: "0px",
-        listStyle: "none",
+        listStyle: "none"
     };
 
     const withoutItems = Object.assign({}, withItems, {

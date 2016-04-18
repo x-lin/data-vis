@@ -53,8 +53,8 @@ class ExportToImage extends React.Component {
         a.download = container+".png";
         a.href = imgsrc;
         a.click();
-    })
-        img.setAttribute("src", "data:image/svg+xml;base64," + btoa(svgData))
+    });
+        img.setAttribute("src", "data:image/svg+xml;base64," + btoa(svgData));
 
 
         //ctx.drawImage(img, 0, 0);
