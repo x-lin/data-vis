@@ -22,7 +22,7 @@ const Tooltip = ({ target, tooltip }) => {
 }
 
 Tooltip.propTypes = {
-    target: React.PropTypes.node.isRequired,
+    target: React.PropTypes.any,
     tooltip: React.PropTypes.node.isRequired
 };
 
