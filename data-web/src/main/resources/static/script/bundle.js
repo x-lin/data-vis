@@ -77835,7 +77835,7 @@
 	};
 
 	_get__("Tooltip").propTypes = {
-	    target: _get__("React").PropTypes.node.isRequired,
+	    target: _get__("React").PropTypes.any,
 	    tooltip: _get__("React").PropTypes.node.isRequired
 	};
 
@@ -83286,242 +83286,287 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _RightToggableSideBar = __webpack_require__(866);
+
+	var _RightToggableSideBar2 = _interopRequireDefault(_RightToggableSideBar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _DefaultExportValue = function _DefaultExportValue(_ref) {
-	    var toggleHandler = _ref.toggleHandler;
-	    var valueHandler = _ref.valueHandler;
-	    var settings = _ref.settings;
-
+	var _DefaultExportValue = function _DefaultExportValue() {
+	    var _RightToggableSideBar_Component = _get__("RightToggableSideBar");
 
 	    return _react2.default.createElement(
-	        "div",
-	        null,
+	        _RightToggableSideBar_Component,
+	        { hasPadding: true },
 	        _react2.default.createElement(
-	            "aside",
-	            { className: "control-sidebar control-sidebar-dark" },
+	            "div",
+	            { className: "box box-default", style: { color: "#000000" } },
 	            _react2.default.createElement(
 	                "div",
-	                { style: { padding: "10px", color: "#000000" } },
+	                { className: "box-body" },
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "box box-default" },
+	                    "p",
+	                    null,
 	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "box-body" },
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            _react2.default.createElement(
-	                                "strong",
-	                                null,
-	                                "General graph panel behaviors"
-	                            ),
-	                            _react2.default.createElement("br", null)
-	                        ),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "MOUSE WHEEL"
-	                            ),
-	                            ": Zooming. ",
-	                            _react2.default.createElement("br", null),
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "LEFT CLICK"
-	                            ),
-	                            " or ",
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "MOUSE WHEEL"
-	                            ),
-	                            " + ",
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "MOUSE MOVE"
-	                            ),
-	                            ": Panning. ",
-	                            _react2.default.createElement("br", null)
-	                        ),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            _react2.default.createElement(
-	                                "strong",
-	                                null,
-	                                "Custom node behaviors"
-	                            ),
-	                            _react2.default.createElement("br", null)
-	                        ),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "MOUSE HOVER"
-	                            ),
-	                            ": Tooltip. ",
-	                            _react2.default.createElement("br", null),
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "RIGHT CLICK"
-	                            ),
-	                            ": Custom context menu. ",
-	                            _react2.default.createElement("br", null),
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "DOUBLE LEFT CLICK/"
-	                            ),
-	                            ": Node expansion. ",
-	                            _react2.default.createElement("br", null),
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "CTRL + LEFT CLICK"
-	                            ),
-	                            ": Marking connected nodes. To release: ",
-	                            _react2.default.createElement(
-	                                "code",
-	                                null,
-	                                "LEFT CLICK"
-	                            ),
-	                            " on any node. ",
-	                            _react2.default.createElement("br", null)
-	                        )
-	                    )
+	                        "strong",
+	                        null,
+	                        "General graph panel behaviors"
+	                    ),
+	                    _react2.default.createElement("br", null)
 	                ),
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "box box-default" },
+	                    "p",
+	                    null,
 	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "box-body" },
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            _react2.default.createElement(
-	                                "strong",
-	                                null,
-	                                "About the data"
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            "ul",
-	                            { style: { paddingLeft: "1.2em" } },
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                "Pulled from Jama and JIRA."
-	                            ),
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                "Items with status \"Deleted\" in Jama or status \"Closed\" in JIRA are not stored / will be deleted."
-	                            ),
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                "Relationships from Jama are stored as unidirectional edges, relationships from JIRA as bidirectional edges. Relationships that exist in both use Jama mappings."
-	                            ),
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                "Parent/children relationships are treated equally to upstream/downstream relationships (i.e., no difference in querying)."
-	                            )
-	                        )
-	                    )
+	                        "code",
+	                        null,
+	                        "MOUSE WHEEL"
+	                    ),
+	                    ": Zooming. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "LEFT CLICK"
+	                    ),
+	                    " or ",
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "MOUSE WHEEL"
+	                    ),
+	                    " + ",
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "MOUSE MOVE"
+	                    ),
+	                    ": Panning. ",
+	                    _react2.default.createElement("br", null)
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "Custom node behaviors"
+	                    ),
+	                    _react2.default.createElement("br", null)
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "MOUSE HOVER"
+	                    ),
+	                    ": Tooltip. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "RIGHT CLICK"
+	                    ),
+	                    ": Custom context menu. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "DOUBLE LEFT CLICK/"
+	                    ),
+	                    ": Node expansion. ",
+	                    _react2.default.createElement("br", null),
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "CTRL + LEFT CLICK"
+	                    ),
+	                    ": Marking connected nodes. To release: ",
+	                    _react2.default.createElement(
+	                        "code",
+	                        null,
+	                        "LEFT CLICK"
+	                    ),
+	                    " on any node. ",
+	                    _react2.default.createElement("br", null)
 	                )
 	            )
 	        ),
-	        _react2.default.createElement("div", { className: "control-sidebar-bg" })
+	        _react2.default.createElement(
+	            "div",
+	            { className: "box box-default", style: { color: "#000000" } },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "box-body" },
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "About the data"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "ul",
+	                    { style: { paddingLeft: "1.2em" } },
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Pulled from Jama and JIRA."
+	                    ),
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Items with status \"Deleted\" in Jama or status \"Closed\" in JIRA are not stored / will be deleted."
+	                    ),
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Relationships from Jama are stored as unidirectional edges, relationships from JIRA as bidirectional edges. Relationships that exist in both use Jama mappings."
+	                    ),
+	                    _react2.default.createElement(
+	                        "li",
+	                        null,
+	                        "Parent/children relationships are treated equally to upstream/downstream relationships (i.e., no difference in querying)."
+	                    )
+	                )
+	            )
+	        )
 	    );
 	};
 
 	exports.default = _DefaultExportValue;
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
 
-	//export default ( {
-	//    toggleHandler,
-	//    valueHandler,
-	//    settings
-	//} ) => {
-	//    const renderCheckboxes = () => {
-	//        return settings.map((setting, index) => {
-	//            return (
-	//                <div className="form-group" key={index}>
-	//                    {typeof setting.value === "boolean" ?
-	//                        <label className="control-sidebar-subheading cursor">
-	//                            <input type="checkbox" className="pull-right cursor" value={setting.name} checked={setting.value}
-	//                                   onChange={toggleHandler}/>
-	//                            {setting.description}
-	//                        </label>
-	//                        :
-	//                    <div>
-	//                            <label className="control-sidebar-subheading cursor">
-	//                                {setting.description}
-	//                            </label>
-	//                            <div>
-	//                                {/*<Slider min={setting.min} max={setting.max}
-	//                                        defaultValue={setting.value}
-	//                                        step={setting.step}
-	//                                        onChange={function(value) {
-	//                                            valueHandler(setting.name, value)}}
-	//                                />*/}
-	//                            </div>
-	//                        </div>
-	//                    }
-	//
-	//                </div>
-	//            );
-	//        });
-	//    };
-	//
-	//    return (
-	//    <div>
-	//        <aside className="control-sidebar control-sidebar-dark">
-	//
-	//            <ul className="nav nav-tabs nav-justified control-sidebar-tabs">
-	//                <li className="active"><a href="#control-sidebar-settings-tab" data-toggle="tab"><i className="fa fa-gears" /></a></li>
-	//                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i className="fa fa-home" /></a></li>
-	//            </ul>
-	//
-	//            <div className="tab-content">
-	//                <div className="tab-pane active" id="control-sidebar-settings-tab">
-	//                        <div className="sidebar-topdown">
-	//                            <SideBarHeader title="Graph Settings" iconClass="fa fa-picture-o" />
-	//                        </div>
-	//
-	//                        <div className="sidebar-padding">
-	//                            {renderCheckboxes()}
-	//                        </div>
-	//                </div>
-	//
-	//                <div className="tab-pane" id="control-sidebar-home-tab">
-	//                    <div className="sidebar-topdown">
-	//                        <SideBarHeader title="Some other settings" iconClass="fa fa-picture-o" />
-	//                    </div>
-	//                    <SideBarHeader title="Another settings" iconClass="fa fa-picture-o" />
-	//                </div>
-	//
-	//            </div>
-	//        </aside>
-	//        <div className="control-sidebar-bg"></div>
-	//    </div>
-	//    );
-	//};
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "RightToggableSideBar":
+	            return _RightToggableSideBar2.default;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(_DefaultExportValue, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
 /* 610 */,
@@ -104239,7 +104284,7 @@
 /* 861 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -105608,6 +105653,175 @@
 	exports.__ResetDependency__ = _reset__;
 	exports.__RewireAPI__ = _RewireAPI__;
 	exports.default = _RewireAPI__;
+
+/***/ },
+/* 866 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SettingsSideBar = function SettingsSideBar(_ref) {
+	    var children = _ref.children;
+	    var hasPadding = _ref.hasPadding;
+
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	            "aside",
+	            { className: "control-sidebar control-sidebar-dark" },
+	            _react2.default.createElement(
+	                "div",
+	                { style: hasPadding && { padding: "10px" } },
+	                children
+	            )
+	        ),
+	        _react2.default.createElement("div", { className: "control-sidebar-bg" })
+	    );
+	};
+
+	_get__("SettingsSideBar").propTypes = {
+	    children: _get__("React").PropTypes.node,
+	    hasPadding: _get__("React").PropTypes.bool
+	};
+
+	exports.default = _get__("SettingsSideBar");
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "SettingsSideBar":
+	            return SettingsSideBar;
+
+	        case "React":
+	            return _react2.default;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof SettingsSideBar === "undefined" ? "undefined" : _typeof(SettingsSideBar);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(SettingsSideBar, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(SettingsSideBar)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ }
 /******/ ]);
