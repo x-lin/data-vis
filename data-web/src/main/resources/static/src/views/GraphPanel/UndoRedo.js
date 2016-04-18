@@ -4,10 +4,8 @@ import { connect } from "react-redux";
 import d3 from "d3";
 import { store } from "../../stores/ReduxStore";
 
-import ForceGraphComponent from "./ForceGraphComponent";
-import GraphLegendComponent from "./GraphLegendComponent";
-import "./GraphLegend.css";
-import "./ForceGraphComponent.css"
+import ForceGraphComponent from "./ForceGraphContainer";
+import GraphLegendComponent from "./GraphLegendContainer";
 import { undoGraphAction, redoGraphAction } from "../../actions/action-creators/GraphActions";
 
 class UndoRedo extends React.Component {

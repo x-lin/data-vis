@@ -2,12 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import d3 from "d3";
 
-import ForceGraphComponent from "./ForceGraphComponent";
-import GraphLegendComponent from "./GraphLegendComponent";
-import CircularGraphComponent from "./CircularGraphComponent";
+import ForceGraphComponent from "./ForceGraphContainer";
+import GraphLegendComponent from "./GraphLegendContainer";
+import CircularGraphComponent from "./CircularGraphContainer";
 import UndoRedo from "./UndoRedo";
-import "./GraphLegend.css";
-import "./ForceGraphComponent.css"
 import { CHANGE_GRAPH_LAYOUT, CIRCULAR_LAYOUT, TREE_LAYOUT, FORCE_GRAPH_LAYOUT } from "../../config/Settings";
 
 class D3Panel extends React.Component {

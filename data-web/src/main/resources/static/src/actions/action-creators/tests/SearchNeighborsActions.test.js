@@ -3,10 +3,12 @@ import { test } from "tape";
 import { executeTests } from "./ActionsTestTemplate";
 
 import {
-    SEARCH_NEIGHBORS_START,
-    searchNeighborsStart
+    NEIGHBORS_FETCH_ERROR, NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS,
+    fetchNeighborsError, fetchNeighborsStart, fetchNeighborsSuccess
 } from "../SearchNeighborsActions";
 
-test("Testing SearchNeighborsActions", (assert) => {
-    executeTests(assert, searchNeighborsStart, SEARCH_NEIGHBORS_START, ["category", "key"]);
+test("Testing FetchNeighborsActions", (assert) => {
+    executeTests(assert, fetchNeighborsStart, NEIGHBORS_FETCH_START, ["category", "key"]);
+    executeTests(assert, fetchNeighborsSuccess, NEIGHBORS_FETCH_SUCCESS, ["category", "key", "neighbors"]);
+    executeTests(assert, fetchNeighborsError, NEIGHBORS_FETCH_ERROR, ["category", "key", "error"]);
 });

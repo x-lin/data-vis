@@ -2,13 +2,13 @@ import React from "react";
 
 import SideBarHeader from "../widgets/SideBarHeader";
 import Slider from "../widgets/Slider";
-import FileLoaderComponent from "../GraphLoader/FileLoaderComponent";
-import FileSaverComponent from "../GraphLoader/FileSaverComponent";
-import NewGraphComponent from "../GraphLoader/NewGraphComponent";
+import FileLoaderComponent from "../GraphLoader/FileLoaderContainer";
+import FileSaverComponent from "../GraphLoader/FileSaverContainer";
+import NewGraphComponent from "../GraphLoader/NewGraphContainer";
 import Label from "../widgets/Label";
 import LanePicker from "../LanePicker/LanePicker";
-import BasicOptionsComponent from "./BasicOptionsComponent";
-import NeighborExpansionComponent from "./NeighborExpansionComponent";
+import BasicOptionsComponent from "./BasicOptionsContainer";
+import NeighborExpansionComponent from "./NeighborExpansionContainer";
 import Header from "../widgets/Header";
 
 import { DropdownButton, MenuItem, OverlayTrigger, Popover } from "react-bootstrap";

@@ -1,7 +1,7 @@
 import { ADD_TO_GRAPH, REMOVE_FROM_GRAPH, UPDATE_GRAPH, CLEAR_GRAPH, EXPAND_NODE, REDO_GRAPH_ACTION, UNDO_GRAPH_ACTION }
     from "../actions/action-creators/GraphActions";
 import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
-    from "../actions/action-creators/FetchNeighborsActions";
+    from "../actions/action-creators/SearchNeighborsActions";
 import { REHYDRATE } from "redux-persist/constants";
 import Constants from "../config/Constants";
 import Edge from "../utils/graph/Edge";
@@ -137,7 +137,7 @@ action) => {
             };
         case REHYDRATE:
             const { graph } = action.payload;
-            console.log(action.payload);
+
             if(graph) {
                 push(state.present, prepareWithoutParse(graph.present));
 

@@ -4,14 +4,14 @@ import { MenuItem, Dropdown, ButtonGroup } from "react-bootstrap";
 
 import Constants from "../../../config/Constants";
 import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT } from "../../../actions/action-creators/ContextMenuActions";
-import { searchTestCoverage } from "../../../actions/aggregated/SearchTestCoverage";
+import { searchTestCoverage } from "../../../actions/aggregated/SearchTestCoverageActions";
 import { activateContext, deactivateContext, clearState } from "../../../actions/action-creators/ContextMenuActions";
 import { removeFromGraph } from "../../../actions/action-creators/GraphActions";
 import ContextMenuBuilder from "./ContextMenuBuilder";
 
 class ContextMenuButtonMenu extends React.Component {
-    showTestCoverage(key, category, d) {
-        this.props.searchTestCoverage(category, key, d);
+    showTestCoverage(d) {
+        this.props.searchTestCoverage(d);
     }
 
     removeNode(key) {
@@ -43,7 +43,7 @@ class ContextMenuButtonMenu extends React.Component {
                 </a>
 
                 <Dropdown.Menu>
-                    <MenuItem eventKey="1" onSelect={() => this.showTestCoverage(d.key, d.type, d)}><strong>TC</strong>&nbsp; Test Coverage</MenuItem>
+                    <MenuItem eventKey="1" onSelect={() => this.showTestCoverage(d)}><strong>TC</strong>&nbsp; Test Coverage</MenuItem>
                 </Dropdown.Menu>
             </Dropdown>
         </ButtonGroup>
@@ -58,8 +58,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        searchTestCoverage: (category, key, d) => {
-            dispatch(searchTestCoverage(category, key, d));
+        searchTestCoverage: (node) => {
+            dispatch(searchTestCoverage(node));
         },
         activateContext: (context) => {
             dispatch(activateContext(context));

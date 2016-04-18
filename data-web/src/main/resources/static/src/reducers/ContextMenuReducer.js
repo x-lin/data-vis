@@ -1,5 +1,5 @@
-import { ACTIVATE_CONTEXT, DEACTIVATE_CONTEXT, CLEAR_STATE,
-        EXPAND_CONTEXT, FILTER_NEIGHBOR_TYPES} from "../actions/action-creators/ContextMenuActions";
+import { ACTIVATE_CONTEXT, DEACTIVATE_CONTEXT, CLEAR_STATE, EXPAND_CONTEXT, FILTER_NEIGHBOR_TYPES }
+    from "../actions/action-creators/ContextMenuActions";
 import { NEIGHBORTYPES_FETCH_START, NEIGHBORTYPES_FETCH_ERROR, NEIGHBORTYPES_FETCH_SUCCESS }
     from "../actions/action-creators/SearchNeighborTypesActions";
 import { NEIGHBORS_SINGLE_FETCH_ERROR, NEIGHBORS_SINGLE_FETCH_START, NEIGHBORS_SINGLE_FETCH_SUCCESS }
@@ -11,14 +11,13 @@ const initialState = {
     searchNode: {},
     searchStatus: null,
     filterDirection: null,
-    neighborTypes: {data: [], node: null, rawData: []}
+    neighborTypes: { data: [], node: null, rawData: [] }
 };
 
 export default (state = initialState, action) => {
-
-    switch(action.type) {
+    switch (action.type) {
         case ACTIVATE_CONTEXT:
-            if(action.context !== state.context) {
+            if (action.context !== state.context) {
                 return Object.assign({}, state, {
                     context: action.context
                 });
@@ -32,23 +31,21 @@ export default (state = initialState, action) => {
         case CLEAR_STATE:
             return Object.assign({}, initialState);
         case FILTER_NEIGHBOR_TYPES:
-            //for stats
             const neighborTypes = state.neighborTypes;
             neighborTypes.data = prepare(neighborTypes.rawData, action.filterDirection);
 
             return Object.assign({}, state, {
-                neighborTypes: neighborTypes,
+                neighborTypes,
                 filterDirection: action.filterDirection
             });
         case NEIGHBORS_SINGLE_FETCH_START:
-            //for search
             return Object.assign({}, state, {
                 searchNode: action.node,
                 search: initialState.search,
                 searchStatus: NEIGHBORS_SINGLE_FETCH_START
             });
         case NEIGHBORS_SINGLE_FETCH_SUCCESS:
-            if(action.node.key === state.searchNode.key) {
+            if (action.node.key === state.searchNode.key) {
                 return Object.assign({}, state, {
                     search: action.data,
                     searchStatus: NEIGHBORS_SINGLE_FETCH_SUCCESS
@@ -60,6 +57,7 @@ export default (state = initialState, action) => {
         case NEIGHBORTYPES_FETCH_START:
         case NEIGHBORTYPES_FETCH_SUCCESS:
             return neighborTypesReducer(state, action);
+        case NEIGHBORS_SINGLE_FETCH_ERROR:
         default:
             return state;
     }
@@ -106,7 +104,7 @@ const neighborTypesReducer = (state, action) => {
 
 const prepare = (data, filterDirection) => {
     return data.reduce((array, current) => {
-        if((filterDirection && current.relationship.indexOf(filterDirection) !== -1) ||
+        if ((filterDirection && current.relationship.indexOf(filterDirection) !== -1) ||
             !filterDirection
         ) {
             const index = array.reduce((val, entry, index) => {
@@ -117,7 +115,7 @@ const prepare = (data, filterDirection) => {
                 }
             }, -1);
 
-            if(index === -1) {
+            if (index === -1) {
                 array.push(current);
             } else {
                 array[index] = Object.assign({}, array[index], {
@@ -126,7 +124,7 @@ const prepare = (data, filterDirection) => {
                 });
             }
 
-            array.sort((a,b) => {
+            array.sort((a, b) => {
                 return b.count - a.count;
             });
         }

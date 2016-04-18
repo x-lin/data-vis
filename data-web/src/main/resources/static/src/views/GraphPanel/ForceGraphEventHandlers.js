@@ -42,7 +42,7 @@ EventHandlers.onContextMenuNode = (d, props) => {
 EventHandlers.onDoubleClickNode = (d, props) => {
     d3.event.stopPropagation();
     //if(d.count - d.weight > 0) {
-        props.searchNeighbors(d.category, d.key);
+        props.expandNeighbors(d.category, d.key);
     //}
 };
 

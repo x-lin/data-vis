@@ -8,12 +8,13 @@ import ContextMenuFooter from "./ContextMenuFooter";
 import ContextMenuButtonMenu from "./ContextMenuButtonMenu";
 import ExpandMenu from "./ExpandMenu";
 import StatsMenu from "./StatsMenu";
-import "./ContextMenu.css";
 
 import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT } from "../../../actions/action-creators/ContextMenuActions";
-import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
+import { expandNeighbors } from "../../../actions/aggregated/SearchNeighborsActions";
+import { createParams } from "../../../actions/aggregated/SearchNeighborsParams";
 import { clearState } from "../../../actions/action-creators/ContextMenuActions";
 import Constants from "../../../config/Constants";
+
 
 class ContextMenu extends React.Component {
     componentWillUnmount() {
@@ -21,9 +22,12 @@ class ContextMenu extends React.Component {
     }
 
     showFeatures(key, category) {
-        const paramsString = "type=FEAT&limit=500";
+        const params = createParams()
+            .addType("FEAT")
+            .limit(500)
+            .getParams();
 
-        this.props.getNeighbors(category, key, paramsString);
+        this.props.searchNeighbors(category, key, params);
     }
 
     getContextObject(context) {
@@ -71,8 +75,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        getNeighbors: (category, key, paramsString) => {
-            dispatch(getNeighbors(category, key, paramsString));
+        expandNeighbors: (category, key, params) => {
+            dispatch(expandNeighbors(category, key, params));
         },
         clearState:() => {
             dispatch(clearState());

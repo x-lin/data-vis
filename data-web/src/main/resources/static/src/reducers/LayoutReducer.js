@@ -1,10 +1,10 @@
 import { SET_SIDEBAR_PANEL } from "../actions/action-creators/LayoutActions";
 import Constants from "../config/Constants";
 import { REHYDRATE } from "redux-persist/constants";
-import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageComponent";
+import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageContainer";
 export default (
     state = {
-        sidebar : {
+        sidebar: {
             obj: null,
             visible: false,
             key: null,

@@ -1,6 +1,6 @@
 import React from "react";
 
-import SearchBar from "./../SearchBar/SearchBarComponent";
+import SearchBar from "./../SearchBar/SearchBarContainer";
 import D3Panel from "./GraphPanel";
 
 class ExportToImage extends React.Component {

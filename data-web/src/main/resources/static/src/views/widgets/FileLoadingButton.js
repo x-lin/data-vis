@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./FileLoadingButton.css";
-
 export default ( {
     buttonClass,
     iconClass,

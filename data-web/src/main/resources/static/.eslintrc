@@ -7,6 +7,14 @@
     }
   },
   "rules": {
-    "semi": 2
-  }
+    "semi": 2,
+    "quotes": [2, "double", "avoid-escape"],
+    "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 2 }],
+    "comma-dangle": ["error", "never"],
+    "arrow-body-style": ["off", "as-needed"],
+    "no-else-return": "off",
+    "no-shadow": ["warn", { "builtinGlobals": true, "hoist": "functions", "allow": [] }],
+    "max-len": ["warn", 120, 4]
+  },
+  "extends": "airbnb"
 }

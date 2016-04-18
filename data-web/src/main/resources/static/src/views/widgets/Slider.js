@@ -1,6 +1,5 @@
 import React from "react";
 import Slider from "rc-slider";
-import "./Slider.css";
 
 export default ( { min, max, defaultValue, step, onChange }) => {
     return (

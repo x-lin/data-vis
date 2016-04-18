@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./SideBarCollapsable.css";
-
 export default ({
     title,
     children,

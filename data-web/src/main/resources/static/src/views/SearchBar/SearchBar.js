@@ -5,7 +5,17 @@ import Constants from "../../config/Constants";
 import SearchBarPresent from "./SearchBarPresentation";
 import CircleSpan from "../widgets/CircleSpan";
 
+import _debounce from "lodash/debounce";
+
 export default class extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            eventValue: null
+        }
+    }
+
     render() {
         return (
             <SearchBarPresent
@@ -22,11 +32,14 @@ export default class extends React.Component {
         );
     };
 
+    componentWillMount() {
+        this.searchItemDebounced = _debounce(this.searchItem, 200);
+    }
+
     componentDidMount() {
         // Hide dropdown block on click outside the block
         window.addEventListener('click', () => this.cancel(), false);
     }
-
 
     componentWillUnmount() {
         // Remove click event listener on component unmount
@@ -86,8 +99,15 @@ export default class extends React.Component {
 
     handleChange(event) {
         this.applyInputAndResetSelectionList(event.target.value);
-        this.props.searchItem(this.props.type, event.target.value);
+
+        this.state.eventValue = event.target.value;
+
+        this.searchItemDebounced(event);
     };
+
+    searchItem(event) {
+        this.props.searchItem(this.props.type, this.state.eventValue);
+    }
 
     resetOnOptionSelection(item) {
         this.props.clearAllItems();

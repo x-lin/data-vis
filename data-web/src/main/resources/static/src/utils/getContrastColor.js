@@ -22,9 +22,9 @@ const hexadecToDecimal = (hex) => {
  * @returns {string} A contrasting color in hexadecimal code with fornat "#RRGGBB".
  */
 export default (hexcode) => {
-    const red = hexadecToDecimal(hexcode.substring(1,3));
-    const green = hexadecToDecimal(hexcode.substring(3,5));
-    const blue = hexadecToDecimal(hexcode.substring(5,7));
+    const red = hexadecToDecimal(hexcode.substring(1, 3));
+    const green = hexadecToDecimal(hexcode.substring(3, 5));
+    const blue = hexadecToDecimal(hexcode.substring(5, 7));
 
-    return  calcWithWeight(red, green, blue) > BRIGHTNESS_THRESHOLD ? DEFAULT_DARK_COLOR : DEFAULT_BRIGHT_COLOR;
+    return calcWithWeight(red, green, blue) > BRIGHTNESS_THRESHOLD ? DEFAULT_DARK_COLOR : DEFAULT_BRIGHT_COLOR;
 };

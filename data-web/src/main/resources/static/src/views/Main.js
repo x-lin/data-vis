@@ -2,17 +2,12 @@ var React = require("react");
 import Router from "react-router";
 import { Link } from "react-router";
 import { connect } from "react-redux";
-import LanePicker from "./LanePicker/LanePicker";
 
-import SettingsSideBarComponent from "./Settings/SettingsSideBarComponent";
-import SearchBarComponent from "../views/SearchBar/SearchBarComponent";
-import FileLoaderComponent from "../views/GraphLoader/FileLoaderComponent";
-import FileSaverComponent from "../views/GraphLoader/FileSaverComponent";
-import NewGraphComponent from "../views/GraphLoader/NewGraphComponent";
+import SettingsSideBarComponent from "./Settings/SettingsSideBarContainer";
+import SearchBarComponent from "./SearchBar/SearchBarContainer";
 import MenuComponent from "../views/Menu/MenuComponent";
 
 export default class Main extends React.Component {
-
     render() {
         return (
             <div>
@@ -42,6 +37,6 @@ export default class Main extends React.Component {
                 </div>
 
             </div>
-        )
+        );
     }
 };

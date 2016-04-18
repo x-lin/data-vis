@@ -6,7 +6,8 @@ import { Table, Tr, Td, Thead, Th } from "reactable";
 import Constants from "../../../config/Constants";
 import CircleSpan from "../../widgets/CircleSpan";
 import Label from "../../widgets/Label";
-import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
+import { expandNeighbors } from "../../../actions/aggregated/SearchNeighborsActions";
+import { createParams } from "../../../actions/aggregated/SearchNeighborsParams";
 import { expandNode } from "../../../actions/action-creators/GraphActions";
 
 import ExpandSearchMenu from "./ExpandSearchMenu";
@@ -28,15 +29,23 @@ export default class ExpandMenu extends React.Component {
     }
 
     goUpstream(key, category) {
-        const paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&downstream=false&limit=500";
+        const params = createParams()
+            .setTypes(["FEAT", "SSS", "SRS", "PSRS", "WP"])
+            .setLimit(500)
+            .setDownstream(false)
+            .getParams();
 
-        this.props.getNeighbors(category, key, paramsString);
+        this.props.expandNeighbors(category, key, params);
     }
 
     goDownstream(key, category) {
-        const paramsString = "type=FEAT&type=SSS&type=SRS&type=PSRS&type=WP&upstream=false&limit=500";
+        const params = createParams()
+            .setTypes(["FEAT", "SSS", "SRS", "PSRS", "WP"])
+            .setLimit(500)
+            .setUpstream(false)
+            .getParams();
 
-        this.props.getNeighbors(category, key, paramsString);
+        this.props.expandNeighbors(category, key, params);
     }
 
     setMenuType(number) {
@@ -87,8 +96,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        getNeighbors: (category, key, paramsString) => {
-            dispatch(getNeighbors(category, key, paramsString));
+        expandNeighbors: (category, key, paramsString) => {
+            dispatch(expandNeighbors(category, key, paramsString));
         },
         expandNode: (key, toNode) => {
             dispatch(expandNode(key, toNode));

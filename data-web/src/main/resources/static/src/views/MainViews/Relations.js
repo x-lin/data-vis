@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import SearchBarComponent from "../SearchBar/SearchBarComponent";
+import SearchBarComponent from "../SearchBar/SearchBarContainer";
 import GraphPanel from "../GraphPanel/GraphPanel";
 import ExportToImage from "../GraphPanel/ExportToImage"
-import TestCoverageComponent from "../TestCoveragePanel/TestCoverageComponent";
+import TestCoverageComponent from "../TestCoveragePanel/TestCoverageContainer";
 import VerticalSplitView from "../widgets/VerticalSplitView";
 
 const Relations = ( { sidebarObject, sidebarVisible } ) => {

@@ -18,7 +18,7 @@ export const fetchSuccess = (category, key, data) => createAction(
 
 export const fetchError = (category, key, error) => createAction(
     ITEM_FETCH_ERROR,
-    {category, key, error}
+    { category, key, error }
 );
 
 export const clearItems = () => createAction(

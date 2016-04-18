@@ -6,7 +6,6 @@ import Constants from "../../config/Constants";
 import ContextMenuBuilder from "./ContextMenu/ContextMenuBuilder";
 import EventHandlers from "./ForceGraphEventHandlers";
 import FilterHelpers from "../../utils/FilterHelpers";
-import "./ForceGraph.css";
 import D3Utils from "../../utils/D3Utils";
 import DOMSelector from "../../utils/DOMSelector";
 

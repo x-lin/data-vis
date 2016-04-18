@@ -6,8 +6,7 @@ import { Table, Tr, Td, Thead, Th } from "reactable";
 import Constants from "../../../config/Constants";
 import CircleSpan from "../../widgets/CircleSpan";
 import Label from "../../widgets/Label";
-import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
-import { searchNeighborsSingle } from "../../../actions/aggregated/SearchNeighborsSingle";
+import { searchNeighborsSingle } from "../../../actions/aggregated/SearchNeighborsSingleActions";
 import { expandNode } from "../../../actions/action-creators/GraphActions";
 import { NEIGHBORS_SINGLE_FETCH_ERROR, NEIGHBORS_SINGLE_FETCH_START, NEIGHBORS_SINGLE_FETCH_SUCCESS }
     from "../../../actions/action-creators/SearchNeighborsSingleActions";
@@ -26,7 +25,7 @@ export default class ExpandSearchMenu extends React.Component {
     }
 
     componentWillMount() {
-        this.props.getNeighborsSingle(this.props.d);
+        this.props.searchNeighborsSingle(this.props.d);
     }
 
     setClicked(direction) {
@@ -119,11 +118,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        getNeighborsSingle: (node) => {
+        searchNeighborsSingle: (node) => {
             dispatch(searchNeighborsSingle(node));
-        },
-        getNeighbors: (category, key, paramsString) => {
-            dispatch(getNeighbors(category, key, paramsString));
         },
         expandNode: (key, toNode) => {
             dispatch(expandNode(key, toNode));

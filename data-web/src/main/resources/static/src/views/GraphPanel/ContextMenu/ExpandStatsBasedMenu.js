@@ -6,13 +6,12 @@ import { connect } from "react-redux";
 import Constants from "../../../config/Constants";
 import CircleSpan from "../../widgets/CircleSpan";
 import Label from "../../widgets/Label";
-import { getNeighborTypes } from "../../../actions/aggregated/GETNeighborTypes";
+import { getNeighborTypes } from "../../../actions/aggregated/promises/GETNeighborTypesActions";
 import { filterNeighborTypes } from "../../../actions/action-creators/ContextMenuActions";
-import { getNeighbors } from "../../../actions/aggregated/GETNeighbors";
+import { expandNeighbors } from "../../../actions/aggregated/SearchNeighborsActions";
+import { createParams } from "../../../actions/aggregated/SearchNeighborsParams";
 import { NEIGHBORTYPES_FETCH_SUCCESS } from "../../../actions/action-creators/SearchNeighborTypesActions";
-
-const UPSTREAM = "UPSTREAM";
-const DOWNSTREAM = "DOWNSTREAM";
+import { UPSTREAM, DOWNSTREAM} from "../../../config/Defaults";
 
 class StatsBasedMenu extends React.Component {
     constructor(props) {
@@ -45,16 +44,18 @@ class StatsBasedMenu extends React.Component {
 
     getNeighbors(typeKey) {
         const { node, filterDirection } = this.props;
-        let paramsString = `type=${typeKey}`;
-        if(filterDirection) {
-            if(filterDirection === UPSTREAM) {
-                paramsString += "&downstream=false";
-            } else if(filterDirection === DOWNSTREAM) {
-                paramsString += "&upstream=false";
+        const params = createParams()
+            .addType(typeKey);
+
+        if (filterDirection) {
+            if (filterDirection === UPSTREAM) {
+                params.setDownstream(false);
+            } else if (filterDirection === DOWNSTREAM) {
+                params.setUpstream(false);
             }
         }
 
-        this.props.getNeighbors(node.type, node.key, paramsString);
+        this.props.expandNeighbors(node.type, node.key, params);
     }
 
     render() {
@@ -176,8 +177,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = (dispatch) => {
     return {
-        getNeighbors: (type, key, params) => {
-            dispatch(getNeighbors(type, key, params));
+        expandNeighbors: (type, key, params) => {
+            dispatch(expandNeighbors(type, key, params));
         },
         getNeighborTypes: (node) => {
             dispatch(getNeighborTypes(node))

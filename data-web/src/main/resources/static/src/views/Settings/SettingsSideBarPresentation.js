@@ -18,24 +18,21 @@ export default ( {
                         <div className="box-body">
                             <p>
                                 <strong>General graph panel behaviors</strong><br/>
-                                <code>MOUSE WHEEL</code>: Zooming. <br/>
-                                <code>LEFT CLICK</code>, <code>RIGHT CLICK</code> or <code>MOUSE WHEEL</code> + <code>MOUSE MOVE</code>: Panning. <br/>
                             </p>
 
                             <p>
+                                <code>MOUSE WHEEL</code>: Zooming. <br/>
+                                <code>LEFT CLICK</code> or <code>MOUSE WHEEL</code> + <code>MOUSE MOVE</code>: Panning. <br/>
+                            </p>
+                            <p>
                                 <strong>Custom node behaviors</strong><br/>
+                            </p>
+                            <p>
                                 <code>MOUSE HOVER</code>: Tooltip. <br/>
                                 <code>RIGHT CLICK</code>: Custom context menu. <br/>
                                 <code>DOUBLE LEFT CLICK/</code>: Node expansion. <br/>
                                 <code>CTRL + LEFT CLICK</code>: Marking connected nodes. To release: <code>LEFT CLICK</code> on any node. <br/>
                             </p>
-                        </div>
-                    </div>
-                    <div className="box box-danger">
-                        <div className="box-body">
-                            <strong>NOTE:</strong> Dragging/Zooming within the graph panel with two or more mouseevents (e.g. left and right click)
-                            will trigger an issue with D3 and cause some weird behavior (see issue <a href="https://github.com/mbostock/d3/issues/2393" target="_blank">#2393</a> or issue <a href="https://github.com/mbostock/d3/issues/2498" target="_blank">#2498</a>)
-                            and may cause the Drag and Drop component to break. The same issue may also occur with some other browser native right click events. To resolve the issue for now, when it occurs: <strong>Refresh page.</strong>
                         </div>
                     </div>
                     <div className="box box-default">
@@ -45,7 +42,7 @@ export default ( {
                             </p>
 
                             <ul style={{paddingLeft: "1.2em"}}>
-                                <li>Pulled from Jama and JIRA. Stored in Neo4j.</li>
+                                <li>Pulled from Jama and JIRA.</li>
                                 <li>Items with status "Deleted" in Jama or status "Closed" in JIRA are not stored / will be deleted.</li>
                                 <li>Relationships from Jama are stored as unidirectional edges, relationships from JIRA as bidirectional edges. Relationships that exist in both use Jama mappings.</li>
                                 <li>Parent/children relationships are treated equally to upstream/downstream relationships (i.e., no difference in querying).</li>

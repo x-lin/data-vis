@@ -1,4 +1,5 @@
 import { ATTACH_TO_LANE, MOVE, INIT_LANE, SET_FILTER_VALUE } from "../actions/action-creators/LaneActions";
+import { NODETYPE_FETCH_SUCCESS } from "../actions/action-creators/FetchNodeTypeActions";
 
 export const PRIORITIZED = "PRIORITIZED";
 export const EXCLUDED = "EXCLUDED";
@@ -11,7 +12,7 @@ export default (
     }, action
 ) => {
     switch (action.type) {
-        case INIT_LANE:
+        case NODETYPE_FETCH_SUCCESS:
             const array = [PRIORITIZED, EXCLUDED, UNORDERED];
             let unordered = [];
             let excluded = [];
