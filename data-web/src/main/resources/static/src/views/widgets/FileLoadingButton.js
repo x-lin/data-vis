@@ -1,11 +1,11 @@
 import React from "react";
 
-export default ( {
+const FileLoadingButton = ({
     buttonClass,
     iconClass,
     onChange,
     title
-} ) => {
+}) => {
     return (
         <div className={buttonClass}>
             <span className={iconClass} />
@@ -15,3 +15,11 @@ export default ( {
     );
 };
 
+FileLoadingButton.propTypes = {
+    buttonClass: React.PropTypes.string,
+    iconClass: React.PropTypes.string,
+    onChange: React.PropTypes.func.isRequired,
+    title: React.PropTypes.string
+};
+
+export default FileLoadingButton;

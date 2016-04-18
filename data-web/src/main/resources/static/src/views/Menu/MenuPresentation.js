@@ -1,6 +1,5 @@
 import React from "react";
 
-import SideBarHeader from "../widgets/SideBarHeader";
 import Slider from "../widgets/Slider";
 import FileLoaderComponent from "../GraphLoader/FileLoaderContainer";
 import FileSaverComponent from "../GraphLoader/FileSaverContainer";

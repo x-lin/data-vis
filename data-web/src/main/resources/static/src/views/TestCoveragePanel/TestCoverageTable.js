@@ -1,11 +1,12 @@
 import React from "react";
-import { Table, Tr, Td, Thead, Th } from "reactable";
+import { Table, Tr, Td } from "reactable";
 
-import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS } from "../../actions/action-creators/TestCoverageActions";
-import GraphPanel from "../GraphPanel/GraphPanel";
+import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS }
+    from "../../actions/action-creators/TestCoverageActions";
 import Constants from "../../config/Constants";
-import CircleSpan from "../widgets/CircleSpan";
 import Label from "../widgets/Label";
+import DataTable from "../widgets/DataTable";
+import { createMapping } from "../../utils/TableMapping";
 
 export default class extends React.Component {
     constructor(props) {
@@ -33,23 +34,6 @@ export default class extends React.Component {
             })
         }
 
-        const prepared = data.map((coverage, index) => {
-            const count = coverage.testcases ? coverage.testcases.length : 0;
-
-            return (
-                <Tr key={index} className = { count ? "" :  "bg-red"}>
-                    <Td column=""><a href={Constants.getJamaAddress(coverage.node.jamaId, coverage.node.projectId)} target="_blank">
-                        <img src="img/jama-logo.png" className="tableImg" /></a>
-                    </Td>
-                    {/*<Td column="Key" style={{whiteSpace: "nowrap"}}>{coverage.key}</Td>*/}
-                    <Td column="Name" value={coverage.name}><a onClick={(key) => this.onClick(coverage.key)}>{coverage.name}</a></Td>
-                    <Td column="Type" value={coverage.type}><Label bgColor={Constants.getColor(coverage.type)}>{coverage.type}</Label></Td>
-                    <Td column="Status">{coverage.node.status}</Td>
-                    <Td column="Test Cases">{coverage.testcases ? coverage.testcases.length : 0}</Td>
-                </Tr>
-            );
-        });
-
         const linkStyle = {
             color: "#444",
             boxShadow: "0 0 0 .03em #ddd",
@@ -64,6 +48,72 @@ export default class extends React.Component {
             cursor: "default",
             padding: "6px 8px"
         };
+
+        const filter = <div>
+            <a onClick={(filter) => this.filter(false)} style={this.state.filter ? linkStyle : activeLinkStyle}>Show All</a>
+            <a onClick={(filter) => this.filter(true)} style={this.state.filter ? activeLinkStyle : linkStyle}>Show With No Test Cases</a>
+        </div>;
+
+        const jamaUrlMapper = createMapping()
+            .setProperty("jamaId")
+            .setColumnHeader("")
+            .setContentMapping((node) => {
+                return <a href={Constants.getJamaAddress(node.jamaId, node.projectId)} target="_blank">
+                    <img src="img/jama-logo.png" className="tableImg" /></a>
+            })
+            .setDataFunction((data) => {
+                return data.node;
+            })
+            .getMapping();
+
+        const nameMapper = createMapping()
+            .setProperty("name")
+            .setColumnHeader("Name")
+            .setContentMapping((node) => {
+                return <a onClick={(key) => this.onClick(node.key)}>{node.name}</a>
+            })
+            .setSortable(true)
+            .setFilterable(true)
+            .getMapping();
+
+        const typeMapper = createMapping()
+            .setProperty("type")
+            .setColumnHeader("Type")
+            .setContentMapping((node) => {
+                return <Label bgColor={Constants.getColor(node.type)}>{node.type}</Label>
+            })
+            .setDataFunction((data) => {
+                return data.node;
+            })
+            .setSortable(true)
+            .setFilterable(true)
+            .getMapping();
+
+        const statusMapper = createMapping()
+            .setProperty("status")
+            .setColumnHeader("Status")
+            .setContentMapping((node) => {
+                return node.status;
+            })
+            .setDataFunction((data) => {
+                return data.node;
+            })
+            .setSortable(true)
+            .setFilterable(true)
+            .getMapping();
+
+        const testCaseMapper = createMapping()
+            .setProperty("testcases")
+            .setColumnHeader("Test Cases")
+            .setContentMapping((node) => {
+                return node.testcases ? node.testcases.length : 0;
+            })
+            .setSortable(true)
+            .setSortableFunction((data) => { return data.testcases.length})
+            .setFilterable(true)
+            .getMapping();
+
+        const mappers = [jamaUrlMapper, nameMapper, typeMapper, statusMapper, testCaseMapper];
 
         return (
             <div className="box box-solid">
@@ -82,17 +132,18 @@ export default class extends React.Component {
                 </div>
 
                 <div className="box-body">
-                    { this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                    <div style={{float: "left", padding: "10px 0px"}}>{`${data.length} result${data.length !== 1 ? "s" : ""} found.`}</div>}
-
-                    {this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS &&
-                    <div style={{float: "right", padding: "10px 0px"}}><a onClick={(filter) => this.filter(false)} style={this.state.filter ? linkStyle : activeLinkStyle}>Show All</a>
-                        <a onClick={(filter) => this.filter(true)} style={this.state.filter ? activeLinkStyle : linkStyle}>Show With No Test Cases</a></div>}
-
-                    <Table className="table table-bordered table-hover sidebar-table" itemsPerPage={100} sortable={["Key", "Status", "Type", "Name", "Test Cases"]}
-                           filterable={['Name', 'Key', 'Status', 'Type']}>
-                        {prepared}
-                    </Table>
+                    <DataTable
+                        filter={filter}
+                        data={data}
+                        tableClass="table table-bordered table-hover sidebar-table"
+                        isSuccess={ this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS}
+                        itemsPerPage={100}
+                        sortable={["Key", "Status", "Type", "Name", "Test Cases"]}
+                        filterable={['Name', 'Key', 'Status', 'Type']}
+                        mapper={mappers}
+                        dataMapper={(data) => {return data.node}}
+                        trClass={(data) => {return (data.testcases  && data.testcases.length > 0) ? "" : "bg-red"}}
+                    />
                 </div>
 
                 {this.props.coverage.status === TEST_COVERAGE_FETCH_START &&

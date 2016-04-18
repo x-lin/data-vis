@@ -1,13 +1,17 @@
 import React from "react";
 
-export default class extends React.Component {
-    render() {
-        return (
-            <aside className="main-sidebar control-sidebar-dark">
-                <section className="sidebar">
-                    {this.props.children}
-                </section>
-            </aside>
-        );
-    }
-}
+const LeftSideBar = ({ children }) => {
+    return (
+        <aside className="main-sidebar control-sidebar-dark">
+            <section className="sidebar">
+                {children}
+            </section>
+        </aside>
+    );
+};
+
+LeftSideBar.propTypes = {
+    children: React.PropTypes.node
+};
+
+export default LeftSideBar;

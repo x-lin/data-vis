@@ -1,8 +1,5 @@
 import React from "react";
 
-import SideBarHeader from "../widgets/SideBarHeader";
-import Slider from "../widgets/Slider";
-
 export default ( {
     toggleHandler,
     valueHandler,

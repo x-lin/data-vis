@@ -13,8 +13,6 @@ import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT } from "../../../actions/ac
 import { expandNeighbors } from "../../../actions/aggregated/SearchNeighborsActions";
 import { createParams } from "../../../actions/aggregated/SearchNeighborsParams";
 import { clearState } from "../../../actions/action-creators/ContextMenuActions";
-import Constants from "../../../config/Constants";
-
 
 class ContextMenu extends React.Component {
     componentWillUnmount() {

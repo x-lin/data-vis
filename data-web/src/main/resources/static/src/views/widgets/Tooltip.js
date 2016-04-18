@@ -1,27 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { Overlay, Tooltip } from "react-bootstrap";
+import { Overlay, Tooltip as BootstrapTooltip } from "react-bootstrap";
 
-export default class extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Overlay
-                show={true}
-                target={() => ReactDOM.findDOMNode(this.props.target)}
-                placement="right"
-                container={this}
+const Tooltip = ({ target, tooltip }) => {
+    return (
+        <Overlay
+          show
+          target={() => ReactDOM.findDOMNode(target)}
+          placement="right"
+          container={this}
+        >
+            <BootstrapTooltip
+              className="in"
+              id="actual-tooltip"
             >
-                <Tooltip className="in"
-                         id="actual-tooltip"
-                >
-                    {this.props.tooltip}
-                </Tooltip>
-            </Overlay>
-        )
-    }
+                {tooltip}
+            </BootstrapTooltip>
+        </Overlay>
+    );
+}
+
+Tooltip.propTypes = {
+    target: React.PropTypes.node.isRequired,
+    tooltip: React.PropTypes.node.isRequired
 };
+
+export default Tooltip;

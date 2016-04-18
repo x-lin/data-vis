@@ -6,6 +6,8 @@ import { Table, Tr, Td, Thead, Th } from "reactable";
 import Constants from "../../../config/Constants";
 import CircleSpan from "../../widgets/CircleSpan";
 import Label from "../../widgets/Label";
+import DataTable from "../../widgets/DataTable";
+import { createMapping } from "../../../utils/TableMapping";
 import { searchNeighborsSingle } from "../../../actions/aggregated/SearchNeighborsSingleActions";
 import { expandNode } from "../../../actions/action-creators/GraphActions";
 import { NEIGHBORS_SINGLE_FETCH_ERROR, NEIGHBORS_SINGLE_FETCH_START, NEIGHBORS_SINGLE_FETCH_SUCCESS }
@@ -45,18 +47,6 @@ export default class ExpandSearchMenu extends React.Component {
             })
         }
 
-        data = data.map((node, index) => {
-            return (
-                <Tr key={index}>
-                    <Td column="Name" value={node.name}>
-                        <a onClick={(key) => this.onClick(this.props.d.key, node)}>
-                            {node.name} <Label bgColor={Constants.getColor(node.type)}>{node.type}</Label>
-                        </a>
-                    </Td>
-                </Tr>
-            );
-        });
-
         const linkStyle = {
             color: "#444",
             boxShadow: "0 0 0 .03em #ddd",
@@ -72,37 +62,47 @@ export default class ExpandSearchMenu extends React.Component {
             padding: "6px 12px"
         };
 
+        const mapper = createMapping()
+            .setProperty("name")
+            .setColumnHeader("Name")
+            .setContentMapping((node) => {
+                return <a onClick={(key) => this.onClick(this.props.d.key, node)}>
+                    {node.name} <Label bgColor={Constants.getColor(node.type)}>{node.type}</Label>
+                </a>
+            })
+            .getMapping();
+
+        const filter = <div style={{float: "right", padding: "10px 0px"}}>
+            <a onClick={(direction) => this.setClicked(BOTH)}
+               style={this.state.clicked === BOTH ? activeLinkStyle : linkStyle}
+               title="Search in both directions">
+                <span className="fa fa-arrows-v"/>
+            </a>
+            <a onClick={(direction) => this.setClicked(UPSTREAM)}
+               style={this.state.clicked === UPSTREAM ? activeLinkStyle : linkStyle}
+               title="Search upstream">
+                <span className="fa fa-long-arrow-up"/>
+            </a>
+            <a onClick={(direction) => this.setClicked(DOWNSTREAM)}
+               style={this.state.clicked === DOWNSTREAM ? activeLinkStyle : linkStyle}
+               title="Search downstream">
+                <span className="fa fa-long-arrow-down"/>
+            </a>
+        </div>;
+
         return (
             <div className="dropdown-content-item">
-                <div style={{float: "right", padding: "10px 0px"}}>
-                    <a onClick={(direction) => this.setClicked(BOTH)}
-                       style={this.state.clicked === BOTH ? activeLinkStyle : linkStyle}
-                       title="Search in both directions">
-                        <span className="fa fa-arrows-v"/>
-                    </a>
-                    <a onClick={(direction) => this.setClicked(UPSTREAM)}
-                       style={this.state.clicked === UPSTREAM ? activeLinkStyle : linkStyle}
-                       title="Search upstream">
-                        <span className="fa fa-long-arrow-up"/>
-                    </a>
-                    <a onClick={(direction) => this.setClicked(DOWNSTREAM)}
-                       style={this.state.clicked === DOWNSTREAM ? activeLinkStyle : linkStyle}
-                       title="Search downstream">
-                        <span className="fa fa-long-arrow-down"/>
-                    </a>
-                </div>
-
-                {this.props.status === NEIGHBORS_SINGLE_FETCH_START && "Loading..."}
-
-                {this.props.status === NEIGHBORS_SINGLE_FETCH_SUCCESS &&
-                <div style={{float: "left", padding: "10px 0px"}}>{`${data.length} result${data.length !== 1 ? "s" : ""} found.`}</div>}
-
-                {this.props.status === NEIGHBORS_SINGLE_FETCH_SUCCESS &&
-                <Table className="table table-sm table-hover contextmenu-table" itemsPerPage={10} sortable={["Name"]}
-                       filterable={['Name']} pageButtonLimit={5}>
-                    {data}
-                </Table>
-                }
+                <DataTable
+                    filter={filter}
+                    data={data}
+                    tableClass="table table-sm table-hover contextmenu-table"
+                    isSuccess={this.props.status === NEIGHBORS_SINGLE_FETCH_SUCCESS}
+                    itemsPerPage={10}
+                    pageButtonLimit={5}
+                    sortable={["Name"]}
+                    filterable={['Name']}
+                    mapper={[mapper]}
+                />
             </div>
         );
     }

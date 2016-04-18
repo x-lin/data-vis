@@ -1,8 +1,15 @@
 import React from "react";
 
-export default ( { children } ) => {
-    return <div style={{color: "#CCC", textTransform: "uppercase", paddingBottom: "5px"}}>
-        {children}
-    </div>
+const Header = ({ children }) => {
+    return (
+        <div style={{ color: "#CCC", textTransform: "uppercase", paddingBottom: "5px" }}>
+            {children}
+        </div>
+    );
 };
 
+Header.propTypes = {
+    children: React.PropTypes.node.isRequired
+};
+
+export default Header;

@@ -1,13 +1,11 @@
 import React from "react";
 
-import FileLoadingButton from "../widgets/FileLoadingButton";
+const NewGraph = ({ handleClick }) => {
+    return <a title="Create New Graph" onClick={() => handleClick()}><i className="fa fa-file-o" /></a>;
+};
 
-export default class extends React.Component {
-    handleClick() {
-        this.props.clearGraph();
-    }
+NewGraph.propTypes = {
+    handleClick: React.PropTypes.func.isRequired
+};
 
-    render() {
-        return <a title="Create New Graph" onClick={() => this.handleClick()}><i className="fa fa-file-o" /></a>
-    }
-}
+export default NewGraph;
