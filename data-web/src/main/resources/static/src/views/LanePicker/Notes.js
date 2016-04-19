@@ -1,7 +1,7 @@
 import React from "react";
 import Note from "./Note.js";
 
-const Notes = ({ notes, move }) => {
+const Notes = ({ notes, onMove }) => {
     const withItems = {
         padding: "0px",
         margin: "0px",
@@ -20,7 +20,7 @@ const Notes = ({ notes, move }) => {
               className="note"
               id={note.key}
               key={note.key}
-              onMove={move}
+              onMove={onMove}
               note={note}
             />
         );
@@ -35,7 +35,7 @@ const Notes = ({ notes, move }) => {
 
 Notes.propTypes = {
     notes: React.PropTypes.array.isRequired,
-    move: React.PropTypes.func.isRequired
+    onMove: React.PropTypes.func.isRequired
 };
 
 export default Notes;
