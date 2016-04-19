@@ -4,15 +4,15 @@ import Lane from "./Lane";
 
 export default class extends React.Component {
     renderLane(lane) {
-      return (
-          <Lane
-            className="lane"
-            key={lane.id}
-            lane={lane}
-            notes={lane.notes}
-            onMove={this.props.move}
-            attachToLane={this.props.attachToLane} />
-      );
+        return (
+            <Lane
+              className="lane"
+              key={lane.id}
+              lane={lane}
+              notes={lane.notes}
+              onMove={this.props.move}
+              attachToLane={this.props.attachToLane} />
+        );
     }
 
     render() {

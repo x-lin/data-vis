@@ -2,11 +2,10 @@ import React from "react";
 import _debounce from "lodash/debounce";
 
 import Constants from "../../config/Constants";
-
 import SearchInputField from "./SearchInputField";
 import SearchAutocomplete from "./SearchAutocomplete";
 
-export default class extends React.Component {
+class SearchBar extends React.Component {
     constructor(props) {
         super(props);
 
@@ -25,7 +24,6 @@ export default class extends React.Component {
     }
 
     componentWillUnmount() {
-        // Remove click event listener on component unmount
         window.removeEventListener("click", () => this.cancel(), false);
     }
 
@@ -34,7 +32,7 @@ export default class extends React.Component {
     }
 
     handleSubmit(event) {
-        const { items, selectedIndex, value } = this.props;
+        const { items, selectedIndex } = this.props;
         event.preventDefault(); // done to disable site refreshes
 
         const item = items[selectedIndex];
@@ -53,7 +51,7 @@ export default class extends React.Component {
         this.searchItemDebounced(event);
     }
 
-    searchItem(event) {
+    searchItem() {
         this.props.searchItem(this.props.type, this.state.eventValue);
     }
 
@@ -65,14 +63,14 @@ export default class extends React.Component {
     handleKeyDown(event) {
         // down key
         if (event.keyCode === 40) {
-            if (this.props.selectedIndex+1 < this.props.items.length) {
-                this.props.setSearchSelectedIndex(this.props.selectedIndex+1);
+            if (this.props.selectedIndex + 1 < this.props.items.length) {
+                this.props.setSearchSelectedIndex(this.props.selectedIndex + 1);
             }
         }
         // up key
         if (event.keyCode === 38) {
             if (this.props.selectedIndex > 0) {
-                this.props.setSearchSelectedIndex(this.props.selectedIndex-1);
+                this.props.setSearchSelectedIndex(this.props.selectedIndex - 1);
             }
         }
         // ESC key
@@ -81,7 +79,6 @@ export default class extends React.Component {
         }
         // Enter key
         if (event.keyCode === 13) {
-            // will trigger event listener, if event is not stopped propagating
             event.preventDefault();
             event.stopPropagation();
 
@@ -89,29 +86,22 @@ export default class extends React.Component {
         }
     }
 
-    renderCategories() {
-        return Object.keys(this.props.categories).map((categoryKey) => {
-            const category = this.props.categories[categoryKey];
-
-            return (
-                <li key={category} onClick={() => this.props.setSearchCategory(category)}>
-                    <a href="#">{category}</a>
-                </li>
-            );
-        });
-    }
-
     renderItems() {
         return this.props.items.map((item, index) => {
-            const listgroupClass = " list-group-item cursor"
-                + (this.props.selectedIndex === index ? " active" : "");
+            const listgroupClass = `list-group-item cursor ${this.props.selectedIndex === index ? "active" : ""}`;
 
             return (
                 <li className={listgroupClass} key={index}
-                    onClick={(event) => {this.handleSubmit(event)}}
-                    onMouseOver={() => {this.props.setSearchSelectedIndex(index)}}>
+                  onClick={(event) => this.handleSubmit(event)}
+                  onMouseOver={() => this.props.setSearchSelectedIndex(index)}
+                >
                     <span className="label"
-                          style={{backgroundColor: Constants.getColor(item.type), color: Constants.getContrastColor(Constants.getColor(item.type))}}>{item.type}</span>
+                      style={{
+                          backgroundColor: Constants.getColor(item.type),
+                          color: Constants.getContrastColor(Constants.getColor(item.type))
+                      }}
+                    >
+                        {item.type}</span>
                     &nbsp; <strong>{item.name}</strong> | {item.key}
                 </li>
             );
@@ -138,3 +128,17 @@ export default class extends React.Component {
         );
     }
 }
+
+SearchBar.propTypes = {
+    value: React.PropTypes.string,
+    type: React.PropTypes.string,
+    selectedIndex: React.PropTypes.number.isRequired,
+    items: React.PropTypes.array.isRequired,
+    clearAllItems: React.PropTypes.func.isRequired,
+    setSearchSelectedIndex: React.PropTypes.func.isRequired,
+    setSearchInputValue: React.PropTypes.func.isRequired,
+    searchNeighborsStart: React.PropTypes.func.isRequired,
+    searchItem: React.PropTypes.func.isRequired
+};
+
+export default SearchBar;

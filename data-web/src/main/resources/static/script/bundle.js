@@ -44485,7 +44485,7 @@
 /* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -83431,13 +83431,13 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _DefaultExportValue = function (_get__$Component) {
-	    _inherits(_DefaultExportValue, _get__$Component);
+	var SearchBar = function (_get__$Component) {
+	    _inherits(SearchBar, _get__$Component);
 
-	    function _DefaultExportValue(props) {
-	        _classCallCheck(this, _DefaultExportValue);
+	    function SearchBar(props) {
+	        _classCallCheck(this, SearchBar);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_DefaultExportValue).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SearchBar).call(this, props));
 
 	        _this.state = {
 	            eventValue: null
@@ -83445,7 +83445,7 @@
 	        return _this;
 	    }
 
-	    _createClass(_DefaultExportValue, [{
+	    _createClass(SearchBar, [{
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
 	            this.searchItemDebounced = _get__("_debounce")(this.searchItem, 200);
@@ -83465,7 +83465,6 @@
 	        value: function componentWillUnmount() {
 	            var _this3 = this;
 
-	            // Remove click event listener on component unmount
 	            window.removeEventListener("click", function () {
 	                return _this3.cancel();
 	            }, false);
@@ -83481,7 +83480,6 @@
 	            var _props = this.props;
 	            var items = _props.items;
 	            var selectedIndex = _props.selectedIndex;
-	            var value = _props.value;
 
 	            event.preventDefault(); // done to disable site refreshes
 
@@ -83503,7 +83501,7 @@
 	        }
 	    }, {
 	        key: "searchItem",
-	        value: function searchItem(event) {
+	        value: function searchItem() {
 	            this.props.searchItem(this.props.type, this.state.eventValue);
 	        }
 	    }, {
@@ -83533,7 +83531,6 @@
 	            }
 	            // Enter key
 	            if (event.keyCode === 13) {
-	                // will trigger event listener, if event is not stopped propagating
 	                event.preventDefault();
 	                event.stopPropagation();
 
@@ -83541,47 +83538,31 @@
 	            }
 	        }
 	    }, {
-	        key: "renderCategories",
-	        value: function renderCategories() {
-	            var _this4 = this;
-
-	            return Object.keys(this.props.categories).map(function (categoryKey) {
-	                var category = _this4.props.categories[categoryKey];
-
-	                return _react2.default.createElement(
-	                    "li",
-	                    { key: category, onClick: function onClick() {
-	                            return _this4.props.setSearchCategory(category);
-	                        } },
-	                    _react2.default.createElement(
-	                        "a",
-	                        { href: "#" },
-	                        category
-	                    )
-	                );
-	            });
-	        }
-	    }, {
 	        key: "renderItems",
 	        value: function renderItems() {
-	            var _this5 = this;
+	            var _this4 = this;
 
 	            return this.props.items.map(function (item, index) {
-	                var listgroupClass = " list-group-item cursor" + (_this5.props.selectedIndex === index ? " active" : "");
+	                var listgroupClass = "list-group-item cursor " + (_this4.props.selectedIndex === index ? "active" : "");
 
 	                return _react2.default.createElement(
 	                    "li",
 	                    { className: listgroupClass, key: index,
 	                        onClick: function onClick(event) {
-	                            _this5.handleSubmit(event);
+	                            return _this4.handleSubmit(event);
 	                        },
 	                        onMouseOver: function onMouseOver() {
-	                            _this5.props.setSearchSelectedIndex(index);
-	                        } },
+	                            return _this4.props.setSearchSelectedIndex(index);
+	                        }
+	                    },
 	                    _react2.default.createElement(
 	                        "span",
 	                        { className: "label",
-	                            style: { backgroundColor: _get__("Constants").getColor(item.type), color: _get__("Constants").getContrastColor(_get__("Constants").getColor(item.type)) } },
+	                            style: {
+	                                backgroundColor: _get__("Constants").getColor(item.type),
+	                                color: _get__("Constants").getContrastColor(_get__("Constants").getColor(item.type))
+	                            }
+	                        },
 	                        item.type
 	                    ),
 	                    "  ",
@@ -83598,7 +83579,7 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            var _this6 = this;
+	            var _this5 = this;
 
 	            var _SearchInputField_Component = _get__("SearchInputField");
 
@@ -83607,7 +83588,7 @@
 	            return _react2.default.createElement(
 	                "form",
 	                { onSubmit: function onSubmit(event) {
-	                        return _this6.handleSubmit(event);
+	                        return _this5.handleSubmit(event);
 	                    } },
 	                _react2.default.createElement(
 	                    "div",
@@ -83615,10 +83596,10 @@
 	                    _react2.default.createElement(_SearchInputField_Component, {
 	                        value: this.props.value,
 	                        onChangeHandler: function onChangeHandler(event) {
-	                            return _this6.handleChange(event);
+	                            return _this5.handleChange(event);
 	                        },
 	                        onKeyDownHandler: function onKeyDownHandler(event) {
-	                            return _this6.handleKeyDown(event);
+	                            return _this5.handleKeyDown(event);
 	                        }
 	                    }),
 	                    _react2.default.createElement(_SearchAutocomplete_Component, {
@@ -83629,10 +83610,22 @@
 	        }
 	    }]);
 
-	    return _DefaultExportValue;
+	    return SearchBar;
 	}(_get__("React").Component);
 
-	exports.default = _DefaultExportValue;
+	_get__("SearchBar").propTypes = {
+	    value: _get__("React").PropTypes.string,
+	    type: _get__("React").PropTypes.string,
+	    selectedIndex: _get__("React").PropTypes.number.isRequired,
+	    items: _get__("React").PropTypes.array.isRequired,
+	    clearAllItems: _get__("React").PropTypes.func.isRequired,
+	    setSearchSelectedIndex: _get__("React").PropTypes.func.isRequired,
+	    setSearchInputValue: _get__("React").PropTypes.func.isRequired,
+	    searchNeighborsStart: _get__("React").PropTypes.func.isRequired,
+	    searchItem: _get__("React").PropTypes.func.isRequired
+	};
+
+	exports.default = _get__("SearchBar");
 	var _RewiredData__ = {};
 	var _RewireAPI__ = {};
 
@@ -83674,6 +83667,9 @@
 
 	        case "React":
 	            return _react2.default;
+
+	        case "SearchBar":
+	            return SearchBar;
 	    }
 
 	    return undefined;
@@ -83738,17 +83734,17 @@
 	    };
 	}
 
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+	var _typeOfOriginalExport = typeof SearchBar === "undefined" ? "undefined" : _typeof(SearchBar);
 
 	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
+	    Object.defineProperty(SearchBar, name, {
 	        value: value,
 	        enumerable: false,
 	        configurable: true
 	    });
 	}
 
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(SearchBar)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);
@@ -104000,17 +103996,9 @@
 
 	var _reactRedux = __webpack_require__(273);
 
-	var _reactBootstrap = __webpack_require__(341);
-
-	var _reactable = __webpack_require__(310);
-
 	var _Constants = __webpack_require__(269);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
-
-	var _CircleSpan = __webpack_require__(814);
-
-	var _CircleSpan2 = _interopRequireDefault(_CircleSpan);
 
 	var _Label = __webpack_require__(308);
 
@@ -104060,14 +104048,14 @@
 	            this.props.searchNeighborsSingle(this.props.d);
 	        }
 	    }, {
-	        key: "setClicked",
-	        value: function setClicked(direction) {
-	            this.setState({ clicked: direction });
-	        }
-	    }, {
 	        key: "onClick",
 	        value: function onClick(key, toNode) {
 	            this.props.expandNode(key, toNode);
+	        }
+	    }, {
+	        key: "setClicked",
+	        value: function setClicked(direction) {
+	            this.setState({ clicked: direction });
 	        }
 	    }, {
 	        key: "getStatus",
@@ -104101,7 +104089,7 @@
 
 	                return _react2.default.createElement(
 	                    "a",
-	                    { onClick: function onClick(key) {
+	                    { onClick: function onClick() {
 	                            return _this2.onClick(_this2.props.d.key, node);
 	                        } },
 	                    node.name,
@@ -104115,7 +104103,7 @@
 	            }).getMapping();
 
 	            var filter = [{ onClick: function onClick() {
-	                    return _this2.setClicked(BOTH);
+	                    return _this2.setClicked(null);
 	                }, body: _react2.default.createElement("span", { className: "fa fa-arrows-v" }) }, { onClick: function onClick() {
 	                    return _this2.setClicked(_get__("UPSTREAM"));
 	                }, body: _react2.default.createElement("span", { className: "fa fa-long-arrow-up" }) }, { onClick: function onClick() {
@@ -104143,8 +104131,13 @@
 	    return ExpandSearchMenu;
 	}(_get__("React").Component);
 
-	exports.default = ExpandSearchMenu;
-
+	_get__("ExpandSearchMenu").propTypes = {
+	    d: _get__("React").PropTypes.object.isRequired,
+	    data: _get__("React").PropTypes.array.isRequired,
+	    status: _get__("React").PropTypes.string,
+	    searchNeighborsSingle: _get__("React").PropTypes.func.isRequired,
+	    expandNode: _get__("React").PropTypes.func.isRequired
+	};
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
@@ -104233,6 +104226,9 @@
 	        case "React":
 	            return _react2.default;
 
+	        case "ExpandSearchMenu":
+	            return ExpandSearchMenu;
+
 	        case "searchNeighborsSingle":
 	            return _SearchNeighborsSingleActions.searchNeighborsSingle;
 
@@ -104247,9 +104243,6 @@
 
 	        case "mapDispatchProps":
 	            return mapDispatchProps;
-
-	        case "ExpandSearchMenu":
-	            return ExpandSearchMenu;
 	    }
 
 	    return undefined;
@@ -104312,27 +104305,6 @@
 
 	        return result;
 	    };
-	}
-
-	var _typeOfOriginalExport = typeof ExpandSearchMenu === "undefined" ? "undefined" : _typeof(ExpandSearchMenu);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(ExpandSearchMenu, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(ExpandSearchMenu)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
 	}
 
 	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
@@ -104682,13 +104654,13 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var StatsBasedMenu = function (_get__$Component) {
-	    _inherits(StatsBasedMenu, _get__$Component);
+	var ExpandStatsBasedMenu = function (_get__$Component) {
+	    _inherits(ExpandStatsBasedMenu, _get__$Component);
 
-	    function StatsBasedMenu(props) {
-	        _classCallCheck(this, StatsBasedMenu);
+	    function ExpandStatsBasedMenu(props) {
+	        _classCallCheck(this, ExpandStatsBasedMenu);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StatsBasedMenu).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ExpandStatsBasedMenu).call(this, props));
 
 	        _this.state = {
 	            width: 0,
@@ -104697,7 +104669,7 @@
 	        return _this;
 	    }
 
-	    _createClass(StatsBasedMenu, [{
+	    _createClass(ExpandStatsBasedMenu, [{
 	        key: "componentWillMount",
 	        value: function componentWillMount() {
 	            if (this.props.d !== this.props.node) {
@@ -104708,6 +104680,7 @@
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
 	            var bbox = $("#" + "stats-menu")[0].getBoundingClientRect();
+
 	            this.setState({
 	                width: bbox.width,
 	                height: bbox.height
@@ -104742,14 +104715,12 @@
 	        value: function render() {
 	            var _this2 = this;
 
-	            var _state = this.state;
-	            var width = _state.width;
-	            var height = _state.height;
+	            var width = this.state.width;
 	            var data = this.props.data;
 
 
-	            var chart = undefined,
-	                count = 0;
+	            var chart = undefined;
+	            var count = 0;
 
 	            var translate = "translate(150,0)";
 
@@ -104784,7 +104755,8 @@
 	                                    "g",
 	                                    {
 	                                        className: "tick axis",
-	                                        transform: "translate(0, " + (10.5 + 14 * index) + ")" },
+	                                        transform: "translate(0, " + (10.5 + 14 * index) + ")"
+	                                    },
 	                                    _react2.default.createElement(
 	                                        "text",
 	                                        {
@@ -104873,29 +104845,32 @@
 	                    { style: { float: "right", padding: "10px 0px" } },
 	                    _react2.default.createElement(
 	                        "a",
-	                        { onClick: function onClick(direction) {
+	                        { onClick: function onClick() {
 	                                return _this2.setFilterDirection(null);
 	                            },
 	                            style: this.props.filterDirection === null ? activeLinkStyle : linkStyle,
-	                            title: "Show stats for both directions" },
+	                            title: "Show stats for both directions"
+	                        },
 	                        _react2.default.createElement("span", { className: "fa fa-arrows-v" })
 	                    ),
 	                    _react2.default.createElement(
 	                        "a",
-	                        { onClick: function onClick(direction) {
+	                        { onClick: function onClick() {
 	                                return _this2.setFilterDirection(_get__("UPSTREAM"));
 	                            },
 	                            style: this.props.filterDirection === _get__("UPSTREAM") ? activeLinkStyle : linkStyle,
-	                            title: "Show upstream" },
+	                            title: "Show upstream"
+	                        },
 	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-up" })
 	                    ),
 	                    _react2.default.createElement(
 	                        "a",
-	                        { onClick: function onClick(direction) {
+	                        { onClick: function onClick() {
 	                                return _this2.setFilterDirection(_get__("DOWNSTREAM"));
 	                            },
 	                            style: this.props.filterDirection === _get__("DOWNSTREAM") ? activeLinkStyle : linkStyle,
-	                            title: "Show downstream" },
+	                            title: "Show downstream"
+	                        },
 	                        _react2.default.createElement("span", { className: "fa fa-long-arrow-down" })
 	                    )
 	                ),
@@ -104916,8 +104891,19 @@
 	        }
 	    }]);
 
-	    return StatsBasedMenu;
+	    return ExpandStatsBasedMenu;
 	}(_get__("React").Component);
+
+	_get__("ExpandStatsBasedMenu").propTypes = {
+	    status: _get__("React").PropTypes.string,
+	    data: _get__("React").PropTypes.array.isRequired,
+	    d: _get__("React").PropTypes.object,
+	    node: _get__("React").PropTypes.object,
+	    filterDirection: _get__("React").PropTypes.string,
+	    filterNeighborTypes: _get__("React").PropTypes.func.isRequired,
+	    getNeighborTypes: _get__("React").PropTypes.func.isRequired,
+	    expandNeighbors: _get__("React").PropTypes.func.isRequired
+	};
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
@@ -104942,7 +104928,7 @@
 	    };
 	};
 
-	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("StatsBasedMenu"));
+	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("ExpandStatsBasedMenu"));
 
 	exports.default = _DefaultExportValue;
 	var _RewiredData__ = {};
@@ -104996,6 +104982,9 @@
 	        case "React":
 	            return _react2.default;
 
+	        case "ExpandStatsBasedMenu":
+	            return ExpandStatsBasedMenu;
+
 	        case "expandNeighbors":
 	            return _SearchNeighborsActions.expandNeighbors;
 
@@ -105013,9 +105002,6 @@
 
 	        case "mapDispatchProps":
 	            return mapDispatchProps;
-
-	        case "StatsBasedMenu":
-	            return StatsBasedMenu;
 	    }
 
 	    return undefined;
