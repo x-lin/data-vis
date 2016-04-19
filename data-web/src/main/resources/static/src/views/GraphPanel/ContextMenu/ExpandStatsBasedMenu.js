@@ -4,14 +4,11 @@ import { OverlayTrigger, Tooltip} from "react-bootstrap";
 import { connect } from "react-redux";
 
 import Constants from "../../../config/Constants";
-import CircleSpan from "../../widgets/CircleSpan";
-import Label from "../../widgets/Label";
 import { getNeighborTypes } from "../../../actions/aggregated/promises/GETNeighborTypesActions";
 import { filterNeighborTypes } from "../../../actions/action-creators/ContextMenuActions";
 import { expandNeighbors } from "../../../actions/aggregated/SearchNeighborsActions";
 import { createParams } from "../../../actions/aggregated/SearchNeighborsParams";
-import { NEIGHBORTYPES_FETCH_SUCCESS } from "../../../actions/action-creators/SearchNeighborTypesActions";
-import { UPSTREAM, DOWNSTREAM} from "../../../config/Defaults";
+import { UPSTREAM, DOWNSTREAM } from "../../../config/Defaults";
 
 class StatsBasedMenu extends React.Component {
     constructor(props) {
@@ -20,7 +17,7 @@ class StatsBasedMenu extends React.Component {
         this.state = {
             width: 0,
             height: 0
-        }
+        };
     }
 
     componentWillMount() {

@@ -1,14 +1,15 @@
 import React from "react";
-import { Table, Tr, Td } from "reactable";
 
-import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS }
+import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS, TEST_COVERAGE_FETCH_ERROR }
     from "../../actions/action-creators/TestCoverageActions";
 import Constants from "../../config/Constants";
 import Label from "../widgets/Label";
 import DataTable from "../widgets/DataTable";
+import { START, SUCCESS, ERROR } from "../../config/Settings";
 import { createMapping } from "../../utils/TableMapping";
+import TestCoverageHeader from "./TestCoverageHeader";
 
-export default class extends React.Component {
+class TestCoverageTable extends React.Component {
     constructor(props) {
         super(props);
 
@@ -17,49 +18,20 @@ export default class extends React.Component {
         };
     }
 
-    onClick(key) {
+    onNameClick(key) {
         this.props.searchNeighborsStart("GeneralNode", key);
     }
 
-    filter(bool) {
-        this.setState({filter : bool});
-    }
-
-    render() {
-        let data = this.props.coverage.data;
-
-        if(this.state.filter) {
-            data = data.filter((coverage) => {
-                return !coverage.testcases || coverage.testcases.length === 0;
-            })
-        }
-
-        const linkStyle = {
-            color: "#444",
-            boxShadow: "0 0 0 .03em #ddd",
-            padding: "6px 8px"
-        };
-
-        const activeLinkStyle = {
-            backgroundColor: "#2c3b41",
-            color: "#fff",
-            boxShadow: "0 0 0 .03em #2c3b41",
-            pointerEvents: "none",
-            cursor: "default",
-            padding: "6px 8px"
-        };
-
-        const filter = <div>
-            <a onClick={(filter) => this.filter(false)} style={this.state.filter ? linkStyle : activeLinkStyle}>Show All</a>
-            <a onClick={(filter) => this.filter(true)} style={this.state.filter ? activeLinkStyle : linkStyle}>Show With No Test Cases</a>
-        </div>;
-
+    getMapper() {
         const jamaUrlMapper = createMapping()
             .setProperty("jamaId")
             .setColumnHeader("")
             .setContentMapping((node) => {
-                return <a href={Constants.getJamaAddress(node.jamaId, node.projectId)} target="_blank">
-                    <img src="img/jama-logo.png" className="tableImg" /></a>
+                return (
+                    <a href={Constants.getJamaAddress(node.jamaId, node.projectId)} target="_blank">
+                        <img src="img/jama-logo.png" className="tableImg" alt="Jama logo" />
+                    </a>
+                );
             })
             .setDataFunction((data) => {
                 return data.node;
@@ -70,7 +42,7 @@ export default class extends React.Component {
             .setProperty("name")
             .setColumnHeader("Name")
             .setContentMapping((node) => {
-                return <a onClick={(key) => this.onClick(node.key)}>{node.name}</a>
+                return <a onClick={() => this.onNameClick(node.key)}>{node.name}</a>;
             })
             .setSortable(true)
             .setFilterable(true)
@@ -80,7 +52,7 @@ export default class extends React.Component {
             .setProperty("type")
             .setColumnHeader("Type")
             .setContentMapping((node) => {
-                return <Label bgColor={Constants.getColor(node.type)}>{node.type}</Label>
+                return <Label bgColor={Constants.getColor(node.type)}>{node.type}</Label>;
             })
             .setDataFunction((data) => {
                 return data.node;
@@ -109,40 +81,64 @@ export default class extends React.Component {
                 return node.testcases ? node.testcases.length : 0;
             })
             .setSortable(true)
-            .setSortableFunction((data) => { return data.testcases.length})
+            .setSortableFunction(data => data.testcases.length)
             .setFilterable(true)
             .getMapping();
 
-        const mappers = [jamaUrlMapper, nameMapper, typeMapper, statusMapper, testCaseMapper];
+        return [jamaUrlMapper, nameMapper, typeMapper, statusMapper, testCaseMapper];
+    }
+
+    getStatus() {
+        switch (this.props.coverage.status) {
+            case TEST_COVERAGE_FETCH_START:
+                return START;
+            case TEST_COVERAGE_FETCH_SUCCESS:
+                return SUCCESS;
+            case TEST_COVERAGE_FETCH_ERROR:
+                return ERROR;
+            default:
+                return START;
+        }
+    }
+
+    filter(bool) {
+        this.setState({ filter: bool });
+    }
+
+    render() {
+        let data = this.props.coverage.data;
+
+        if (this.state.filter) {
+            data = data.filter((coverage) => {
+                return !coverage.testcases || coverage.testcases.length === 0;
+            });
+        }
+
+        const filter = [
+            { onClick: () => this.filter(false), body: "Show All" },
+            { onClick: () => this.filter(true), body: "Show With No Test Cases" }
+        ];
 
         return (
             <div className="box box-solid">
-                <div className="box-header with-border">
-                    <p>
-                        <span className="label label-default">Test Coverage</span>&nbsp;
-                        <span className="label" style={{backgroundColor: Constants.getColor(this.props.coverage.name.type), color: Constants.getContrastColor(Constants.getColor(this.props.coverage.name.type))}}>{this.props.coverage.name.type}</span>
-                    </p>
-                    <h3 className="box-title">
-                        <strong>{this.props.coverage.name.name}</strong>
-                    </h3>
-                    <div className="box-tools pull-right">
-                        <button className="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><span className="fa fa-minus" /></button>
-                        <button type="button" className="btn btn-box-tool" onClick={() => this.props.setPanelInvisible()}><span className="fa fa-times" /></button>
-                    </div>
-                </div>
+                {
+                    <TestCoverageHeader
+                      type={this.props.coverage.node.type}
+                      name={this.props.coverage.node.name}
+                      setPanelInvisible={this.props.setPanelInvisible}
+                    />
+                }
 
                 <div className="box-body">
                     <DataTable
-                        filter={filter}
-                        data={data}
-                        tableClass="table table-bordered table-hover sidebar-table"
-                        isSuccess={ this.props.coverage.status === TEST_COVERAGE_FETCH_SUCCESS}
-                        itemsPerPage={100}
-                        sortable={["Key", "Status", "Type", "Name", "Test Cases"]}
-                        filterable={['Name', 'Key', 'Status', 'Type']}
-                        mapper={mappers}
-                        dataMapper={(data) => {return data.node}}
-                        trClass={(data) => {return (data.testcases  && data.testcases.length > 0) ? "" : "bg-red"}}
+                      filter={filter}
+                      data={data}
+                      tableClass="table table-bordered table-hover sidebar-table"
+                      itemsPerPage={100}
+                      mapper={this.getMapper()}
+                      dataMapper={data => data.node}
+                      trClass={data => ((data.testcases && data.testcases.length > 0) ? "" : "bg-red")}
+                      status={this.getStatus()}
                     />
                 </div>
 
@@ -151,6 +147,14 @@ export default class extends React.Component {
                     <i className="fa fa-refresh fa-spin" />
                 </div>}
             </div>
-        )
+        );
     }
 }
+
+TestCoverageTable.propTypes = {
+    coverage: React.PropTypes.object.isRequired,
+    setPanelInvisible: React.PropTypes.func.isRequired,
+    searchNeighborsStart: React.PropTypes.func.isRequired
+};
+
+export default TestCoverageTable;

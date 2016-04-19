@@ -1,6 +1,14 @@
-import { test } from "tape";
-
 import { createNested, createPrimitive } from "./ActionsTestHelper";
+
+const getParamProps = (names, object) => {
+    if (Array.isArray(names)) {
+        return names.map((name) => {
+            return object[name];
+        });
+    }
+
+    return null;
+};
 
 export const executeTests = (assert, func, type, params) => {
     assert.test(`Testing ${func.name}`, (assert) => {
@@ -23,7 +31,7 @@ export const executeTests = (assert, func, type, params) => {
         assert.test("should work with no parameter values", (assert) => {
             const expected = { type };
 
-            if(params !== null && typeof params !== "undefined") {
+            if (params !== null && typeof params !== "undefined") {
                 params.forEach((name) => {
                     expected[name] = undefined;
                 });
@@ -35,14 +43,4 @@ export const executeTests = (assert, func, type, params) => {
             assert.end();
         });
     });
-};
-
-const getParamProps = (names, object) => {
-    if(Array.isArray(names)) {
-        return names.map((name) => {
-            return object[name];
-        });
-    } else if(names === null || typeof names === "undefined") {
-        return null;
-    }
 };

@@ -22,7 +22,7 @@ export const searchNeighbors = (category, key, params) => {
 
             dispatch(getNeighbors(category, key, params));
         } else {
-            return dispatch(() => {});
+            dispatch(() => {});
         }
     };
 };

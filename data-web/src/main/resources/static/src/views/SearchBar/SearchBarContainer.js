@@ -1,10 +1,9 @@
-import React from "react";
 import { connect } from "react-redux";
 
 import { getItem } from "../../actions/aggregated/promises/GETItemActions";
 import { searchNeighbors } from "../../actions/aggregated/SearchNeighborsActions";
 import { clearItems } from "../../actions/action-creators/FetchItemActions";
-import { setSearchCategory, setSearchInputValue, setSearchSelectedIndex}
+import { setSearchCategory, setSearchInputValue, setSearchSelectedIndex }
     from "../../actions/action-creators/SearchBarActions";
 
 import SearchBar from "./SearchBar";

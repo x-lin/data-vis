@@ -1,4 +1,3 @@
-import React from "react";
 import { connect } from "react-redux";
 
 import { attachToLane, move } from "../../actions/action-creators/LaneActions";
@@ -16,7 +15,7 @@ const mapDispatchProps = (dispatch) => {
             dispatch(attachToLane(laneId, note));
         },
         move: (sourceId, targetId) => {
-            dispatch(move(sourceId, targetId))
+            dispatch(move(sourceId, targetId));
         }
     };
 };

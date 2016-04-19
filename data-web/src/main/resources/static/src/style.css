@@ -392,7 +392,7 @@ a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-l
 
 .force-graph .circle {
     stroke: #fff;
-    stroke-width: 1.5px;
+    stroke-width: 1.5;
     cursor: pointer
 }
 

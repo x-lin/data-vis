@@ -7,7 +7,7 @@ const BLUE_RATIO = 0.114;
 const BRIGHTNESS_THRESHOLD = 186;
 
 const calcWithWeight = (red, green, blue) => {
-    return (red*RED_RATIO + green*GREEN_RATIO + blue*BLUE_RATIO);
+    return ((red * RED_RATIO) + (green * GREEN_RATIO) + (blue * BLUE_RATIO));
 };
 
 const hexadecToDecimal = (hex) => {
@@ -18,7 +18,8 @@ const hexadecToDecimal = (hex) => {
  * Creates a contrasting color based on a hexadecimal representation of an input color. Contrast can be understood in
  * the sense of brightness.
  *
- * @param {string} hexcode A color in hexadecimal code. Currently the format "#RRGGBB" is accepted (e.g. #FFFFFF for white).
+ * @param {string} hexcode A color in hexadecimal code. Currently the format "#RRGGBB" is accepted
+ * (e.g. #FFFFFF for white).
  * @returns {string} A contrasting color in hexadecimal code with fornat "#RRGGBB".
  */
 export default (hexcode) => {

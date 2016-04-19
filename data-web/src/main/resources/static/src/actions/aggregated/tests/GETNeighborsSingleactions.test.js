@@ -1,7 +1,8 @@
 import { test } from "tape";
 import { mockAxios, mockStore } from "./MockSetup";
 
-import { fetchNeighborsSingleStart, fetchNeighborsSingleSuccess } from "../../action-creators/SearchNeighborsSingleActions";
+import { fetchNeighborsSingleStart, fetchNeighborsSingleSuccess }
+    from "../../action-creators/SearchNeighborsSingleActions";
 import { getNeighborsSingle } from "../promises/GETNeighborsSingleActions";
 
 test("Testing GETNeighborsSingleActions", (assert) => {

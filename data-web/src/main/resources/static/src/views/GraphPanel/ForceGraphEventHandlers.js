@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import d3 from "d3";
 
 import ContextMenuBuilder from "./ContextMenu/ContextMenuBuilder";
 
@@ -13,21 +13,20 @@ EventHandlers.onClickSvg = () => {
 EventHandlers.onMouseOver = (d) => {
     d3.event.preventDefault();
 
-    if(!isContextOpen) {
+    if (!isContextOpen) {
         const popoverEl = ContextMenuBuilder.buildElement(d.key, d.category);
         ContextMenuBuilder.createAndShowTooltip(popoverEl, d);
     }
 };
 
-EventHandlers.onMouseLeave = (d) => {
+EventHandlers.onMouseLeave = () => {
     ContextMenuBuilder.removeTooltip();
-    //ContextMenuBuilder.removePopup();
 };
 
 EventHandlers.onZoomSvg = (panelElement) => {
     ContextMenuBuilder.removePopup();
     isContextOpen = false;
-    panelElement.attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+    panelElement.attr("transform", `translate(${d3.event.translate}) scale(${d3.event.scale})`);
 };
 
 EventHandlers.onContextMenuNode = (d, props) => {
@@ -41,14 +40,14 @@ EventHandlers.onContextMenuNode = (d, props) => {
 
 EventHandlers.onDoubleClickNode = (d, props) => {
     d3.event.stopPropagation();
-    //if(d.count - d.weight > 0) {
-        props.expandNeighbors(d.category, d.key);
-    //}
+    // if(d.count - d.weight > 0) {
+    props.expandNeighbors(d.category, d.key);
+    // }
 };
 
 EventHandlers.onDragStartNode = (d) => {
     d3.event.sourceEvent.stopPropagation();
-    //ContextMenuBuilder.removeTooltip();
+    // ContextMenuBuilder.removeTooltip();
     ContextMenuBuilder.removePopup();
     isContextOpen = false;
     d.fixed = true;
@@ -56,13 +55,13 @@ EventHandlers.onDragStartNode = (d) => {
 };
 
 EventHandlers.onDragEndNode = (d) => {
-    if(!isContextOpen) {
+    if (!isContextOpen) {
         const popoverEl = ContextMenuBuilder.buildElement(d.key, d.category);
         ContextMenuBuilder.createAndShowTooltip(popoverEl, d);
     }
 };
 
-EventHandlers.onDragNode = (d) => {
+EventHandlers.onDragNode = () => {
     ContextMenuBuilder.removeTooltip();
 };
 

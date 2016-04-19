@@ -13,8 +13,10 @@
     "comma-dangle": ["error", "never"],
     "arrow-body-style": ["off", "as-needed"],
     "no-else-return": "off",
-    "no-shadow": ["warn", { "builtinGlobals": true, "hoist": "functions", "allow": [] }],
-    "max-len": ["warn", 120, 4]
+    "no-shadow": "off",
+    "max-len": ["warn", 120, 4],
+    "new-cap": "off",
+    "no-param-reassign": "warn",
   },
   "extends": "airbnb"
 }

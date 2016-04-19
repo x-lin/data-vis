@@ -5,7 +5,49 @@ import { NEIGHBORS_FETCH_START }
 import { SET_SEARCH_CATEGORY, SET_SEARCH_SELECTED_INDEX, SET_SEARCH_INPUT_VALUE }
     from "../actions/action-creators/SearchBarActions";
 
-import Constants from "../config/Constants";
+const searchBarReducer = (state, action) => {
+    switch (action.type) {
+        case SET_SEARCH_CATEGORY:
+            return Object.assign({}, state, {
+                category: action.value
+            });
+        case SET_SEARCH_SELECTED_INDEX:
+            return Object.assign({}, state, {
+                selectedIndex: action.value,
+                value: action.value >= 0 ? state.data[action.value].key : state.value
+            });
+        case SET_SEARCH_INPUT_VALUE:
+            return Object.assign({}, state, {
+                value: action.value
+            });
+        default:
+            return state;
+    }
+};
+
+const fetchItemsReducer = (state, action) => {
+    switch (action.type) {
+        case ITEM_FETCH_START:
+            return Object.assign({}, state, {
+                status: ITEM_FETCH_START,
+                error: {}
+            });
+        case ITEM_FETCH_SUCCESS:
+            return Object.assign({}, state, {
+                data: action.data,
+                error: {},
+                status: ITEM_FETCH_SUCCESS
+            });
+        case ITEM_FETCH_ERROR:
+            return Object.assign({}, state, {
+                data: [],
+                error: action.error,
+                status: ITEM_FETCH_ERROR
+            });
+        default:
+            return state;
+    }
+};
 
 export default (state = {
     data: [],
@@ -36,50 +78,6 @@ export default (state = {
             return Object.assign({}, state, {
                 data: [],
                 error: {}
-            });
-        default:
-            return state;
-    }
-};
-
-const searchBarReducer = (state, action) => {
-    switch (action.type) {
-        case SET_SEARCH_CATEGORY:
-            return Object.assign({}, state, {
-                category: action.value
-            });
-        case SET_SEARCH_SELECTED_INDEX:
-            return Object.assign({}, state, {
-                selectedIndex: action.value,
-                value: action.value >=0 ? state.data[action.value].key : state.value
-            });
-        case SET_SEARCH_INPUT_VALUE:
-            return Object.assign({}, state, {
-                value: action.value
-            });
-        default:
-            return state;
-    }
-};
-
-const fetchItemsReducer = (state, action) => {
-    switch (action.type) {
-        case ITEM_FETCH_START:
-            return Object.assign({}, state, {
-                status: ITEM_FETCH_START,
-                error: {}
-            });
-        case ITEM_FETCH_SUCCESS:
-            return Object.assign({}, state, {
-                data: action.data,
-                error: {},
-                status: ITEM_FETCH_SUCCESS
-            });
-        case ITEM_FETCH_ERROR:
-            return Object.assign({}, state, {
-                data: [],
-                error: action.error,
-                status: ITEM_FETCH_ERROR
             });
         default:
             return state;

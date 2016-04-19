@@ -30,8 +30,8 @@ class BasicOptions extends React.Component {
 
 BasicOptions.propTypes = {
     setFilterValue: React.PropTypes.func.isRequired,
-    upstream: React.PropTypes.string.isRequired,
-    downstream: React.PropTypes.string.isRequired
+    upstream: React.PropTypes.bool.isRequired,
+    downstream: React.PropTypes.bool.isRequired
 };
 
 export default BasicOptions;

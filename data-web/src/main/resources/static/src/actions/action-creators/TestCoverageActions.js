@@ -6,9 +6,9 @@ export const TEST_COVERAGE_FETCH_ERROR = "TEST_COVERAGE_FETCH_ERROR";
 
 export const TEST_COVERAGE_CLEAR = "TEST_COVERAGE_CLEAR";
 
-export const fetchStart = (key, name) => createAction(
+export const fetchStart = (node) => createAction(
     TEST_COVERAGE_FETCH_START,
-    { key, name }
+    { node }
 );
 
 export const fetchSuccess = (key, data) => createAction(

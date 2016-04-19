@@ -1,65 +1,47 @@
 import React from "react";
-import { connect } from "react-redux";
-
-import d3 from "d3";
-import { store } from "../../stores/ReduxStore";
-
-import ForceGraphComponent from "./ForceGraphContainer";
-import GraphLegendComponent from "./GraphLegendContainer";
-import { undoGraphAction, redoGraphAction } from "../../actions/action-creators/GraphActions";
 
 class UndoRedo extends React.Component {
     renderUndo() {
-        if(this.props.past.length > 0) {
-            return <button className="btn btn-default btn-flat btn-lg" onClick={() => this.props.undoGraphAction()}>
-                <span className="fa fa-undo"/>
-            </button>;
-        } else {
-            return (<button className="btn btn-default btn-flat btn-lg disabled">
-                <span className="fa fa-undo"/>
-            </button>);
-        }
+        const { past, undoGraphAction } = this.props;
+
+        return (
+            <button
+              className={`btn btn-default btn-flat btn-lg ${past.length > 0 ? "" : "disabled"}`}
+              onClick={past.length > 0 ? () => undoGraphAction() : null}
+            >
+                <span className="fa fa-undo" />
+            </button>
+        );
     }
 
     renderRedo() {
-        if(this.props.future.length > 0) {
-            return (<button className="btn btn-default btn-flat btn-lg" onClick={() => this.props.redoGraphAction()}>
-                <span className="fa fa-repeat"/>
-            </button>);
-        } else {
-            return (<button className="btn btn-default btn-flat btn-lg disabled">
-                <span className="fa fa-repeat"/>
-            </button>);
-        }
+        const { future, redoGraphAction } = this.props;
+
+        return (
+            <button
+              className={`btn btn-default btn-flat btn-lg ${future.length > 0 ? "" : "disabled"}`}
+              onClick={future.length > 0 ? () => redoGraphAction() : null}
+            >
+                <span className="fa fa-repeat" />
+            </button>
+        );
     }
 
     render() {
-        return <div style={{bottom: "20px", left: "20px", position: "absolute", zIndex: "10"}}>
-            {this.renderUndo()}
-            {this.renderRedo()}
-        </div>
+        return (
+            <div style={{ bottom: "20px", left: "20px", position: "absolute", zIndex: "10" }}>
+                {this.renderUndo()}
+                {this.renderRedo()}
+            </div>
+        );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        past: state.graph.past,
-        future: state.graph.future
-    };
+UndoRedo.propTypes = {
+    future: React.PropTypes.array.isRequired,
+    past: React.PropTypes.array.isRequired,
+    redoGraphAction: React.PropTypes.func.isRequired,
+    undoGraphAction: React.PropTypes.func.isRequired
 };
 
-const mapDispatchProps = (dispatch) => {
-    return {
-        undoGraphAction: () => {
-            dispatch(undoGraphAction());
-        },
-        redoGraphAction: () => {
-            dispatch(redoGraphAction());
-        }
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchProps
-)(UndoRedo);
+export default UndoRedo;

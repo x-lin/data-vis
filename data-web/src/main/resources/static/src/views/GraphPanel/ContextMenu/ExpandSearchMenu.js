@@ -12,17 +12,15 @@ import { searchNeighborsSingle } from "../../../actions/aggregated/SearchNeighbo
 import { expandNode } from "../../../actions/action-creators/GraphActions";
 import { NEIGHBORS_SINGLE_FETCH_ERROR, NEIGHBORS_SINGLE_FETCH_START, NEIGHBORS_SINGLE_FETCH_SUCCESS }
     from "../../../actions/action-creators/SearchNeighborsSingleActions";
-
-const UPSTREAM = "UPSTREAM";
-const DOWNSTREAM = "DOWNSTREAM";
-const BOTH ="BOTH";
+import { START, SUCCESS, ERROR } from "../../../config/Settings";
+import { DOWNSTREAM, UPSTREAM } from "../../../config/Defaults";
 
 export default class ExpandSearchMenu extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            clicked: BOTH
+            clicked: null
         }
     }
 
@@ -38,58 +36,43 @@ export default class ExpandSearchMenu extends React.Component {
         this.props.expandNode(key, toNode);
     }
 
+    getStatus() {
+        switch (this.props.status) {
+            case NEIGHBORS_SINGLE_FETCH_START:
+                return START;
+            case NEIGHBORS_SINGLE_FETCH_SUCCESS:
+                return SUCCESS;
+            case NEIGHBORS_SINGLE_FETCH_ERROR:
+                return ERROR;
+            default:
+                return START;
+        }
+    }
+
     render() {
         let data = this.props.data;
 
-        if(this.state.clicked != BOTH) {
+        if(this.state.clicked !== null) {
             data = data.filter((node) => {
                 return !node.direction || node.direction === this.state.clicked;
-            })
+            });
         }
-
-        const linkStyle = {
-            color: "#444",
-            boxShadow: "0 0 0 .03em #ddd",
-            padding: "6px 12px"
-        };
-
-        const activeLinkStyle = {
-            backgroundColor: "#2c3b41",
-            color: "#fff",
-            boxShadow: "0 0 0 .03em #2c3b41",
-            pointerEvents: "none",
-            cursor: "default",
-            padding: "6px 12px"
-        };
 
         const mapper = createMapping()
             .setProperty("name")
             .setColumnHeader("Name")
             .setContentMapping((node) => {
-                console.log(node);
                 return <a onClick={(key) => this.onClick(this.props.d.key, node)}>
                     {node.name} <Label bgColor={Constants.getColor(node.type)}>{node.type}</Label>
                 </a>
             })
             .getMapping();
 
-        const filter = <div style={{float: "right", padding: "10px 0px"}}>
-            <a onClick={(direction) => this.setClicked(BOTH)}
-               style={this.state.clicked === BOTH ? activeLinkStyle : linkStyle}
-               title="Search in both directions">
-                <span className="fa fa-arrows-v"/>
-            </a>
-            <a onClick={(direction) => this.setClicked(UPSTREAM)}
-               style={this.state.clicked === UPSTREAM ? activeLinkStyle : linkStyle}
-               title="Search upstream">
-                <span className="fa fa-long-arrow-up"/>
-            </a>
-            <a onClick={(direction) => this.setClicked(DOWNSTREAM)}
-               style={this.state.clicked === DOWNSTREAM ? activeLinkStyle : linkStyle}
-               title="Search downstream">
-                <span className="fa fa-long-arrow-down"/>
-            </a>
-        </div>;
+        const filter = [
+            {onClick: () => this.setClicked(BOTH), body: <span className="fa fa-arrows-v"/>},
+            {onClick: () => this.setClicked(UPSTREAM), body: <span className="fa fa-long-arrow-up"/>},
+            {onClick: () => this.setClicked(DOWNSTREAM), body: <span className="fa fa-long-arrow-down"/>}
+        ];
 
         return (
             <div className="dropdown-content-item">
@@ -97,12 +80,10 @@ export default class ExpandSearchMenu extends React.Component {
                     filter={filter}
                     data={data}
                     tableClass="table table-sm table-hover contextmenu-table"
-                    isSuccess={this.props.status === NEIGHBORS_SINGLE_FETCH_SUCCESS}
                     itemsPerPage={10}
                     pageButtonLimit={5}
-                    sortable={["Name"]}
-                    filterable={['Name']}
                     mapper={[mapper]}
+                    status={this.getStatus()}
                 />
             </div>
         );
@@ -113,7 +94,6 @@ const mapStateToProps = (state) => {
     return {
         data: state.contextmenu.search,
         status: state.contextmenu.searchStatus
-        //coverage: state.coverage
     };
 };
 

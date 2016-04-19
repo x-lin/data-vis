@@ -11,7 +11,7 @@ const Relations = ({ sidebarObject, sidebarVisible }) => {
     return (
         <div>
             <VerticalSplitView rightWidth={500} height={height}>
-                <div style={{height: height}}>
+                <div style={{ height }}>
                     <SearchBarComponent />
                     <GraphPanel />
                 </div>

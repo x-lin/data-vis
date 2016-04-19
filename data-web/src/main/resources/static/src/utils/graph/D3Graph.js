@@ -1,21 +1,21 @@
 export default class {
     constructor(nodes, edges, legend) {
-        this.nodes = nodes ? nodes : [];
-        this.edges = edges ? edges : [];
+        this.nodes = nodes || [];
+        this.edges = edges || [];
 
-        this.legend = legend ? legend : [];
+        this.legend = legend || [];
 
-        if(this.legend.length == 0 && nodes) {
+        if (this.legend.length === 0 && nodes) {
             this.nodes.forEach((node) => {
                 this.addNodeLegend(node);
-            })
+            });
         }
     }
 
     addNode(node) {
         let index = this.indexOfNode(node.key);
 
-        if(index === -1) {
+        if (index === -1) {
             this.nodes.push(node);
             index = this.nodes.length - 1;
             this.addNodeLegend(node);
@@ -25,20 +25,20 @@ export default class {
     }
 
     addEdge(edge) {
-        if(!this.edgeExists(edge.source, edge.target)) {
+        if (!this.edgeExists(edge.source, edge.target)) {
             this.edges.push(edge);
         }
     }
 
     addNodeLegend(node) {
-        if(!this.nodeLegendExists(node)) {
+        if (!this.nodeLegendExists(node)) {
             this.legend.push(node.type ? node.type : node.category);
         }
     }
 
     indexOfNode(key) {
-        for(let i = 0; i < this.nodes.length; i++) {
-            if(this.nodes[i].key === key) {
+        for (let i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].key === key) {
                 return i;
             }
         }
@@ -47,8 +47,8 @@ export default class {
     }
 
     nodeLegendExists(node) {
-        for(let i = 0; i < this.legend.length; i++) {
-            if(node.type === this.legend[i]) {
+        for (let i = 0; i < this.legend.length; i++) {
+            if (node.type === this.legend[i]) {
                 return true;
             }
         }
@@ -59,13 +59,13 @@ export default class {
     edgeExists(inputSource, inputTarget) {
         const input = this.getCleansedSourceAndTarget(inputSource, inputTarget);
 
-        for(let i = 0; i < this.edges.length; i++) {
+        for (let i = 0; i < this.edges.length; i++) {
             const edge = this.edges[i];
-            const { source, target} = this.getCleansedSourceAndTarget(edge.source, edge.target);
+            const { source, target } = this.getCleansedSourceAndTarget(edge.source, edge.target);
 
-            if(input.source === source && input.target === target) {
+            if (input.source === source && input.target === target) {
                 return true;
-            } else if(input.target === source && input.source === target) {
+            } else if (input.target === source && input.source === target) {
                 return true;
             }
         }
@@ -74,7 +74,8 @@ export default class {
     }
 
     getCleansedSourceAndTarget(sourceInp, targetInp) {
-        let source, target;
+        let source;
+        let target;
 
         if (this.isEdgeInit(sourceInp, targetInp)) {
             source = sourceInp.index;
@@ -84,7 +85,7 @@ export default class {
             target = targetInp;
         }
 
-        return {source, target};
+        return { source, target };
     }
 
     isEdgeInit(source, target) {

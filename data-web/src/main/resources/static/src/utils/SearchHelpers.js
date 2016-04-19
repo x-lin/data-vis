@@ -1,28 +1,30 @@
-export const indexOfObjectInArrayByProperty = (array, propertyValue, propertyKey) => {
-    const property = {};
-    property[propertyKey] = propertyValue;
-
-    return indexOfObjectInArrayByProperties(array, property);
-};
-
 export const indexOfObjectInArrayByProperties = (array, properties) => {
-    for(let i = 0; i < array.length; i++) {
-        let object = array[i];
+    for (let i = 0; i < array.length; i++) {
+        const object = array[i];
         let doesExist = true;
 
-        for(let propertyKey in properties) {
-            const propertyValue = properties[propertyKey];
+        for (const propertyKey in properties) {
+            if ({}.hasOwnProperty.call(properties, propertyKey)) {
+                const propertyValue = properties[propertyKey];
 
-            if(object[propertyKey] !== propertyValue) {
-                doesExist = false;
-                break;
+                if (object[propertyKey] !== propertyValue) {
+                    doesExist = false;
+                    break;
+                }
             }
         }
 
-        if(doesExist) {
+        if (doesExist) {
             return i;
         }
     }
 
     return -1;
+};
+
+export const indexOfObjectInArrayByProperty = (array, propertyValue, propertyKey) => {
+    const property = {};
+    property[propertyKey] = propertyValue;
+
+    return indexOfObjectInArrayByProperties(array, property);
 };

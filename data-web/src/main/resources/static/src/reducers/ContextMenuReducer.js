@@ -14,53 +14,35 @@ const initialState = {
     neighborTypes: { data: [], node: null, rawData: [] }
 };
 
-export default (state = initialState, action) => {
-    switch (action.type) {
-        case ACTIVATE_CONTEXT:
-            if (action.context !== state.context) {
-                return Object.assign({}, state, {
-                    context: action.context
-                });
-            } else {
-                return state;
-            }
-        case DEACTIVATE_CONTEXT:
-            return Object.assign({}, state, {
-                context: null
-            });
-        case CLEAR_STATE:
-            return Object.assign({}, initialState);
-        case FILTER_NEIGHBOR_TYPES:
-            const neighborTypes = state.neighborTypes;
-            neighborTypes.data = prepare(neighborTypes.rawData, action.filterDirection);
+const prepare = (data, filterDirection) => {
+    return data.reduce((array, current) => {
+        if ((filterDirection && current.relationship.indexOf(filterDirection) !== -1) ||
+            !filterDirection
+        ) {
+            const index = array.reduce((val, entry, index) => {
+                if (val === -1 && entry.node.key === current.node.key) {
+                    return index;
+                } else {
+                    return val;
+                }
+            }, -1);
 
-            return Object.assign({}, state, {
-                neighborTypes,
-                filterDirection: action.filterDirection
-            });
-        case NEIGHBORS_SINGLE_FETCH_START:
-            return Object.assign({}, state, {
-                searchNode: action.node,
-                search: initialState.search,
-                searchStatus: NEIGHBORS_SINGLE_FETCH_START
-            });
-        case NEIGHBORS_SINGLE_FETCH_SUCCESS:
-            if (action.node.key === state.searchNode.key) {
-                return Object.assign({}, state, {
-                    search: action.data,
-                    searchStatus: NEIGHBORS_SINGLE_FETCH_SUCCESS
-                });
+            if (index === -1) {
+                array.push(current);
             } else {
-                return state;
+                array[index] = Object.assign({}, array[index], {
+                    count: current.count + array[index].count,
+                    relationship: array[index].relationship.concat(current.relationship[0])
+                });
             }
-        case NEIGHBORTYPES_FETCH_ERROR:
-        case NEIGHBORTYPES_FETCH_START:
-        case NEIGHBORTYPES_FETCH_SUCCESS:
-            return neighborTypesReducer(state, action);
-        case NEIGHBORS_SINGLE_FETCH_ERROR:
-        default:
-            return state;
-    }
+
+            array.sort((a, b) => {
+                return b.count - a.count;
+            });
+        }
+
+        return array;
+    }, []);
 };
 
 const neighborTypesReducer = (state, action) => {
@@ -102,33 +84,50 @@ const neighborTypesReducer = (state, action) => {
     }
 };
 
-const prepare = (data, filterDirection) => {
-    return data.reduce((array, current) => {
-        if ((filterDirection && current.relationship.indexOf(filterDirection) !== -1) ||
-            !filterDirection
-        ) {
-            const index = array.reduce((val, entry, index) => {
-                if (val === -1 && entry.node.key === current.node.key) {
-                    return index;
-                } else {
-                    return val;
-                }
-            }, -1);
-
-            if (index === -1) {
-                array.push(current);
-            } else {
-                array[index] = Object.assign({}, array[index], {
-                    count: current.count + array[index].count,
-                    relationship: array[index].relationship.concat(current.relationship[0])
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case ACTIVATE_CONTEXT:
+            if (action.context !== state.context) {
+                return Object.assign({}, state, {
+                    context: action.context
                 });
+            } else {
+                return state;
             }
-
-            array.sort((a, b) => {
-                return b.count - a.count;
+        case DEACTIVATE_CONTEXT:
+            return Object.assign({}, state, {
+                context: null
             });
-        }
+        case CLEAR_STATE:
+            return Object.assign({}, initialState);
+        case FILTER_NEIGHBOR_TYPES:
+            state.neighborTypes.data = prepare(state.neighborTypes.rawData, action.filterDirection);
 
-        return array;
-    }, []);
+            return Object.assign({}, state, {
+                neighborTypes: state.neighborTypes,
+                filterDirection: action.filterDirection
+            });
+        case NEIGHBORS_SINGLE_FETCH_START:
+            return Object.assign({}, state, {
+                searchNode: action.node,
+                search: initialState.search,
+                searchStatus: NEIGHBORS_SINGLE_FETCH_START
+            });
+        case NEIGHBORS_SINGLE_FETCH_SUCCESS:
+            if (action.node.key === state.searchNode.key) {
+                return Object.assign({}, state, {
+                    search: action.data,
+                    searchStatus: NEIGHBORS_SINGLE_FETCH_SUCCESS
+                });
+            } else {
+                return state;
+            }
+        case NEIGHBORTYPES_FETCH_ERROR:
+        case NEIGHBORTYPES_FETCH_START:
+        case NEIGHBORTYPES_FETCH_SUCCESS:
+            return neighborTypesReducer(state, action);
+        case NEIGHBORS_SINGLE_FETCH_ERROR:
+        default:
+            return state;
+    }
 };

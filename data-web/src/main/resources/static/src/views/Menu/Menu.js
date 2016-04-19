@@ -1,109 +1,107 @@
 import React from "react";
+import { OverlayTrigger, Popover } from "react-bootstrap";
 
 import Slider from "../widgets/Slider";
 import FileLoaderComponent from "../GraphLoader/FileLoaderContainer";
 import FileSaverComponent from "../GraphLoader/FileSaverContainer";
 import NewGraphComponent from "../GraphLoader/NewGraphContainer";
 import Label from "../widgets/Label";
-import LanePicker from "../LanePicker/LanePicker";
-import BasicOptionsComponent from "./BasicOptionsContainer";
-import NeighborExpansionComponent from "./NeighborExpansionContainer";
-import Header from "../widgets/Header";
+import Header from "../widgets/MenuHeader";
+import MenuLanePicker from "./MenuLanePicker";
+import MenuEdgeDirections from "./MenuEdgeDirections";
+import MenuRenderingLimit from "./MenuRenderingLimit";
 
-import { OverlayTrigger, Popover } from "react-bootstrap";
-
-export default ( {
+const Menu = ({
     toggleHandler,
     valueHandler,
     settings,
     layout
-    } ) => {
+    }) => {
     const renderEntries = () => {
         return settings.map((setting, index) => {
+            const liClass = (index === settings.length - 1) ? "navbar-space" : "";
+            
             if (typeof setting.value === "boolean") {
                 let clazz = setting.value ? "btn btn-default active btn-flat-custom" : "";
 
-                return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
-                    <a title={setting.description} className={clazz} onClick={(value) => toggleHandler(setting.name)}>
-                        <span className={setting.menuButton} />
-                    </a>
-                </li>;
+                return (
+                    <li key={index} className={liClass}>
+                        <a title={setting.description} className={clazz} onClick={() => toggleHandler(setting.name)}>
+                            <span className={setting.menuButton} />
+                        </a>
+                    </li>
+                );
             } else if (!isNaN(parseFloat(setting.value))) {
-                return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}><div style={{minWidth: "200px"}}>
-                    <Header>{setting.shortDescription}</Header>
-                    <Slider min={setting.min} max={setting.max}
-                                defaultValue={setting.value}
-                                step={setting.step}
-                                onChange={(value) => valueHandler(setting.name, value)}
-                        /></div></Popover>}>
-                        <a title={setting.description}>
-                            <span className={setting.menuButton} />
-                            <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
-                        </a>
-                    </OverlayTrigger>
-                </li>;
-            } else {
-                return <li key={index} className={index === settings.length-1 ? "navbar-space" : ""}>
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={index}>
+                const popover = (
+                    <Popover id={index}>
+                        <div style={{ minWidth: "200px" }}>
                             <Header>{setting.shortDescription}</Header>
-                            {setting.options.map((entry, index) => {
-                                return <div className="cursor" style={{paddingBottom: "5px"}} onClick={() => valueHandler(setting.name, entry.key)} key={index}>
-                                    <span style={{marginRight: "5px"}}>{entry.description}</span>
-                                    <input type="radio" className="pull-right"
-                                           checked={layout === entry.key}
-                                           onChange={() => {}}
-                                    />
-                                </div>
-                                })
-                            }
-</Popover>}>
-                        <a title={setting.description}>
-                            <span className={setting.menuButton} />
-                            <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
-                        </a>
-                    </OverlayTrigger>
-                </li>;
+                            <Slider min={setting.min} max={setting.max}
+                              defaultValue={setting.value}
+                              step={setting.step}
+                              onChange={(value) => valueHandler(setting.name, value)}
+                            />
+                        </div>
+                    </Popover>
+                );
+
+                return (
+                    <li key={index} className={liClass}>
+                        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
+                            <a title={setting.description}>
+                                <span className={setting.menuButton} />
+                                <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
+                            </a>
+                        </OverlayTrigger>
+                    </li>
+                );
+            } else {
+                const options = setting.options.map((entry, index) => {
+                    return (
+                        <div className="cursor"
+                          style={{ paddingBottom: "5px" }}
+                          onClick={() => valueHandler(setting.name, entry.key)}
+                          key={index}
+                        >
+                            <span style={{ marginRight: "5px" }}>{entry.description}</span>
+                            <input type="radio" className="pull-right"
+                              checked={layout === entry.key}
+                              onChange={() => {}}
+                            />
+                        </div>
+                    );
+                });
+
+                const popover1 = (
+                    <Popover id={index}>
+                        <Header>{setting.shortDescription}</Header>
+                        {options}
+                    </Popover>
+                );
+
+                return (
+                    <li key={index} className={liClass}>
+                        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover1}>
+                            <a title={setting.description}>
+                                <span className={setting.menuButton} />
+                                <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
+                            </a>
+                        </OverlayTrigger>
+                    </li>
+                );
             }
-        })
+        });
     };
 
     return (
         <ul className="nav navbar-nav">
             <li><NewGraphComponent /></li>
-            <li><a href="#" title="Load Graph From File"><FileLoaderComponent hasLabel={false} /></a></li>
+            <li><FileLoaderComponent hasLabel={false} /></li>
             <li className="navbar-space"><FileSaverComponent /></li>
 
-            <li>
-                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"lanepicker"}><div style={{height: $(document).height() - 100}}><LanePicker /></div></Popover>}>
-                    <a title="Group items">
-                        <span className="fa fa-building-o" />
-                        <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
-                    </a>
-                </OverlayTrigger>
-            </li>
-            <li>
-                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"basicoptions"}>
-                    <Header>Edge Directions</Header>
-                    <BasicOptionsComponent />
-                </Popover>}>
-                    <a title="Edge directions">
-                        <span className="fa fa-exchange" />
-                        <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
-                    </a>
-                </OverlayTrigger>
-            </li>
-            <li className="navbar-space">
-                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id={"neighborexpansion"}>
-                    <Header>Single Rendering Limit</Header>
-                    <NeighborExpansionComponent />
-                </Popover>}>
-                    <a title="Limit for rendering of neighbor nodes">
-                        <span className="fa fa-pencil-square-o" />
-                        <Label labelClass="label-default"><span className="fa fa-caret-down" /></Label>
-                    </a>
-                </OverlayTrigger>
-            </li>
+            <li><MenuLanePicker /></li>
+            <li><MenuEdgeDirections /></li>
+            <li className="navbar-space"><MenuRenderingLimit /></li>
 
             {renderEntries()}
 
@@ -111,3 +109,12 @@ export default ( {
         </ul>
     );
 };
+
+Menu.propTypes = {
+    toggleHandler: React.PropTypes.func.isRequired,
+    valueHandler: React.PropTypes.func.isRequired,
+    settings: React.PropTypes.array.isRequired,
+    layout: React.PropTypes.string.isRequired
+};
+
+export default Menu;

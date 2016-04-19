@@ -7,11 +7,14 @@ export const SHOW_EDGE_DIRECTION = "SHOW_EDGE_DIRECTION";
 
 export const FORCE_GRAPH_LAYOUT = "FORCE_GRAPH_LAYOUT";
 export const CIRCULAR_LAYOUT = "CIRCULAR_LAYOUT";
-export const TREE_LAYOUT = "TREE_LAYOUT";
 
 export const DEFAULT_COLOR = "#999999";
 export const DEFAULT_BRIGHT_COLOR = "#FFFFFF";
 export const DEFAULT_DARK_COLOR = "#444444";
+
+export const ERROR = "ERROR";
+export const SUCCESS = "SUCCESS";
+export const START = "START";
 
 export default [
     {
@@ -53,10 +56,9 @@ export default [
         shortDescription: "Graph Layout",
         value: FORCE_GRAPH_LAYOUT,
         options: [
-            {key: FORCE_GRAPH_LAYOUT, description: "Force-directed"},
-            {key: CIRCULAR_LAYOUT, description: "Circular (experimental)"}
+            { key: FORCE_GRAPH_LAYOUT, description: "Force-directed" },
+            { key: CIRCULAR_LAYOUT, description: "Circular (experimental)" }
         ],
         menuButton: "fa fa-picture-o"
     }
 ];
-

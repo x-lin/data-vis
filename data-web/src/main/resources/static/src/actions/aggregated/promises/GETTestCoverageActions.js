@@ -5,7 +5,7 @@ import { getEndpoint } from "../../../config/Defaults";
 
 export const getCoverage = (node) => {
     return dispatch => {
-        dispatch(fetchStart(node.key, node.name));
+        dispatch(fetchStart(node));
 
         return axios.get(`/search/${getEndpoint(node.type)}/coverage/${node.key}`)
             .then((response) => {

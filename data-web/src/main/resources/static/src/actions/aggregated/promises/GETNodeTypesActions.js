@@ -1,6 +1,7 @@
 import axios from "axios";
 
-import { fetchNodeTypeStart, fetchNodeTypeError, fetchNodeTypeSuccess } from "../../action-creators/FetchNodeTypeActions";
+import { fetchNodeTypeStart, fetchNodeTypeError, fetchNodeTypeSuccess }
+    from "../../action-creators/FetchNodeTypeActions";
 
 export const getNodeTypes = () => {
     return (dispatch) => {

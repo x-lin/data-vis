@@ -1,7 +1,7 @@
 import { NODETYPE_FETCH_START, NODETYPE_FETCH_ERROR, NODETYPE_FETCH_SUCCESS }
     from "../actions/action-creators/FetchNodeTypeActions";
 
-export default (state = {data: []}, action) => {
+export default (state = { data: [] }, action) => {
     switch (action.type) {
         case NODETYPE_FETCH_START:
             return Object.assign({}, state, {

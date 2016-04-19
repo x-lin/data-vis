@@ -39,7 +39,13 @@ class FileLoaderContainer extends React.Component {
     }
 
     render() {
-        return <FileLoader title={this.props.hasLabel ? "Load Graph" : ""} handleLoad={(event) => this.handleLoad(event)} />;
+        const title = this.props.hasLabel ? "Load Graph" : "";
+
+        return (
+            <a href="#" title="Load Graph From File">
+                <FileLoader title={title} handleLoad={(event) => this.handleLoad(event)} />
+            </a>
+        );
     }
 }
 

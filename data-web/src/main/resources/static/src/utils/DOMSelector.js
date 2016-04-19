@@ -1,5 +1,3 @@
-import d3 from "d3";
-
 const DOMSelector = {};
 
 DOMSelector.getWidth = (selector) => {

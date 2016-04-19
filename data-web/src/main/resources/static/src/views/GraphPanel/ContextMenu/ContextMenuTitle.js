@@ -1,11 +1,9 @@
 import React from "react";
 
 import Constants from "../../../config/Constants";
-import CircleSpan from "../../widgets/CircleSpan";
 import Label from "../../widgets/Label";
 
-export default ( { d
-    } ) => {
+const ContextMenuTitle = ({ d }) => {
     return (
 
         <div>
@@ -18,3 +16,9 @@ export default ( { d
         </div>
     );
 };
+
+ContextMenuTitle.propTypes = {
+    d: React.PropTypes.object.isRequired
+};
+
+export default ContextMenuTitle;

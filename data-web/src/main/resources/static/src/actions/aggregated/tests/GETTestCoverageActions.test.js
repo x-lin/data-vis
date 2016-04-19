@@ -15,7 +15,7 @@ test("Testing GETNeighborsSingleActions", (assert) => {
     const store = mockStore({ data: [] });
 
     const expectedActions = [
-        fetchStart(node.key, node.name),
+        fetchStart(node),
         fetchSuccess(node.key, data)
     ];
 

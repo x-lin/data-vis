@@ -7,9 +7,31 @@ const PRIMITIVES = [STRING, NUMBER, NULL, BOOL];
 
 const NUM_ARRAY = [2, 0, 3, 5];
 const STRING_ARRAY = ["string1", "string2", STRING];
-const OBJECT = {prop1: STRING, prop2: NULL, prop3: NUMBER, prop4: { nestedProp: NUM_ARRAY }};
+const OBJECT = { prop1: STRING, prop2: NULL, prop3: NUMBER, prop4: { nestedProp: NUM_ARRAY } };
 
 const NESTED = [NUM_ARRAY, OBJECT, STRING_ARRAY];
+
+const processParams = (params, assign) => {
+    if (typeof params === "string") {
+        assign(params, 0);
+    } else if (Array.isArray(params)) {
+        params.forEach((name, index) => {
+            assign(name, index);
+        });
+    }
+};
+
+const pick = (index, array) => {
+    return array[index % (array.length - 1)];
+};
+
+const pickPrimitive = (index) => {
+    return pick(index, PRIMITIVES);
+};
+
+const pickNested = (index) => {
+    return pick(index, NESTED);
+};
 
 /**
  * Creates an action assigning a primitive value to each parameter
@@ -43,26 +65,4 @@ export const createNested = (type, params) => {
     });
 
     return object;
-};
-
-const processParams = (params, assign) => {
-    if(typeof params === "string") {
-        assign(params, 0);
-    } else if(Array.isArray(params)) {
-        params.forEach((name, index) => {
-            assign(name, index);
-        });
-    }
-};
-
-const pickPrimitive = (index) => {
-    return pick(index, PRIMITIVES);
-};
-
-const pickNested = (index) => {
-    return pick(index, NESTED);
-};
-
-const pick = (index, array) => {
-    return array[index % (array.length-1)];
 };

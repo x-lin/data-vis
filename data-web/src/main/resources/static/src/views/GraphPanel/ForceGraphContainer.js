@@ -1,8 +1,6 @@
-import React from "react";
 import { connect } from "react-redux";
 
 import { expandNeighbors } from "../../actions/aggregated/SearchNeighborsActions";
-import { clearGraph, updateGraph } from "../../actions/action-creators/GraphActions";
 import { DISABLED_OPACITY_VALUE, SET_NODE_POSITIONS_FIXED, ENABLE_SELECTION_OF_FILTERED_NODES, SHOW_EDGE_DIRECTION }
     from "../../config/Settings";
 
@@ -12,7 +10,7 @@ const mapStateToProps = (state) => {
     const settings = (() => {
         const s = {};
 
-        for(let i = 0; i < state.settings.length; i++) {
+        for (let i = 0; i < state.settings.length; i++) {
             s[state.settings[i].name] = state.settings[i].value;
         }
 

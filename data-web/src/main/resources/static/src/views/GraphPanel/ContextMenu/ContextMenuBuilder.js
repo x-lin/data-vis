@@ -4,31 +4,29 @@ import ReactDOM from "react-dom";
 import ContextMenu from "./ContextMenu";
 import Tooltip from "../../widgets/Tooltip";
 import ProviderWrapper from "../../../stores/ProviderWrapper";
-import { Provider } from "react-redux";
-import { store } from "../../../stores/ReduxStore";
 
 const ContextMenuBuilder = {};
 
 ContextMenuBuilder.buildElement = (key, category) => {
-    return $("#" + ContextMenuBuilder.buildElementId(key, category));
+    return $(`#${ContextMenuBuilder.buildElementId(key, category)}`);
 };
 
 ContextMenuBuilder.buildElementId = (key, category) => {
-    return "g" + key.replace(/^[^a-z]+|[^\w-]+/gi, "") + category;
+    return `g${key.replace(/^[^a-z]+|[^\w-]+/gi, "")}${category}`;
 };
 
 ContextMenuBuilder.createAndShow = (element, d, props) => {
-    ReactDOM.render (
+    ReactDOM.render(
         <ProviderWrapper>
             <ContextMenu d={d} target={element[0]} {...props} />
         </ProviderWrapper>,
         $("#popover-content")[0]
     );
 
-    //close popover on outside click
-    $('body').on('click', function (e) {
-        $('#popover-content').each(function () {
-            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+    // close popover on outside click
+    $("body").on("click", (e) => {
+        $("#popover-content").each(() => {
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $(".popover").has(e.target).length === 0) {
                 ContextMenuBuilder.removePopup();
             }
         });
@@ -46,11 +44,11 @@ ContextMenuBuilder.createAndShowTooltip = (element, d) => {
     return element;
 };
 
-ContextMenuBuilder.removeTooltip = (selector) => {
+ContextMenuBuilder.removeTooltip = () => {
     ReactDOM.unmountComponentAtNode($("#tooltip-content")[0]);
 };
 
-ContextMenuBuilder.removePopup = (selector) => {
+ContextMenuBuilder.removePopup = () => {
     ReactDOM.unmountComponentAtNode($("#popover-content")[0]);
 };
 

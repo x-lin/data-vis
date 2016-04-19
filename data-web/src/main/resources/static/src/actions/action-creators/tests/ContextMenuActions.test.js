@@ -15,7 +15,7 @@ test("Testing ContextMenuActions", (assert) => {
 
     assert.test("Testing filterNeighborTypes", assert => {
         assert.test("should create an action with a null filter direction", (assert) => {
-            const expected = {type: FILTER_NEIGHBOR_TYPES, filterDirection: null};
+            const expected = { type: FILTER_NEIGHBOR_TYPES, filterDirection: null };
             const actual1 = filterNeighborTypes(null);
             const actual2 = filterNeighborTypes();
             const actual3 = filterNeighborTypes("somethign else");
@@ -27,7 +27,7 @@ test("Testing ContextMenuActions", (assert) => {
         });
 
         assert.test("should create an action with an upstream filter direction", (assert) => {
-            const expected = {type: FILTER_NEIGHBOR_TYPES, filterDirection: UPSTREAM};
+            const expected = { type: FILTER_NEIGHBOR_TYPES, filterDirection: UPSTREAM };
             const actual = filterNeighborTypes(expected.filterDirection);
 
             assert.deepEqual(actual, expected);
@@ -35,7 +35,7 @@ test("Testing ContextMenuActions", (assert) => {
         });
 
         assert.test("should create an action with an upstream filter direction", (assert) => {
-            const expected = {type: FILTER_NEIGHBOR_TYPES, filterDirection: DOWNSTREAM};
+            const expected = { type: FILTER_NEIGHBOR_TYPES, filterDirection: DOWNSTREAM };
             const actual = filterNeighborTypes(expected.filterDirection);
 
             assert.deepEqual(actual, expected);

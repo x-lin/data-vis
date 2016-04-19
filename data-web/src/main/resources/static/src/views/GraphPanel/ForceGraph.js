@@ -1,6 +1,5 @@
 import React from "react";
 import d3 from "d3";
-import cola from "webcola";
 
 import Constants from "../../config/Constants";
 import ContextMenuBuilder from "./ContextMenu/ContextMenuBuilder";
@@ -9,9 +8,9 @@ import FilterHelpers from "../../utils/FilterHelpers";
 import D3Utils from "../../utils/D3Utils";
 import DOMSelector from "../../utils/DOMSelector";
 
-//Note: This class is mostly a wrapper around the D3 force graph implementation enriched with some customized behaviors.
-//A refactoring of the force graph was started to apply to the React way (check out ForceGraph_Ref.js), it was however
-//abandoned due to apparent performance losses in graph rendering and the lack of reusability of D3 behaviors in React.
+// Note: This class is mostly a wrapper around the D3 force graph implementation enriched with some customized behaviors.
+// A refactoring of the force graph was started to apply to the React way (check out ForceGraph_Ref.js), it was however
+// abandoned due to apparent performance losses in graph rendering and the lack of reusability of D3 behaviors in React.
 export default class extends React.Component {
     constructor(props) {
         super(props);
@@ -22,21 +21,14 @@ export default class extends React.Component {
             links: {},
             svg: {},
             g: {},
-            translate: [0,0],
+            translate: [0, 0],
             scale: 1,
             zoom: {},
-            selector: "#" + this.props.divId,
+            selector: `#${this.props.divId}`,
             localG: {},
             linkedByIndex: {},
             toggle: 0
-        }
-    }
-
-    render() {
-        return (
-            <div id={this.props.divId}>
-            </div>
-        );
+        };
     }
 
     componentDidMount() {
@@ -69,9 +61,9 @@ export default class extends React.Component {
     createConnectedIndex(data) {
         this.state.linkedByIndex = {};
 
-        //Create an array logging what is connected to what
+        // Create an array logging what is connected to what
         for (let i = 0; i < data.nodes.length; i++) {
-            this.state.linkedByIndex[i + "," + i] = 1;
+            this.state.linkedByIndex[`${i},${i}`] = 1;
         }
         data.edges.forEach((d) => {
             this.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
@@ -80,21 +72,23 @@ export default class extends React.Component {
 
     connectedNodes(d, state, props, thiz) {
         function neighboring(a, b) {
-            return state.linkedByIndex[a.index + "," + b.index];
+            return state.linkedByIndex[`${a.index},${b.index}`];
         }
 
-        if(d3.event.ctrlKey) {
+        if (d3.event.ctrlKey) {
             d = d3.select(thiz).node().__data__;
             state.nodes.style("opacity", (o) => {
-                return neighboring(d, o) | neighboring(o, d) ? (o.visible ? 1 : props.disabledOpacity) : 0.1;
+                const visibleOpacity = o.visible ? 1 : props.disabledOpacity;
+                return neighboring(d, o) | neighboring(o, d) ? visibleOpacity : 0.1;
             });
             state.links.style("opacity", (o) => {
-                return d.index==o.source.index | d.index==o.target.index ? (o.visible ? 1 : props.disabledOpacity) : 0.1;
+                const visibleOpacity = o.visible ? 1 : props.disabledOpacity;
+                return d.index === o.source.index | d.index === o.target.index ? visibleOpacity : 0.1;
             });
-            //Reduce the op
+            // Reduce the op
             state.toggle = 1;
-        } else if (state.toggle == 1) {
-            //Put them back to opacity=1
+        } else if (state.toggle === 1) {
+            // Put them back to opacity=1
             state.nodes.style("opacity", (d) => {
                 return d.visible ? "1" : props.disabledOpacity;
             });
@@ -106,29 +100,29 @@ export default class extends React.Component {
     }
 
     saveZoom() {
-        if(typeof this.state.zoom.scale == 'function') {
+        if (typeof this.state.zoom.scale === "function") {
             this.state.scale = this.state.zoom.scale();
             this.state.translate = this.state.zoom.translate();
         }
     }
 
     createOnZoomBehavior(panelElement) {
-        //assign panelElement to be the element responsible for zooming
+        // assign panelElement to be the element responsible for zooming
         this.state.zoom
-            .on("zoom", (element) => EventHandlers.onZoomSvg(panelElement));
+            .on("zoom", () => EventHandlers.onZoomSvg(panelElement));
 
-        //set zoom level to saved zoom level
+        // set zoom level to saved zoom level
         this.state.g
             .transition()
             .duration(0)
-            .attr('transform', 'translate(' + this.state.zoom.translate() + ') scale(' + this.state.zoom.scale() + ')');
+            .attr("transform", `translate(${this.state.zoom.translate()}) scale(${this.state.zoom.scale()})`);
 
         return this.state.zoom;
     }
 
     dismissOldSvg() {
         d3.select(this.state.selector).select("svg").remove();
-    };
+    }
 
     createSvg() {
         const svg = D3Utils.createSvg(this.state.selector)
@@ -138,10 +132,9 @@ export default class extends React.Component {
 
         svg
             .on("click", (d) => EventHandlers.onClickSvg(d));
-            //.on("contextmenu", function(){d3.event.preventDefault();}); //disabled context menu because of D3 bug with drag(still exists e.g. in Chrome when a force graph is initialized: 1. right click on a DOM element in the Developer Tools, 2. click on the SVG panel -> the graph now magically moves around and React DnD (Lane Picker) won't work anymore)
 
         const vis = svg
-            .append('svg:g')
+            .append("svg:g")
             .attr("id", "gAll");
 
         this.state.g = vis;
@@ -165,9 +158,6 @@ export default class extends React.Component {
     createForceLayout(data) {
         this.state.force = d3.layout.force()
             .charge(-700)
-            //.chargeDistance(300)
-            //.friction(0.5)
-            //.gravity(0.2)
             .linkDistance(70)
             .nodes(data.nodes)
             .links(data.edges)
@@ -214,8 +204,8 @@ export default class extends React.Component {
             return node;
         });
 
-        data.edges = data.edges.map((edge, index) => {
-            const connectedToFilter =  (filterIndexValues.indexOf(edge.source.index) > -1) ||
+        data.edges = data.edges.map((edge) => {
+            const connectedToFilter = (filterIndexValues.indexOf(edge.source.index) > -1) ||
                 (filterIndexValues.indexOf(edge.target.index) > -1) ||
                 (filterIndexValues.indexOf(edge.source) > -1) ||
                 (filterIndexValues.indexOf(edge.target) > -1);
@@ -257,20 +247,20 @@ export default class extends React.Component {
         g1.append("text")
             .attr("class", "unselectable force-text-label")
             .text((d) => {
-                const count = d.count - (parseInt(d.weight) || 0);
+                const count = d.count - (parseInt(d.weight, 10) || 0);
 
-                return (count && count > 0 ) ? `+${count}` : ""
+                return (count && count > 0) ? `+${count}` : "";
             })
             .call(this.getTextBox);
 
-        g1.insert("rect","text")
-            .attr("x", function(d){return d.bbox.x - padding })
-            .attr("y", function(d){return d.bbox.y - padding })
-            .attr("width", function(d){return d.bbox.width + (d.bbox.width ? padding*2 : 0)})
-            .attr("height", function(d){return d.bbox.height + (d.bbox.height ? padding*2 : 0)})
+        g1.insert("rect", "text")
+            .attr("x", d => d.bbox.x - padding)
+            .attr("y", d => d.bbox.y - padding)
+            .attr("width", d => d.bbox.width + (d.bbox.width ? padding * 2 : 0))
+            .attr("height", d => d.bbox.height + (d.bbox.height ? padding * 2 : 0))
             .attr("rx", 3)
             .attr("ry", 3)
-            .style("fill", function(d){return Constants.getColor(d.type)});
+            .style("fill", d => Constants.getColor(d.type));
     }
 
     addNodeText(g) {
@@ -302,12 +292,12 @@ export default class extends React.Component {
 
         this.state.nodes
             .on("dblclick", (d, props) => {
-                if(d.visible || this.props.enableFiltered) {
+                if (d.visible || this.props.enableFiltered) {
                     EventHandlers.onDoubleClickNode(d, this.props);
                 }
             })
             .on("contextmenu", (d) => {
-                if(d.visible || this.props.enableFiltered) {
+                if (d.visible || this.props.enableFiltered) {
                     EventHandlers.onContextMenuNode(d, this.props);
                 }
             })
@@ -323,17 +313,17 @@ export default class extends React.Component {
             .call(
                 this.state.force.drag()
                     .on("dragstart", (d) => {
-                        if(d.visible || this.props.enableFiltered) {
+                        if (d.visible || this.props.enableFiltered) {
                             EventHandlers.onDragStartNode(d);
                         }
                     })
                     .on("drag", (d) => {
-                        if(d.visible || this.props.enableFiltered) {
+                        if (d.visible || this.props.enableFiltered) {
                             EventHandlers.onDragNode(d);
                         }
                     })
                     .on("dragend", (d) => {
-                        if(d.visible || this.props.enableFiltered) {
+                        if (d.visible || this.props.enableFiltered) {
                             EventHandlers.onDragEndNode(d);
                         }
                     })
@@ -358,7 +348,7 @@ export default class extends React.Component {
     }
 
     passOverTicks(ticksPerRender) {
-        for(var j = 0; j < ticksPerRender; j++) {
+        for (let j = 0; j < ticksPerRender; j++) {
             this.state.force.tick();
         }
     }
@@ -403,5 +393,12 @@ export default class extends React.Component {
             .append("path")
             .attr("d", "M0,5L10,0L0,5 L10,0 L0, -5 Z")
             .style("fill", "#999");
+    }
+
+    render() {
+        return (
+            <div id={this.props.divId}>
+            </div>
+        );
     }
 }

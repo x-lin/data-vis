@@ -5,7 +5,7 @@ import DOMSelector from "./DOMSelector";
 const MIN_ZOOM = 0.05;
 const MAX_ZOOM = 8;
 const DEFAULT_SCALE = 1;
-const DEFAULT_TRANSLATE = [0,0];
+const DEFAULT_TRANSLATE = [0, 0];
 
 const D3Utils = {};
 

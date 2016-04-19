@@ -3,15 +3,16 @@ import { TEST_COVERAGE_FETCH_ERROR, TEST_COVERAGE_FETCH_SUCCESS, TEST_COVERAGE_F
 
 export default (
     state = {
-        name: null,
+        node: null,
         data: []
     },
     action
 ) => {
     switch (action.type) {
+
         case TEST_COVERAGE_FETCH_START:
             return Object.assign({}, state, {
-                name: action.name,
+                node: action.node,
                 data: [],
                 status: TEST_COVERAGE_FETCH_START
             });

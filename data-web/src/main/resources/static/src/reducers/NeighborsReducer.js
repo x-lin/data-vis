@@ -1,7 +1,7 @@
 import { NEIGHBORS_FETCH_START, NEIGHBORS_FETCH_SUCCESS, NEIGHBORS_FETCH_ERROR }
     from "../actions/action-creators/SearchNeighborsActions";
 
-export default (state = {data: []}, action) => {
+export default (state = { data: [] }, action) => {
     switch (action.type) {
         case NEIGHBORS_FETCH_START:
             return Object.assign({}, state, {

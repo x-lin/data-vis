@@ -1,10 +1,9 @@
 import React from "react";
 
-export default ({
+const SideBarCollapsable = ({
     title,
-    children,
-    collapsed
-    }) => {
+    children
+}) => {
     return (
         <div className={"box box-custom"}>
             <div className="box-header cursor">
@@ -15,4 +14,11 @@ export default ({
             </div>
         </div>
     );
-}
+};
+
+SideBarCollapsable.propTypes = {
+    title: React.PropTypes.node.isRequired,
+    children: React.PropTypes.node
+};
+
+export default SideBarCollapsable;
