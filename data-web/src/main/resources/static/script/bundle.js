@@ -40561,9 +40561,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	var params = exports.params = {
 	    type: [],
 	    priority: [],
@@ -40574,7 +40571,14 @@
 	};
 
 	var createParams = exports.createParams = function createParams(paramsPar) {
-	    var paramsObj = paramsPar || _extends({}, _get__("params"));
+	    var paramsObj = paramsPar || {
+	        type: [],
+	        priority: [],
+	        excluded: [],
+	        limit: 0,
+	        upstream: null,
+	        downstream: null
+	    };
 
 	    return {
 	        addType: function addType(type) {
@@ -40668,9 +40672,6 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
-	        case "params":
-	            return params;
-
 	        case "createParams":
 	            return createParams;
 	    }
@@ -44490,7 +44491,7 @@
 /* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -104735,6 +104736,8 @@
 	    }, {
 	        key: "getNeighbors",
 	        value: function getNeighbors(typeKey) {
+	            console.log("type key", typeKey);
+
 	            var _props = this.props;
 	            var node = _props.node;
 	            var filterDirection = _props.filterDirection;

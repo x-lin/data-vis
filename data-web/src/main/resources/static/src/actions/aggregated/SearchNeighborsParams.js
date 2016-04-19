@@ -8,7 +8,14 @@ export const params = {
 };
 
 export const createParams = (paramsPar) => {
-    const paramsObj = paramsPar || Object.assign({}, params);
+    const paramsObj = paramsPar || {
+        type: [],
+        priority: [],
+        excluded: [],
+        limit: 0,
+        upstream: null,
+        downstream: null
+    };
 
     return {
         addType(type) {
