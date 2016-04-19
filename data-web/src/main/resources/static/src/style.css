@@ -289,7 +289,7 @@ a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-l
 }
 
 #stats-menu text {
-    font: 10px sans-serif;
+    font: 11px sans-serif;
     cursor: pointer;
     -webkit-user-select:none;
     -khtml-user-select:none;

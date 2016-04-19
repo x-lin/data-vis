@@ -44490,7 +44490,7 @@
 /* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -103085,10 +103085,6 @@
 
 	var _reactBootstrap = __webpack_require__(341);
 
-	var _Constants = __webpack_require__(269);
-
-	var _Constants2 = _interopRequireDefault(_Constants);
-
 	var _ContextMenuActions = __webpack_require__(329);
 
 	var _SearchTestCoverageActions = __webpack_require__(851);
@@ -103143,21 +103139,25 @@
 
 	            var _MenuItem_Component = _get__("MenuItem");
 
+	            var _MenuItem_Component2 = _get__("MenuItem");
+
+	            var _MenuItem_Component3 = _get__("MenuItem");
+
 	            return _react2.default.createElement(
 	                _ButtonGroup_Component,
 	                { justified: true },
 	                _react2.default.createElement(
 	                    "a",
 	                    { type: "button", className: "btn btn-app " + (context === _get__("EXPAND_CONTEXT") && "active"), title: "Expand node", onClick: function onClick() {
-	                            activateContext(_get__("EXPAND_CONTEXT"));
+	                            return activateContext(_get__("EXPAND_CONTEXT"));
 	                        } },
 	                    _react2.default.createElement("span", { className: "fa fa-plus" }),
 	                    "Expand"
 	                ),
 	                _react2.default.createElement(
 	                    "a",
-	                    { type: "button", className: "btn btn-app", title: "Remove node from panel", onClick: function onClick(key) {
-	                            _this2.removeNode(d.key);
+	                    { type: "button", className: "btn btn-app", title: "Remove node from panel", onClick: function onClick() {
+	                            return _this2.removeNode(d.key);
 	                        } },
 	                    _react2.default.createElement("span", { className: "fa fa-remove" }),
 	                    "Remove"
@@ -103165,7 +103165,7 @@
 	                _react2.default.createElement(
 	                    "a",
 	                    { type: "button", className: "btn btn-app " + (context === _get__("STATS_CONTEXT") && "active") + " disabled", title: "Statistics", onClick: function onClick() {
-	                            activateContext(_get__("STATS_CONTEXT"));
+	                            return activateContext(_get__("STATS_CONTEXT"));
 	                        } },
 	                    _react2.default.createElement("span", { className: "fa fa-bar-chart" }),
 	                    "Stats"
@@ -103193,6 +103193,26 @@
 	                                "TC"
 	                            ),
 	                            "  Test Coverage"
+	                        ),
+	                        _react2.default.createElement(
+	                            _MenuItem_Component2,
+	                            { eventKey: "2", onSelect: function onSelect() {} },
+	                            _react2.default.createElement(
+	                                "strong",
+	                                null,
+	                                "RT"
+	                            ),
+	                            "  Related Open Tickets"
+	                        ),
+	                        _react2.default.createElement(
+	                            _MenuItem_Component3,
+	                            { eventKey: "3", onSelect: function onSelect() {} },
+	                            _react2.default.createElement(
+	                                "strong",
+	                                null,
+	                                "RW"
+	                            ),
+	                            "  Related Work Packages"
 	                        )
 	                    )
 	                )
@@ -104719,7 +104739,7 @@
 	            var node = _props.node;
 	            var filterDirection = _props.filterDirection;
 
-	            var params = _get__("createParams")().addType(typeKey);
+	            var params = _get__("createParams")().addType(typeKey).setLimit(500);
 
 	            if (filterDirection) {
 	                if (filterDirection === _get__("UPSTREAM")) {
@@ -104729,7 +104749,7 @@
 	                }
 	            }
 
-	            this.props.expandNeighbors(node.type, node.key, params);
+	            this.props.expandNeighbors(node.type, node.key, params.getParams());
 	        }
 	    }, {
 	        key: "render",
@@ -104742,6 +104762,7 @@
 
 	            var chart = undefined;
 	            var count = 0;
+	            var BAR_THICKNESS = 20;
 
 	            var translate = "translate(150,0)";
 
@@ -104776,14 +104797,14 @@
 	                                    "g",
 	                                    {
 	                                        className: "tick axis",
-	                                        transform: "translate(0, " + (10.5 + 14 * index) + ")"
+	                                        transform: "translate(0, " + (20 + BAR_THICKNESS * index) + ")"
 	                                    },
 	                                    _react2.default.createElement(
 	                                        "text",
 	                                        {
 	                                            dy: ".32em", x: "-6", y: "0",
 	                                            style: { textAnchor: "end" },
-	                                            onDoubleClick: function onDoubleClick() {
+	                                            onClick: function onClick() {
 	                                                return _this2.getNeighbors(entry.node.key);
 	                                            }
 	                                        },
@@ -104805,19 +104826,19 @@
 	                                        className: "bar",
 	                                        fill: _get__("Constants").getColor(entry.node.name),
 	                                        x: "0",
-	                                        y: 4 + index * 14,
+	                                        y: 10 + index * BAR_THICKNESS,
 	                                        width: x(entry.count) - x(0) + 10,
-	                                        height: "13",
-	                                        onDoubleClick: function onDoubleClick() {
+	                                        height: BAR_THICKNESS - 1,
+	                                        onClick: function onClick() {
 	                                            return _this2.getNeighbors(entry.node.key);
 	                                        }
 	                                    }),
 	                                    _react2.default.createElement(
 	                                        "text",
 	                                        {
-	                                            transform: "translate(1, " + (14 + index * 14) + ")",
+	                                            transform: "translate(4, " + (24 + index * BAR_THICKNESS) + ")",
 	                                            fill: _get__("Constants").getContrastColor(_get__("Constants").getColor(entry.node.name)),
-	                                            onDoubleClick: function onDoubleClick() {
+	                                            onClick: function onClick() {
 	                                                return _this2.getNeighbors(entry.node.key);
 	                                            }
 	                                        },
@@ -104902,7 +104923,7 @@
 	                    { id: "stats-menu" },
 	                    _react2.default.createElement(
 	                        "svg",
-	                        { width: "100%", height: data.length * 14 + 10 },
+	                        { width: "100%", height: data.length * BAR_THICKNESS + 10 },
 	                        _react2.default.createElement(
 	                            "g",
 	                            { transform: translate },

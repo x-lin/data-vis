@@ -44,7 +44,8 @@ class ExpandStatsBasedMenu extends React.Component {
     getNeighbors(typeKey) {
         const { node, filterDirection } = this.props;
         const params = createParams()
-            .addType(typeKey);
+            .addType(typeKey)
+            .setLimit(500);
 
         if (filterDirection) {
             if (filterDirection === UPSTREAM) {
@@ -54,7 +55,7 @@ class ExpandStatsBasedMenu extends React.Component {
             }
         }
 
-        this.props.expandNeighbors(node.type, node.key, params);
+        this.props.expandNeighbors(node.type, node.key, params.getParams());
     }
 
     render() {
@@ -63,6 +64,7 @@ class ExpandStatsBasedMenu extends React.Component {
 
         let chart;
         let count = 0;
+        const BAR_THICKNESS = 20;
 
         const translate = "translate(150,0)";
 
@@ -79,12 +81,12 @@ class ExpandStatsBasedMenu extends React.Component {
                         <OverlayTrigger placement="right" overlay={<Tooltip id={index}>{entry.node.name}</Tooltip>}>
                             <g
                               className="tick axis"
-                              transform={`translate(0, ${10.5 + 14 * index})`}
+                              transform={`translate(0, ${20 + BAR_THICKNESS * index})`}
                             >
                                 <text
                                   dy=".32em" x="-6" y="0"
                                   style={{ textAnchor: "end" }}
-                                  onDoubleClick={() => this.getNeighbors(entry.node.key)}
+                                  onClick={() => this.getNeighbors(entry.node.key)}
                                 >
                                     {entry.node.name.length > 24 ? `${entry.node.name.substring(0, 24)}...` : entry.node.name}
                                 </text>
@@ -96,15 +98,15 @@ class ExpandStatsBasedMenu extends React.Component {
                                   className="bar"
                                   fill={Constants.getColor(entry.node.name)}
                                   x="0"
-                                  y={4 + index * 14}
+                                  y={10 + index * BAR_THICKNESS}
                                   width={x(entry.count) - x(0) + 10}
-                                  height="13"
-                                  onDoubleClick={() => this.getNeighbors(entry.node.key)}
+                                  height={BAR_THICKNESS - 1}
+                                  onClick={() => this.getNeighbors(entry.node.key)}
                                 />
                                 <text
-                                  transform={`translate(1, ${14 + index * 14})`}
+                                  transform={`translate(4, ${24 + index * BAR_THICKNESS})`}
                                   fill={Constants.getContrastColor(Constants.getColor(entry.node.name))}
-                                  onDoubleClick={() => this.getNeighbors(entry.node.key)}
+                                  onClick={() => this.getNeighbors(entry.node.key)}
                                 >
                                     {entry.count}
                                 </text>
@@ -163,7 +165,7 @@ class ExpandStatsBasedMenu extends React.Component {
                 </a>
             </div>
             <div id="stats-menu">
-                <svg width="100%" height={data.length * 14 + 10}>
+                <svg width="100%" height={data.length * BAR_THICKNESS + 10}>
                     <g transform={translate}>
                         {chart}
                     </g>

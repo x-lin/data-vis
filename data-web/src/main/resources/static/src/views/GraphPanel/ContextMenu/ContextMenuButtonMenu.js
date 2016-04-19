@@ -2,10 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { MenuItem, Dropdown, ButtonGroup } from "react-bootstrap";
 
-import Constants from "../../../config/Constants";
-import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT } from "../../../actions/action-creators/ContextMenuActions";
+import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT,
+    activateContext, deactivateContext} from "../../../actions/action-creators/ContextMenuActions";
 import { searchTestCoverage } from "../../../actions/aggregated/SearchTestCoverageActions";
-import { activateContext, deactivateContext, clearState } from "../../../actions/action-creators/ContextMenuActions";
 import { removeFromGraph } from "../../../actions/action-creators/GraphActions";
 import ContextMenuBuilder from "./ContextMenuBuilder";
 
@@ -23,15 +22,15 @@ class ContextMenuButtonMenu extends React.Component {
         const { activateContext, context, d } = this.props;
 
         return <ButtonGroup justified>
-            <a type="button" className={`btn btn-app ${context === EXPAND_CONTEXT && "active"}`} title="Expand node" onClick={() => {activateContext(EXPAND_CONTEXT)}}>
+            <a type="button" className={`btn btn-app ${context === EXPAND_CONTEXT && "active"}`} title="Expand node" onClick={() => activateContext(EXPAND_CONTEXT)}>
                 <span className="fa fa-plus" />
                 Expand
             </a>
-            <a type="button" className="btn btn-app" title="Remove node from panel" onClick={(key) => {this.removeNode(d.key)}}>
+            <a type="button" className="btn btn-app" title="Remove node from panel" onClick={() => this.removeNode(d.key)}>
                 <span className="fa fa-remove" />
                 Remove
             </a>
-            <a type="button" className={`btn btn-app ${context === STATS_CONTEXT && "active"} disabled`} title="Statistics" onClick={() => {activateContext(STATS_CONTEXT)}}>
+            <a type="button" className={`btn btn-app ${context === STATS_CONTEXT && "active"} disabled`} title="Statistics" onClick={() => activateContext(STATS_CONTEXT)}>
                 <span className="fa fa-bar-chart" />
                 Stats
             </a>
@@ -44,6 +43,8 @@ class ContextMenuButtonMenu extends React.Component {
 
                 <Dropdown.Menu>
                     <MenuItem eventKey="1" onSelect={() => this.showTestCoverage(d)}><strong>TC</strong>&nbsp; Test Coverage</MenuItem>
+                    <MenuItem eventKey="2" onSelect={() => {}}><strong>RT</strong>&nbsp; Related Open Tickets</MenuItem>
+                    <MenuItem eventKey="3" onSelect={() => {}}><strong>RW</strong>&nbsp; Related Work Packages</MenuItem>
                 </Dropdown.Menu>
             </Dropdown>
         </ButtonGroup>
