@@ -9,6 +9,8 @@ import { filterNeighborTypes } from "../../../actions/action-creators/ContextMen
 import { expandNeighbors } from "../../../actions/aggregated/SearchNeighborsActions";
 import { createParams } from "../../../actions/aggregated/SearchNeighborsParams";
 import { UPSTREAM, DOWNSTREAM } from "../../../config/Defaults";
+import { NEIGHBORTYPES_FETCH_START } from "../../../actions/action-creators/SearchNeighborTypesActions";
+import Spinner from "../../widgets/Spinner";
 
 class ExpandStatsBasedMenu extends React.Component {
     constructor(props) {
@@ -167,6 +169,8 @@ class ExpandStatsBasedMenu extends React.Component {
                     </g>
                 </svg>
             </div>
+
+            {this.props.status === NEIGHBORTYPES_FETCH_START && <Spinner />}
         </div>
         );
     }
@@ -185,7 +189,7 @@ ExpandStatsBasedMenu.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        status: state.contextmenu.status,
+        status: state.contextmenu.neighborTypes.status,
         data: state.contextmenu.neighborTypes.data,
         node: state.contextmenu.neighborTypes.node,
         filterDirection: state.contextmenu.filterDirection

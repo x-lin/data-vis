@@ -40786,6 +40786,10 @@
 
 	var _TestCoverageHeader2 = _interopRequireDefault(_TestCoverageHeader);
 
+	var _Spinner = __webpack_require__(863);
+
+	var _Spinner2 = _interopRequireDefault(_Spinner);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40906,6 +40910,8 @@
 
 	            var _DataTable_Component = _get__("DataTable");
 
+	            var _Spinner_Component = _get__("Spinner");
+
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "box box-solid" },
@@ -40932,11 +40938,7 @@
 	                        status: this.getStatus()
 	                    })
 	                ),
-	                this.props.coverage.status === _get__("TEST_COVERAGE_FETCH_START") && _react2.default.createElement(
-	                    "div",
-	                    { className: "overlay" },
-	                    _react2.default.createElement("i", { className: "fa fa-refresh fa-spin" })
-	                )
+	                this.props.coverage.status === _get__("TEST_COVERAGE_FETCH_START") && _react2.default.createElement(_Spinner_Component, null)
 	            );
 	        }
 	    }]);
@@ -41010,6 +41012,9 @@
 
 	        case "DataTable":
 	            return _DataTable2.default;
+
+	        case "Spinner":
+	            return _Spinner2.default;
 
 	        case "React":
 	            return _react2.default;
@@ -80130,7 +80135,7 @@
 
 	var Notes = function Notes(_ref) {
 	    var notes = _ref.notes;
-	    var move = _ref.move;
+	    var onMove = _ref.onMove;
 
 	    var withItems = {
 	        padding: "0px",
@@ -80151,7 +80156,7 @@
 	            className: "note",
 	            id: note.key,
 	            key: note.key,
-	            onMove: move,
+	            onMove: onMove,
 	            note: note
 	        });
 	    });
@@ -80165,7 +80170,7 @@
 
 	_get__("Notes").propTypes = {
 	    notes: _get__("React").PropTypes.array.isRequired,
-	    move: _get__("React").PropTypes.func.isRequired
+	    onMove: _get__("React").PropTypes.func.isRequired
 	};
 
 	exports.default = _get__("Notes");
@@ -104008,6 +104013,10 @@
 
 	var _DataTable2 = _interopRequireDefault(_DataTable);
 
+	var _Spinner = __webpack_require__(863);
+
+	var _Spinner2 = _interopRequireDefault(_Spinner);
+
 	var _TableMapping = __webpack_require__(326);
 
 	var _SearchNeighborsSingleActions = __webpack_require__(855);
@@ -104112,6 +104121,8 @@
 
 	            var _DataTable_Component = _get__("DataTable");
 
+	            var _Spinner_Component = _get__("Spinner");
+
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "dropdown-content-item" },
@@ -104123,7 +104134,8 @@
 	                    pageButtonLimit: 5,
 	                    mapper: [mapper],
 	                    status: this.getStatus()
-	                })
+	                }),
+	                this.props.status === _get__("NEIGHBORS_SINGLE_FETCH_START") && _react2.default.createElement(_Spinner_Component, null)
 	            );
 	        }
 	    }]);
@@ -104222,6 +104234,9 @@
 
 	        case "DataTable":
 	            return _DataTable2.default;
+
+	        case "Spinner":
+	            return _Spinner2.default;
 
 	        case "React":
 	            return _react2.default;
@@ -104646,6 +104661,12 @@
 
 	var _Defaults = __webpack_require__(303);
 
+	var _SearchNeighborTypesActions = __webpack_require__(330);
+
+	var _Spinner = __webpack_require__(863);
+
+	var _Spinner2 = _interopRequireDefault(_Spinner);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -104832,6 +104853,8 @@
 	                padding: "6px 12px"
 	            };
 
+	            var _Spinner_Component = _get__("Spinner");
+
 	            return _react2.default.createElement(
 	                "div",
 	                { style: { width: "100%", height: "100%", padding: "10px" }, className: "dropdown-content-item" },
@@ -104886,7 +104909,8 @@
 	                            chart
 	                        )
 	                    )
-	                )
+	                ),
+	                this.props.status === _get__("NEIGHBORTYPES_FETCH_START") && _react2.default.createElement(_Spinner_Component, null)
 	            );
 	        }
 	    }]);
@@ -104907,7 +104931,7 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        status: state.contextmenu.status,
+	        status: state.contextmenu.neighborTypes.status,
 	        data: state.contextmenu.neighborTypes.data,
 	        node: state.contextmenu.neighborTypes.node,
 	        filterDirection: state.contextmenu.filterDirection
@@ -104978,6 +105002,12 @@
 
 	        case "Constants":
 	            return _Constants2.default;
+
+	        case "NEIGHBORTYPES_FETCH_START":
+	            return _SearchNeighborTypesActions.NEIGHBORTYPES_FETCH_START;
+
+	        case "Spinner":
+	            return _Spinner2.default;
 
 	        case "React":
 	            return _react2.default;
@@ -106028,6 +106058,176 @@
 	}
 
 	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
+
+/***/ },
+/* 863 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Spinner = function Spinner() {
+	    var style = {
+	        zIndex: 50,
+	        background: "rgba(255, 255, 255, 0.7)",
+	        borderRadius: "3px",
+	        top: 0,
+	        left: 0,
+	        position: "absolute",
+	        width: "100%",
+	        height: "100%"
+	    };
+
+	    var spinnerStyle = {
+	        position: "absolute",
+	        top: "50%",
+	        left: "50%",
+	        marginLeft: "-15px",
+	        marginTop: "-15px",
+	        color: "#000",
+	        fontSize: "30px"
+	    };
+
+	    return _react2.default.createElement(
+	        "div",
+	        { style: style },
+	        _react2.default.createElement("i", { className: "fa fa-refresh fa-spin", style: spinnerStyle })
+	    );
+	};
+
+	exports.default = _get__("Spinner");
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "Spinner":
+	            return Spinner;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof Spinner === "undefined" ? "undefined" : _typeof(Spinner);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(Spinner, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(Spinner)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);

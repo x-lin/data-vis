@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Constants from "../../../config/Constants";
 import Label from "../../widgets/Label";
 import DataTable from "../../widgets/DataTable";
+import Spinner from "../../widgets/Spinner";
 import { createMapping } from "../../../utils/TableMapping";
 import { searchNeighborsSingle } from "../../../actions/aggregated/SearchNeighborsSingleActions";
 import { expandNode } from "../../../actions/action-creators/GraphActions";
@@ -84,6 +85,8 @@ class ExpandSearchMenu extends React.Component {
                   mapper={[mapper]}
                   status={this.getStatus()}
                 />
+
+                {this.props.status === NEIGHBORS_SINGLE_FETCH_START && <Spinner />}
             </div>
         );
     }

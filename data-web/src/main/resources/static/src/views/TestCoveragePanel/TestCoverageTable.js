@@ -8,6 +8,7 @@ import DataTable from "../widgets/DataTable";
 import { START, SUCCESS, ERROR } from "../../config/Settings";
 import { createMapping } from "../../utils/TableMapping";
 import TestCoverageHeader from "./TestCoverageHeader";
+import Spinner from "../widgets/Spinner";
 
 class TestCoverageTable extends React.Component {
     constructor(props) {
@@ -142,10 +143,7 @@ class TestCoverageTable extends React.Component {
                     />
                 </div>
 
-                {this.props.coverage.status === TEST_COVERAGE_FETCH_START &&
-                <div className="overlay">
-                    <i className="fa fa-refresh fa-spin" />
-                </div>}
+                {this.props.coverage.status === TEST_COVERAGE_FETCH_START && <Spinner />}
             </div>
         );
     }
