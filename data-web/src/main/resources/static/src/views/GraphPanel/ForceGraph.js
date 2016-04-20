@@ -360,7 +360,9 @@ export default class extends React.Component {
             this.state.force.stop();
 
             this.state.nodes.attr("fixed", (d) => {
-                d.fixed = this.props.isFixed ? true : d.isFixed;
+                if (!d.fixed) {
+                    d.fixed = this.props.isFixed ? true : d.isFixed;
+                }
             });
         }
     }
