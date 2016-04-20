@@ -44,7 +44,7 @@ class ContextMenuButtonMenu extends React.Component {
                 <Dropdown.Menu>
                     <MenuItem eventKey="1" onSelect={() => this.showTestCoverage(d)}><strong>TC</strong>&nbsp; Test Coverage</MenuItem>
                     <MenuItem eventKey="2" onSelect={() => this.props.searchRelatedBugs(d)}><strong>RT</strong>&nbsp; Related Open Tickets</MenuItem>
-                    <MenuItem eventKey="3" onSelect={() => {}}><strong>RW</strong>&nbsp; Related Work Packages</MenuItem>
+                    {/*<MenuItem eventKey="3" onSelect={() => {}} className="disabled"><strong>RW</strong>&nbsp; Related Work Packages</MenuItem>*/}
                 </Dropdown.Menu>
             </Dropdown>
         </ButtonGroup>

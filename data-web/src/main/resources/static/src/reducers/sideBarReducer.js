@@ -1,6 +1,7 @@
 import { REHYDRATE } from "redux-persist/constants";
 
-import { SET_SIDEBAR_PANEL, DELETE_BOX_FROM_SIDEBAR } from "../actions/action-creators/SidebarActions";
+import { SET_SIDEBAR_PANEL, DELETE_BOX_FROM_SIDEBAR, ADD_SIDEBAR_REACT_COMPONENT }
+    from "../actions/action-creators/SidebarActions";
 import { TEST_COVERAGE_FETCH_ERROR, TEST_COVERAGE_FETCH_SUCCESS, TEST_COVERAGE_FETCH_START }
     from "../actions/action-creators/TestCoverageActions";
 import { RELATED_BUGS_FETCH_START, RELATED_BUGS_FETCH_SUCCESS, RELATED_BUGS_FETCH_ERROR }
@@ -58,6 +59,22 @@ const createTestCoverage = (state, action) => {
 
             return state;
         case TEST_COVERAGE_FETCH_ERROR:
+            for (let i = 0; i < state.data.length; i++) {
+                if (state.data[i].id === action.id) {
+                    const obj = Object.assign({}, state.data[i]);
+
+                    obj.status = "ERROR";
+
+                    return Object.assign({}, state, {
+                        data: [
+                            ...state.data.slice(0, i),
+                            obj,
+                            ...state.data.slice(i+1)
+                        ]
+                    });
+                }
+            }
+
             return state;
         default:
             return state;
@@ -116,6 +133,22 @@ const createRelatedBugs = (state, action) => {
 
             return state;
         case RELATED_BUGS_FETCH_ERROR:
+            for (let i = 0; i < state.data.length; i++) {
+                if (state.data[i].id === action.id) {
+                    const obj = Object.assign({}, state.data[i]);
+
+                    obj.status = "ERROR";
+
+                    return Object.assign({}, state, {
+                        data: [
+                            ...state.data.slice(0, i),
+                            obj,
+                            ...state.data.slice(i+1)
+                        ]
+                    });
+                }
+            }
+
             return state;
         default:
             return state;

@@ -14,11 +14,6 @@ export const setVisibility = (visible) => createAction(
     { visible }
 );
 
-export const addReactComponent = (index, object) => createAction(
-    ADD_SIDEBAR_REACT_COMPONENT,
-    { index, object }
-);
-
 export const deleteBox = (id) => createAction(
     DELETE_BOX_FROM_SIDEBAR,
     { id }

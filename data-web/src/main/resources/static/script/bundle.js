@@ -102020,8 +102020,6 @@
 
 	            var _MenuItem_Component2 = _get__("MenuItem");
 
-	            var _MenuItem_Component3 = _get__("MenuItem");
-
 	            return _react2.default.createElement(
 	                _ButtonGroup_Component,
 	                { justified: true },
@@ -102084,16 +102082,6 @@
 	                                "RT"
 	                            ),
 	                            "  Related Open Tickets"
-	                        ),
-	                        _react2.default.createElement(
-	                            _MenuItem_Component3,
-	                            { eventKey: "3", onSelect: function onSelect() {} },
-	                            _react2.default.createElement(
-	                                "strong",
-	                                null,
-	                                "RW"
-	                            ),
-	                            "  Related Work Packages"
 	                        )
 	                    )
 	                )
@@ -105261,6 +105249,18 @@
 
 	            return state;
 	        case _get__("TEST_COVERAGE_FETCH_ERROR"):
+	            for (var i = 0; i < state.data.length; i++) {
+	                if (state.data[i].id === action.id) {
+	                    var _obj2 = _extends({}, state.data[i]);
+
+	                    _obj2.status = "ERROR";
+
+	                    return _extends({}, state, {
+	                        data: [].concat(_toConsumableArray(state.data.slice(0, i)), [_obj2], _toConsumableArray(state.data.slice(i + 1)))
+	                    });
+	                }
+	            }
+
 	            return state;
 	        default:
 	            return state;
@@ -105287,9 +105287,9 @@
 	        case _get__("RELATED_BUGS_FETCH_SUCCESS"):
 	            for (var i = 0; i < state.data.length; i++) {
 	                if (state.data[i].id === action.id) {
-	                    var _obj2 = _extends({}, state.data[i]);
+	                    var _obj3 = _extends({}, state.data[i]);
 
-	                    _obj2.data = action.data.reduce(function (array, entry) {
+	                    _obj3.data = action.data.reduce(function (array, entry) {
 	                        for (var j = 0; j < array.length; j++) {
 	                            if (array[j].bug.key === entry.bug.key) {
 	                                array[j].paths.push(entry.path);
@@ -105305,16 +105305,28 @@
 	                        return array;
 	                    }, []);
 
-	                    _obj2.status = "SUCCESS";
+	                    _obj3.status = "SUCCESS";
 
 	                    return _extends({}, state, {
-	                        data: [].concat(_toConsumableArray(state.data.slice(0, i)), [_obj2], _toConsumableArray(state.data.slice(i + 1)))
+	                        data: [].concat(_toConsumableArray(state.data.slice(0, i)), [_obj3], _toConsumableArray(state.data.slice(i + 1)))
 	                    });
 	                }
 	            }
 
 	            return state;
 	        case _get__("RELATED_BUGS_FETCH_ERROR"):
+	            for (var i = 0; i < state.data.length; i++) {
+	                if (state.data[i].id === action.id) {
+	                    var _obj4 = _extends({}, state.data[i]);
+
+	                    _obj4.status = "ERROR";
+
+	                    return _extends({}, state, {
+	                        data: [].concat(_toConsumableArray(state.data.slice(0, i)), [_obj4], _toConsumableArray(state.data.slice(i + 1)))
+	                    });
+	                }
+	            }
+
 	            return state;
 	        default:
 	            return state;
@@ -105542,7 +105554,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = exports.deleteBox = exports.addReactComponent = exports.setVisibility = exports.setTestCoverageVisibility = exports.DELETE_BOX_FROM_SIDEBAR = exports.ADD_SIDEBAR_REACT_COMPONENT = exports.SET_SIDEBAR_PANEL = undefined;
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = exports.deleteBox = exports.setVisibility = exports.setTestCoverageVisibility = exports.DELETE_BOX_FROM_SIDEBAR = exports.ADD_SIDEBAR_REACT_COMPONENT = exports.SET_SIDEBAR_PANEL = undefined;
 
 	var _createAction = __webpack_require__(246);
 
@@ -105560,10 +105572,6 @@
 
 	var setVisibility = exports.setVisibility = function setVisibility(visible) {
 	    return _get__("createAction")(_get__("SET_SIDEBAR_PANEL"), { visible: visible });
-	};
-
-	var addReactComponent = exports.addReactComponent = function addReactComponent(index, object) {
-	    return _get__("createAction")(_get__("ADD_SIDEBAR_REACT_COMPONENT"), { index: index, object: object });
 	};
 
 	var deleteBox = exports.deleteBox = function deleteBox(id) {
@@ -105601,9 +105609,6 @@
 
 	        case "SET_SIDEBAR_PANEL":
 	            return SET_SIDEBAR_PANEL;
-
-	        case "ADD_SIDEBAR_REACT_COMPONENT":
-	            return ADD_SIDEBAR_REACT_COMPONENT;
 
 	        case "DELETE_BOX_FROM_SIDEBAR":
 	            return DELETE_BOX_FROM_SIDEBAR;
@@ -106010,9 +106015,6 @@
 	        },
 	        setPanelInvisible: function setPanelInvisible() {
 	            dispatch(_get__("setVisibility")(false));
-	        },
-	        addReactComponent: function addReactComponent(index, object) {
-	            dispatch(_get__("addReactComponent")(index, object));
 	        }
 	    };
 	};
@@ -106052,9 +106054,6 @@
 
 	        case "setVisibility":
 	            return _SidebarActions.setVisibility;
-
-	        case "addReactComponent":
-	            return _SidebarActions.addReactComponent;
 
 	        case "connect":
 	            return _reactRedux.connect;
@@ -106208,12 +106207,6 @@
 	    }
 
 	    _createClass(Sidebar, [{
-	        key: "componentDidUpdate",
-	        value: function componentDidUpdate() {
-	            // TODO cache rendered components with status SUCCESS
-	            //this.props.addReactComponent(0, "dfas");
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            var _this2 = this;
@@ -106221,39 +106214,35 @@
 	            var data = this.props.data;
 
 
-	            var entries = data.map(function (entry, index) {
-	                if (entry.object) {
-	                    return entry.object;
-	                } else {
-	                    var body = undefined;
+	            var entries = data.map(function (entry) {
+	                var body = undefined;
 
-	                    if (entry.type === "Test Coverage") {
-	                        var _TestCoverageTableContainer_Component2 = _get__("TestCoverageTableContainer");
+	                if (entry.type === "Test Coverage") {
+	                    var _TestCoverageTableContainer_Component2 = _get__("TestCoverageTableContainer");
 
-	                        body = _react2.default.createElement(_TestCoverageTableContainer_Component2, { data: entry.data, status: entry.status });
-	                    } else if (entry.type === "Related Open Tickets") {
-	                        var _RelatedBugsTableContainer_Component2 = _get__("RelatedBugsTableContainer");
+	                    body = _react2.default.createElement(_TestCoverageTableContainer_Component2, { data: entry.data, status: entry.status });
+	                } else if (entry.type === "Related Open Tickets") {
+	                    var _RelatedBugsTableContainer_Component2 = _get__("RelatedBugsTableContainer");
 
-	                        body = _react2.default.createElement(_RelatedBugsTableContainer_Component2, { data: entry.data, status: entry.status });
-	                    }
-
-	                    var _SidebarBox_Component2 = _get__("SidebarBox");
-
-	                    var box = _react2.default.createElement(_SidebarBox_Component2, {
-	                        title: entry.title,
-	                        labels: entry.labels,
-	                        type: entry.type,
-	                        body: body,
-	                        status: entry.status,
-	                        isOpen: entry.isOpen,
-	                        key: index,
-	                        onClose: function onClose() {
-	                            _this2.props.deleteBox(entry.id);
-	                        }
-	                    });
-
-	                    return box;
+	                    body = _react2.default.createElement(_RelatedBugsTableContainer_Component2, { data: entry.data, status: entry.status });
 	                }
+
+	                var _SidebarBox_Component = _get__("SidebarBox");
+
+	                var box = _react2.default.createElement(_SidebarBox_Component, {
+	                    title: entry.title,
+	                    labels: entry.labels,
+	                    type: entry.type,
+	                    body: body,
+	                    status: entry.status,
+	                    isOpen: entry.isOpen,
+	                    key: entry.id,
+	                    onClose: function onClose() {
+	                        _this2.props.deleteBox(entry.id);
+	                    }
+	                });
+
+	                return box;
 	            });
 
 	            return _react2.default.createElement(
@@ -106270,7 +106259,6 @@
 
 	_get__("Sidebar").propTypes = {
 	    data: _get__("React").PropTypes.array.isRequired,
-	    addReactComponent: _get__("React").PropTypes.func.isRequired,
 	    deleteBox: _get__("React").PropTypes.func.isRequired
 	};
 
@@ -106421,6 +106409,8 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -106439,41 +106429,68 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var SUCCESS = exports.SUCCESS = "SUCCESS";
 	var ERROR = exports.ERROR = "ERROR";
 	var START = exports.START = "START";
 
-	var SidebarBox = function SidebarBox(_ref) {
-	    var title = _ref.title;
-	    var labels = _ref.labels;
-	    var type = _ref.type;
-	    var body = _ref.body;
-	    var status = _ref.status;
-	    var onClose = _ref.onClose;
+	var SidebarBox = function (_get__$Component) {
+	    _inherits(SidebarBox, _get__$Component);
 
-	    var _SideBarBoxHeader_Component = _get__("SideBarBoxHeader");
+	    function SidebarBox() {
+	        _classCallCheck(this, SidebarBox);
 
-	    var _SidebarBoxBody_Component = _get__("SidebarBoxBody");
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(SidebarBox).apply(this, arguments));
+	    }
 
-	    var _Spinner_Component = _get__("Spinner");
+	    _createClass(SidebarBox, [{
+	        key: "render",
+	        value: function render() {
+	            var _props = this.props;
+	            var title = _props.title;
+	            var labels = _props.labels;
+	            var type = _props.type;
+	            var body = _props.body;
+	            var status = _props.status;
+	            var onClose = _props.onClose;
 
-	    return _react2.default.createElement(
-	        "div",
-	        { className: "box box-solid" },
-	        _react2.default.createElement(_SideBarBoxHeader_Component, {
-	            labels: labels,
-	            widgetType: type,
-	            title: title,
-	            onClose: onClose
-	        }),
-	        _react2.default.createElement(
-	            _SidebarBoxBody_Component,
-	            null,
-	            body
-	        ),
-	        status === _get__("START") && _react2.default.createElement(_Spinner_Component, null)
-	    );
-	};
+	            var _SideBarBoxHeader_Component = _get__("SideBarBoxHeader");
+
+	            var _SidebarBoxBody_Component = _get__("SidebarBoxBody");
+
+	            var _Spinner_Component = _get__("Spinner");
+
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "box box-solid" },
+	                _react2.default.createElement(_SideBarBoxHeader_Component, {
+	                    labels: labels,
+	                    widgetType: type,
+	                    title: title,
+	                    onClose: onClose
+	                }),
+	                _react2.default.createElement(
+	                    _SidebarBoxBody_Component,
+	                    null,
+	                    status === _get__("SUCCESS") && body,
+	                    status === _get__("ERROR") && _react2.default.createElement(
+	                        "span",
+	                        { className: "bg-red" },
+	                        "An error occured!"
+	                    )
+	                ),
+	                status === _get__("START") && _react2.default.createElement(_Spinner_Component, null)
+	            );
+	        }
+	    }]);
+
+	    return SidebarBox;
+	}(_get__("React").Component);
 
 	_get__("SidebarBox").propTypes = {
 	    labels: _get__("React").PropTypes.arrayOf(_get__("React").PropTypes.string).isRequired,
@@ -106519,23 +106536,23 @@
 	        case "SidebarBoxBody":
 	            return _SidebarBoxBody2.default;
 
+	        case "SUCCESS":
+	            return SUCCESS;
+
+	        case "ERROR":
+	            return ERROR;
+
 	        case "START":
 	            return START;
 
 	        case "Spinner":
 	            return _Spinner2.default;
 
-	        case "SidebarBox":
-	            return SidebarBox;
-
 	        case "React":
 	            return _react2.default;
 
-	        case "SUCCESS":
-	            return SUCCESS;
-
-	        case "ERROR":
-	            return ERROR;
+	        case "SidebarBox":
+	            return SidebarBox;
 	    }
 
 	    return undefined;
