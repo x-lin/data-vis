@@ -24,5 +24,5 @@ export const store = createStore();
 
 store.dispatch(getNodeTypes());
 
-// persistStore(store, {storage: localforage}).purgeAll();
-persistStore(store, { storage: localforage });
+ persistStore(store, {storage: localforage}).purgeAll();
+//persistStore(store, { storage: localforage });

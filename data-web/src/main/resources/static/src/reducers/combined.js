@@ -1,15 +1,15 @@
 import { combineReducers } from "redux";
 
-import itemReducer from "../reducers/itemReducer";
-import neighborsReducer from "../reducers/neighborsReducer";
-import graphReducer from "../reducers/graphReducer";
-import settingsReducer from "../reducers/settingsReducer";
-import graphFilterReducer from "../reducers/graphFilterReducer";
-import laneReducer from "../reducers/laneReducer";
-import testCoverageReducer from "../reducers/testCoverageReducer";
-import nodeTypeReducer from "../reducers/nodeTypeReducer";
-import layoutReducer from "../reducers/layoutReducer";
-import contextMenuReducer from "../reducers/contextMenuReducer";
+import itemReducer from "./itemReducer";
+import neighborsReducer from "./neighborsReducer";
+import graphReducer from "./graphReducer";
+import settingsReducer from "./settingsReducer";
+import graphFilterReducer from "./graphFilterReducer";
+import laneReducer from "./laneReducer";
+import nodeTypeReducer from "./nodeTypeReducer";
+import layoutReducer from "./sidebarReducer";
+import contextMenuReducer from "./contextMenuReducer";
+import sidebarReducer from "./sidebarReducer";
 
 export default combineReducers({
     settings: settingsReducer,
@@ -18,8 +18,8 @@ export default combineReducers({
     graph: graphReducer,
     visibilityFilters: graphFilterReducer,
     lanes: laneReducer,
-    coverage: testCoverageReducer,
     nodeTypes: nodeTypeReducer,
     layout: layoutReducer,
-    contextmenu: contextMenuReducer
+    contextmenu: contextMenuReducer,
+    sidebar: sidebarReducer
 });

@@ -4,7 +4,7 @@ import { MenuItem, Dropdown, ButtonGroup } from "react-bootstrap";
 
 import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT,
     activateContext, deactivateContext} from "../../../actions/action-creators/ContextMenuActions";
-import { searchTestCoverage } from "../../../actions/aggregated/SearchTestCoverageActions";
+import { searchTestCoverage, searchRelatedBugs } from "../../../actions/aggregated/SearchTestCoverageActions";
 import { removeFromGraph } from "../../../actions/action-creators/GraphActions";
 import ContextMenuBuilder from "./ContextMenuBuilder";
 
@@ -43,7 +43,7 @@ class ContextMenuButtonMenu extends React.Component {
 
                 <Dropdown.Menu>
                     <MenuItem eventKey="1" onSelect={() => this.showTestCoverage(d)}><strong>TC</strong>&nbsp; Test Coverage</MenuItem>
-                    <MenuItem eventKey="2" onSelect={() => {}}><strong>RT</strong>&nbsp; Related Open Tickets</MenuItem>
+                    <MenuItem eventKey="2" onSelect={() => this.props.searchRelatedBugs(d)}><strong>RT</strong>&nbsp; Related Open Tickets</MenuItem>
                     <MenuItem eventKey="3" onSelect={() => {}}><strong>RW</strong>&nbsp; Related Work Packages</MenuItem>
                 </Dropdown.Menu>
             </Dropdown>
@@ -61,6 +61,9 @@ const mapDispatchProps = (dispatch) => {
     return {
         searchTestCoverage: (node) => {
             dispatch(searchTestCoverage(node));
+        },
+        searchRelatedBugs: (node) => {
+            dispatch(searchRelatedBugs(node));
         },
         activateContext: (context) => {
             dispatch(activateContext(context));

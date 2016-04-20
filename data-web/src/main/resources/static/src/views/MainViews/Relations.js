@@ -1,21 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import SearchBarComponent from "../SearchBar/SearchBarContainer";
+import SearchBarContainer from "../SearchBar/SearchBarContainer";
 import GraphPanel from "../GraphPanel/GraphPanel";
 import VerticalSplitView from "../widgets/VerticalSplitView";
+import SidebarContainer from "../Sidebar/SidebarContainer";
 
-const Relations = ({ sidebarObject, sidebarVisible }) => {
+const Relations = ({ sidebarVisible }) => {
     const height = "calc(100vh - 50px)";
 
     return (
         <div>
             <VerticalSplitView rightWidth={500} height={height}>
                 <div style={{ height }}>
-                    <SearchBarComponent />
+                    <SearchBarContainer />
                     <GraphPanel />
                 </div>
-                {sidebarVisible && sidebarObject}
+                {sidebarVisible && <SidebarContainer />}
 
             </VerticalSplitView>
         </div>
@@ -23,13 +24,11 @@ const Relations = ({ sidebarObject, sidebarVisible }) => {
 };
 
 Relations.propTypes = {
-    sidebarObject: React.PropTypes.object,
     sidebarVisible: React.PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
     return {
-        sidebarObject: state.layout.sidebar.obj,
         sidebarVisible: state.layout.sidebar.visible
     };
 };

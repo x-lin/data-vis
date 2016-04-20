@@ -1,10 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.ProjectDataReader;
-import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
-import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
-import at.ac.tuwien.dst.mms.dal.query.model.ProjectSchema;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+import at.ac.tuwien.dst.mms.dal.query.model.*;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.stereotype.Service;
@@ -90,12 +87,16 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> i
 
 	@Override
 	@Transactional
-	public List<Map<String, Object>>getNeighborsSingle(String key) {
+	public List<Map<String, Object>> getNeighborsSingle(String key) {
 		Iterable<Map<String, Object>> nodes = ((ProjectRepository)this.getRepository()).findNeighborsSingle(key);
 
 		List<Map<String, Object>> neighbors = this.getNeighbors(nodes);
 
-
 		return neighbors;
+	}
+
+	@Override
+	public List<BugCoverage> getBugCoverage(String key) {
+		return null;
 	}
 }

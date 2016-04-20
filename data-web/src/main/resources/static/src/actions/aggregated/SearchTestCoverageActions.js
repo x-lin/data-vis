@@ -1,11 +1,29 @@
-import { getCoverage } from "./promises/GETTestCoverageActions";
-import { setTestCoverageVisibility } from "../action-creators/LayoutActions";
+import { getTestCoverage } from "./promises/GETTestCoverageActions";
+import { getRelatedBugs } from "./promises/GETRelatedBugsActions";
+import { setTestCoverageVisibility } from "../action-creators/SidebarActions";
+
+let i = 0;
 
 export const searchTestCoverage = (node) => {
+    const index = i++;
+
     return (dispatch) => {
         if (node.key) {
             dispatch(setTestCoverageVisibility(true));
-            return dispatch(getCoverage(node));
+            return dispatch(getTestCoverage(node, index));
+        } else {
+            return dispatch(() => {});
+        }
+    };
+};
+
+export const searchRelatedBugs = (node) => {
+    const index = i++;
+
+    return (dispatch) => {
+        if (node.key) {
+            dispatch(setTestCoverageVisibility(true));
+            return dispatch(getRelatedBugs(node, index));
         } else {
             return dispatch(() => {});
         }

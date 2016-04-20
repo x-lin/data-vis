@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.dal.repo;
 
+import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
 import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
@@ -66,6 +67,13 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 			"RETURN p AS node, count(p) AS count, ['UPSTREAM', 'DOWNSTREAM'] AS relationship " +
 			"ORDER BY count DESC")
 	List<NeighborType> getNeighborTypes(String key);
+
+	@Query("START no=node:generalNodeKeyIndex(key={0}) " +
+			"MATCH path=(no)-[:DOWNSTREAM*0..10]->(n:GeneralNode) " +
+			"WITH path, n " +
+			"MATCH (n)-[:DOWNSTREAM]->(tc:GeneralNode)-[:NODE_TYPE]->(:GeneralNodeType {key: 'BUG'}) " +
+			"RETURN DISTINCT tc AS bug, NODES(path) as path")
+	List<BugCoverage> getBugCoverage(String key);
 
 	@Query("MATCH (n)-[:NODE_TYPE]->(m) WHERE m.key = 'USER' OR m.key = 'BUG' RETURN n")
 	List<GeneralNode> getJiraStuff();

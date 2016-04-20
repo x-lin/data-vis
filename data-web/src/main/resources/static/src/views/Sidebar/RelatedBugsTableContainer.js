@@ -1,8 +1,7 @@
 import { connect } from "react-redux";
 
 import { searchNeighbors } from "../../actions/aggregated/SearchNeighborsActions";
-import { setVisibility } from "../../actions/action-creators/SidebarActions";
-import TestCoverageTable from "./TestCoverageTable";
+import RelatedBugsTable from "./RelatedBugsTable";
 
 const mapStateToProps = (state) => {
     return {
@@ -13,9 +12,6 @@ const mapDispatchProps = (dispatch) => {
     return {
         searchNeighborsStart: (category, key) => {
             dispatch(searchNeighbors(category, key));
-        },
-        setPanelInvisible: () => {
-            dispatch(setVisibility(false));
         }
     };
 };
@@ -23,4 +19,4 @@ const mapDispatchProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(TestCoverageTable);
+)(RelatedBugsTable);

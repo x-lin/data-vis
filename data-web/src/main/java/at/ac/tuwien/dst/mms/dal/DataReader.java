@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.dal;
 
+import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
 import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
@@ -34,4 +35,6 @@ public interface DataReader<T> {
 	List<NeighborType> getNeighborTypes(String key);
 
 	List<Map<String, Object>> getNeighborsSingle(String key);
+
+	List<BugCoverage> getBugCoverage(String key);
 }

@@ -5,7 +5,7 @@ import { executeTests } from "./ActionsTestTemplate";
 import {
     SET_SIDEBAR_PANEL,
     setTestCoverageVisibility, setVisibility
-} from "../LayoutActions";
+} from "../SidebarActions";
 
 test("Testing LayoutActions", (assert) => {
     executeTests(assert, setVisibility, SET_SIDEBAR_PANEL, ["visible"]);

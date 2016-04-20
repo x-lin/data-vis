@@ -1,6 +1,6 @@
 import React from "react";
 
-import InfoSideBar from "./Settings/InfoSideBar";
+import InfoSideBar from "./Settings/InfoSidebar";
 import MenuContainer from "./Menu/MenuContainer";
 
 const Main = ({ children }) => {

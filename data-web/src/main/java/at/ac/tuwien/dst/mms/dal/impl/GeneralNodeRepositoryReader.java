@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.GeneralNodeDataReader;
+import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
 import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
@@ -73,5 +74,10 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 		List<Map<String, Object>> neighbors = this.getNeighbors(nodes);
 
 		return neighbors;
+	}
+
+	@Override
+	public List<BugCoverage> getBugCoverage(String key) {
+		return ((GeneralNodeRepository)this.getRepository()).getBugCoverage(key);
 	}
 }

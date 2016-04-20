@@ -1,5 +1,6 @@
 package at.ac.tuwien.dst.mms.client.rest;
 
+import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
 import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
@@ -59,6 +60,11 @@ public interface SearchController<T> {
 
 	@RequestMapping(value ="/coverage/{key}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<TestCoverage> getTestCoverage(
+			@PathVariable String key
+	);
+
+	@RequestMapping(value ="/bugs/{key}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<BugCoverage> getBugCoverage(
 			@PathVariable String key
 	);
 }

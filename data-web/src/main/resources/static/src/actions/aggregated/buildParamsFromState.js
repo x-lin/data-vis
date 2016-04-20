@@ -17,7 +17,7 @@ export const buildParamsFromState = (state) => {
 
     paramsFunc
         .setUpstream(filters.upstream)
-        .setDownstream(filters.upstream)
+        .setDownstream(filters.downstream)
         .setLimit(filters.limit);
 
     return paramsFunc.getParams();

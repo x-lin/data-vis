@@ -2,6 +2,7 @@ package at.ac.tuwien.dst.mms.client.rest.impl;
 
 import at.ac.tuwien.dst.mms.client.rest.SearchController;
 import at.ac.tuwien.dst.mms.dal.DataReader;
+import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
 import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
@@ -83,6 +84,13 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 			@PathVariable String key
 	) {
 		return reader.getTestCoverage(key);
+	}
+
+	@Override
+	public List<BugCoverage> getBugCoverage(
+			@PathVariable String key
+	) {
+		return reader.getBugCoverage(key);
 	}
 
 	protected DataReader<T> getRepositoryReader() {

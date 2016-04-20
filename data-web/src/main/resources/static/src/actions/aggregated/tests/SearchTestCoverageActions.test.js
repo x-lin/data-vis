@@ -2,8 +2,8 @@ import { test } from "tape";
 
 import { createStore } from "../../../stores/ReduxStore";
 import { searchTestCoverage } from "../SearchTestCoverageActions";
-import { setTestCoverageVisibility } from "../../action-creators/LayoutActions";
-import { getCoverage } from "../../aggregated/promises/GETTestCoverageActions";
+import { setTestCoverageVisibility } from "../../action-creators/SidebarActions";
+import { getTestCoverage } from "../../aggregated/promises/GETTestCoverageActions";
 
 test("Testing SearchTestCoverageActions", (assert) => {
     const withoutKeyNode = {
@@ -21,7 +21,7 @@ test("Testing SearchTestCoverageActions", (assert) => {
         assert.plan(2);
 
         const dispatch = (action) => {
-            if ((action.toString() === getCoverage(node).toString()) ||
+            if ((action.toString() === getTestCoverage(node).toString()) ||
                 (action.toString() === setTestCoverageVisibility(true).toString())) {
                 assert.pass();
             } else {

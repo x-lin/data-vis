@@ -1,14 +1,9 @@
 import React from "react";
 
-import { TEST_COVERAGE_FETCH_START, TEST_COVERAGE_FETCH_SUCCESS, TEST_COVERAGE_FETCH_ERROR }
-    from "../../actions/action-creators/TestCoverageActions";
 import Constants from "../../config/Constants";
 import Label from "../widgets/Label";
 import DataTable from "../widgets/DataTable";
-import { START, SUCCESS, ERROR } from "../../config/Settings";
 import { createMapping } from "../../utils/TableMapping";
-import TestCoverageHeader from "./TestCoverageHeader";
-import Spinner from "../widgets/Spinner";
 
 class TestCoverageTable extends React.Component {
     constructor(props) {
@@ -89,25 +84,13 @@ class TestCoverageTable extends React.Component {
         return [jamaUrlMapper, nameMapper, typeMapper, statusMapper, testCaseMapper];
     }
 
-    getStatus() {
-        switch (this.props.coverage.status) {
-            case TEST_COVERAGE_FETCH_START:
-                return START;
-            case TEST_COVERAGE_FETCH_SUCCESS:
-                return SUCCESS;
-            case TEST_COVERAGE_FETCH_ERROR:
-                return ERROR;
-            default:
-                return START;
-        }
-    }
-
     filter(bool) {
         this.setState({ filter: bool });
     }
 
     render() {
-        let data = this.props.coverage.data;
+        let data = this.props.data;
+        let status = this.props.status;
 
         if (this.state.filter) {
             data = data.filter((coverage) => {
@@ -121,37 +104,22 @@ class TestCoverageTable extends React.Component {
         ];
 
         return (
-            <div className="box box-solid">
-                {
-                    <TestCoverageHeader
-                      type={this.props.coverage.node.type}
-                      name={this.props.coverage.node.name}
-                      setPanelInvisible={this.props.setPanelInvisible}
-                    />
-                }
-
-                <div className="box-body">
-                    <DataTable
-                      filter={filter}
-                      data={data}
-                      tableClass="table table-bordered table-hover sidebar-table"
-                      itemsPerPage={100}
-                      mapper={this.getMapper()}
-                      dataMapper={data => data.node}
-                      trClass={data => ((data.testcases && data.testcases.length > 0) ? "" : "bg-red")}
-                      status={this.getStatus()}
-                    />
-                </div>
-
-                {this.props.coverage.status === TEST_COVERAGE_FETCH_START && <Spinner />}
-            </div>
+            <DataTable
+              filter={filter}
+              data={data}
+              tableClass="table table-bordered table-hover sidebar-table"
+              itemsPerPage={100}
+              mapper={this.getMapper()}
+              trClass={data => ((data.testcases && data.testcases.length > 0) ? "" : "bg-red")}
+              status={status}
+            />
         );
     }
 }
 
 TestCoverageTable.propTypes = {
-    coverage: React.PropTypes.object.isRequired,
-    setPanelInvisible: React.PropTypes.func.isRequired,
+    status: React.PropTypes.string.isRequired,
+    data: React.PropTypes.array.isRequired,
     searchNeighborsStart: React.PropTypes.func.isRequired
 };
 

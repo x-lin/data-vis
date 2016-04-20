@@ -73,7 +73,7 @@ class DataTable extends React.Component {
     }
 
     render() {
-        const { mapper, data, tableClass, itemsPerPage, pageButtonLimit, status } = this.props;
+        const { mapper, data, tableClass, itemsPerPage, pageButtonLimit, status, filter } = this.props;
 
         const sortable = mapper
             .filter(map => map.sortable)
@@ -92,7 +92,7 @@ class DataTable extends React.Component {
 
                 {status === SUCCESS &&
                 <div style={{ float: "right", padding: "10px 0px" }}>
-                    {this.createFilter()}
+                    {filter && this.createFilter()}
                 </div>}
 
                 <Table className={tableClass}
@@ -119,7 +119,7 @@ DataTable.propTypes = {
     itemsPerPage: React.PropTypes.number,
     pageButtonLimit: React.PropTypes.number,
     mapper: React.PropTypes.array.isRequired,
-    filter: React.PropTypes.array.isRequired
+    filter: React.PropTypes.array
 };
 
 export default DataTable;
