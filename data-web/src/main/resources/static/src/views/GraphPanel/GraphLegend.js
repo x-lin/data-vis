@@ -1,30 +1,18 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import Constants from "../../config/Constants";
 
 class GraphLegend extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            width: null,
-            height: null
-        };
-    }
-
     componentDidUpdate() {
-        this.updateBBox();
-    }
+        const bbox = $("#"+ this.props.divId)[0].getBBox();
 
-    updateBBox() {
-        const bbox = ReactDOM.findDOMNode(this).getBBox();
+        if (bbox) {
+            const padding = 15;
+            const extra = 10;
 
-        if (this.state.width !== bbox.width) {
-            this.setState({
-                width: bbox.width,
-                height: bbox.height
-            });
+            $("#"+ this.props.divId)
+                .attr("width", bbox.width + 2 * padding + extra)
+                .attr("height", bbox.height + 2 * padding + extra);
         }
     }
 
@@ -49,9 +37,10 @@ class GraphLegend extends React.Component {
     }
 
     render() {
+        const data = this.createData();
         const { visibilityFilters, toggleFilterItemCategory, divId } = this.props;
 
-        const g = this.createData().map((element, index) => {
+        const g = data.map((element, index) => {
             const yTranslate = index * 25 + 10;
             const opacity = (!visibilityFilters.hasOwnProperty(element.name) || visibilityFilters[element.name]) ?
                 "1" : "0.6";
@@ -61,17 +50,14 @@ class GraphLegend extends React.Component {
                   onClick={() => toggleFilterItemCategory(element.name)}
                   opacity={opacity}
                 >
+
                     <circle r="10" fill={element.color} />
                     <text x="20" y="5">{element.name}</text>
                 </g>);
         });
 
         return (
-            <svg
-              id={divId}
-              width={this.calcLength(this.state.width)}
-              height={this.calcLength(this.state.height)}
-            >
+            <svg id={divId}>
                 {g}
             </svg>
         );
