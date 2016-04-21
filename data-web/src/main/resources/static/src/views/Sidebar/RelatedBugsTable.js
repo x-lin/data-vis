@@ -41,8 +41,11 @@ class RelatedBugsTable extends React.Component {
         const nameMapper = createMapping()
             .setProperty("name")
             .setColumnHeader("Name")
-            .setContentMapping((node) => {
-                return <a onClick={() => this.onNameClick(node.bug.key)}>{node.bug.name}</a>;
+            .setContentMapping((bug) => {
+                return <a onClick={() => this.onNameClick(bug.key)}>{bug.name}</a>;
+            })
+            .setDataFunction((data) => {
+                return data.bug;
             })
             .setSortable(true)
             .setFilterable(true)
@@ -67,9 +70,6 @@ class RelatedBugsTable extends React.Component {
             .setContentMapping((node) => {
                 return node.paths ? node.paths.length : 0;
             })
-            .setSortable(true)
-            .setSortableFunction(data => data.paths.length)
-            .setFilterable(true)
             .getMapping();
 
         return [jamaUrlMapper, jiraUrlMapper, nameMapper, pathMapper];
