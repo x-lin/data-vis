@@ -17,6 +17,7 @@
     "max-len": ["warn", 120, 4],
     "new-cap": "off",
     "no-param-reassign": "warn",
+    "react-in-jsx-scope": "off"
   },
   "extends": "airbnb"
 }
