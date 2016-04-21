@@ -1,97 +1,40 @@
 import React from "react";
+import d3 from "d3";
 
 import SearchBar from "./../SearchBar/SearchBarContainer";
 import GraphPanel from "./GraphPanel";
+import { connect } from "react-redux";
+
+import DOMSelector from "../../utils/DOMSelector";
 
 class ExportToImage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            imageData: ""
-        }
-    };
-
     convert() {
-        console.log("rendering image");
-        var svg = document.getElementById('d3box');
-        var svgData = new XMLSerializer().serializeToString( svg );
+        const html = d3.select("#force-force")
+            .attr("version", 1.1)
+            .attr("xmlns", "http://www.w3.org/2000/svg")
+            .node().parentNode.innerHTML;
 
-        var canvas = document.createElement( "canvas" );
+        const imgsrc = `data:image/svg+xml;base64,${btoa(html)}`;
 
-        var svgSize = svg.getBoundingClientRect();
-        canvas.width = svgSize.width;
-        canvas.height = svgSize.height;
+        const canvas = document.createElement("canvas");
+        canvas.setAttribute("width", DOMSelector.getWidth("#force-force"));
+        canvas.setAttribute("height", DOMSelector.getHeight("#force-force"));
 
-        var ctx = canvas.getContext( "2d" );
+        const image = new Image();
+        image.src = imgsrc;
+        image.onload = () => {
+            canvas.getContext("2d").drawImage(image, 0, 0);
 
-        var img = document.createElement("img");
-
-
-        img.onload = () => {
-            console.log("d rawi ng image ");
-            console.log(img);
-
-            ctx.drawImage(img, 0, 0);
-            var imgsrc = canvas.toDataURL("image/png");
-            console.log(imgsrc);
-
-            var a = document.createElement("a");
-            a.download = container+".png";
-            a.href = imgsrc;
+            const a = document.createElement("a");
+            a.download = `graph-${Date.now()}.png`;
+            a.href = canvas.toDataURL("image/png");
             a.click();
         };
-    img.setAttribute("onload", () => {
-        console.log("d rawi ng image ");
-        console.log(img);
-
-        ctx.drawImage(img, 0, 0);
-        var imgsrc = canvas.toDataURL("image/png");
-        console.log(imgsrc);
-
-        var a = document.createElement("a");
-        a.download = container+".png";
-        a.href = imgsrc;
-        a.click();
-    });
-        img.setAttribute("src", "data:image/svg+xml;base64," + btoa(svgData));
-
-
-        //ctx.drawImage(img, 0, 0);
-        //
-        //
-        //
-        ////svg sofar
-        //console.log("data:image/svg+xml;base64," + btoa(svgData))
-
-
-
-        //img.setAttribute( "src", "data:image/svg+xml;base64," + btoa( svgData ) );
-        //
-        //img.onload = function() {
-        //    ctx.drawImage(img, 0, 0);
-        //    this.setState({imageDate: canvas.toDataURL("image/png")});
-        //};
-
-        //var svg  = document.getElementById('d3box'),
-        //    xml  = new XMLSerializer().serializeToString(svg),
-        //    data = "data:image/svg+xml;base64," + btoa(xml),
-        //    img = new Image();
-        //console.log(data)
-        //    this.setState({imageData: "data:image/svg+xml;base64," + btoa(xml)});
     }
 
     render() {
         return (
-            <div>
-                <button className="btn  btn-default" onClick={() => this.convert()}>
-                    <span className="glyphicon glyphicon-search " aria-hidden="true"></span>&nbsp;
-                </button>
-                <canvas></canvas>
-                <img src="#"></img>
-                {this.state.imageData && <img src={this.state.imageData} />}
-            </div>
-
+            <a href="#" title="Export as image" onClick={() => this.convert()}><span className="fa  fa-download" /></a>
         );
     };
 }

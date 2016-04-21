@@ -8,6 +8,8 @@ import FilterHelpers from "../../utils/FilterHelpers";
 import D3Utils from "../../utils/D3Utils";
 import DOMSelector from "../../utils/DOMSelector";
 
+
+
 // Note: This class is mostly a wrapper around the D3 force graph implementation enriched with some customized behaviors.
 // A refactoring of the force graph was started to apply to the React way (check out ForceGraph_Ref.js), it was however
 // abandoned due to apparent performance losses in graph rendering and the lack of reusability of D3 behaviors in React.
@@ -32,11 +34,29 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener("resize", (event) => this.resizePanel(event));
         this.renderGraph(Object.assign({}, this.props.graph));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.resizePanel);
     }
 
     componentDidUpdate() {
         this.updateGraph(Object.assign({}, this.props.graph));
+    }
+
+    resizePanel(e) {
+        const { selector } = this.state;
+
+        if ($(selector)) {
+            const width = DOMSelector.getWidth(selector);
+            const height = DOMSelector.getHeight(selector);
+
+            d3.select(selector)
+                .select("svg")
+                .attr("viewBox", `0 0 ${width} ${height}`);
+        }
     }
 
     renderGraph(data) {
@@ -125,8 +145,12 @@ export default class extends React.Component {
     }
 
     createSvg() {
-        const svg = D3Utils.createSvg(this.state.selector)
+        const { selector } = this.state;
+
+        const svg = D3Utils.createSvg(selector)
             .attr("class", "force-graph")
+            .attr("id", "force-force")
+            .attr("viewBox", `0 0 ${DOMSelector.getWidth(selector)} ${DOMSelector.getHeight(selector)}`)
             .attr("width", "100%")
             .attr("height", "100%");
 
@@ -177,6 +201,7 @@ export default class extends React.Component {
             .attr("class", "link ");
 
         this.state.links
+            .attr("stroke", "#999")
             .attr("opacity", (d) => { return d.visible ? "1" : this.props.disabledOpacity});
 
         if(this.props.showEdgeDirection) {
@@ -222,8 +247,12 @@ export default class extends React.Component {
                 return Constants.getColor(d.type ? d.type : d.category)
             });
 
+
+
         g.append("circle")
             .attr("class", "circle")
+            .attr("stroke", "#FFF")
+            .attr("stroke-width", 1.5)
             .attr("r", 20)
             .attr("id", (d) => { return ContextMenuBuilder.buildElementId(d.key, d.category);});
 
@@ -245,13 +274,18 @@ export default class extends React.Component {
             .style("fill", d => Constants.getColor(d.type ? d.type : d.category));
 
         g1.append("text")
-            .attr("class", "unselectable force-text-label")
+            .attr("class", "unselectable")
+            .attr("fill", "white")
+            .attr("text-anchor", "middle")
+            .style("font", "6px sans-serif")
             .text((d) => {
                 const count = d.count - (parseInt(d.weight, 10) || 0);
 
                 return (count && count > 0) ? `+${count}` : "";
             })
             .call(this.getTextBox);
+
+
 
         g1.insert("rect", "text")
             .attr("x", d => d.bbox.x - padding)
@@ -260,12 +294,17 @@ export default class extends React.Component {
             .attr("height", d => d.bbox.height + (d.bbox.height ? padding * 2 : 0))
             .attr("rx", 3)
             .attr("ry", 3)
+            .style("font", "9px sans-serif")
+            .attr("text-anchor", "middle")
             .style("fill", d => Constants.getColor(d.type));
     }
 
     addNodeText(g) {
         g.append("text")
             .attr("class", "force-text  unselectable")
+            .style("font", "9px sans-serif")
+            .attr("text-anchor", "middle")
+            .style("fill", "black")
             .text(d => {
                 return d.name.length > 25 ? d.name.substring(0, 25) + "..." : d.name;
             })

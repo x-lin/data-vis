@@ -10,6 +10,7 @@ import Header from "../widgets/MenuHeader";
 import MenuLanePicker from "./MenuLanePicker";
 import MenuEdgeDirections from "./MenuEdgeDirections";
 import MenuRenderingLimit from "./MenuRenderingLimit";
+import ExportToImage from "../GraphPanel/ExportToImage";
 
 const Menu = ({
     toggleHandler,
@@ -97,7 +98,8 @@ const Menu = ({
         <ul className="nav navbar-nav">
             <li><NewGraphComponent /></li>
             <li><FileLoaderComponent hasLabel={false} /></li>
-            <li className="navbar-space"><FileSaverComponent /></li>
+            <li><FileSaverComponent /></li>
+            <li className="navbar-space"><ExportToImage /></li>
 
             <li><MenuLanePicker /></li>
             <li><MenuEdgeDirections /></li>

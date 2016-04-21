@@ -24899,8 +24899,8 @@
 
 	_get__("store").dispatch(_get__("getNodeTypes")());
 
-	_get__("persistStore")(_get__("store"), { storage: _get__("localforage") }).purgeAll();
-	//persistStore(store, { storage: localforage });
+	// persistStore(store, {storage: localforage}).purgeAll();
+	_get__("persistStore")(_get__("store"), { storage: _get__("localforage") });
 	var _RewiredData__ = {};
 	var _RewireAPI__ = {};
 
@@ -45826,6 +45826,10 @@
 
 	var _MenuRenderingLimit2 = _interopRequireDefault(_MenuRenderingLimit);
 
+	var _ExportToImage = __webpack_require__(875);
+
+	var _ExportToImage2 = _interopRequireDefault(_ExportToImage);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Menu = function Menu(_ref) {
@@ -45972,6 +45976,8 @@
 
 	    var _FileSaverComponent_Component = _get__("FileSaverComponent");
 
+	    var _ExportToImage_Component = _get__("ExportToImage");
+
 	    var _MenuLanePicker_Component = _get__("MenuLanePicker");
 
 	    var _MenuEdgeDirections_Component = _get__("MenuEdgeDirections");
@@ -45993,8 +45999,13 @@
 	        ),
 	        _react2.default.createElement(
 	            "li",
-	            { className: "navbar-space" },
+	            null,
 	            _react2.default.createElement(_FileSaverComponent_Component, null)
+	        ),
+	        _react2.default.createElement(
+	            "li",
+	            { className: "navbar-space" },
+	            _react2.default.createElement(_ExportToImage_Component, null)
 	        ),
 	        _react2.default.createElement(
 	            "li",
@@ -46082,6 +46093,9 @@
 
 	        case "FileSaverComponent":
 	            return _FileSaverContainer2.default;
+
+	        case "ExportToImage":
+	            return _ExportToImage2.default;
 
 	        case "MenuLanePicker":
 	            return _MenuLanePicker2.default;
@@ -84262,12 +84276,35 @@
 	    _createClass(_DefaultExportValue, [{
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            window.addEventListener("resize", function (event) {
+	                return _this2.resizePanel(event);
+	            });
 	            this.renderGraph(_extends({}, this.props.graph));
+	        }
+	    }, {
+	        key: "componentWillUnmount",
+	        value: function componentWillUnmount() {
+	            window.removeEventListener("resize", this.resizePanel);
 	        }
 	    }, {
 	        key: "componentDidUpdate",
 	        value: function componentDidUpdate() {
 	            this.updateGraph(_extends({}, this.props.graph));
+	        }
+	    }, {
+	        key: "resizePanel",
+	        value: function resizePanel(e) {
+	            var selector = this.state.selector;
+
+
+	            if ($(selector)) {
+	                var width = _get__("DOMSelector").getWidth(selector);
+	                var height = _get__("DOMSelector").getHeight(selector);
+
+	                _get__("d3").select(selector).select("svg").attr("viewBox", "0 0 " + width + " " + height);
+	            }
 	        }
 	    }, {
 	        key: "renderGraph",
@@ -84293,7 +84330,7 @@
 	    }, {
 	        key: "createConnectedIndex",
 	        value: function createConnectedIndex(data) {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            this.state.linkedByIndex = {};
 
@@ -84302,7 +84339,7 @@
 	                this.state.linkedByIndex[i + "," + i] = 1;
 	            }
 	            data.edges.forEach(function (d) {
-	                _this2.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
+	                _this3.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
 	            });
 	        }
 	    }, {
@@ -84364,7 +84401,10 @@
 	    }, {
 	        key: "createSvg",
 	        value: function createSvg() {
-	            var svg = _get__("D3Utils").createSvg(this.state.selector).attr("class", "force-graph").attr("width", "100%").attr("height", "100%");
+	            var selector = this.state.selector;
+
+
+	            var svg = _get__("D3Utils").createSvg(selector).attr("class", "force-graph").attr("id", "force-force").attr("viewBox", "0 0 " + _get__("DOMSelector").getWidth(selector) + " " + _get__("DOMSelector").getHeight(selector)).attr("width", "100%").attr("height", "100%");
 
 	            svg.on("click", function (d) {
 	                return _get__("EventHandlers").onClickSvg(d);
@@ -84393,10 +84433,10 @@
 	    }, {
 	        key: "createForceLayout",
 	        value: function createForceLayout(data) {
-	            var _this3 = this;
+	            var _this4 = this;
 
 	            this.state.force = _get__("d3").layout.force().charge(-700).linkDistance(70).nodes(data.nodes).links(data.edges).size([_get__("DOMSelector").getWidth(this.state.selector), _get__("DOMSelector").getHeight(this.state.selector)]).on("start", function () {
-	                return _this3.createSpeededUpAnimation();
+	                return _this4.createSpeededUpAnimation();
 	            });
 	        }
 	    }, {
@@ -84408,12 +84448,12 @@
 	    }, {
 	        key: "addLinks",
 	        value: function addLinks() {
-	            var _this4 = this;
+	            var _this5 = this;
 
 	            this.state.links.enter().insert("line", "g").attr("class", "link ");
 
-	            this.state.links.attr("opacity", function (d) {
-	                return d.visible ? "1" : _this4.props.disabledOpacity;
+	            this.state.links.attr("stroke", "#999").attr("opacity", function (d) {
+	                return d.visible ? "1" : _this5.props.disabledOpacity;
 	            });
 
 	            if (this.props.showEdgeDirection) {
@@ -84448,13 +84488,13 @@
 	    }, {
 	        key: "addNodes",
 	        value: function addNodes() {
-	            var _this5 = this;
+	            var _this6 = this;
 
 	            var g = this.state.nodes.enter().append("g").attr("class", "g").style("fill", function (d) {
 	                return _get__("Constants").getColor(d.type ? d.type : d.category);
 	            });
 
-	            g.append("circle").attr("class", "circle").attr("r", 20).attr("id", function (d) {
+	            g.append("circle").attr("class", "circle").attr("stroke", "#FFF").attr("stroke-width", 1.5).attr("r", 20).attr("id", function (d) {
 	                return _get__("ContextMenuBuilder").buildElementId(d.key, d.category);
 	            });
 
@@ -84463,7 +84503,7 @@
 	            this.addNodeText(g);
 
 	            this.state.nodes.attr("opacity", function (d) {
-	                return d.visible ? "1" : _this5.props.disabledOpacity;
+	                return d.visible ? "1" : _this6.props.disabledOpacity;
 	            });
 
 	            this.setNodeBehavior();
@@ -84477,7 +84517,7 @@
 	                return _get__("Constants").getColor(d.type ? d.type : d.category);
 	            });
 
-	            g1.append("text").attr("class", "unselectable force-text-label").text(function (d) {
+	            g1.append("text").attr("class", "unselectable").attr("fill", "white").attr("text-anchor", "middle").style("font", "6px sans-serif").text(function (d) {
 	                var count = d.count - (parseInt(d.weight, 10) || 0);
 
 	                return count && count > 0 ? "+" + count : "";
@@ -84491,14 +84531,14 @@
 	                return d.bbox.width + (d.bbox.width ? padding * 2 : 0);
 	            }).attr("height", function (d) {
 	                return d.bbox.height + (d.bbox.height ? padding * 2 : 0);
-	            }).attr("rx", 3).attr("ry", 3).style("fill", function (d) {
+	            }).attr("rx", 3).attr("ry", 3).style("font", "9px sans-serif").attr("text-anchor", "middle").style("fill", function (d) {
 	                return _get__("Constants").getColor(d.type);
 	            });
 	        }
 	    }, {
 	        key: "addNodeText",
 	        value: function addNodeText(g) {
-	            g.append("text").attr("class", "force-text  unselectable").text(function (d) {
+	            g.append("text").attr("class", "force-text  unselectable").style("font", "9px sans-serif").attr("text-anchor", "middle").style("fill", "black").text(function (d) {
 	                return d.name.length > 25 ? d.name.substring(0, 25) + "..." : d.name;
 	            }).call(this.getTextBox);
 
@@ -84522,19 +84562,19 @@
 	    }, {
 	        key: "setNodeBehavior",
 	        value: function setNodeBehavior() {
-	            var _this6 = this;
+	            var _this7 = this;
 
 	            var state = this.state;
 	            var props = this.props;
 	            var connectedNodes = this.connectedNodes;
 
 	            this.state.nodes.on("dblclick", function (d, props) {
-	                if (d.visible || _this6.props.enableFiltered) {
-	                    _get__("EventHandlers").onDoubleClickNode(d, _this6.props);
+	                if (d.visible || _this7.props.enableFiltered) {
+	                    _get__("EventHandlers").onDoubleClickNode(d, _this7.props);
 	                }
 	            }).on("contextmenu", function (d) {
-	                if (d.visible || _this6.props.enableFiltered) {
-	                    _get__("EventHandlers").onContextMenuNode(d, _this6.props);
+	                if (d.visible || _this7.props.enableFiltered) {
+	                    _get__("EventHandlers").onContextMenuNode(d, _this7.props);
 	                }
 	            }).on("mouseover", function (d) {
 	                _get__("EventHandlers").onMouseOver(d);
@@ -84543,15 +84583,15 @@
 	            }).on("click", function (d) {
 	                connectedNodes(d, state, props, this);
 	            }).call(this.state.force.drag().on("dragstart", function (d) {
-	                if (d.visible || _this6.props.enableFiltered) {
+	                if (d.visible || _this7.props.enableFiltered) {
 	                    _get__("EventHandlers").onDragStartNode(d);
 	                }
 	            }).on("drag", function (d) {
-	                if (d.visible || _this6.props.enableFiltered) {
+	                if (d.visible || _this7.props.enableFiltered) {
 	                    _get__("EventHandlers").onDragNode(d);
 	                }
 	            }).on("dragend", function (d) {
-	                if (d.visible || _this6.props.enableFiltered) {
+	                if (d.visible || _this7.props.enableFiltered) {
 	                    _get__("EventHandlers").onDragEndNode(d);
 	                }
 	            }));
@@ -84559,10 +84599,10 @@
 	    }, {
 	        key: "createSpeededUpAnimation",
 	        value: function createSpeededUpAnimation() {
-	            var _this7 = this;
+	            var _this8 = this;
 
 	            requestAnimationFrame(function () {
-	                _this7.createAnimation();
+	                _this8.createAnimation();
 	            });
 	        }
 	    }, {
@@ -84587,7 +84627,7 @@
 	    }, {
 	        key: "animateIfNotFinished",
 	        value: function animateIfNotFinished(alphaThreshold) {
-	            var _this8 = this;
+	            var _this9 = this;
 
 	            if (this.state.force.alpha() > alphaThreshold) {
 	                this.createSpeededUpAnimation();
@@ -84596,7 +84636,7 @@
 
 	                this.state.nodes.attr("fixed", function (d) {
 	                    if (!d.fixed) {
-	                        d.fixed = _this8.props.isFixed ? true : d.isFixed;
+	                        d.fixed = _this9.props.isFixed ? true : d.isFixed;
 	                    }
 	                });
 	            }
@@ -84648,17 +84688,17 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
-	        case "D3Utils":
-	            return _D3Utils2.default;
+	        case "DOMSelector":
+	            return _DOMSelector2.default;
 
 	        case "d3":
 	            return _d2.default;
 
+	        case "D3Utils":
+	            return _D3Utils2.default;
+
 	        case "EventHandlers":
 	            return _ForceGraphEventHandlers2.default;
-
-	        case "DOMSelector":
-	            return _DOMSelector2.default;
 
 	        case "FilterHelpers":
 	            return _FilterHelpers2.default;
@@ -107784,6 +107824,231 @@
 	}
 
 	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(TestCoverageTable)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
+
+/***/ },
+/* 875 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _d = __webpack_require__(833);
+
+	var _d2 = _interopRequireDefault(_d);
+
+	var _SearchBarContainer = __webpack_require__(823);
+
+	var _SearchBarContainer2 = _interopRequireDefault(_SearchBarContainer);
+
+	var _GraphPanel = __webpack_require__(830);
+
+	var _GraphPanel2 = _interopRequireDefault(_GraphPanel);
+
+	var _reactRedux = __webpack_require__(273);
+
+	var _DOMSelector = __webpack_require__(855);
+
+	var _DOMSelector2 = _interopRequireDefault(_DOMSelector);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ExportToImage = function (_get__$Component) {
+	    _inherits(ExportToImage, _get__$Component);
+
+	    function ExportToImage() {
+	        _classCallCheck(this, ExportToImage);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ExportToImage).apply(this, arguments));
+	    }
+
+	    _createClass(ExportToImage, [{
+	        key: "convert",
+	        value: function convert() {
+	            var html = _get__("d3").select("#force-force").attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+
+	            var imgsrc = "data:image/svg+xml;base64," + btoa(html);
+
+	            var canvas = document.createElement("canvas");
+	            canvas.setAttribute("width", _get__("DOMSelector").getWidth("#force-force"));
+	            canvas.setAttribute("height", _get__("DOMSelector").getHeight("#force-force"));
+
+	            var image = new Image();
+	            image.src = imgsrc;
+	            image.onload = function () {
+	                canvas.getContext("2d").drawImage(image, 0, 0);
+
+	                var a = document.createElement("a");
+	                a.download = "graph-" + Date.now() + ".png";
+	                a.href = canvas.toDataURL("image/png");
+	                a.click();
+	            };
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                "a",
+	                { href: "#", title: "Export as image", onClick: function onClick() {
+	                        return _this2.convert();
+	                    } },
+	                _react2.default.createElement("span", { className: "fa  fa-download" })
+	            );
+	        }
+	    }]);
+
+	    return ExportToImage;
+	}(_get__("React").Component);
+
+	exports.default = _get__("ExportToImage");
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "d3":
+	            return _d2.default;
+
+	        case "DOMSelector":
+	            return _DOMSelector2.default;
+
+	        case "React":
+	            return _react2.default;
+
+	        case "ExportToImage":
+	            return ExportToImage;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof ExportToImage === "undefined" ? "undefined" : _typeof(ExportToImage);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(ExportToImage, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(ExportToImage)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);
