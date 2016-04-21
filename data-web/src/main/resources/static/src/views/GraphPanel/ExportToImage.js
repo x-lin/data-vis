@@ -3,6 +3,8 @@ import d3 from "d3";
 
 import DOMSelector from "../../utils/DOMSelector";
 
+const SCALE = 2;
+
 class ExportToImage extends React.Component {
     convert() {
         const html = d3.select("#force-force")
@@ -14,16 +16,21 @@ class ExportToImage extends React.Component {
             return `&#${c.charCodeAt(0)};`;
         }));
 
+
+        const width = DOMSelector.getWidth("#force-force") * SCALE;
+        const height = DOMSelector.getHeight("#force-force") * SCALE;
+
         const imgsrc = `data:image/svg+xml;base64,${base64}`;
 
         const canvas = document.createElement("canvas");
-        canvas.setAttribute("width", DOMSelector.getWidth("#force-force"));
-        canvas.setAttribute("height", DOMSelector.getHeight("#force-force"));
+        canvas.setAttribute("width", width.toString());
+        canvas.setAttribute("height", height.toString());
 
         const image = new Image();
         image.src = imgsrc;
         image.onload = () => {
-            canvas.getContext("2d").drawImage(image, 0, 0);
+            const context = canvas.getContext("2d")
+            context.drawImage(image, 0, 0, width, height);
 
             const a = document.createElement("a");
             a.download = `graph-${Date.now()}.png`;
