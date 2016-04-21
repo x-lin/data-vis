@@ -37415,7 +37415,7 @@
 
 	var _getContrastColor2 = _interopRequireDefault(_getContrastColor);
 
-	var _TestCoverageTableContainer = __webpack_require__(272);
+	var _TestCoverageTableContainer = __webpack_require__(873);
 
 	var _TestCoverageTableContainer2 = _interopRequireDefault(_TestCoverageTableContainer);
 
@@ -37956,185 +37956,7 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 272 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _reactRedux = __webpack_require__(273);
-
-	var _SearchNeighborsActions = __webpack_require__(284);
-
-	var _SidebarActions = __webpack_require__(266);
-
-	var _TestCoverageTable = __webpack_require__(307);
-
-	var _TestCoverageTable2 = _interopRequireDefault(_TestCoverageTable);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {};
-	};
-
-	var mapDispatchProps = function mapDispatchProps(dispatch) {
-	    return {
-	        searchNeighborsStart: function searchNeighborsStart(category, key) {
-	            dispatch(_get__("searchNeighbors")(category, key));
-	        },
-	        setPanelInvisible: function setPanelInvisible() {
-	            dispatch(_get__("setVisibility")(false));
-	        }
-	    };
-	};
-
-	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("TestCoverageTable"));
-
-	exports.default = _DefaultExportValue;
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "searchNeighbors":
-	            return _SearchNeighborsActions.searchNeighbors;
-
-	        case "setVisibility":
-	            return _SidebarActions.setVisibility;
-
-	        case "connect":
-	            return _reactRedux.connect;
-
-	        case "mapStateToProps":
-	            return mapStateToProps;
-
-	        case "mapDispatchProps":
-	            return mapDispatchProps;
-
-	        case "TestCoverageTable":
-	            return _TestCoverageTable2.default;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(_DefaultExportValue, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
+/* 272 */,
 /* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -40889,304 +40711,7 @@
 	exports.default = _RewireAPI__;
 
 /***/ },
-/* 307 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Constants = __webpack_require__(269);
-
-	var _Constants2 = _interopRequireDefault(_Constants);
-
-	var _Label = __webpack_require__(308);
-
-	var _Label2 = _interopRequireDefault(_Label);
-
-	var _DataTable = __webpack_require__(309);
-
-	var _DataTable2 = _interopRequireDefault(_DataTable);
-
-	var _TableMapping = __webpack_require__(326);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var TestCoverageTable = function (_get__$Component) {
-	    _inherits(TestCoverageTable, _get__$Component);
-
-	    function TestCoverageTable(props) {
-	        _classCallCheck(this, TestCoverageTable);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TestCoverageTable).call(this, props));
-
-	        _this.state = {
-	            filter: false
-	        };
-	        return _this;
-	    }
-
-	    _createClass(TestCoverageTable, [{
-	        key: "onNameClick",
-	        value: function onNameClick(key) {
-	            this.props.searchNeighborsStart("GeneralNode", key);
-	        }
-	    }, {
-	        key: "getMapper",
-	        value: function getMapper() {
-	            var _this2 = this;
-
-	            var jamaUrlMapper = _get__("createMapping")().setProperty("jamaId").setColumnHeader("").setContentMapping(function (node) {
-	                return _react2.default.createElement(
-	                    "a",
-	                    { href: _get__("Constants").getJamaAddress(node.jamaId, node.projectId), target: "_blank" },
-	                    _react2.default.createElement("img", { src: "img/jama-logo.png", className: "tableImg", alt: "Jama logo" })
-	                );
-	            }).setDataFunction(function (data) {
-	                return data.node;
-	            }).getMapping();
-
-	            var nameMapper = _get__("createMapping")().setProperty("name").setColumnHeader("Name").setContentMapping(function (node) {
-	                return _react2.default.createElement(
-	                    "a",
-	                    { onClick: function onClick() {
-	                            return _this2.onNameClick(node.key);
-	                        } },
-	                    node.name
-	                );
-	            }).setSortable(true).setFilterable(true).getMapping();
-
-	            var typeMapper = _get__("createMapping")().setProperty("type").setColumnHeader("Type").setContentMapping(function (node) {
-	                var _Label_Component = _get__("Label");
-
-	                return _react2.default.createElement(
-	                    _Label_Component,
-	                    { bgColor: _get__("Constants").getColor(node.type) },
-	                    node.type
-	                );
-	            }).setDataFunction(function (data) {
-	                return data.node;
-	            }).setSortable(true).setFilterable(true).getMapping();
-
-	            var statusMapper = _get__("createMapping")().setProperty("status").setColumnHeader("Status").setContentMapping(function (node) {
-	                return node.status;
-	            }).setDataFunction(function (data) {
-	                return data.node;
-	            }).setSortable(true).setFilterable(true).getMapping();
-
-	            var testCaseMapper = _get__("createMapping")().setProperty("testcases").setColumnHeader("Test Cases").setContentMapping(function (node) {
-	                return node.testcases ? node.testcases.length : 0;
-	            }).setSortable(true).setSortableFunction(function (data) {
-	                return data.testcases.length;
-	            }).setFilterable(true).getMapping();
-
-	            return [jamaUrlMapper, nameMapper, typeMapper, statusMapper, testCaseMapper];
-	        }
-	    }, {
-	        key: "filter",
-	        value: function filter(bool) {
-	            this.setState({ filter: bool });
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this3 = this;
-
-	            var data = this.props.data;
-	            var status = this.props.status;
-
-	            if (this.state.filter) {
-	                data = data.filter(function (coverage) {
-	                    return !coverage.testcases || coverage.testcases.length === 0;
-	                });
-	            }
-
-	            var filter = [{ onClick: function onClick() {
-	                    return _this3.filter(false);
-	                }, body: "Show All" }, { onClick: function onClick() {
-	                    return _this3.filter(true);
-	                }, body: "Show With No Test Cases" }];
-
-	            var _DataTable_Component = _get__("DataTable");
-
-	            return _react2.default.createElement(_DataTable_Component, {
-	                filter: filter,
-	                data: data,
-	                tableClass: "table table-bordered table-hover sidebar-table",
-	                itemsPerPage: 100,
-	                mapper: this.getMapper(),
-	                trClass: function trClass(data) {
-	                    return data.testcases && data.testcases.length > 0 ? "" : "bg-red";
-	                },
-	                status: status
-	            });
-	        }
-	    }]);
-
-	    return TestCoverageTable;
-	}(_get__("React").Component);
-
-	_get__("TestCoverageTable").propTypes = {
-	    status: _get__("React").PropTypes.string.isRequired,
-	    data: _get__("React").PropTypes.array.isRequired,
-	    searchNeighborsStart: _get__("React").PropTypes.func.isRequired
-	};
-
-	exports.default = _get__("TestCoverageTable");
-	var _RewiredData__ = {};
-	var _RewireAPI__ = {};
-
-	(function () {
-	    function addPropertyToAPIObject(name, value) {
-	        Object.defineProperty(_RewireAPI__, name, {
-	            value: value,
-	            enumerable: false,
-	            configurable: true
-	        });
-	    }
-
-	    addPropertyToAPIObject('__get__', _get__);
-	    addPropertyToAPIObject('__GetDependency__', _get__);
-	    addPropertyToAPIObject('__Rewire__', _set__);
-	    addPropertyToAPIObject('__set__', _set__);
-	    addPropertyToAPIObject('__reset__', _reset__);
-	    addPropertyToAPIObject('__ResetDependency__', _reset__);
-	    addPropertyToAPIObject('__with__', _with__);
-	})();
-
-	function _get__(variableName) {
-	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
-	}
-
-	function _get_original__(variableName) {
-	    switch (variableName) {
-	        case "createMapping":
-	            return _TableMapping.createMapping;
-
-	        case "Constants":
-	            return _Constants2.default;
-
-	        case "Label":
-	            return _Label2.default;
-
-	        case "DataTable":
-	            return _DataTable2.default;
-
-	        case "React":
-	            return _react2.default;
-
-	        case "TestCoverageTable":
-	            return TestCoverageTable;
-	    }
-
-	    return undefined;
-	}
-
-	function _assign__(variableName, value) {
-	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-	        return _set_original__(variableName, value);
-	    } else {
-	        return _RewiredData__[variableName] = value;
-	    }
-	}
-
-	function _set_original__(variableName, _value) {
-	    switch (variableName) {}
-
-	    return undefined;
-	}
-
-	function _update_operation__(operation, variableName, prefix) {
-	    var oldValue = _get__(variableName);
-
-	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
-	    _assign__(variableName, newValue);
-
-	    return prefix ? newValue : oldValue;
-	}
-
-	function _set__(variableName, value) {
-	    return _RewiredData__[variableName] = value;
-	}
-
-	function _reset__(variableName) {
-	    delete _RewiredData__[variableName];
-	}
-
-	function _with__(object) {
-	    var rewiredVariableNames = Object.keys(object);
-	    var previousValues = {};
-
-	    function reset() {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            _RewiredData__[variableName] = previousValues[variableName];
-	        });
-	    }
-
-	    return function (callback) {
-	        rewiredVariableNames.forEach(function (variableName) {
-	            previousValues[variableName] = _RewiredData__[variableName];
-	            _RewiredData__[variableName] = object[variableName];
-	        });
-	        var result = callback();
-
-	        if (!!result && typeof result.then == 'function') {
-	            result.then(reset).catch(reset);
-	        } else {
-	            reset();
-	        }
-
-	        return result;
-	    };
-	}
-
-	var _typeOfOriginalExport = typeof TestCoverageTable === "undefined" ? "undefined" : _typeof(TestCoverageTable);
-
-	function addNonEnumerableProperty(name, value) {
-	    Object.defineProperty(TestCoverageTable, name, {
-	        value: value,
-	        enumerable: false,
-	        configurable: true
-	    });
-	}
-
-	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(TestCoverageTable)) {
-	    addNonEnumerableProperty('__get__', _get__);
-	    addNonEnumerableProperty('__GetDependency__', _get__);
-	    addNonEnumerableProperty('__Rewire__', _set__);
-	    addNonEnumerableProperty('__set__', _set__);
-	    addNonEnumerableProperty('__reset__', _reset__);
-	    addNonEnumerableProperty('__ResetDependency__', _reset__);
-	    addNonEnumerableProperty('__with__', _with__);
-	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
-	}
-
-	exports.__get__ = _get__;
-	exports.__GetDependency__ = _get__;
-	exports.__Rewire__ = _set__;
-	exports.__set__ = _set__;
-	exports.__ResetDependency__ = _reset__;
-	exports.__RewireAPI__ = _RewireAPI__;
-
-/***/ },
+/* 307 */,
 /* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -106497,11 +106022,11 @@
 
 	var _SidebarBox2 = _interopRequireDefault(_SidebarBox);
 
-	var _TestCoverageTableContainer = __webpack_require__(272);
+	var _TestCoverageTableContainer = __webpack_require__(873);
 
 	var _TestCoverageTableContainer2 = _interopRequireDefault(_TestCoverageTableContainer);
 
-	var _RelatedBugsTableContainer = __webpack_require__(869);
+	var _RelatedBugsTableContainer = __webpack_require__(871);
 
 	var _RelatedBugsTableContainer2 = _interopRequireDefault(_RelatedBugsTableContainer);
 
@@ -107350,7 +106875,9 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 869 */
+/* 869 */,
+/* 870 */,
+/* 871 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -107366,7 +106893,7 @@
 
 	var _SearchNeighborsActions = __webpack_require__(284);
 
-	var _RelatedBugsTable = __webpack_require__(870);
+	var _RelatedBugsTable = __webpack_require__(872);
 
 	var _RelatedBugsTable2 = _interopRequireDefault(_RelatedBugsTable);
 
@@ -107521,7 +107048,7 @@
 	exports.__RewireAPI__ = _RewireAPI__;
 
 /***/ },
-/* 870 */
+/* 872 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -107780,6 +107307,483 @@
 	}
 
 	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(RelatedBugsTable)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
+
+/***/ },
+/* 873 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _reactRedux = __webpack_require__(273);
+
+	var _SearchNeighborsActions = __webpack_require__(284);
+
+	var _SidebarActions = __webpack_require__(266);
+
+	var _TestCoverageTable = __webpack_require__(874);
+
+	var _TestCoverageTable2 = _interopRequireDefault(_TestCoverageTable);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {};
+	};
+
+	var mapDispatchProps = function mapDispatchProps(dispatch) {
+	    return {
+	        searchNeighborsStart: function searchNeighborsStart(category, key) {
+	            dispatch(_get__("searchNeighbors")(category, key));
+	        },
+	        setPanelInvisible: function setPanelInvisible() {
+	            dispatch(_get__("setVisibility")(false));
+	        }
+	    };
+	};
+
+	var _DefaultExportValue = _get__("connect")(_get__("mapStateToProps"), _get__("mapDispatchProps"))(_get__("TestCoverageTable"));
+
+	exports.default = _DefaultExportValue;
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "searchNeighbors":
+	            return _SearchNeighborsActions.searchNeighbors;
+
+	        case "setVisibility":
+	            return _SidebarActions.setVisibility;
+
+	        case "connect":
+	            return _reactRedux.connect;
+
+	        case "mapStateToProps":
+	            return mapStateToProps;
+
+	        case "mapDispatchProps":
+	            return mapDispatchProps;
+
+	        case "TestCoverageTable":
+	            return _TestCoverageTable2.default;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof _DefaultExportValue === "undefined" ? "undefined" : _typeof(_DefaultExportValue);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(_DefaultExportValue, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	    addNonEnumerableProperty('__get__', _get__);
+	    addNonEnumerableProperty('__GetDependency__', _get__);
+	    addNonEnumerableProperty('__Rewire__', _set__);
+	    addNonEnumerableProperty('__set__', _set__);
+	    addNonEnumerableProperty('__reset__', _reset__);
+	    addNonEnumerableProperty('__ResetDependency__', _reset__);
+	    addNonEnumerableProperty('__with__', _with__);
+	    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+	}
+
+	exports.__get__ = _get__;
+	exports.__GetDependency__ = _get__;
+	exports.__Rewire__ = _set__;
+	exports.__set__ = _set__;
+	exports.__ResetDependency__ = _reset__;
+	exports.__RewireAPI__ = _RewireAPI__;
+
+/***/ },
+/* 874 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Constants = __webpack_require__(269);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _Label = __webpack_require__(308);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	var _DataTable = __webpack_require__(309);
+
+	var _DataTable2 = _interopRequireDefault(_DataTable);
+
+	var _TableMapping = __webpack_require__(326);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TestCoverageTable = function (_get__$Component) {
+	    _inherits(TestCoverageTable, _get__$Component);
+
+	    function TestCoverageTable(props) {
+	        _classCallCheck(this, TestCoverageTable);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TestCoverageTable).call(this, props));
+
+	        _this.state = {
+	            filter: false
+	        };
+	        return _this;
+	    }
+
+	    _createClass(TestCoverageTable, [{
+	        key: "onNameClick",
+	        value: function onNameClick(key) {
+	            this.props.searchNeighborsStart("GeneralNode", key);
+	        }
+	    }, {
+	        key: "getMapper",
+	        value: function getMapper() {
+	            var _this2 = this;
+
+	            var jamaUrlMapper = _get__("createMapping")().setProperty("jamaId").setColumnHeader("").setContentMapping(function (node) {
+	                return _react2.default.createElement(
+	                    "a",
+	                    { href: _get__("Constants").getJamaAddress(node.jamaId, node.projectId), target: "_blank" },
+	                    _react2.default.createElement("img", { src: "img/jama-logo.png", className: "tableImg", alt: "Jama logo" })
+	                );
+	            }).setDataFunction(function (data) {
+	                return data.node;
+	            }).getMapping();
+
+	            var nameMapper = _get__("createMapping")().setProperty("name").setColumnHeader("Name").setContentMapping(function (node) {
+	                return _react2.default.createElement(
+	                    "a",
+	                    { onClick: function onClick() {
+	                            return _this2.onNameClick(node.key);
+	                        } },
+	                    node.name
+	                );
+	            }).setSortable(true).setFilterable(true).getMapping();
+
+	            var typeMapper = _get__("createMapping")().setProperty("type").setColumnHeader("Type").setContentMapping(function (node) {
+	                var _Label_Component = _get__("Label");
+
+	                return _react2.default.createElement(
+	                    _Label_Component,
+	                    { bgColor: _get__("Constants").getColor(node.type) },
+	                    node.type
+	                );
+	            }).setDataFunction(function (data) {
+	                return data.node;
+	            }).setSortable(true).setFilterable(true).getMapping();
+
+	            var statusMapper = _get__("createMapping")().setProperty("status").setColumnHeader("Status").setContentMapping(function (node) {
+	                return node.status;
+	            }).setDataFunction(function (data) {
+	                return data.node;
+	            }).setSortable(true).setFilterable(true).getMapping();
+
+	            var testCaseMapper = _get__("createMapping")().setProperty("testcases").setColumnHeader("Test Cases").setContentMapping(function (node) {
+	                return node.testcases ? node.testcases.length : 0;
+	            }).setSortable(true).setSortableFunction(function (data) {
+	                return data.testcases.length;
+	            }).setFilterable(true).getMapping();
+
+	            return [jamaUrlMapper, nameMapper, typeMapper, statusMapper, testCaseMapper];
+	        }
+	    }, {
+	        key: "filter",
+	        value: function filter(bool) {
+	            this.setState({ filter: bool });
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this3 = this;
+
+	            var data = this.props.data;
+	            var status = this.props.status;
+
+	            if (this.state.filter) {
+	                data = data.filter(function (coverage) {
+	                    return !coverage.testcases || coverage.testcases.length === 0;
+	                });
+	            }
+
+	            var filter = [{ onClick: function onClick() {
+	                    return _this3.filter(false);
+	                }, body: "Show All" }, { onClick: function onClick() {
+	                    return _this3.filter(true);
+	                }, body: "Show With No Test Cases" }];
+
+	            var _DataTable_Component = _get__("DataTable");
+
+	            return _react2.default.createElement(_DataTable_Component, {
+	                filter: filter,
+	                data: data,
+	                tableClass: "table table-bordered table-hover sidebar-table",
+	                itemsPerPage: 100,
+	                mapper: this.getMapper(),
+	                trClass: function trClass(data) {
+	                    return data.testcases && data.testcases.length > 0 ? "" : "bg-red";
+	                },
+	                status: status
+	            });
+	        }
+	    }]);
+
+	    return TestCoverageTable;
+	}(_get__("React").Component);
+
+	_get__("TestCoverageTable").propTypes = {
+	    status: _get__("React").PropTypes.string.isRequired,
+	    data: _get__("React").PropTypes.array.isRequired,
+	    searchNeighborsStart: _get__("React").PropTypes.func.isRequired
+	};
+
+	exports.default = _get__("TestCoverageTable");
+	var _RewiredData__ = {};
+	var _RewireAPI__ = {};
+
+	(function () {
+	    function addPropertyToAPIObject(name, value) {
+	        Object.defineProperty(_RewireAPI__, name, {
+	            value: value,
+	            enumerable: false,
+	            configurable: true
+	        });
+	    }
+
+	    addPropertyToAPIObject('__get__', _get__);
+	    addPropertyToAPIObject('__GetDependency__', _get__);
+	    addPropertyToAPIObject('__Rewire__', _set__);
+	    addPropertyToAPIObject('__set__', _set__);
+	    addPropertyToAPIObject('__reset__', _reset__);
+	    addPropertyToAPIObject('__ResetDependency__', _reset__);
+	    addPropertyToAPIObject('__with__', _with__);
+	})();
+
+	function _get__(variableName) {
+	    return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	}
+
+	function _get_original__(variableName) {
+	    switch (variableName) {
+	        case "createMapping":
+	            return _TableMapping.createMapping;
+
+	        case "Constants":
+	            return _Constants2.default;
+
+	        case "Label":
+	            return _Label2.default;
+
+	        case "DataTable":
+	            return _DataTable2.default;
+
+	        case "React":
+	            return _react2.default;
+
+	        case "TestCoverageTable":
+	            return TestCoverageTable;
+	    }
+
+	    return undefined;
+	}
+
+	function _assign__(variableName, value) {
+	    if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	        return _set_original__(variableName, value);
+	    } else {
+	        return _RewiredData__[variableName] = value;
+	    }
+	}
+
+	function _set_original__(variableName, _value) {
+	    switch (variableName) {}
+
+	    return undefined;
+	}
+
+	function _update_operation__(operation, variableName, prefix) {
+	    var oldValue = _get__(variableName);
+
+	    var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	    _assign__(variableName, newValue);
+
+	    return prefix ? newValue : oldValue;
+	}
+
+	function _set__(variableName, value) {
+	    return _RewiredData__[variableName] = value;
+	}
+
+	function _reset__(variableName) {
+	    delete _RewiredData__[variableName];
+	}
+
+	function _with__(object) {
+	    var rewiredVariableNames = Object.keys(object);
+	    var previousValues = {};
+
+	    function reset() {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            _RewiredData__[variableName] = previousValues[variableName];
+	        });
+	    }
+
+	    return function (callback) {
+	        rewiredVariableNames.forEach(function (variableName) {
+	            previousValues[variableName] = _RewiredData__[variableName];
+	            _RewiredData__[variableName] = object[variableName];
+	        });
+	        var result = callback();
+
+	        if (!!result && typeof result.then == 'function') {
+	            result.then(reset).catch(reset);
+	        } else {
+	            reset();
+	        }
+
+	        return result;
+	    };
+	}
+
+	var _typeOfOriginalExport = typeof TestCoverageTable === "undefined" ? "undefined" : _typeof(TestCoverageTable);
+
+	function addNonEnumerableProperty(name, value) {
+	    Object.defineProperty(TestCoverageTable, name, {
+	        value: value,
+	        enumerable: false,
+	        configurable: true
+	    });
+	}
+
+	if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(TestCoverageTable)) {
 	    addNonEnumerableProperty('__get__', _get__);
 	    addNonEnumerableProperty('__GetDependency__', _get__);
 	    addNonEnumerableProperty('__Rewire__', _set__);

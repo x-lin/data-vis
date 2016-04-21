@@ -2,7 +2,7 @@ import React from "react";
 
 import stringToColor from "../utils/stringToColor";
 import getContrastColor from "../utils/getContrastColor";
-import TestCoverageComponent from "../views/TestCoveragePanel/TestCoverageTableContainer";
+import TestCoverageComponent from "../views/TestCoverageTable/TestCoverageTableContainer";
 
 const Constants = {};
 

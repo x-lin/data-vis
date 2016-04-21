@@ -1,8 +1,8 @@
 import React from "react";
 
 import SidebarBox from "./SidebarBox";
-import TestCoverageTableContainer from "../TestCoveragePanel/TestCoverageTableContainer";
-import RelatedBugsTableContainer from "./RelatedBugsTableContainer";
+import TestCoverageTableContainer from "../TestCoverageTable/TestCoverageTableContainer";
+import RelatedBugsTableContainer from "./../RelatedBugsTable/RelatedBugsTableContainer";
 
 class Sidebar extends React.Component {
     removeBox(id) {
