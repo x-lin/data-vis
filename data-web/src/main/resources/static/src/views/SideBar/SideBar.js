@@ -5,6 +5,14 @@ import TestCoverageTableContainer from "../TestCoveragePanel/TestCoverageTableCo
 import RelatedBugsTableContainer from "./RelatedBugsTableContainer";
 
 class Sidebar extends React.Component {
+    removeBox(id) {
+        this.props.deleteBox(id);
+    }
+
+    toggleBox(id) {
+        this.props.toggleBox(id);
+    }
+
     render() {
         const { data } = this.props;
 
@@ -23,11 +31,10 @@ class Sidebar extends React.Component {
                 type={entry.type}
                 body={body}
                 status={entry.status}
-                isOpen={entry.isOpen}
                 key={entry.id}
-                onClose={() => {
-                    this.props.deleteBox(entry.id);
-                }}
+                onClose={() => this.removeBox(entry.id)}
+                onCollapse={() => this.toggleBox(entry.id)}
+                isCollapsed={entry.isCollapsed}
             />;
 
             return box;
@@ -42,7 +49,8 @@ class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
     data: React.PropTypes.array.isRequired,
-    deleteBox: React.PropTypes.func.isRequired
+    deleteBox: React.PropTypes.func.isRequired,
+    toggleBox: React.PropTypes.func.isRequired
 };
 
 export default Sidebar;

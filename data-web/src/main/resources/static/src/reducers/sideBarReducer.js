@@ -1,6 +1,6 @@
 import { REHYDRATE } from "redux-persist/constants";
 
-import { SET_SIDEBAR_PANEL, DELETE_BOX_FROM_SIDEBAR, ADD_SIDEBAR_REACT_COMPONENT }
+import { SET_SIDEBAR_PANEL, DELETE_BOX_FROM_SIDEBAR, TOGGLE_BOX_FROM_SIDEBAR }
     from "../actions/action-creators/SidebarActions";
 import { TEST_COVERAGE_FETCH_ERROR, TEST_COVERAGE_FETCH_SUCCESS, TEST_COVERAGE_FETCH_START }
     from "../actions/action-creators/TestCoverageActions";
@@ -33,7 +33,7 @@ const createTestCoverage = (state, action) => {
                 title: action.node.name,
                 labels: [action.node.type],
                 type: "Test Coverage",
-                isOpen: true
+                isCollapsed: false
             };
 
             return Object.assign({}, state, {
@@ -92,7 +92,7 @@ const createRelatedBugs = (state, action) => {
                 title: action.node.name,
                 labels: [action.node.type],
                 type: "Related Open Tickets",
-                isOpen: true
+                isCollapsed: false
             };
 
             return Object.assign({}, state, {
@@ -180,6 +180,24 @@ export default (
                             ...state.data.slice(i + 1)
                         ],
                         sidebar: state.sidebar
+                    });
+                }
+            }
+
+            return state;
+        case TOGGLE_BOX_FROM_SIDEBAR:
+            for (let i = 0; i < state.data.length; i++) {
+                if (state.data[i].id === action.id) {
+                    const toggleData = Object.assign({}, state.data[i], {
+                        isCollapsed: !state.data[i].isCollapsed
+                    });
+
+                    return Object.assign({}, state, {
+                        data: [
+                            ...state.data.slice(0, i),
+                            toggleData,
+                            ...state.data.slice(i + 1)
+                        ]
                     });
                 }
             }
