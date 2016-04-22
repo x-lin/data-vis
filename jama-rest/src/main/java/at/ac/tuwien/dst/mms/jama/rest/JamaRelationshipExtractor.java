@@ -75,4 +75,16 @@ public class JamaRelationshipExtractor {
 
 		return restTemplate.getForObject(uri, RelationshipResponse.class);
 	}
+
+	public RelationshipResponse getUpstreamRelationshipsForItem(Long itemId) {
+		URI uri = UriComponentsBuilder
+				.fromHttpUrl(Config.HOST + "/items")
+				.path("/" + itemId)
+				.path("/upstreamrelationships")
+				.build().encode().toUri();
+
+		logger.info("Requesting relationships for item " + itemId);
+
+		return restTemplate.getForObject(uri, RelationshipResponse.class);
+	}
 }

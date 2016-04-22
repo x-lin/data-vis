@@ -1,9 +1,8 @@
 package at.ac.tuwien.dst.mms.jama.rest;
 
-import at.ac.tuwien.dst.mms.jama.model.Item;
-import at.ac.tuwien.dst.mms.jama.model.Project;
-import at.ac.tuwien.dst.mms.jama.model.Relationship;
+import at.ac.tuwien.dst.mms.jama.model.*;
 import at.ac.tuwien.dst.mms.jama.rest.model.RelationshipResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,9 @@ public class JamaController {
 
     @Autowired
     JamaRelationshipExtractor relationshipExtractor;
+
+    @Autowired
+    JamaActivitiesExtractor activitiesExtractor;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -121,6 +123,117 @@ public class JamaController {
         } else {
             return relationships;
         }
+    }
+
+    @RequestMapping(value = "/activities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    List<Activity> getActivities(
+            @RequestParam("project") Long projectId,
+            @RequestParam(value="webhook", required=false) String webhook
+    ) {
+
+        List<Activity> activities = activitiesExtractor.getAllItemsForProject(projectId);
+
+        boolean isWebhook = (webhook != null && webhook.length() > 0);
+
+        if(isWebhook) {
+
+            restTemplate.postForEntity(webhook, activities, Object.class);
+
+            return new ArrayList<>();
+        } else {
+            return activities;
+        }
+    }
+
+    private class Stats {
+        @JsonProperty
+        private int itemsCount;
+
+        @JsonProperty
+        private int relCount;
+
+        @JsonProperty
+        private String projectName;
+
+        public int getItemsCount() {
+            return itemsCount;
+        }
+
+        public void setItemsCount(int itemsCount) {
+            this.itemsCount = itemsCount;
+        }
+
+        public int getRelCount() {
+            return relCount;
+        }
+
+        public void setRelCount(int relCount) {
+            this.relCount = relCount;
+        }
+
+        public String getProjectName() {
+            return projectName;
+        }
+
+        public void setProjectName(String projectName) {
+            this.projectName = projectName;
+        }
+
+        @Override
+        public String toString() {
+            return "Stats{" +
+                    "itemsCount=" + itemsCount +
+                    ", relCount=" + relCount +
+                    ", projectName='" + projectName + '\'' +
+                    '}';
+        }
+    }
+
+    @RequestMapping(value = "/map", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    List<Stats> getAllItemsForActivities() {
+        long start = System.nanoTime();
+
+        List<Project> projects = this.getAllProjects();
+        List<Stats> allStats = new ArrayList<>();
+
+        for(Project project : projects) {
+            List<Activity> activities = getActivities(project.getJamaId(), null);
+            List<Item> items = new ArrayList<>();
+            List<Relationship> relationships = new ArrayList<>();
+
+            for(Activity activity : activities) {
+                Item item = itemExtractor.getItem(activity.getItemId());
+
+                if(item != null) {
+                    items.add(item);
+
+                    if(activity.getObjectType() == ObjectType.RELATIONSHIP) {
+                        List<Relationship> downstream = relationshipExtractor.getRelationshipsForItem(activity.getItemId()).getRelationships();
+                        List<Relationship> upstream = relationshipExtractor.getUpstreamRelationshipsForItem(activity.getItemId()).getRelationships();
+
+                        if(downstream != null && downstream.size() > 0) {
+                            relationships.addAll(downstream);
+                        }
+
+                        if(upstream != null && upstream.size() > 0) {
+                            relationships.addAll(upstream);
+                        }
+                    }
+                }
+            }
+
+            Stats stats = new Stats();
+            stats.setProjectName(project.getKey());
+            stats.setItemsCount(items.size());
+            stats.setRelCount(relationships.size());
+            logger.info("stats: " + stats.toString());
+
+            allStats.add(stats);
+        }
+
+        logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
+
+        return allStats;
     }
 
     private void writeItems(List<Item> items, String filename) {

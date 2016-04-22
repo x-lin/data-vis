@@ -2,6 +2,7 @@ package at.ac.tuwien.dst.mms.jama.rest;
 
 import at.ac.tuwien.dst.mms.jama.model.Item;
 import at.ac.tuwien.dst.mms.jama.rest.model.ItemResponse;
+import at.ac.tuwien.dst.mms.jama.rest.model.ItemSingleResponse;
 import at.ac.tuwien.dst.mms.jama.util.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,16 @@ public class JamaItemExtractor {
 		}
 
 		return items;
+	}
+
+	public Item getItem(Long id) {
+		URI uri = UriComponentsBuilder
+				.fromHttpUrl(itemUri+"/"+id)
+				.build().encode().toUri();
+
+		logger.info("Requesting item " + id);
+
+		return restTemplate.getForObject(uri, ItemSingleResponse.class).getItem();
 	}
 
 	public Map<Long, Item> indexItems(List<Item> items) {
