@@ -43876,7 +43876,7 @@
 /* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -84303,7 +84303,7 @@
 	                var width = _get__("DOMSelector").getWidth(selector);
 	                var height = _get__("DOMSelector").getHeight(selector);
 
-	                _get__("d3").select(selector).select("svg").attr("viewBox", "0 0 " + width + " " + height);
+	                _get__("d3").select(selector).select("svg").attr("width", _get__("DOMSelector").getWidth(selector)).attr("height", _get__("DOMSelector").getHeight(selector));
 	            }
 	        }
 	    }, {
@@ -84404,7 +84404,7 @@
 	            var selector = this.state.selector;
 
 
-	            var svg = _get__("D3Utils").createSvg(selector).attr("class", "force-graph").attr("id", "force-force").attr("viewBox", "0 0 " + _get__("DOMSelector").getWidth(selector) + " " + _get__("DOMSelector").getHeight(selector)).attr("width", "100%").attr("height", "100%");
+	            var svg = _get__("D3Utils").createSvg(selector).attr("class", "force-graph").attr("id", "force-force").attr("width", _get__("DOMSelector").getWidth(selector)).attr("height", _get__("DOMSelector").getHeight(selector));
 
 	            svg.on("click", function (d) {
 	                return _get__("EventHandlers").onClickSvg(d);
@@ -107864,15 +107864,15 @@
 
 	var _d2 = _interopRequireDefault(_d);
 
-	var _SearchBarContainer = __webpack_require__(823);
+	var _reactBootstrap = __webpack_require__(340);
 
-	var _SearchBarContainer2 = _interopRequireDefault(_SearchBarContainer);
+	var _MenuHeader = __webpack_require__(647);
 
-	var _GraphPanel = __webpack_require__(830);
+	var _MenuHeader2 = _interopRequireDefault(_MenuHeader);
 
-	var _GraphPanel2 = _interopRequireDefault(_GraphPanel);
+	var _Label = __webpack_require__(308);
 
-	var _reactRedux = __webpack_require__(273);
+	var _Label2 = _interopRequireDefault(_Label);
 
 	var _DOMSelector = __webpack_require__(855);
 
@@ -107886,48 +107886,166 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var SCALE = 2;
+
+	var PNG = "PNG";
+	var SVG = "SVG";
+
 	var ExportToImage = function (_get__$Component) {
 	    _inherits(ExportToImage, _get__$Component);
 
-	    function ExportToImage() {
+	    function ExportToImage(props) {
 	        _classCallCheck(this, ExportToImage);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ExportToImage).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ExportToImage).call(this, props));
+
+	        _this.state = {
+	            format: _get__("PNG")
+	        };
+	        return _this;
 	    }
 
 	    _createClass(ExportToImage, [{
+	        key: "setFormat",
+	        value: function setFormat(format) {
+	            this.setState({ format: format });
+	        }
+	    }, {
 	        key: "convert",
 	        value: function convert() {
+	            var format = this.state.format;
+
+
+	            if (format === _get__("PNG")) {
+	                this.convertToPng();
+	            } else if (format === _get__("SVG")) {
+	                this.convertToSvg();
+	            }
+	        }
+	    }, {
+	        key: "convertToSvg",
+	        value: function convertToSvg() {
 	            var html = _get__("d3").select("#force-force").attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg").node().parentNode.innerHTML;
 
-	            var imgsrc = "data:image/svg+xml;base64," + btoa(html);
+	            var blob = new Blob([html], { type: "image/svg+xml;charset=utf-8" });
 
+	            saveAs(blob, "graph-" + Date.now() + ".svg");
+	        }
+	    }, {
+	        key: "convertToPng",
+	        value: function convertToPng() {
+	            var width = _get__("DOMSelector").getWidth("#force-force") * _get__("SCALE");
+	            var height = _get__("DOMSelector").getHeight("#force-force") * _get__("SCALE");
+
+	            var html = _get__("d3").select("#force-force").attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg").node();
+
+	            var svgString = new XMLSerializer().serializeToString(html);
 	            var canvas = document.createElement("canvas");
-	            canvas.setAttribute("width", _get__("DOMSelector").getWidth("#force-force"));
-	            canvas.setAttribute("height", _get__("DOMSelector").getHeight("#force-force"));
+	            canvas.setAttribute("width", width.toString());
+	            canvas.setAttribute("height", height.toString());
 
-	            var image = new Image();
-	            image.src = imgsrc;
-	            image.onload = function () {
-	                canvas.getContext("2d").drawImage(image, 0, 0);
+	            var context = canvas.getContext("2d");
+	            var DOMURL = self.URL || self.webkitURL || self;
 
-	                var a = document.createElement("a");
-	                a.download = "graph-" + Date.now() + ".png";
-	                a.href = canvas.toDataURL("image/png");
-	                a.click();
+	            var img = new Image();
+	            var svg = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+	            var url = DOMURL.createObjectURL(svg);
+
+	            img.onload = function () {
+	                try {
+	                    context.drawImage(img, 0, 0, width, height);
+	                    canvas.toBlob(function (blob) {
+	                        saveAs(blob, "graph-" + Date.now() + ".png");
+	                    });
+	                } catch (SecurityError) {
+	                    alert("PNG cannot be exported in your browser. If you are using IE, please switch to another browser to export PNG images or export the graph as SVG file.");
+	                }
 	            };
+	            img.src = url;
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
 	            var _this2 = this;
 
+	            var format = this.state.format;
+
+	            var _Popover_Component = _get__("Popover");
+
+	            var _Header_Component = _get__("Header");
+
+	            var popover = _react2.default.createElement(
+	                _Popover_Component,
+	                { id: "ExportToImagePopover" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { style: { minWidth: "150px" } },
+	                    _react2.default.createElement(
+	                        _Header_Component,
+	                        null,
+	                        "Export as"
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "cursor",
+	                            style: { paddingBottom: "5px" },
+	                            onClick: function onClick() {
+	                                return _this2.setFormat(_get__("PNG"));
+	                            }
+	                        },
+	                        _react2.default.createElement(
+	                            "span",
+	                            { style: { marginRight: "5px" } },
+	                            "PNG"
+	                        ),
+	                        _react2.default.createElement("input", { type: "radio", className: "pull-right", checked: format === _get__("PNG"), onChange: function onChange() {} })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "cursor",
+	                            style: { paddingBottom: "5px" },
+	                            onClick: function onClick() {
+	                                return _this2.setFormat(_get__("SVG"));
+	                            }
+	                        },
+	                        _react2.default.createElement(
+	                            "span",
+	                            { style: { marginRight: "5px" } },
+	                            "SVG"
+	                        ),
+	                        _react2.default.createElement("input", { type: "radio", className: "pull-right", checked: format === _get__("SVG"), onChange: function onChange() {} })
+	                    ),
+	                    _react2.default.createElement(
+	                        "button",
+	                        {
+	                            type: "button",
+	                            className: "btn bg-navy pull-right",
+	                            onClick: function onClick() {
+	                                return _this2.convert();
+	                            },
+	                            style: { marginBottom: "5px" } },
+	                        "Export!"
+	                    )
+	                )
+	            );
+
+	            var _OverlayTrigger_Component = _get__("OverlayTrigger");
+
+	            var _Label_Component = _get__("Label");
+
 	            return _react2.default.createElement(
-	                "a",
-	                { href: "#", title: "Export as image", onClick: function onClick() {
-	                        return _this2.convert();
-	                    } },
-	                _react2.default.createElement("span", { className: "fa  fa-download" })
+	                _OverlayTrigger_Component,
+	                { trigger: "click", rootClose: true, placement: "bottom", overlay: popover },
+	                _react2.default.createElement(
+	                    "a",
+	                    { title: "Export as image" },
+	                    _react2.default.createElement("span", { className: "fa fa-download" }),
+	                    _react2.default.createElement(
+	                        _Label_Component,
+	                        { labelClass: "label-default" },
+	                        _react2.default.createElement("span", { className: "fa fa-caret-down" })
+	                    )
+	                )
 	            );
 	        }
 	    }]);
@@ -107963,11 +108081,32 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
+	        case "PNG":
+	            return PNG;
+
+	        case "SVG":
+	            return SVG;
+
 	        case "d3":
 	            return _d2.default;
 
 	        case "DOMSelector":
 	            return _DOMSelector2.default;
+
+	        case "SCALE":
+	            return SCALE;
+
+	        case "Popover":
+	            return _reactBootstrap.Popover;
+
+	        case "Header":
+	            return _MenuHeader2.default;
+
+	        case "OverlayTrigger":
+	            return _reactBootstrap.OverlayTrigger;
+
+	        case "Label":
+	            return _Label2.default;
 
 	        case "React":
 	            return _react2.default;

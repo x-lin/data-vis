@@ -55,7 +55,8 @@ export default class extends React.Component {
 
             d3.select(selector)
                 .select("svg")
-                .attr("viewBox", `0 0 ${width} ${height}`);
+                .attr("width", DOMSelector.getWidth(selector))
+                .attr("height", DOMSelector.getHeight(selector));
         }
     }
 
@@ -150,9 +151,8 @@ export default class extends React.Component {
         const svg = D3Utils.createSvg(selector)
             .attr("class", "force-graph")
             .attr("id", "force-force")
-            .attr("viewBox", `0 0 ${DOMSelector.getWidth(selector)} ${DOMSelector.getHeight(selector)}`)
-            .attr("width", "100%")
-            .attr("height", "100%");
+            .attr("width", DOMSelector.getWidth(selector))
+            .attr("height", DOMSelector.getHeight(selector));
 
         svg
             .on("click", (d) => EventHandlers.onClickSvg(d));
