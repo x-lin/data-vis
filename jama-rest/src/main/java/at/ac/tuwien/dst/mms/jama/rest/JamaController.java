@@ -2,6 +2,8 @@ package at.ac.tuwien.dst.mms.jama.rest;
 
 import at.ac.tuwien.dst.mms.jama.model.*;
 import at.ac.tuwien.dst.mms.jama.rest.model.RelationshipResponse;
+import at.ac.tuwien.dst.mms.jama.serialize.ItemSerializer;
+import at.ac.tuwien.dst.mms.jama.serialize.RelationshipSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,12 @@ public class JamaController {
 
     @Autowired
     JamaActivitiesExtractor activitiesExtractor;
+
+    @Autowired
+    ItemSerializer itemSerializer;
+
+    @Autowired
+    RelationshipSerializer relationshipSerializer;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -70,7 +77,7 @@ public class JamaController {
     }
 
     private List<Item> getForFile(String filename) {
-        List<Item> items = this.readItems(filename);
+        List<Item> items = itemSerializer.read(filename);
 
         List<Item> filteredItems = new ArrayList<>();
 
@@ -111,7 +118,7 @@ public class JamaController {
             @RequestParam(value="webhook", required=false) String webhook
     ) {
 
-        List<Relationship> relationships = this.readObjects();
+        List<Relationship> relationships = relationshipSerializer.read("relationships.txt");
 
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
@@ -234,115 +241,5 @@ public class JamaController {
         logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
 
         return allStats;
-    }
-
-    private void writeItems(List<Item> items, String filename) {
-        try {
-            FileOutputStream out = new FileOutputStream(filename);
-            ObjectOutputStream objOut = new ObjectOutputStream(out);
-            objOut.writeObject(items);
-            objOut.close();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private List<Item> readItems(String filename) {
-        List<Item> items = new ArrayList<>();
-
-        try {
-            FileInputStream fileIn = new FileInputStream(filename);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            items = (List<Item>)in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return items;
-    }
-
-    private void writeObjects(List<Relationship> relationships) {
-        try {
-            FileOutputStream out = new FileOutputStream("relationships.txt");
-            ObjectOutputStream objOut = new ObjectOutputStream(out);
-            objOut.writeObject(relationships);
-            objOut.close();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private List<Relationship> readObjects() {
-        List<Relationship> relationships = new ArrayList<Relationship>();
-
-        try {
-            FileInputStream fileIn = new FileInputStream("relationships.txt");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            relationships = (List<Relationship>)in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return relationships;
-    }
-
-    private void writeFile() {
-        try(FileWriter writer = new FileWriter("output.txt")) {
-            for(Relationship rel: RelationshipsTempStorage.get().getAll()) {
-                writer.write(rel.toString());
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String readFile() {
-        StringBuilder sb = new StringBuilder();
-
-        try(BufferedReader br = new BufferedReader(new FileReader("output.txt"))) {
-            String line = br.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            String everything = sb.toString();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return sb.toString();
-    }
-
-    private List<Relationship> convertToObjects(String data) {
-        List<Relationship> relationships = new ArrayList<>();
-
-        String[] tokens = data.split("}");
-        for(String token : tokens) {
-            if(token.trim().length() > 0) {
-                token = token.substring(13);
-
-                String[] fromTo = token.split(", ");
-                String from = fromTo[0].substring(5);
-                String to = fromTo[1].substring(3);
-                relationships.add(new Relationship(Long.parseLong(from), Long.parseLong(to)));
-            }
-        }
-
-        return relationships;
     }
 }
