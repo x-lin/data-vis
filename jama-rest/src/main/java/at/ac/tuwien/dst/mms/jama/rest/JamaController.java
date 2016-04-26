@@ -4,11 +4,13 @@ import at.ac.tuwien.dst.mms.jama.model.*;
 import at.ac.tuwien.dst.mms.jama.rest.model.RelationshipResponse;
 import at.ac.tuwien.dst.mms.jama.serialize.ItemSerializer;
 import at.ac.tuwien.dst.mms.jama.serialize.RelationshipSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import at.ac.tuwien.dst.mms.jama.util.DateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,7 +53,8 @@ public class JamaController {
     List<Project> getAllProjects(
 //            @RequestParam("webhook") String webhook
     ) {
-        return projectExtractor.getAllProjects();
+		System.out.println("fetching all projects");
+		return projectExtractor.getAllProjects();
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,15 +68,15 @@ public class JamaController {
 
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
-        List<Item> pvcsb = this.getForFile("items_pvcsb.txt");
+        //List<Item> pvcsb = this.getForFile("items_pvcsb.txt");
         List<Item> pvcsc = this.getForFile("items_pvcsc.txt");
 
         if(isWebhook) {
-            restTemplate.postForEntity(webhook, pvcsb, Object.class);
+            //restTemplate.postForEntity(webhook, pvcsb, Object.class);
             restTemplate.postForEntity(webhook, pvcsc, Object.class);
             return new ArrayList<>();
         } else {
-            return pvcsb;
+            return pvcsc;
         }
     }
 
@@ -99,8 +103,6 @@ public class JamaController {
     }
 
     private void extractRelationships(Item item) {
-        System.out.println(item.getItemType());
-
         if(item.getItemType() != null && !item.getItemType().getKey().equals("FLD") && !item.getItemType().getKey().equals("SET")) {
             RelationshipResponse initialResponse = relationshipExtractor.getRelationshipsForItem(item.getJamaId());
 
@@ -118,13 +120,15 @@ public class JamaController {
             @RequestParam(value="webhook", required=false) String webhook
     ) {
 
-        List<Relationship> relationships = relationshipSerializer.read("relationships.txt");
+        List<Relationship> relationships = relationshipSerializer.read("relationships_pvcsc.txt");
+		//List<Relationship> relationships = relationshipSerializer.read("relationships_pvcsb.txt");
 
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
         if(isWebhook) {
 
-            restTemplate.postForEntity(webhook, relationships, Object.class);
+            //restTemplate.postForEntity(webhook, relationships, Object.class);
+			restTemplate.postForEntity(webhook, relationships, Object.class);
 
             return new ArrayList<>();
         } else {
@@ -135,10 +139,12 @@ public class JamaController {
     @RequestMapping(value = "/activities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     List<Activity> getActivities(
             @RequestParam("project") Long projectId,
+			@RequestParam(value="dateFrom") Date dateFrom,
+			@RequestParam(value="dateTo", required=false) Date dateTo,
             @RequestParam(value="webhook", required=false) String webhook
     ) {
 
-        List<Activity> activities = activitiesExtractor.getAllItemsForProject(projectId);
+        List<Activity> activities = activitiesExtractor.getAllItemsForProject(projectId, dateFrom, dateTo);
 
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
@@ -152,94 +158,74 @@ public class JamaController {
         }
     }
 
-    private class Stats {
-        @JsonProperty
-        private int itemsCount;
+	@Async
+	private void add(List<Activity> activities, List<Item> items, List<Relationship> relationships) {
+		for (Activity activity : activities) {
+			Item item = itemExtractor.getItem(activity.getItemId());
 
-        @JsonProperty
-        private int relCount;
+			if (item != null) {
+				items.add(item);
 
-        @JsonProperty
-        private String projectName;
+				if (activity.getObjectType() == ObjectType.RELATIONSHIP) {
+					List<Relationship> downstream = relationshipExtractor.getRelationshipsForItem(activity.getItemId()).getRelationships();
+					List<Relationship> upstream = relationshipExtractor.getUpstreamRelationshipsForItem(activity.getItemId()).getRelationships();
 
-        public int getItemsCount() {
-            return itemsCount;
-        }
+					if (downstream != null && downstream.size() > 0) {
+						relationships.addAll(downstream);
+					}
 
-        public void setItemsCount(int itemsCount) {
-            this.itemsCount = itemsCount;
-        }
+					if (upstream != null && upstream.size() > 0) {
+						relationships.addAll(upstream);
+					}
+				}
+			}
+		}
+	}
 
-        public int getRelCount() {
-            return relCount;
-        }
+	@Async
+	private void addProjects(Project project, Date dateFrom, Date dateTo, List<Item> items, List<Relationship> relationships) {
+		List<Activity> activities = getActivities(project.getJamaId(), dateFrom, dateTo, null);
+		this.add(activities, items, relationships);
+	}
 
-        public void setRelCount(int relCount) {
-            this.relCount = relCount;
-        }
+	@RequestMapping(value = "/update", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	List<Object> getUpdates(
+		@RequestParam(value="relWebhook", required=false) String relWebhook,
+		@RequestParam(value="itemWebhook", required=false) String itemWebhook,
+		@RequestParam(value="dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dateFrom,
+		@RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dateTo,
+		@RequestParam(value="project", required=false) List<Long> projectIds
+	) {
+		System.out.println("date: " + DateConverter.dateToString(dateFrom));
 
-        public String getProjectName() {
-            return projectName;
-        }
+		List<Project> projects = this.getAllProjects();
+		List<Item> items = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
 
-        public void setProjectName(String projectName) {
-            this.projectName = projectName;
-        }
+		if (projectIds == null || projectIds.size() == 0) {
+			for (Project project : projects) {
+				this.addProjects(project, dateFrom, dateTo, items, relationships);
+			}
+		} else {
+			for (Long projectId : projectIds) {
+				List<Activity> activities = getActivities(projectId, dateFrom, dateTo, null);
+				this.add(activities, items, relationships);
+			}
+		}
 
-        @Override
-        public String toString() {
-            return "Stats{" +
-                    "itemsCount=" + itemsCount +
-                    ", relCount=" + relCount +
-                    ", projectName='" + projectName + '\'' +
-                    '}';
-        }
-    }
+		logger.info("Finished fetching all updates starting from " + dateFrom.toString() + (dateTo != null ? " until " + dateTo.toString() : ""));
 
-    @RequestMapping(value = "/map", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    List<Stats> getAllItemsForActivities() {
-        long start = System.nanoTime();
+		if(relWebhook == null || itemWebhook == null) {
+			List<Object> objects = new ArrayList<>();
+			objects.addAll(items);
+			objects.addAll(relationships);
 
-        List<Project> projects = this.getAllProjects();
-        List<Stats> allStats = new ArrayList<>();
+			return objects;
+		} else {
+			restTemplate.postForEntity(itemWebhook, items, Object.class);
+			restTemplate.postForEntity(relWebhook, relationships, Object.class);
 
-        for(Project project : projects) {
-            List<Activity> activities = getActivities(project.getJamaId(), null);
-            List<Item> items = new ArrayList<>();
-            List<Relationship> relationships = new ArrayList<>();
-
-            for(Activity activity : activities) {
-                Item item = itemExtractor.getItem(activity.getItemId());
-
-                if(item != null) {
-                    items.add(item);
-
-                    if(activity.getObjectType() == ObjectType.RELATIONSHIP) {
-                        List<Relationship> downstream = relationshipExtractor.getRelationshipsForItem(activity.getItemId()).getRelationships();
-                        List<Relationship> upstream = relationshipExtractor.getUpstreamRelationshipsForItem(activity.getItemId()).getRelationships();
-
-                        if(downstream != null && downstream.size() > 0) {
-                            relationships.addAll(downstream);
-                        }
-
-                        if(upstream != null && upstream.size() > 0) {
-                            relationships.addAll(upstream);
-                        }
-                    }
-                }
-            }
-
-            Stats stats = new Stats();
-            stats.setProjectName(project.getKey());
-            stats.setItemsCount(items.size());
-            stats.setRelCount(relationships.size());
-            logger.info("stats: " + stats.toString());
-
-            allStats.add(stats);
-        }
-
-        logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
-
-        return allStats;
-    }
+			return null;
+		}
+	}
 }

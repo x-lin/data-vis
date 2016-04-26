@@ -30,12 +30,15 @@ public class JamaRelationshipDTOWriter implements DataWriter<JamaRelationshipDTO
 	@Autowired
 	private GraphDatabase graphDatabase;
 
+	@Autowired
+	private JamaRelationshipTempStorage tempStorage;
+
 	@Override
 	public void write(List<JamaRelationshipDTO> relationships) {
 		try (Transaction tx = graphDatabase.beginTx()) {
 			for (JamaRelationshipDTO relationship : relationships) {
 				if (relationship.getFrom() == null || relationship.getTo() == null) {
-					//TODO save relationship to storage for later on.
+					tempStorage.add(relationship);
 				} else {
 					if (generalNodeJamaIndexRepository.findByJamaId(relationship.getFrom()) == null) {
 						logger.warn("no node found for id " + relationship.getFrom());

@@ -4,6 +4,7 @@ import at.ac.tuwien.dst.mms.jama.model.Activity;
 import at.ac.tuwien.dst.mms.jama.model.ObjectType;
 import at.ac.tuwien.dst.mms.jama.rest.model.ActivityResponse;
 import at.ac.tuwien.dst.mms.jama.util.Config;
+import at.ac.tuwien.dst.mms.jama.util.DateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,10 +28,6 @@ public class JamaActivitiesExtractor {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private String activitiesUri = Config.HOST + "/activities";
-
-	private String dateFrom = "2016-04-21T07:00:00.000-0000";
-
-	private String dateTo = "2016-04-22T07:00:00.000-0000";
 
 	private List<Activity> cleanse(List<Activity> activities) {
 		List<Activity> cleansedAct = new ArrayList<>();
@@ -63,10 +61,10 @@ public class JamaActivitiesExtractor {
 		return cleansedAct;
 	}
 
-	public List<Activity> getAllItemsForProject(Long id) {
+	public List<Activity> getAllItemsForProject(Long id, Date dateFrom, Date dateTo) {
 		List<Activity> activities = new ArrayList<>();
 
-		ActivityResponse initialResponse = this.getActivitiesForProject(id, 0);
+		ActivityResponse initialResponse = this.getActivitiesForProject(id, 0, dateFrom, dateTo);
 
 		activities.addAll(initialResponse.getActivities());
 
@@ -77,7 +75,7 @@ public class JamaActivitiesExtractor {
 		while(startIndex + resultCount < totalResults) {
 
 			startIndex += resultCount;
-			ActivityResponse response = this.getActivitiesForProject(id, startIndex);
+			ActivityResponse response = this.getActivitiesForProject(id, startIndex, dateFrom, dateTo);
 			if(response.getActivities() != null) {
 				activities.addAll(response.getActivities());
 			}
@@ -86,17 +84,25 @@ public class JamaActivitiesExtractor {
 		return cleanse(activities);
 	}
 
-	public ActivityResponse getActivitiesForProject(Long projectId, Integer startAt) {
-		URI uri = UriComponentsBuilder
+	public ActivityResponse getActivitiesForProject(Long projectId, Integer startAt, Date dateFrom, Date dateTo) {
+
+		UriComponentsBuilder builder = UriComponentsBuilder
 				.fromHttpUrl(activitiesUri)
 				.queryParam("maxResults", Config.MAX_RESULTS)
 				.queryParam("project", projectId)
 				.queryParam("startAt", startAt)
 				.queryParam("objectType", ObjectType.ITEM)
-				.queryParam("objectType", ObjectType.RELATIONSHIP)
-				.queryParam("date", dateFrom)
-				.queryParam("date", dateTo)
-				.build().encode().toUri();
+				.queryParam("objectType", ObjectType.RELATIONSHIP);
+
+		if (dateTo != null) {
+			builder.queryParam("date", DateConverter.dateToString(dateTo));
+		}
+
+		if(dateFrom != null) {
+			builder.queryParam("date", DateConverter.dateToString(dateFrom));
+		}
+
+		URI uri = builder.build().encode().toUri();
 
 		logger.info("Requesting activities for project " + projectId + " starting at " + startAt);
 

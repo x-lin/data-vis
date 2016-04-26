@@ -72,6 +72,7 @@ public class GeneralNode extends ModelEntity {
 	@RelatedTo(type = "TEXT_INDEX", direction = Direction.OUTGOING)
 	private Set<TextIndex> textIndex;
 
+	@JsonProperty
 	private String jiraStatus;
 
 	@GraphProperty

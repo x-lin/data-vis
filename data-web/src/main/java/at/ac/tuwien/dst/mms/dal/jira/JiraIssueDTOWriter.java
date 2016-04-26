@@ -42,14 +42,16 @@ public class JiraIssueDTOWriter implements DataWriter<JiraIssueDTO> {
 
 					generalNodeRepository.save(dbIssue);
 				} else {
-					generalNodeRepository.delete(findIssue);
+					if(findIssue != null) {
+						generalNodeRepository.delete(findIssue);
+					}
 				}
 			}
 
 			tx.success();
 		}
 
-		logger.info(issues.size() + " issues saved for project " +
+		logger.info(issues.size() + " issues processed for project " +
 				(issues.size() > 0 ? issues.iterator().next().getProject().getKey() : "") + ".");
 	}
 

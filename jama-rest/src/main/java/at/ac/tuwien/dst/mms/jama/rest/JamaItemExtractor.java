@@ -83,16 +83,4 @@ public class JamaItemExtractor {
 
 		return restTemplate.getForObject(uri, ItemResponse.class);
 	}
-
-//	private List<Project> filterProjects(List<Project> projects) {
-//		List<Project> filteredProjects = new ArrayList<>();
-//
-//		for(Project project : projects) {
-//			if(!project.getFolder() && project.getKey() != null) {
-//				filteredProjects.add(project);
-//			}
-//		}
-//
-//		return filteredProjects;
-//	}
 }

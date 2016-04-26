@@ -5,11 +5,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-
 /**
  * Extracts data from the Jira REST API wrapper.
  */
@@ -26,7 +21,6 @@ public class JiraExtractor {
 		long start = System.nanoTime();
 
 		Project[] projects = jiraRestClient.getProjects();
-		//neoWriter.storeProjects(projects);
 
 		for (Project project : projects) {
 			this.extractTickets(project.getKey());
@@ -40,24 +34,6 @@ public class JiraExtractor {
 			jiraRestClient.getIssuesWebhook(projectKey);
 		} catch (Exception e) {
 			logger.error("Exception occurred: ", e);
-		}
-	}
-
-	public void testing() {
-		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
-
-			long start = System.nanoTime();
-
-			try {
-				jiraRestClient.getIssuesWebhook("MNG");
-			} catch (Exception e) {
-				logger.error("Exception occurred: ", e);
-				output.append("MNG");
-			}
-
-			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
-		} catch(IOException e) {
-			e.printStackTrace();
 		}
 	}
 }
