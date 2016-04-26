@@ -1,4 +1,4 @@
-package at.ac.tuwien.dst.mms.dal.jira.model;
+package at.ac.tuwien.dst.mms.dal.jira.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -20,7 +20,6 @@ public class JiraIssueDTO {
 	public String getKey() {
 		return key;
 	}
-
 
 	public JiraProjectDTO getProject() {
 		return project;

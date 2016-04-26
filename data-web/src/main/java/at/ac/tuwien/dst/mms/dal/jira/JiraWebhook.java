@@ -1,7 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.jira;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.jira.model.JiraIssueDTO;
+import at.ac.tuwien.dst.mms.dal.jira.dto.JiraIssueDTO;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/jira/webhook")
 public class JiraWebhook {
 	@Autowired
-	DataWriter neoWriter;
+	DataWriter<JiraIssueDTO> issueDTOWriter;
 
 	@Autowired(required=false)
 	Logger logger;
@@ -31,7 +31,7 @@ public class JiraWebhook {
 	@RequestMapping(path="/projects", method=RequestMethod.POST)
 	public void projects(
 			@RequestBody List<Project> projects) {
-		neoWriter.storeProjects(projects);
+		//neoWriter.storeProjects(projects);
 	}
 
 	@RequestMapping(path="/issues", method=RequestMethod.POST)
@@ -40,7 +40,7 @@ public class JiraWebhook {
 
 		try (Writer output = new BufferedWriter(new FileWriter("target/errors1.log"))) {
 			try {
-				neoWriter.storeIssues(issues);
+				issueDTOWriter.write(issues);
 			} catch (Exception e) {
 				logger.error("Exception occurred: ", e);
 				output.append(e.getMessage());
@@ -48,10 +48,5 @@ public class JiraWebhook {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@RequestMapping(path="/index", method=RequestMethod.GET)
-	public void textIndex() {
-		neoWriter.addIndex();
 	}
 }

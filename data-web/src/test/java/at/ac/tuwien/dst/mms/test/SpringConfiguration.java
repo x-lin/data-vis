@@ -1,7 +1,5 @@
 package at.ac.tuwien.dst.mms.test;
 
-import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.impl.NeoRepositoryWriter;
 import at.ac.tuwien.dst.mms.dal.jira.JiraExtractor;
 import at.ac.tuwien.dst.mms.dal.jira.JiraRestClient;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +10,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableTransactionManagement
 @Configuration
 public class SpringConfiguration {
-	@Bean
-	public DataWriter neoWriter() {
-		return new NeoRepositoryWriter();
-	}
-
 	@Bean
 	public JiraExtractor jiraExtractor() {
 		return new JiraExtractor();

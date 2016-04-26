@@ -46,4 +46,16 @@ public class GeneralNodeType extends ModelEntity {
 	public String getName() {
 		return name;
 	}
+
+	public void setJamaId(Integer jamaId) {
+		this.jamaId = jamaId;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

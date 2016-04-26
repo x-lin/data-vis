@@ -1,8 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.jama;
 
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaNodeDTO;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaProjectDTO;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
-import at.ac.tuwien.dst.mms.model.GeneralNode;
-import at.ac.tuwien.dst.mms.model.Project;
 import at.ac.tuwien.dst.mms.util.Config;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +32,31 @@ public class JamaRestClient {
 //
 //	private String issueUri = Config.JIRA_WRAPPER_HOST + "/issue";
 
-	public Project[] getProjects() {
+	public JamaProjectDTO[] getProjects() {
 		logger.info("Fetching all projects on uri "+projectsUri + ".");
 
-		Project[] projects = restTemplate.getForEntity(URI.create(projectsUri), Project[].class).getBody();
+		JamaProjectDTO[] projects = restTemplate.getForEntity(URI.create(projectsUri), JamaProjectDTO[].class).getBody();
+
+		System.out.println("projects: " + projects);
 
 		return projects;
 	}
 
 	@Async
-	public GeneralNode[] getItems(Integer id) {
+	public JamaNodeDTO[] getItems(Integer id) {
+		System.out.println("project id: " + id);
+
 		URI uri = UriComponentsBuilder
 				.fromHttpUrl(itemsUri)
 				.queryParam("project", id)
 				.queryParam("webhook", Config.JAMA_WEBHOOK_ITEMS)
 				.build().encode().toUri();
 
+		System.out.println("uri created");
+
 		logger.info("Requesting all items for project " + id);
 
-		return restTemplate.getForEntity(uri, GeneralNode[].class).getBody();
+		return restTemplate.getForEntity(uri, JamaNodeDTO[].class).getBody();
 	}
 
 	@Async

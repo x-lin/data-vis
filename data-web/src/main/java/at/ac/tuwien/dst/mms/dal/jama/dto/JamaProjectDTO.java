@@ -8,9 +8,9 @@ public class JamaProjectDTO {
 
 	private String name;
 
-	private long jamaId;
+	private Integer jamaId;
 
-	private long jamaParentId;
+	private Integer jamaParentId;
 
 	public String getKey() {
 		return key;
@@ -20,11 +20,11 @@ public class JamaProjectDTO {
 		return name;
 	}
 
-	public long getJamaId() {
+	public Integer getJamaId() {
 		return jamaId;
 	}
 
-	public long getJamaParentId() {
+	public Integer getJamaParentId() {
 		return jamaParentId;
 	}
 

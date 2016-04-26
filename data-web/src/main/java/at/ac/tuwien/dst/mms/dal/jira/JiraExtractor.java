@@ -1,6 +1,5 @@
 package at.ac.tuwien.dst.mms.dal.jira;
 
-import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ public class JiraExtractor {
 	@Autowired
 	JiraRestClient jiraRestClient;
 
-	@Autowired
-	DataWriter neoWriter;
-
 	@Autowired(required = false)
 	Logger logger;
 
@@ -30,7 +26,7 @@ public class JiraExtractor {
 		long start = System.nanoTime();
 
 		Project[] projects = jiraRestClient.getProjects();
-		neoWriter.storeProjects(projects);
+		//neoWriter.storeProjects(projects);
 
 		for (Project project : projects) {
 			this.extractTickets(project.getKey());

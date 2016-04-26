@@ -1,4 +1,4 @@
-package at.ac.tuwien.dst.mms.dal.jira.model;
+package at.ac.tuwien.dst.mms.dal.jira.dto;
 
 /**
  * Created by XLin on 21.03.2016.

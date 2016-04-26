@@ -20,15 +20,8 @@ public class JamaController {
 			@RequestParam(value="limit", required=false) Integer limit,
 			@RequestParam(value="key", required=false) String[] keys
 	) {
-		if(keys != null) {
-			extractor.extractNodes(keys);
-		} else {
-			if(limit != null && limit != -1 && limit != 0) {
-				extractor.extractNodes(limit);
-			} else {
-				extractor.extractNodes();
-			}
-		}
+
+		extractor.extractNodes();
 	}
 
 	@RequestMapping(path="/relationships", method= RequestMethod.GET)
@@ -36,16 +29,11 @@ public class JamaController {
 			@RequestParam(value="limit", required=false) Integer limit,
 			@RequestParam(value="key", required=false) String[] keys
 	) {
-
-		if(keys != null) {
-			extractor.extractRelationships(keys);
+		if(limit != null && limit != -1 && limit != 0) {
+			extractor.extractRelationships(limit);
 		} else {
-			if(limit != null && limit != -1 && limit != 0) {
-				extractor.extractRelationships(limit);
-			} else {
-				extractor.extractRelationships();
-				//extractor.extractNodes();
-			}
+			extractor.extractRelationships();
+			//extractor.extractNodes();
 		}
 	}
 }

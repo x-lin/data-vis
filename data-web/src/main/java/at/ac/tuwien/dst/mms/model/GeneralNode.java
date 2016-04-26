@@ -85,6 +85,30 @@ public class GeneralNode extends ModelEntity {
 		this.name = name;
 	}
 
+	public void setJamaId(Long jamaId) {
+		this.jamaId = jamaId;
+	}
+
+	public void setJamaParentId(Long jamaParentId) {
+		this.jamaParentId = jamaParentId;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
 	public Set<TextIndex> getTextIndex() {
 		return textIndex;
 	}

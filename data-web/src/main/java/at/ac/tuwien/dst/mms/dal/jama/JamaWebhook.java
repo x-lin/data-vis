@@ -1,9 +1,9 @@
 package at.ac.tuwien.dst.mms.dal.jama;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaNodeDTO;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaProjectDTO;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
-import at.ac.tuwien.dst.mms.model.GeneralNode;
-import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,26 +24,33 @@ import java.util.List;
 @RequestMapping("/jama/webhook")
 public class JamaWebhook {
 	@Autowired
-	DataWriter neoWriter;
+	DataWriter<JamaNodeDTO> nodeDTOWriter;
+
+	@Autowired
+	DataWriter<JamaProjectDTO> projectDTOWriter;
+
+	@Autowired
+	DataWriter<JamaRelationshipDTO> relationshipDTOWriter;
 
 	@Autowired(required=false)
 	Logger logger;
 
 	@RequestMapping(path="/projects", method= RequestMethod.POST)
 	public void projects(
-			@RequestBody Project[] projects) {
-		neoWriter.storeProjects(projects);
+			@RequestBody List<JamaProjectDTO> projects) {
+		System.out.println("projects received, storing now.");
+		projectDTOWriter.write(projects);
 	}
 
 	@RequestMapping(path="/items", method=RequestMethod.POST)
 	public void issues(
-			@RequestBody List<GeneralNode> items) {
+			@RequestBody List<JamaNodeDTO> items) {
 
 		try (Writer output = new BufferedWriter(new FileWriter("target/errors1.log"))) {
 			try {
 				logger.info(items.size() + " items received, storing now.");
 
-				neoWriter.storeGeneralNodes(items);
+				nodeDTOWriter.write(items);
 			} catch (Exception e) {
 				logger.error("Exception occurred: ", e);
 				output.append(e.getMessage());
@@ -61,7 +68,7 @@ public class JamaWebhook {
 			try {
 				logger.info(relationships.size() + " relationships received, storing now.");
 
-				neoWriter.addRelationships(relationships);
+				relationshipDTOWriter.write(relationships);
 
 				logger.info(relationships.size() + " relationships processed.");
 			} catch (Exception e) {

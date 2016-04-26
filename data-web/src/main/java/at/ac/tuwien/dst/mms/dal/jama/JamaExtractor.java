@@ -1,7 +1,8 @@
 package at.ac.tuwien.dst.mms.dal.jama;
 
-import at.ac.tuwien.dst.mms.model.GeneralNode;
-import at.ac.tuwien.dst.mms.model.Project;
+import at.ac.tuwien.dst.mms.dal.DataWriter;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaNodeDTO;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaProjectDTO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -11,8 +12,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 @Service
@@ -21,7 +22,7 @@ public class JamaExtractor {
 	JamaRestClient jamaRestClient;
 
 	@Autowired
-	JamaDataWriter dataWriter;
+	DataWriter<JamaProjectDTO> projectWriter;
 
 	@Autowired(required = false)
 	Logger logger;
@@ -33,78 +34,14 @@ public class JamaExtractor {
 
 			long start = System.nanoTime();
 
-			Project[] projects = jamaRestClient.getProjects();
+			List<JamaProjectDTO> projects = Arrays.asList(jamaRestClient.getProjects());
 
-			dataWriter.storeProjects(projects);
-
-			for (Project project : projects) {
+			for (JamaProjectDTO project : projects) {
 				try {
-					this.extractItems(project.getJamaId());
-				} catch (Exception e) {
-					logger.error("Exception occurred: ", e);
-					output.write(e.getMessage());
-				}
-			}
-
-			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Async
-	public void extractNodes(int limit) {
-		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
-
-			long start = System.nanoTime();
-
-			Project[] projects = Arrays.copyOfRange(jamaRestClient.getProjects(), 0, limit);
-
-			dataWriter.storeProjects(projects);
-
-			for (Project project : projects) {
-				try {
-					this.extractItems(project.getJamaId());
-				} catch (Exception e) {
-					logger.error("Exception occurred: ", e);
-					output.write(e.getMessage());
-				}
-			}
-
-			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Async
-	public void extractNodes(String[] keys) {
-		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
-
-			long start = System.nanoTime();
-
-			Project[] unfilteredProjects = jamaRestClient.getProjects();
-			ArrayList<Project> projects = new ArrayList<>();
-
-			for(Project project : unfilteredProjects) {
-				boolean isIn = false;
-				for(String key: keys) {
-					if(project.getKey().equals(key)) {
-						isIn = true;
-						break;
+					if (project.getJamaId() == 27) {
+						projectWriter.write(projects);
+						this.extractItems(project.getJamaId());
 					}
-				}
-
-				if(isIn) {
-					projects.add(project);
-				}
-			}
-
-			dataWriter.storeProjects(projects);
-
-			for (Project project : projects) {
-				try {
-					this.extractItems(project.getJamaId());
 				} catch (Exception e) {
 					logger.error("Exception occurred: ", e);
 					output.write(e.getMessage());
@@ -116,14 +53,13 @@ public class JamaExtractor {
 			e.printStackTrace();
 		}
 	}
+
 
 	@Async
 	public void extractRelationships(int limit) {
-		Project[] projects = Arrays.copyOfRange(jamaRestClient.getProjects(), 0, limit);
+		List<JamaProjectDTO> projects = Arrays.asList(jamaRestClient.getProjects()).subList(0, limit);
 
-		System.out.println(projects.length + " projects");
-
-		for (Project project : projects) {
+		for (JamaProjectDTO project : projects) {
 			try {
 				jamaRestClient.getRelationships(project.getJamaId());
 			} catch (Exception e) {
@@ -138,47 +74,13 @@ public class JamaExtractor {
 	}
 
 	@Async
-	public void extractRelationships(String[] keys) {
-		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
+	public List<JamaNodeDTO> extractItems(Integer projectId) {
+		JamaNodeDTO[] nodes = jamaRestClient.getItems(projectId);
 
-			long start = System.nanoTime();
-
-			Project[] unfilteredProjects = jamaRestClient.getProjects();
-			ArrayList<Project> projects = new ArrayList<>();
-
-			for(Project project : unfilteredProjects) {
-				boolean isIn = false;
-				for(String key: keys) {
-					if(project.getKey().equals(key)) {
-						isIn = true;
-						break;
-					}
-				}
-
-				if(isIn) {
-					projects.add(project);
-				}
-			}
-
-			dataWriter.storeProjects(projects);
-
-			for (Project project : projects) {
-				try {
-					jamaRestClient.getRelationships(project.getJamaId());
-				} catch (Exception e) {
-					logger.error("Exception occurred: ", e);
-					output.write(e.getMessage());
-				}
-			}
-
-			logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
-		} catch(IOException e) {
-			e.printStackTrace();
+		if(nodes != null) {
+			return Arrays.asList(jamaRestClient.getItems(projectId));
+		} else {
+			return null;
 		}
-	}
-
-	@Async
-	public GeneralNode[] extractItems(Integer projectId) {
-		return jamaRestClient.getItems(projectId);
 	}
 }

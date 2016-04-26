@@ -12,6 +12,10 @@ public class JamaNodeDTO {
 
 	private String key;
 
+	private String name;
+
+	private String status;
+
 	private JamaNodeTypeDTO type;
 
 	public Integer getProjectId() {
@@ -32,6 +36,14 @@ public class JamaNodeDTO {
 
 	public JamaNodeTypeDTO getType() {
 		return type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getStatus() {
+		return status;
 	}
 
 	@Override
