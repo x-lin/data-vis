@@ -34,30 +34,11 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener("resize", (event) => this.resizePanel(event));
         this.renderGraph(Object.assign({}, this.props.graph));
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.resizePanel);
     }
 
     componentDidUpdate() {
         this.updateGraph(Object.assign({}, this.props.graph));
-    }
-
-    resizePanel(e) {
-        const { selector } = this.state;
-
-        if ($(selector)) {
-            const width = DOMSelector.getWidth(selector);
-            const height = DOMSelector.getHeight(selector);
-
-            d3.select(selector)
-                .select("svg")
-                .attr("width", DOMSelector.getWidth(selector))
-                .attr("height", DOMSelector.getHeight(selector));
-        }
     }
 
     renderGraph(data) {
@@ -151,8 +132,10 @@ export default class extends React.Component {
         const svg = D3Utils.createSvg(selector)
             .attr("class", "force-graph")
             .attr("id", "force-force")
-            .attr("width", DOMSelector.getWidth(selector))
-            .attr("height", DOMSelector.getHeight(selector));
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("version", 1.1)
+            .attr("xmlns", "http://www.w3.org/2000/svg");
 
         svg
             .on("click", (d) => EventHandlers.onClickSvg(d));

@@ -57,7 +57,15 @@ class GraphLegend extends React.Component {
         });
 
         return (
-            <svg id={divId}>
+            <svg
+              id={divId}
+              style={{
+                  padding: "15px",
+                  font: "11px sans-serif",
+                  background: "rgba(255, 255, 255, .9",
+                  margin: "1px"
+              }}
+            >
                 {g}
             </svg>
         );

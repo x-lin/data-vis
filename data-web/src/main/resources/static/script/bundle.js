@@ -44351,7 +44351,7 @@
 /* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
+	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
 	 * @overview es6-promise - a tiny implementation of Promises/A+.
 	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	 * @license   Licensed under MIT license
@@ -46503,8 +46503,17 @@
 	            null,
 	            _react2.default.createElement(
 	                "a",
+	                { href: "#", title: "Synchronize" },
+	                _react2.default.createElement("span", { className: "fa fa-refresh" })
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "li",
+	            null,
+	            _react2.default.createElement(
+	                "a",
 	                { href: "#", title: "Information", "data-toggle": "control-sidebar" },
-	                _react2.default.createElement("i", { className: "fa fa-info" })
+	                _react2.default.createElement("span", { className: "fa fa-info" })
 	            )
 	        )
 	    );
@@ -82775,45 +82784,60 @@
 	            }
 	        }
 	    }, {
+	        key: "createBlob",
+	        value: function createBlob(width, height) {
+	            var svg1 = document.getElementById("force-force").cloneNode(true);
+	            svg1.setAttribute("width", width);
+	            svg1.setAttribute("height", height);
+
+	            var svg2 = document.getElementById("graph-legend").cloneNode(true);
+	            svg1.appendChild(svg2);
+
+	            var svgString = new XMLSerializer().serializeToString(svg1);
+
+	            return new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+	        }
+	    }, {
 	        key: "convertToSvg",
 	        value: function convertToSvg() {
-	            var html = _get__("d3").select("#force-force").attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg").node().parentNode.innerHTML;
+	            var width = _get__("DOMSelector").getWidth("#force-force");
+	            var height = _get__("DOMSelector").getHeight("#force-force");
 
-	            var blob = new Blob([html], { type: "image/svg+xml;charset=utf-8" });
+	            var blob = this.createBlob(width, height);
 
 	            saveAs(blob, "graph-" + Date.now() + ".svg");
 	        }
 	    }, {
 	        key: "convertToPng",
 	        value: function convertToPng() {
-	            var width = _get__("DOMSelector").getWidth("#force-force") * _get__("SCALE");
-	            var height = _get__("DOMSelector").getHeight("#force-force") * _get__("SCALE");
+	            var width = _get__("DOMSelector").getWidth("#force-force");
+	            var height = _get__("DOMSelector").getHeight("#force-force");
 
-	            var html = _get__("d3").select("#force-force").attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg").node();
+	            var blob = this.createBlob(width, height);
 
-	            var svgString = new XMLSerializer().serializeToString(html);
+	            var scaleWidth = width * _get__("SCALE");
+	            var scaleHeight = height * _get__("SCALE");
+
 	            var canvas = document.createElement("canvas");
-	            canvas.setAttribute("width", width.toString());
-	            canvas.setAttribute("height", height.toString());
+	            canvas.setAttribute("width", scaleWidth.toString());
+	            canvas.setAttribute("height", scaleHeight.toString());
 
 	            var context = canvas.getContext("2d");
 	            var DOMURL = self.URL || self.webkitURL || self;
 
 	            var img = new Image();
-	            var svg = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-	            var url = DOMURL.createObjectURL(svg);
+	            img.src = DOMURL.createObjectURL(blob);
 
 	            img.onload = function () {
 	                try {
-	                    context.drawImage(img, 0, 0, width, height);
+	                    context.drawImage(img, 0, 0, scaleWidth, scaleHeight);
 	                    canvas.toBlob(function (blob) {
 	                        saveAs(blob, "graph-" + Date.now() + ".png");
 	                    });
 	                } catch (SecurityError) {
-	                    alert("PNG cannot be exported in your browser. If you are using IE, please switch to another browser to export PNG images or export the graph as SVG file.");
+	                    alert("PNG cannot be exported in your browser. If you are using IE, please switch to another browser or export the graph as SVG file.");
 	                }
 	            };
-	            img.src = url;
 	        }
 	    }, {
 	        key: "render",
@@ -82875,7 +82899,8 @@
 	                            onClick: function onClick() {
 	                                return _this2.convert();
 	                            },
-	                            style: { marginBottom: "5px" } },
+	                            style: { marginBottom: "5px" }
+	                        },
 	                        "Export!"
 	                    )
 	                )
@@ -82938,9 +82963,6 @@
 
 	        case "SVG":
 	            return SVG;
-
-	        case "d3":
-	            return _d2.default;
 
 	        case "DOMSelector":
 	            return _DOMSelector2.default;
@@ -92831,27 +92853,6 @@
 	    }
 
 	    _createClass(Relations, [{
-	        key: "resizePanel",
-
-	        // TODO move logic to a more sensible place and merge with resizePanel method of ForceGraph
-	        value: function resizePanel(e) {
-	            var selector = "#force-graph-component";
-
-	            if ($(selector)) {
-	                var width = _get__("DOMSelector").getWidth(selector);
-	                var height = _get__("DOMSelector").getHeight(selector);
-
-	                d3.select(selector).select("svg").attr("width", _get__("DOMSelector").getWidth(selector)).attr("height", _get__("DOMSelector").getHeight(selector));
-	            }
-	        }
-	    }, {
-	        key: "componentDidUpdate",
-	        value: function componentDidUpdate() {
-	            if (this.props.sidebarVisible === false) {
-	                this.resizePanel();
-	            }
-	        }
-	    }, {
 	        key: "render",
 	        value: function render() {
 	            var height = "calc(100vh - 50px)";
@@ -92925,9 +92926,6 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
-	        case "DOMSelector":
-	            return _DOMSelector2.default;
-
 	        case "VerticalSplitView":
 	            return _VerticalSplitView2.default;
 
@@ -94879,35 +94877,12 @@
 	    _createClass(_DefaultExportValue, [{
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
-	            var _this2 = this;
-
-	            window.addEventListener("resize", function (event) {
-	                return _this2.resizePanel(event);
-	            });
 	            this.renderGraph(_extends({}, this.props.graph));
-	        }
-	    }, {
-	        key: "componentWillUnmount",
-	        value: function componentWillUnmount() {
-	            window.removeEventListener("resize", this.resizePanel);
 	        }
 	    }, {
 	        key: "componentDidUpdate",
 	        value: function componentDidUpdate() {
 	            this.updateGraph(_extends({}, this.props.graph));
-	        }
-	    }, {
-	        key: "resizePanel",
-	        value: function resizePanel(e) {
-	            var selector = this.state.selector;
-
-
-	            if ($(selector)) {
-	                var width = _get__("DOMSelector").getWidth(selector);
-	                var height = _get__("DOMSelector").getHeight(selector);
-
-	                _get__("d3").select(selector).select("svg").attr("width", _get__("DOMSelector").getWidth(selector)).attr("height", _get__("DOMSelector").getHeight(selector));
-	            }
 	        }
 	    }, {
 	        key: "renderGraph",
@@ -94933,7 +94908,7 @@
 	    }, {
 	        key: "createConnectedIndex",
 	        value: function createConnectedIndex(data) {
-	            var _this3 = this;
+	            var _this2 = this;
 
 	            this.state.linkedByIndex = {};
 
@@ -94942,7 +94917,7 @@
 	                this.state.linkedByIndex[i + "," + i] = 1;
 	            }
 	            data.edges.forEach(function (d) {
-	                _this3.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
+	                _this2.state.linkedByIndex[d.source.index + "," + d.target.index] = 1;
 	            });
 	        }
 	    }, {
@@ -95007,7 +94982,7 @@
 	            var selector = this.state.selector;
 
 
-	            var svg = _get__("D3Utils").createSvg(selector).attr("class", "force-graph").attr("id", "force-force").attr("width", _get__("DOMSelector").getWidth(selector)).attr("height", _get__("DOMSelector").getHeight(selector));
+	            var svg = _get__("D3Utils").createSvg(selector).attr("class", "force-graph").attr("id", "force-force").attr("width", "100%").attr("height", "100%").attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg");
 
 	            svg.on("click", function (d) {
 	                return _get__("EventHandlers").onClickSvg(d);
@@ -95036,10 +95011,10 @@
 	    }, {
 	        key: "createForceLayout",
 	        value: function createForceLayout(data) {
-	            var _this4 = this;
+	            var _this3 = this;
 
 	            this.state.force = _get__("d3").layout.force().charge(-700).linkDistance(70).nodes(data.nodes).links(data.edges).size([_get__("DOMSelector").getWidth(this.state.selector), _get__("DOMSelector").getHeight(this.state.selector)]).on("start", function () {
-	                return _this4.createSpeededUpAnimation();
+	                return _this3.createSpeededUpAnimation();
 	            });
 	        }
 	    }, {
@@ -95051,12 +95026,12 @@
 	    }, {
 	        key: "addLinks",
 	        value: function addLinks() {
-	            var _this5 = this;
+	            var _this4 = this;
 
 	            this.state.links.enter().insert("line", "g").attr("class", "link ");
 
 	            this.state.links.attr("stroke", "#999").attr("opacity", function (d) {
-	                return d.visible ? "1" : _this5.props.disabledOpacity;
+	                return d.visible ? "1" : _this4.props.disabledOpacity;
 	            });
 
 	            if (this.props.showEdgeDirection) {
@@ -95091,7 +95066,7 @@
 	    }, {
 	        key: "addNodes",
 	        value: function addNodes() {
-	            var _this6 = this;
+	            var _this5 = this;
 
 	            var g = this.state.nodes.enter().append("g").attr("class", "g").style("fill", function (d) {
 	                return _get__("Constants").getColor(d.type ? d.type : d.category);
@@ -95106,7 +95081,7 @@
 	            this.addNodeText(g);
 
 	            this.state.nodes.attr("opacity", function (d) {
-	                return d.visible ? "1" : _this6.props.disabledOpacity;
+	                return d.visible ? "1" : _this5.props.disabledOpacity;
 	            });
 
 	            this.setNodeBehavior();
@@ -95165,19 +95140,19 @@
 	    }, {
 	        key: "setNodeBehavior",
 	        value: function setNodeBehavior() {
-	            var _this7 = this;
+	            var _this6 = this;
 
 	            var state = this.state;
 	            var props = this.props;
 	            var connectedNodes = this.connectedNodes;
 
 	            this.state.nodes.on("dblclick", function (d, props) {
-	                if (d.visible || _this7.props.enableFiltered) {
-	                    _get__("EventHandlers").onDoubleClickNode(d, _this7.props);
+	                if (d.visible || _this6.props.enableFiltered) {
+	                    _get__("EventHandlers").onDoubleClickNode(d, _this6.props);
 	                }
 	            }).on("contextmenu", function (d) {
-	                if (d.visible || _this7.props.enableFiltered) {
-	                    _get__("EventHandlers").onContextMenuNode(d, _this7.props);
+	                if (d.visible || _this6.props.enableFiltered) {
+	                    _get__("EventHandlers").onContextMenuNode(d, _this6.props);
 	                }
 	            }).on("mouseover", function (d) {
 	                _get__("EventHandlers").onMouseOver(d);
@@ -95186,15 +95161,15 @@
 	            }).on("click", function (d) {
 	                connectedNodes(d, state, props, this);
 	            }).call(this.state.force.drag().on("dragstart", function (d) {
-	                if (d.visible || _this7.props.enableFiltered) {
+	                if (d.visible || _this6.props.enableFiltered) {
 	                    _get__("EventHandlers").onDragStartNode(d);
 	                }
 	            }).on("drag", function (d) {
-	                if (d.visible || _this7.props.enableFiltered) {
+	                if (d.visible || _this6.props.enableFiltered) {
 	                    _get__("EventHandlers").onDragNode(d);
 	                }
 	            }).on("dragend", function (d) {
-	                if (d.visible || _this7.props.enableFiltered) {
+	                if (d.visible || _this6.props.enableFiltered) {
 	                    _get__("EventHandlers").onDragEndNode(d);
 	                }
 	            }));
@@ -95202,10 +95177,10 @@
 	    }, {
 	        key: "createSpeededUpAnimation",
 	        value: function createSpeededUpAnimation() {
-	            var _this8 = this;
+	            var _this7 = this;
 
 	            requestAnimationFrame(function () {
-	                _this8.createAnimation();
+	                _this7.createAnimation();
 	            });
 	        }
 	    }, {
@@ -95230,7 +95205,7 @@
 	    }, {
 	        key: "animateIfNotFinished",
 	        value: function animateIfNotFinished(alphaThreshold) {
-	            var _this9 = this;
+	            var _this8 = this;
 
 	            if (this.state.force.alpha() > alphaThreshold) {
 	                this.createSpeededUpAnimation();
@@ -95239,7 +95214,7 @@
 
 	                this.state.nodes.attr("fixed", function (d) {
 	                    if (!d.fixed) {
-	                        d.fixed = _this9.props.isFixed ? true : d.isFixed;
+	                        d.fixed = _this8.props.isFixed ? true : d.isFixed;
 	                    }
 	                });
 	            }
@@ -95291,17 +95266,17 @@
 
 	function _get_original__(variableName) {
 	    switch (variableName) {
-	        case "DOMSelector":
-	            return _DOMSelector2.default;
+	        case "D3Utils":
+	            return _D3Utils2.default;
 
 	        case "d3":
 	            return _d2.default;
 
-	        case "D3Utils":
-	            return _D3Utils2.default;
-
 	        case "EventHandlers":
 	            return _ForceGraphEventHandlers2.default;
+
+	        case "DOMSelector":
+	            return _DOMSelector2.default;
 
 	        case "FilterHelpers":
 	            return _FilterHelpers2.default;
@@ -100324,7 +100299,15 @@
 
 	            return _react2.default.createElement(
 	                "svg",
-	                { id: divId },
+	                {
+	                    id: divId,
+	                    style: {
+	                        padding: "15px",
+	                        font: "11px sans-serif",
+	                        background: "rgba(255, 255, 255, .9",
+	                        margin: "1px"
+	                    }
+	                },
 	                g
 	            );
 	        }

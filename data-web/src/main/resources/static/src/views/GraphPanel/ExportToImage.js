@@ -34,55 +34,59 @@ class ExportToImage extends React.Component {
         }
     }
 
-    convertToSvg() {
-        const html = d3.select("#force-force")
-            .attr("version", 1.1)
-            .attr("xmlns", "http://www.w3.org/2000/svg")
-            .node().parentNode.innerHTML;
+    createBlob(width, height) {
+        const svg1 = document.getElementById("force-force").cloneNode(true);
+        svg1.setAttribute("width", width);
+        svg1.setAttribute("height", height);
 
-        const blob = new Blob(
-            [html],
-            { type: "image/svg+xml;charset=utf-8" }
-        );
+        const svg2 = document.getElementById("graph-legend").cloneNode(true);
+        svg1.appendChild(svg2);
+
+        const svgString = new XMLSerializer().serializeToString(svg1);
+
+        return new Blob(
+            [svgString],
+            { type: "image/svg+xml;charset=utf-8" });
+    }
+
+    convertToSvg() {
+        const width = DOMSelector.getWidth("#force-force");
+        const height = DOMSelector.getHeight("#force-force");
+
+        const blob = this.createBlob(width, height);
 
         saveAs(blob, `graph-${Date.now()}.svg`);
     }
 
     convertToPng() {
-        const width = DOMSelector.getWidth("#force-force") * SCALE;
-        const height = DOMSelector.getHeight("#force-force") * SCALE;
+        const width = DOMSelector.getWidth("#force-force");
+        const height = DOMSelector.getHeight("#force-force");
 
-        const html = d3.select("#force-force")
-            .attr("version", 1.1)
-            .attr("xmlns", "http://www.w3.org/2000/svg")
-            .node();
+        const blob = this.createBlob(width, height);
 
-        const svgString = new XMLSerializer().serializeToString(html);
+        const scaleWidth = width * SCALE;
+        const scaleHeight = height * SCALE;
+
         const canvas = document.createElement("canvas");
-        canvas.setAttribute("width", width.toString());
-        canvas.setAttribute("height", height.toString());
+        canvas.setAttribute("width", scaleWidth.toString());
+        canvas.setAttribute("height", scaleHeight.toString());
 
         const context = canvas.getContext("2d");
         const DOMURL = self.URL || self.webkitURL || self;
 
         const img = new Image();
-        const svg = new Blob(
-            [svgString],
-            { type: "image/svg+xml;charset=utf-8" });
-        const url = DOMURL.createObjectURL(svg);
+        img.src = DOMURL.createObjectURL(blob);
 
         img.onload = () => {
             try {
-                context.drawImage(img, 0, 0, width, height);
+                context.drawImage(img, 0, 0, scaleWidth, scaleHeight);
                 canvas.toBlob((blob) => {
                     saveAs(blob, `graph-${Date.now()}.png`);
                 });
             } catch (SecurityError) {
-                alert("PNG cannot be exported in your browser. If you are using IE, please switch to another browser to export PNG images or export the graph as SVG file.");
+                alert("PNG cannot be exported in your browser. If you are using IE, please switch to another browser or export the graph as SVG file.");
             }
-
         };
-        img.src = url;
     }
 
     render() {
@@ -110,7 +114,8 @@ class ExportToImage extends React.Component {
                       type="button"
                       className="btn bg-navy pull-right"
                       onClick={() => this.convert()}
-                      style={{ marginBottom: "5px" }}>
+                      style={{ marginBottom: "5px" }}
+                    >
                         Export!
                     </button>
                 </div>
