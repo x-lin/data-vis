@@ -11,4 +11,6 @@ public interface DataWriter<T> {
 	void write(T object);
 
 	void delete(List<T> objects);
+
+	void delete(T object);
 }

@@ -81,4 +81,9 @@ public class JamaRelationshipDTOWriter implements DataWriter<JamaRelationshipDTO
 			//TODO find relationships and delete them
 		}
 	}
+
+	@Override
+	public void delete(JamaRelationshipDTO object) {
+		logger.warn("Method not yet implemented");
+	}
 }

@@ -1,10 +1,13 @@
 package at.ac.tuwien.dst.mms.dal.jama;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/jama/extract")
@@ -35,5 +38,13 @@ public class JamaController {
 			extractor.extractRelationships();
 			//extractor.extractNodes();
 		}
+	}
+
+	@RequestMapping(path="/activities", method=RequestMethod.GET)
+	public void update(
+			@RequestParam(value="dateFrom", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dateFrom,
+			@RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dateTo
+	) {
+		extractor.extractActivities(dateFrom, dateTo);
 	}
 }

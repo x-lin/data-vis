@@ -87,4 +87,20 @@ public class JamaRelationshipExtractor {
 
 		return restTemplate.getForObject(uri, RelationshipResponse.class);
 	}
+
+	public List<Relationship> getAllRelationshipsForItem(Long itemId) {
+		List<Relationship> relationships = new ArrayList<>();
+		List<Relationship> upstream = this.getUpstreamRelationshipsForItem(itemId).getRelationships();
+		List<Relationship> downstream = this.getRelationshipsForItem(itemId).getRelationships();
+
+		if (upstream != null) {
+			relationships.addAll(upstream);
+		}
+
+		if (downstream != null) {
+			relationships.addAll(downstream);
+		}
+
+		return relationships;
+	}
 }

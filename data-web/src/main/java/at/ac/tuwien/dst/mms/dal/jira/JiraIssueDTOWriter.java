@@ -70,4 +70,9 @@ public class JiraIssueDTOWriter implements DataWriter<JiraIssueDTO> {
 			}
 		}
 	}
+
+	@Override
+	public void delete(JiraIssueDTO object) {
+
+	}
 }

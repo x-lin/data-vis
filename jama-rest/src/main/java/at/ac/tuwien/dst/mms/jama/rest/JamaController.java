@@ -4,17 +4,13 @@ import at.ac.tuwien.dst.mms.jama.model.*;
 import at.ac.tuwien.dst.mms.jama.rest.model.RelationshipResponse;
 import at.ac.tuwien.dst.mms.jama.serialize.ItemSerializer;
 import at.ac.tuwien.dst.mms.jama.serialize.RelationshipSerializer;
-import at.ac.tuwien.dst.mms.jama.util.DateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -62,7 +58,7 @@ public class JamaController {
             @RequestParam("project") Integer projectId,
             @RequestParam(value="webhook", required=false) String webhook
     ) {
-        //List<Item> items = itemExtractor.getAllItemsForProject(projectId);
+        //List<Item> items = itemExtractor.getActivities(projectId);
 
         //this.writeItems(items);
 
@@ -79,6 +75,26 @@ public class JamaController {
             return pvcsc;
         }
     }
+
+	@RequestMapping(value = "/item/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Item getItem(
+			@PathVariable("id") Long id
+	) {
+		Item item = itemExtractor.getItem(id);
+
+		if(item != null) {
+			logger.info("item with id " + item.getJamaId() + " is: " + item.toString());
+		}
+
+		return item;
+	}
+
+	@RequestMapping(value = "/item/{id}/relationships", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Relationship> getRelationships(
+			@PathVariable("id") Long id
+	) {
+		return relationshipExtractor.getAllRelationshipsForItem(id);
+	}
 
     private List<Item> getForFile(String filename) {
         List<Item> items = itemSerializer.read(filename);
@@ -139,12 +155,12 @@ public class JamaController {
     @RequestMapping(value = "/activities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     List<Activity> getActivities(
             @RequestParam("project") Long projectId,
-			@RequestParam(value="dateFrom") Date dateFrom,
-			@RequestParam(value="dateTo", required=false) Date dateTo,
+			@RequestParam(value="dateFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dateFrom,
+			@RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dateTo,
             @RequestParam(value="webhook", required=false) String webhook
     ) {
 
-        List<Activity> activities = activitiesExtractor.getAllItemsForProject(projectId, dateFrom, dateTo);
+        List<Activity> activities = activitiesExtractor.getActivities(projectId, dateFrom, dateTo);
 
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
@@ -196,8 +212,6 @@ public class JamaController {
 		@RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dateTo,
 		@RequestParam(value="project", required=false) List<Long> projectIds
 	) {
-		System.out.println("date: " + DateConverter.dateToString(dateFrom));
-
 		List<Project> projects = this.getAllProjects();
 		List<Item> items = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();
@@ -228,4 +242,6 @@ public class JamaController {
 			return null;
 		}
 	}
+
+
 }

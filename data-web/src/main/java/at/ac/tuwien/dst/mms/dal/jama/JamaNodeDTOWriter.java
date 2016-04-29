@@ -39,15 +39,7 @@ public class JamaNodeDTOWriter implements DataWriter<JamaNodeDTO> {
 	public void write(List<JamaNodeDTO> nodes) {
 		try (Transaction tx = graphDatabase.beginTx()) {
 			for (JamaNodeDTO node : nodes) {
-				GeneralNode fromDb = generalNodeRepository.findByKey(node.getKey());
-				GeneralNode dbNode = fromDb != null ?
-						jamaNodeConverter.convert(node, fromDb) : jamaNodeConverter.convert(node);
-
-				if (generalNodeRepository.findByJamaId(node.getJamaId()) == null) {
-					generalNodeJamaIndexRepository.save(new GeneralNodeJamaIndex(node.getJamaId(), dbNode));
-				}
-
-				generalNodeRepository.save(dbNode);
+				this.write(node);
 			}
 
 			tx.success();
@@ -57,20 +49,35 @@ public class JamaNodeDTOWriter implements DataWriter<JamaNodeDTO> {
 	}
 
 	@Override
-	public void write(JamaNodeDTO object) {
-		logger.warn("Method not yet implemented");
+	public void write(JamaNodeDTO node) {
+		GeneralNode fromDb = generalNodeRepository.findByKey(node.getKey());
+		GeneralNode dbNode = fromDb != null ?
+				jamaNodeConverter.convert(node, fromDb) : jamaNodeConverter.convert(node);
+
+		if (generalNodeRepository.findByJamaId(node.getJamaId()) == null) {
+			generalNodeJamaIndexRepository.save(new GeneralNodeJamaIndex(node.getJamaId(), dbNode));
+		}
+
+		generalNodeRepository.save(dbNode);
 	}
 
 	@Override
 	public void delete(List<JamaNodeDTO> objects) {
 		for (JamaNodeDTO node : objects) {
-			GeneralNode dbNode = generalNodeRepository.findByJamaId(node.getJamaId());
+			this.delete(node);
+		}
+	}
 
-			if (dbNode != null) {
-				generalNodeRepository.delete(dbNode);
+	@Override
+	public void delete(JamaNodeDTO node) {
+		GeneralNode dbNode = generalNodeRepository.findByJamaId(node.getJamaId());
+		GeneralNodeJamaIndex index = generalNodeJamaIndexRepository.findByJamaId(node.getJamaId());
 
-				logger.info("Deleted node with jama id " + dbNode.getJamaId());
-			}
+		if (dbNode != null) {
+			generalNodeRepository.delete(dbNode);
+			generalNodeJamaIndexRepository.delete(index);
+
+			logger.info("Deleted node with jama id " + dbNode.getJamaId());
 		}
 	}
 }

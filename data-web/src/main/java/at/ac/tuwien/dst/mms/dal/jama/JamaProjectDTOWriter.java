@@ -56,4 +56,9 @@ public class JamaProjectDTOWriter implements DataWriter<JamaProjectDTO> {
 	public void delete(List<JamaProjectDTO> objects) {
 		logger.warn("Not allowed to delete projects.");
 	}
+
+	@Override
+	public void delete(JamaProjectDTO object) {
+
+	}
 }

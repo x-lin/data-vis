@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.jama;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
+import at.ac.tuwien.dst.mms.dal.jama.dto.JamaActivityDTO;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaNodeDTO;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaProjectDTO;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,6 +28,9 @@ public class JamaExtractor {
 
 	@Autowired(required = false)
 	Logger logger;
+
+	@Autowired
+	JamaActivitiesDTOWriter activitiesDTOWriter;
 
 	//TODO remove persistent error logging
 	@Async
@@ -78,9 +83,14 @@ public class JamaExtractor {
 		JamaNodeDTO[] nodes = jamaRestClient.getItems(projectId);
 
 		if(nodes != null) {
-			return Arrays.asList(jamaRestClient.getItems(projectId));
+			return Arrays.asList(nodes);
 		} else {
 			return null;
 		}
+	}
+
+	public void extractActivities(Date dateFrom, Date dateTo) {
+		JamaActivityDTO[] nodes = jamaRestClient.getUpdates(dateFrom, dateTo);
+		activitiesDTOWriter.handle(Arrays.asList(nodes));
 	}
 }

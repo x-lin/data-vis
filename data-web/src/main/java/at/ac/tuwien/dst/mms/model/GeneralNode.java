@@ -250,9 +250,18 @@ public class GeneralNode extends ModelEntity {
 				", project=" + project +
 				", jamaId=" + jamaId +
 				", jamaParentId=" + jamaParentId +
+				", jiraId='" + jiraId + '\'' +
 				", key='" + key + '\'' +
+				", name='" + name + '\'' +
 				", projectId=" + projectId +
 				", type=" + type +
+				", parent=" + parent +
+				", children=" + children +
+				", downstream=" + downstream +
+				", unclassified=" + unclassified +
+				", textIndex=" + textIndex +
+				", jiraStatus='" + jiraStatus + '\'' +
+				", status='" + status + '\'' +
 				'}';
 	}
 }

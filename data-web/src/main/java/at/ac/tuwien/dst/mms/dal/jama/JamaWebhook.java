@@ -1,15 +1,11 @@
 package at.ac.tuwien.dst.mms.dal.jama;
 
 import at.ac.tuwien.dst.mms.dal.DataWriter;
-import at.ac.tuwien.dst.mms.dal.jama.dto.JamaNodeDTO;
-import at.ac.tuwien.dst.mms.dal.jama.dto.JamaProjectDTO;
-import at.ac.tuwien.dst.mms.dal.jama.dto.JamaRelationshipDTO;
+import at.ac.tuwien.dst.mms.dal.jama.dto.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -32,13 +28,18 @@ public class JamaWebhook {
 	@Autowired
 	DataWriter<JamaRelationshipDTO> relationshipDTOWriter;
 
+	@Autowired
+	JamaActivitiesDTOWriter activityDTOWriter;
+
 	@Autowired(required=false)
 	Logger logger;
+
+	@Autowired
+	RestTemplate restTemplate;
 
 	@RequestMapping(path="/projects", method= RequestMethod.POST)
 	public void projects(
 			@RequestBody List<JamaProjectDTO> projects) {
-		System.out.println("projects received, storing now.");
 		projectDTOWriter.write(projects);
 	}
 
@@ -58,6 +59,14 @@ public class JamaWebhook {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@RequestMapping(path="/activities", method=RequestMethod.POST)
+	public void activities(
+			@RequestBody List<JamaActivityDTO> activities
+	) {
+		logger.info(activities.size() + " activities received, handling now.");
+		activityDTOWriter.handle(activities);
 	}
 
 	@RequestMapping(path="/relationships", method=RequestMethod.POST)

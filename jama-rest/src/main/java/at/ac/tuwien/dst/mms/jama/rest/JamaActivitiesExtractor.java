@@ -29,42 +29,10 @@ public class JamaActivitiesExtractor {
 
 	private String activitiesUri = Config.HOST + "/activities";
 
-	private List<Activity> cleanse(List<Activity> activities) {
-		List<Activity> cleansedAct = new ArrayList<>();
-
-		for(Activity activity : activities) {
-			boolean exists = false;
-
-			if(activity.getItemId() != null) {
-				for(Activity cleansed : cleansedAct) {
-					boolean same = activity.getItemId().equals(cleansed.getItemId());
-					if(same) {
-						exists = true;
-
-						boolean rel = (activity.getObjectType() == ObjectType.RELATIONSHIP) && (cleansed.getObjectType() == ObjectType.ITEM);
-
-						if(rel) {
-							cleansed.setObjectType(ObjectType.RELATIONSHIP);
-							cleansed.setDate(activity.getDate());
-						}
-
-						break;
-					}
-				}
-
-				if(!exists) {
-					cleansedAct.add(activity);
-				}
-			}
-		}
-
-		return cleansedAct;
-	}
-
-	public List<Activity> getAllItemsForProject(Long id, Date dateFrom, Date dateTo) {
+	public List<Activity> getActivities(Long projectId, Date dateFrom, Date dateTo) {
 		List<Activity> activities = new ArrayList<>();
 
-		ActivityResponse initialResponse = this.getActivitiesForProject(id, 0, dateFrom, dateTo);
+		ActivityResponse initialResponse = this.getActivitiesForProject(projectId, 0, dateFrom, dateTo);
 
 		activities.addAll(initialResponse.getActivities());
 
@@ -75,13 +43,13 @@ public class JamaActivitiesExtractor {
 		while(startIndex + resultCount < totalResults) {
 
 			startIndex += resultCount;
-			ActivityResponse response = this.getActivitiesForProject(id, startIndex, dateFrom, dateTo);
+			ActivityResponse response = this.getActivitiesForProject(projectId, startIndex, dateFrom, dateTo);
 			if(response.getActivities() != null) {
 				activities.addAll(response.getActivities());
 			}
 		}
 
-		return cleanse(activities);
+		return activities;
 	}
 
 	public ActivityResponse getActivitiesForProject(Long projectId, Integer startAt, Date dateFrom, Date dateTo) {

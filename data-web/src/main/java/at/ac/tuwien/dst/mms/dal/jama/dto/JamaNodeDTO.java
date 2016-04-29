@@ -26,6 +26,10 @@ public class JamaNodeDTO {
 		return jamaId;
 	}
 
+	public void setJamaId(Long jamaId) {
+		this.jamaId = jamaId;
+	}
+
 	public Long getJamaParentId() {
 		return jamaParentId;
 	}
