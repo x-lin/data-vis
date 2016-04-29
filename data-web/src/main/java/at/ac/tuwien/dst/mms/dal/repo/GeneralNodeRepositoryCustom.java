@@ -9,4 +9,6 @@ import java.util.Map;
 public interface GeneralNodeRepositoryCustom {
 	Iterable<Map<String, Object>> findNeighbors(String key, boolean upstream, boolean downstream, List<String> excluded,
 												List<String> priority, Integer limit, List<String> type);
+
+	Iterable<Map<String, Object>> findNodesAndNeighborKeys(List<String> keys);
 }

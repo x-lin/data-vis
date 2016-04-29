@@ -67,4 +67,9 @@ public interface SearchController<T> {
 	public List<BugCoverage> getBugCoverage(
 			@PathVariable String key
 	);
+
+	@RequestMapping(value = "/synch", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> synch(
+			@RequestParam List<String> key
+	);
 }

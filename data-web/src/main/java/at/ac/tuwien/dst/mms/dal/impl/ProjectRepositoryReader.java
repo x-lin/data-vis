@@ -99,4 +99,9 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> i
 	public List<BugCoverage> getBugCoverage(String key) {
 		return null;
 	}
+
+	@Override
+	public List<Map<String, Object>> getNodesAndNeighborKeys(List keys) {
+		return null;
+	}
 }

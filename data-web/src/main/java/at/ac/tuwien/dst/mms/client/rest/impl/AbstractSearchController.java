@@ -93,6 +93,13 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 		return reader.getBugCoverage(key);
 	}
 
+	@Override
+	public List<Map<String, Object>> synch(
+			@RequestParam List<String> key
+	) {
+		return reader.getNodesAndNeighborKeys(key);
+	}
+
 	protected DataReader<T> getRepositoryReader() {
 		return this.reader;
 	}

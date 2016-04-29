@@ -25,4 +25,18 @@ public class GeneralNodeRepositoryImpl implements GeneralNodeRepositoryCustom {
 
 		return template.query(query, null);
 	}
+
+	@Override
+	public Iterable<Map<String, Object>> findNodesAndNeighborKeys(List<String> keys) {
+		String keyString = "";
+
+		for(String key : keys) {
+			keyString += "key:" + key + " ";
+		}
+		String query = "START n=node:generalNodeKeyIndex('" + keyString + "') OPTIONAL MATCH (n)-[:DOWNSTREAM|:UNCLASSIFIED]-(n1:GeneralNode) RETURN n AS node, COLLECT(n1.key) AS neighbors";
+
+		System.out.println("query: " + query);
+
+		return template.query(query, null);
+	}
 }

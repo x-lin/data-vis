@@ -84,4 +84,9 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 			"RETURN DISTINCT n AS node, count(o) AS count, " +
 			"CASE WHEN (type(r)='DOWNSTREAM' AND (startnode(r) = p) = true) OR type(r)='PROJECT' THEN 'DOWNSTREAM' WHEN type(r)='UNCLASSIFIED' THEN null ELSE 'UPSTREAM' END AS direction")
 	Iterable<Map<String, Object>> findNeighborsSingle(String key);
+
+	@Query("START n=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX  + "(key={0}) " +
+			"MATCH (n)-[:DOWNSTREAM]-(m) WHERE HAS(m.jamaId) " +
+			"RETURN m")
+	List<GeneralNode> findJamaRelationshipNeighbors(String key);
 }

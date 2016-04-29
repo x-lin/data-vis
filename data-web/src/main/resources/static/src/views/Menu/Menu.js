@@ -11,6 +11,7 @@ import MenuLanePicker from "./MenuLanePicker";
 import MenuEdgeDirections from "./MenuEdgeDirections";
 import MenuRenderingLimit from "./MenuRenderingLimit";
 import ExportToImage from "../GraphPanel/ExportToImage";
+import SynchronizeContainer from "./SynchronizeContainer";
 
 const Menu = ({
     toggleHandler,
@@ -107,7 +108,8 @@ const Menu = ({
 
             {renderEntries()}
 
-            <li><a href="#" title="Information" data-toggle="control-sidebar"><i className="fa fa-info" /></a></li>
+            <li><SynchronizeContainer /></li>
+            <li><a href="#" title="Information" data-toggle="control-sidebar"><span className="fa fa-info" /></a></li>
         </ul>
     );
 };

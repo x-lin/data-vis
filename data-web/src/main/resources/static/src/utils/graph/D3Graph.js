@@ -12,6 +12,23 @@ export default class {
         }
     }
 
+    updateNode(node) {
+        const index = this.addNode(node);
+
+        if (index > -1) {
+            const oldNode = this.nodes[index];
+
+            oldNode.name = node.name;
+            oldNode.count = node.count;
+            oldNode.type = node.type;
+            oldNode.status = node.status;
+            oldNode.jiraStatus = node.jiraStatus;
+            oldNode.jiraId = node.jiraId;
+            oldNode.jamaParentId = node.jamaParentId;
+            oldNode.jamaId = node.jamaId;
+        }
+    }
+
     addNode(node) {
         let index = this.indexOfNode(node.key);
 
@@ -28,6 +45,18 @@ export default class {
         if (!this.edgeExists(edge.source, edge.target)) {
             this.edges.push(edge);
         }
+    }
+
+    updateEdges(node, neighborKeys) {
+        this.edges.forEach((edge, index) => {
+            if (edge.source.key === node.key || edge.target.key === node.key) {
+                const neighbor = edge.source.key === node.key ? edge.target.key : edge.source.key;
+
+                if (neighborKeys.indexOf(neighbor) === -1) {
+                    this.edges.splice(index, 1);
+                }
+            }
+        });
     }
 
     addNodeLegend(node) {

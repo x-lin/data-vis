@@ -4,6 +4,8 @@ import { REMOVE_FROM_GRAPH, UPDATE_GRAPH, CLEAR_GRAPH, EXPAND_NODE, REDO_GRAPH_A
     from "../actions/action-creators/GraphActions";
 import { NEIGHBORS_FETCH_SUCCESS }
     from "../actions/action-creators/SearchNeighborsActions";
+import { SYNCHRONIZE_START, SYNCHRONIZE_SUCCESS, SYNCHRONIZE_ERROR }
+    from"../actions/action-creators/SynchronizeActions";
 import Edge from "../utils/graph/Edge";
 import D3Graph from "../utils/graph/D3Graph";
 
@@ -166,6 +168,26 @@ const onExpandNode = (state, action) => {
     });
 };
 
+const onSynchronizeAction = (state, action) => {
+    const { nodes, edges } = state.present;
+    const past = updateHistory(state.past, state.present);
+
+    const graph = new D3Graph(nodes, edges, state.present.legend);
+
+    console.log("action", action);
+
+    action.data.forEach((node) => {
+        graph.updateNode(node);
+        graph.updateEdges(node, node.neighbors);
+    });
+
+    return Object.assign({}, state, {
+        present: graph,
+        past,
+        future: []
+    });
+};
+
 const onUndoGraphAction = (state) => {
     const previous = prepare(state.past[state.past.length - 1]);
     const snapshot = JSON.stringify(state.present);
@@ -216,6 +238,8 @@ action) => {
             return onUndoGraphAction(state, action);
         case REDO_GRAPH_ACTION:
             return onRedoGraphAction(state, action);
+        case SYNCHRONIZE_SUCCESS:
+            return onSynchronizeAction(state, action);
         case REHYDRATE:
             return onRehydrate(state, action);
         default:

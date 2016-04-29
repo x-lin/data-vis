@@ -1,15 +1,17 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.GeneralNodeDataReader;
-import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
-import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
-import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+import at.ac.tuwien.dst.mms.dal.query.model.*;
 import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeRepository;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
+import at.ac.tuwien.dst.mms.model.NodeType;
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,5 +81,62 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 	@Override
 	public List<BugCoverage> getBugCoverage(String key) {
 		return ((GeneralNodeRepository)this.getRepository()).getBugCoverage(key);
+	}
+
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getNodesAndNeighborKeys(List keys) {
+		Iterable<Map<String, Object>> nodes = ((GeneralNodeRepository)this.getRepository()).findNodesAndNeighborKeys(keys);
+		List<Map<String, Object>> neighbors = this.getNodesAndNeighbors(nodes);
+
+		return neighbors;
+	}
+
+	@Transactional
+	protected List<Map<String, Object>> getNodesAndNeighbors(Iterable<Map<String, Object>> nodesWithNeighbors) {
+		List<Map<String, Object>> results = new ArrayList<>();
+		//List<NodeWithNeighborKeys> res = new ArrayList<>();
+
+		if(nodesWithNeighbors != null) {
+			for(Map<String, Object> entry : nodesWithNeighbors) {
+				Map<String, Object> map = new HashMap<>();
+
+				for(String key : entry.keySet()) {
+
+					if(key.equals("node")) {
+						Node node = neo4jOperations.convert(entry.get(key), Node.class);
+
+						//a node may have multiple labels: check one for one, if the label is mapped to a type
+						//until the object was mapped
+						for(String prop : node.getPropertyKeys()) {
+							if(!prop.equals("count")) {
+								map.put(prop, node.getProperty(prop));
+							}
+						}
+
+						for(Label label : node.getLabels()) {
+
+							if(NodeType.getClass(label.name()) != null) {
+								GeneralNode o = (GeneralNode) neo4jOperations.convert(node, NodeType.getClass(label.name()));
+
+								if(o != null) {
+									map.put("type", o.getType().getName());
+									map.put("projectId", o.getProjectId());
+									break;
+								}
+							}
+						}
+
+					} else if(key.equals("neighbors")) {
+						map.put("count", ((List)entry.get(key)).size());
+						map.put("neighbors", entry.get(key));
+					}
+				}
+
+				results.add(map);
+			}
+		}
+
+		return results;
 	}
 }
