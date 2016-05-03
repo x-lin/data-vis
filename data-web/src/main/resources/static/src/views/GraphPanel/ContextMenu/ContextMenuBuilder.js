@@ -24,8 +24,9 @@ ContextMenuBuilder.createAndShow = (element, d, props) => {
     );
 
     // close popover on outside click
-    $("body").on("click", (e) => {
+    $(".content-wrapper").on("click", (e) => {
         $("#popover-content").each(() => {
+            console.log($(this), e.target);
             if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $(".popover").has(e.target).length === 0) {
                 ContextMenuBuilder.removePopup();
             }
