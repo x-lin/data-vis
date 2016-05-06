@@ -3,7 +3,7 @@ This project is aimed at visualizing relationships between multiple models and t
 
 # Modules
 Currently, the project consists of three modules:
-- `data-web`: A Spring Boot application containing the mainly the user-side logic. Comprises a backend, a frontend and an embedded DB.
+- `data-web`: A Spring Boot application containing mainly the user-side logic. Comprises a backend, a frontend and an embedded DB.
 - `jira-rest`: An extraction service fetching the data from the JIRA REST interface.
 - `jama-rest`: An extraction service fetching the data from the Jama REST interface.
 
@@ -11,15 +11,15 @@ Currently, the project consists of three modules:
 **NOTE: The following instructions are subject to change and will be partially replaced with batch files.**
 ### Starting the REST extraction services
 #### JIRA extraction service
-- Add the URL of the JIRA REST API and credentials to the properties file `config.properties` in the `src/main/resources` directory of the `jira-rest` module.
+- Add the URL of the JIRA REST API and your credentials to the properties file `config.properties` in the `src/main/resources` directory of the `jira-rest` module.
 - Run `mvn clean install` in the main directory of the `jira-rest` module and put the resulting `war` file on an application server (TODO will be replaced with embedded jetty server).
 
 #### Jama extraction service
-- Add the URL and credentials to `config.properties` of the `jama-rest` module (see JIRA subsection for more detailed instruction).
+- Add the URL and your credentials to `config.properties` of the `jama-rest` module (see JIRA subsection for more detailed instruction).
 - Run `mvn spring-boot:run` in the main directory of the `jama-rest` module.
 
 ### Fetching the data
-- Adjust the properties in the `config.properties` file in the `data-web` module.
+- Adjust the properties in the `config.properties` file inside the `data-web` module.
 - Run `mvn spring-boot:run` in the `data-web` directory.
 - In order to fetch and save the data, run `http://TODO` and `http://TODO`. This will start the extraction processes, assembling data from the REST endpoints and storing them into an embedded Neo4j database. The database folder `app.db` will be created in the main directory of the `data-web` module.
 - Updates to the data will occur automatically with a scheduler (not implemented yet).
