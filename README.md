@@ -2,7 +2,7 @@
 This project is aimed at visualizing relationships between multiple models and thus providing the means to quickly browse through the interconnections between different resources. At present time, the project will focus on providing visualizations on data attained through JIRA and Jama interfaces. This project is currently under development.
 
 # Modules
-Currently, the project consists of two modules:
+Currently, the project consists of three modules:
 - `data-web`: A Spring Boot application containing the mainly the user-side logic. Comprises a backend, a frontend and an embedded DB.
 - `jira-rest`: An extraction service fetching the data from the JIRA REST interface.
 - `jama-rest`: An extraction service fetching the data from the Jama REST interface.
@@ -26,7 +26,7 @@ Currently, the project consists of two modules:
 
 ### Starting the client application
 - Run `mvn spring-boot:run` in the `data-web` directory, if not done already.
-- Open `localhost:8081/src/index.html` in the browser.
+- Open `http://localhost:8081/src/index.html` in the browser.
 
 ### Editing the frontend code
 - Assuming `npm` is installed, execute `npm install` in the folder `data-web/src/main/resources/static/`. After that, running `webpack` will bundle the code.
