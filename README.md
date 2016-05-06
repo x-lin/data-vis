@@ -1,5 +1,5 @@
 # About this project
-This project is aimed at visualizing relationships between multiple models and thus providing the means to quickly browse through the interconnections between different resources. At present time, the project will focus on providing visualizations on data attained through JIRA and Jama interfaces. This project is currently under development.
+This project is aimed at visualizing relationships between multiple models and thus providing the means to quickly browse through the interconnections between different resources. At present time, it focuses on providing visualizations on data attained through JIRA and Jama interfaces. This project is currently under development.
 
 # Modules
 Currently, the project consists of three modules:
@@ -22,7 +22,7 @@ Currently, the project consists of three modules:
 - Adjust the properties in the `config.properties` file inside the `data-web` module.
 - Run `mvn spring-boot:run` in the `data-web` directory.
 - In order to fetch and save the data, run `http://TODO` and `http://TODO`. This will start the extraction processes, assembling data from the REST endpoints and storing them into an embedded Neo4j database. The database folder `app.db` will be created in the main directory of the `data-web` module.
-- Updates to the data will occur automatically with a scheduler (not implemented yet).
+- Updates to the data will occur automatically with a scheduler (TODO not implemented yet).
 
 ### Starting the client application
 - Run `mvn spring-boot:run` in the `data-web` directory, if not done already.
@@ -51,8 +51,14 @@ RESTful services are used to communicate between the various components and to f
 - tape for testing
 - A bunch of other frameworks including D3, Bootstrap, jQuery, external react + redux libraries, and other utility libraries (check out `package.json` for a complete list).
 
-### JIRA Rest Client
+### JIRA Extraction Service
 - Java
 - Jersey
 - Genson
 - JIRA Rest Java Client
+- Maven for build management
+
+### Jama Extraction Service
+- Java
+- Spring Boot
+- Maven for build management
