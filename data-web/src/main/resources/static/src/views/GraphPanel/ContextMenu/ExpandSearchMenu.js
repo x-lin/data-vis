@@ -59,6 +59,8 @@ class ExpandSearchMenu extends React.Component {
         const mapper = createMapping()
             .setProperty("name")
             .setColumnHeader("Name")
+            .setSortable(true)
+            .setFilterable(true)
             .setContentMapping((node) => {
                 return (
                     <a onClick={() => this.onClick(this.props.d.key, node)}>

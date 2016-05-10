@@ -239,10 +239,10 @@ export default class extends React.Component {
                 return (this.props.showEdgeDirection && d.direction === null) ? "5,2" : "";
             })
             .style("marker-start", (d) => {
-                return (this.props.showEdgeDirection && d.direction === "DOWNSTREAM") ? "url(#marker-start)" : "";
+                return (this.props.showEdgeDirection && (d.direction === "DOWNSTREAM" || d.direction === null)) ? "url(#marker-start)" : "";
             })
             .style("marker-end", (d) => {
-                return (this.props.showEdgeDirection && d.direction === "UPSTREAM") ? "url(#marker-end)" : "";
+                return (this.props.showEdgeDirection && (d.direction === "UPSTREAM" || d.direction === null)) ? "url(#marker-end)" : "";
             });
     }
 

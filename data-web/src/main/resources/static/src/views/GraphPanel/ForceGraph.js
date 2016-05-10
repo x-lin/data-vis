@@ -189,14 +189,11 @@ export default class extends React.Component {
 
         if(this.props.showEdgeDirection) {
             this.state.links
-                .style("stroke-dasharray", (d) => {
-                    return d.direction === null ? "5,2" : "";
-                })
                 .style("marker-start", (d) => {
-                    return d.direction === "DOWNSTREAM" ? "url(#marker-start)" : "";
+                    return d.direction === "DOWNSTREAM" || d.direction === null ? "url(#marker-start)" : "";
                 })
                 .style("marker-end", (d) => {
-                    return d.direction === "UPSTREAM" ? "url(#marker-end)" : "";
+                    return d.direction === "UPSTREAM" || d.direction === null ? "url(#marker-end)" : "";
                 });
         }
 
