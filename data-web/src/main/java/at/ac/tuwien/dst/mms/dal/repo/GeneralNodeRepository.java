@@ -5,12 +5,14 @@ import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
 import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.GeneralNodeJamaIndex;
+import at.ac.tuwien.dst.mms.model.Project;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by xlin on 08.01.2016.
@@ -30,6 +32,11 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 
 	List<GeneralNode> findAllByKey(String key);
 
+	List<GeneralNode> findAllByProject(Project project);
+
+	@Query("START  a=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX +"(key = {0}) MATCH (a)-[:DOWNSTREAM]->(b) RETURN b")
+	Set<GeneralNode> findAllDownstream(String key);
+
 	@Override
 	Iterable<Map<String, Object>> findNeighbors(String key, boolean upstream, boolean downstream, List<String> excluded,
 												List<String> priority, Integer limit, List<String> type);
@@ -40,8 +47,8 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 	@Query("START no=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) " +
 			"MATCH path=(no)-[:DOWNSTREAM*0..10]->(n:GeneralNode), (n)--(n1:GeneralNodeType) " +
 			"WHERE n1.key='SSS' OR n1.key='SRS' OR n1.key='PSRS' " +
-			"WITH path, NODES(path)[1..-1] AS nodes, n1,no,n " +
-			"WHERE ALL(x IN nodes[1..] WHERE (x.key='SSS' OR x.key='SRS' OR x.key='PSRS' OR x.key='FEAT' OR x.key='WP')) " +
+//			"WITH path, n1,no,n " +
+//			"WHERE ALL(x IN nodes[1..] WHERE (x.key='SSS' OR x.key='SRS' OR x.key='PSRS' OR x.key='FEAT' OR x.key='WP')) " +
 			"AND NOT EXISTS((n)-[:DOWNSTREAM]->(:GeneralNode)-->(:GeneralNodeType{key: 'SSS'})) " +
 			"OPTIONAL MATCH (n)-[:DOWNSTREAM]->(tc:GeneralNode)-->(:GeneralNodeType {key: 'TC'}) " +
 			"RETURN n.key AS key, n.name AS name, n1.name AS type, COLLECT(tc.key) AS testcases, n AS node")
@@ -74,6 +81,11 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 			"MATCH (n)-[:DOWNSTREAM]->(tc:GeneralNode)-[:NODE_TYPE]->(:GeneralNodeType {key: 'BUG'}) " +
 			"RETURN DISTINCT tc AS bug, NODES(path) as path")
 	List<BugCoverage> getBugCoverage(String key);
+
+	@Query("START no=node:generalNodeKeyIndex(key={0}) " +
+			"MATCH path=(no)<-[:DOWNSTREAM*0..10]-(n:GeneralNode)-[:NODE_TYPE]-(:GeneralNodeType {key: 'FEAT'}) " +
+			"RETURN DISTINCT n AS feature")
+	List<GeneralNode> getRelatedFeatures(String key);
 
 	@Query("MATCH (n)-[:NODE_TYPE]->(m) WHERE m.key = 'USER' OR m.key = 'BUG' RETURN n")
 	List<GeneralNode> getJiraStuff();

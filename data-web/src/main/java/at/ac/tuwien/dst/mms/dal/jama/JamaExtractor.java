@@ -4,10 +4,17 @@ import at.ac.tuwien.dst.mms.dal.DataWriter;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaActivityDTO;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaNodeDTO;
 import at.ac.tuwien.dst.mms.dal.jama.dto.JamaProjectDTO;
+import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeJamaIndexRepository;
+import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeRepository;
+import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
+import at.ac.tuwien.dst.mms.model.GeneralNode;
+import at.ac.tuwien.dst.mms.model.GeneralNodeJamaIndex;
+import at.ac.tuwien.dst.mms.model.Project;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -16,6 +23,7 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -71,6 +79,46 @@ public class JamaExtractor {
 				logger.error("Exception occurred: ", e);
 			}
 		}
+	}
+
+	@Autowired
+	private GeneralNodeJamaIndexRepository jamaIndexRepository;
+
+	@Autowired
+	private ProjectRepository projectRepository;
+
+	@Autowired
+	private GeneralNodeRepository generalNodeRepository;
+
+	public void addParentChildren() {
+		List<Project> projects = projectRepository.findAll(100000);
+
+		for (Project project : projects) {
+			this.addParentChildren(project);
+		}
+	}
+
+	@Transactional
+	private void addParentChildren(Project project) {
+		List<GeneralNode> nodes = generalNodeRepository.findAllByProject(project);
+
+		for (GeneralNode node : nodes) {
+			if (node.getJamaParentId() != null) {
+				GeneralNodeJamaIndex parentIndex = jamaIndexRepository.findByJamaId(node.getJamaParentId());
+				GeneralNode parent = parentIndex != null ? parentIndex.getNode() : null;
+
+				if (parent != null) {
+					Set<GeneralNode> downstream = generalNodeRepository.findAllDownstream(parent.getKey());
+					downstream.add(node);
+					parent.setDownstream(downstream);
+
+					generalNodeRepository.save(parent);
+				}
+			}
+
+		}
+
+		logger.info(nodes.size() + " nodes for project " + project.getKey() + " updated with parent/children.");
 	}
 
 	@Async

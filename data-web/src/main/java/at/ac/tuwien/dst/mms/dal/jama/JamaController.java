@@ -47,4 +47,9 @@ public class JamaController {
 	) {
 		extractor.extractActivities(dateFrom, dateTo);
 	}
+
+	@RequestMapping(path="/children", method=RequestMethod.GET)
+	public void addParentChildren() {
+		extractor.addParentChildren();
+	}
 }
