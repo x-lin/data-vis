@@ -1,14 +1,16 @@
 package at.ac.tuwien.dst.mms.dal.jira.converters;
 
-import at.ac.tuwien.dst.mms.dal.IndexWriter;
 import at.ac.tuwien.dst.mms.dal.DataConverter;
+import at.ac.tuwien.dst.mms.dal.IndexWriter;
 import at.ac.tuwien.dst.mms.dal.jira.dto.JiraIssueDTO;
+import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeRepository;
 import at.ac.tuwien.dst.mms.dal.repo.GeneralNodeTypeRepository;
 import at.ac.tuwien.dst.mms.dal.repo.ProjectRepository;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.GeneralNodeType;
 import at.ac.tuwien.dst.mms.model.TextIndex;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +31,12 @@ public class JiraIssueDTOToGeneralNode implements DataConverter<JiraIssueDTO, Ge
 
 	@Autowired
 	GeneralNodeTypeRepository generalNodeTypeRepository;
+
+	@Autowired
+	GeneralNodeRepository generalNodeRepository;
+
+	@Autowired
+	Neo4jTemplate neo4jTemplate;
 
 	@Override
 	public GeneralNode convert(JiraIssueDTO sourceObject) {
@@ -97,8 +105,6 @@ public class JiraIssueDTOToGeneralNode implements DataConverter<JiraIssueDTO, Ge
 
 	@Override
 	public GeneralNode convert(JiraIssueDTO sourceObject, GeneralNode targetObject) {
-
-
 		if(targetObject.getName() == null) {
 			targetObject.setName(sourceObject.getName());
 		}
@@ -107,10 +113,13 @@ public class JiraIssueDTOToGeneralNode implements DataConverter<JiraIssueDTO, Ge
 		targetObject.setJiraStatus(sourceObject.getStatus());
 
 		if (sourceObject.getUser() != null) {
-			GeneralNode user = this.createUser(sourceObject);
-			if(targetObject.getUnclassified() == null) {
-				targetObject.setUnclassified(new HashSet<>());
+			List<GeneralNode> users = generalNodeRepository.findNeighborUsers(targetObject.getKey());
+			for(GeneralNode user : users) {
+				neo4jTemplate.deleteRelationshipBetween(targetObject, user, "UNCLASSIFIED");
 			}
+
+			GeneralNode user = this.createUser(sourceObject);
+			targetObject.setUnclassified(new HashSet<>());
 			targetObject.addUnclassified(user);
 		} else {
 			sourceObject.setUser(null);

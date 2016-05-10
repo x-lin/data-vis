@@ -9,6 +9,7 @@ import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.GraphDatabase;
+import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,9 @@ public class JamaRelationshipDTOWriter implements DataWriter<JamaRelationshipDTO
 
 	@Autowired
 	private JamaRelationshipTempStorage tempStorage;
+
+	@Autowired
+	private Neo4jTemplate neo4jTemplate;
 
 	@Override
 	public void write(List<JamaRelationshipDTO> relationships) {
@@ -78,7 +82,7 @@ public class JamaRelationshipDTOWriter implements DataWriter<JamaRelationshipDTO
 			GeneralNode from = generalNodeRepository.findByJamaId(relationship.getFrom());
 			GeneralNode to = generalNodeRepository.findByJamaId(relationship.getTo());
 
-			//TODO find relationships and delete them
+			neo4jTemplate.deleteRelationshipBetween(from, to, "DOWNSTREAM");
 		}
 	}
 

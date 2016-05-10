@@ -44,9 +44,10 @@ public class JiraController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Issue> issues(
 			@QueryParam("projectKey") String projectKey,
+			@QueryParam("updated") String updated,
 			@DefaultValue("") @QueryParam("webhook") String webhook
 	) throws ExecutionException, InterruptedException, IOException {
-		SearchResult result = extractor.getIssues(projectKey);
+		SearchResult result = extractor.getIssues(projectKey, updated);
 
 		List<Issue> issues = null;
 		boolean isWebhook = (webhook != null && webhook.length() > 0);
@@ -58,7 +59,7 @@ public class JiraController {
 		}
 
 		while(result.getTotal() > result.getStartIndex() + result.getMaxResults()) {
-			result = extractor.getIssues(projectKey, result.getStartIndex() + result.getMaxResults());
+			result = extractor.getIssues(projectKey, result.getStartIndex() + result.getMaxResults(), updated);
 			if(!isWebhook) {
 				issues.addAll(IteratorUtils.toList(result.getIssues().iterator()));
 				logger.info("Returning " + result.getMaxResults() + " issues as response.");

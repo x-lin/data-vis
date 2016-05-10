@@ -58,20 +58,23 @@ public class JiraRestExtractor {
 		return projects.get();
 	}
 
-	public SearchResult getIssues(String projectKey) throws ExecutionException, InterruptedException {
-		return this.getIssues(projectKey, 0);
+	public SearchResult getIssues(String projectKey, String updated) throws ExecutionException, InterruptedException {
+		return this.getIssues(projectKey, 0, updated);
 	}
 
-	public SearchResult getIssues(String projectKey, int startAt) throws ExecutionException, InterruptedException {
+	public SearchResult getIssues(String projectKey, int startAt, String updated) throws ExecutionException, InterruptedException {
 		//result size of -1 means, the JIRA REST API will return the maximum batch size allowed.
-		return this.getIssues(projectKey, startAt, -1);
+		return this.getIssues(projectKey, startAt, -1, updated);
 	}
 
-	public SearchResult getIssues(String projectKey, int startAt, int resultsSize) throws ExecutionException, InterruptedException {
+	public SearchResult getIssues(String projectKey, int startAt, int resultsSize, String updated) throws ExecutionException, InterruptedException {
 		String jqlQuery = "project="+projectKey;
 
-		Set<String> fields = new HashSet<>(Arrays.asList("summary", "issuetype", "created", "updated", "project", "status", "reporter", "assignee"));
+		if (updated != null) {
+			jqlQuery += " AND updated > -" + updated;
+		}
 
+		Set<String> fields = new HashSet<>(Arrays.asList("summary", "issuetype", "created", "updated", "project", "status", "reporter", "assignee"));
 		Promise<SearchResult> result = restClient.getSearchClient().searchJql(jqlQuery, resultsSize, startAt, fields);
 
 		return result.get();

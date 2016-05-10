@@ -21,7 +21,7 @@ public class ExtractionJob {
 	private final int RATE_MS = 1000 * 60 * 10;
 
 	@Autowired
-	private JamaController controller;
+	private JamaController jamaController;
 
 	@Autowired
 	private JiraController jiraController;
@@ -39,9 +39,13 @@ public class ExtractionJob {
 	private void scheduleJob() throws SchedulerException {
 		logger.info("Extracting data on " + lastExtracted.getTime());
 
+		//TODO persistently save lastExtracted time (or save to DB)
+
 		Date extractionDate = lastExtracted.getTime();
 		lastExtracted.setTime(java.util.Calendar.getInstance().getTime());
-		controller.update(extractionDate, null);
-		//TODO add extraction of jira data
+		jamaController.update(extractionDate, null);
+
+		//TODO convert date to hour value
+		//jiraController.getTickets(extractionDate.toString());
 	}
 }

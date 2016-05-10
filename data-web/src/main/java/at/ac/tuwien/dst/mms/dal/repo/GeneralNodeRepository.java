@@ -28,6 +28,9 @@ public interface GeneralNodeRepository extends GraphRepository<GeneralNode>, Gen
 	@Query("MATCH (a:GeneralNode) RETURN a LIMIT {0}")
 	List<GeneralNode> findAll(int limit);
 
+	@Query("START node=node:" + GeneralNode.GENERAL_NODE_KEY_INDEX + "(key={0}) MATCH (node)-[:UNCLASSIFIED]-(b)-[:NODE_TYPE]-(c) WHERE c.key='USER' return b")
+	List<GeneralNode> findNeighborUsers(String key);
+
 	List<GeneralNode> findAllByKey(String key, Pageable pageable);
 
 	List<GeneralNode> findAllByKey(String key);

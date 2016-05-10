@@ -17,21 +17,21 @@ public class JiraExtractor {
 	Logger logger;
 
 	//TODO remove persistent error logging
-	public void extractAll() {
+	public void extractAll(String updated) {
 		long start = System.nanoTime();
 
 		Project[] projects = jiraRestClient.getProjects();
 
 		for (Project project : projects) {
-			this.extractTickets(project.getKey());
+			this.extractTickets(project.getKey(), updated);
 		}
 
 		logger.info("Finished requesting all data in " + (System.nanoTime() - start)/1000000000.0 + "s.");
 	}
 
-	public void extractTickets(String projectKey) {
+	public void extractTickets(String projectKey, String updated) {
 		try {
-			jiraRestClient.getIssuesWebhook(projectKey);
+			jiraRestClient.getIssuesWebhook(projectKey, updated);
 		} catch (Exception e) {
 			logger.error("Exception occurred: ", e);
 		}

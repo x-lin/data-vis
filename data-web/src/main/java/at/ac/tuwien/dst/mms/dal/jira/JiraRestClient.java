@@ -51,15 +51,22 @@ public class JiraRestClient {
 	}
 
 	@Async
-	public void getIssuesWebhook(String projectKey) {
-		URI uri = UriComponentsBuilder
+	public void getIssuesWebhook(String projectKey, String updated) {
+		UriComponentsBuilder builder = UriComponentsBuilder
 				.fromHttpUrl(issuesUri)
 				.queryParam("projectKey", '"' + projectKey + '"')
-				.queryParam("webhook", Config.JIRA_WEBHOOK_ISSUES)
-				.build().encode().toUri();
+				.queryParam("webhook", Config.JIRA_WEBHOOK_ISSUES);
+
+		if (updated != null) {
+			builder.queryParam("updated", updated);
+		}
+
+		URI uri = builder.build().encode().toUri();
 
 		logger.info("Requesting issues for project " + projectKey + " with URI " + uri + ". Results will be directed " +
 				"to specified webhook.");
+
+		System.out.println(uri);
 
 		restTemplate.getForObject(uri, List.class);
 	}
