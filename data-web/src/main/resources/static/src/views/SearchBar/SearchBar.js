@@ -62,24 +62,40 @@ class SearchBar extends React.Component {
     }
 
     handleKeyDown(event) {
+        const { searchType, searchKey, setSearchSelectedIndex, selectedIndex, data, clearAllItems, searchItem } = this.props;
         // down key
         if (event.keyCode === 40) {
-            if (this.props.selectedIndex + 1 < this.props.data.items.length) {
-                this.props.setSearchSelectedIndex(this.props.selectedIndex + 1);
+            if (selectedIndex + 1 < data.items.length) {
+                setSearchSelectedIndex(selectedIndex + 1);
             }
         }
         // up key
-        if (event.keyCode === 38) {
-            if (this.props.selectedIndex > 0) {
-                this.props.setSearchSelectedIndex(this.props.selectedIndex - 1);
+        else if (event.keyCode === 38) {
+            if (selectedIndex > 0) {
+                setSearchSelectedIndex(selectedIndex - 1);
+            }
+        }
+        //left key
+        else if (event.keyCode === 37 && data.items) {
+            if (data.startAt > 0) {
+                searchItem(searchType, searchKey, data.startAt - 10);
+                setSearchSelectedIndex(0);
+            }
+        }
+        //right key
+        else if (event.keyCode === 39  && data.items) {
+            const endpointer = data.startAt + data.items.length;
+            if (endpointer < data.count) {
+                searchItem(searchType, searchKey, endpointer);
+                setSearchSelectedIndex(0);
             }
         }
         // ESC key
-        if (event.keyCode === 27) {
-            this.props.clearAllItems();
+        else if (event.keyCode === 27) {
+            clearAllItems();
         }
         // Enter key
-        if (event.keyCode === 13) {
+        else if (event.keyCode === 13) {
             event.preventDefault();
             event.stopPropagation();
 
