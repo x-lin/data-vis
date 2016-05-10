@@ -3,6 +3,7 @@ import React from "react";
 import SidebarBox from "./SidebarBox";
 import TestCoverageTableContainer from "../TestCoverageTable/TestCoverageTableContainer";
 import RelatedBugsTableContainer from "./../RelatedBugsTable/RelatedBugsTableContainer";
+import QueryBuilderContainer from "./../QueryBuilderTable/QueryBuilderTableContainer";
 
 class Sidebar extends React.Component {
     removeBox(id) {
@@ -23,6 +24,8 @@ class Sidebar extends React.Component {
                 body = <TestCoverageTableContainer data={entry.data} status={entry.status} />;
             } else if (entry.type === "Related Open Tickets") {
                 body = <RelatedBugsTableContainer data={entry.data} status={entry.status} />;
+            } else if (entry.type === "Query Builder") {
+                body = <QueryBuilderContainer data={entry.data} status={entry.status} />;
             }
 
             const box = <SidebarBox
