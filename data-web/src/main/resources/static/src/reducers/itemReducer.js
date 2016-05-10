@@ -14,7 +14,7 @@ const searchBarReducer = (state, action) => {
         case SET_SEARCH_SELECTED_INDEX:
             return Object.assign({}, state, {
                 selectedIndex: action.value,
-                value: action.value >= 0 ? state.data[action.value].key : state.value
+                value: action.value >= 0 ? state.data.items[action.value].key : state.value
             });
         case SET_SEARCH_INPUT_VALUE:
             return Object.assign({}, state, {
@@ -30,6 +30,8 @@ const fetchItemsReducer = (state, action) => {
         case ITEM_FETCH_START:
             return Object.assign({}, state, {
                 status: ITEM_FETCH_START,
+                searchKey: action.key,
+                searchType: action.category,
                 error: {}
             });
         case ITEM_FETCH_SUCCESS:
@@ -42,7 +44,9 @@ const fetchItemsReducer = (state, action) => {
             return Object.assign({}, state, {
                 data: [],
                 error: action.error,
-                status: ITEM_FETCH_ERROR
+                status: ITEM_FETCH_ERROR,
+                searchKey: "",
+                searchType: ""
             });
         default:
             return state;
@@ -50,12 +54,14 @@ const fetchItemsReducer = (state, action) => {
 };
 
 export default (state = {
-    data: [],
+    data: {},
     error: {},
     selectedIndex: -1,
     item: {},
     type: "GeneralNode",
-    value: ""
+    value: "",
+    searchKey: "",
+    searchType: ""
 }, action) => {
     switch (action.type) {
         case SET_SEARCH_CATEGORY:
@@ -70,13 +76,15 @@ export default (state = {
 
         case ITEMS_CLEAR:
             return Object.assign({}, state, {
-                data: [],
+                data: {},
                 error: {},
-                status: ITEMS_CLEAR
+                status: ITEMS_CLEAR,
+                searchKey: "",
+                searchType: ""
             });
         case NEIGHBORS_FETCH_START:
             return Object.assign({}, state, {
-                data: [],
+                data: {},
                 error: {}
             });
         default:

@@ -17,9 +17,9 @@ public interface DataReader<T> {
 
 	List<T> findMatchingByNeighborKey(String property, String value, int limit);
 
-	Iterable<Map<String,Object>> findAllMatching(String key, int limit);
+	SearchResult findAllMatching(String key, int limit, int startAt);
 
-	Iterable<Map<String,Object>> findAllMatching(String key);
+	SearchResult findAllMatching(String key);
 
 	T find(String indexAttribute);
 

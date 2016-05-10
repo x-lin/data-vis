@@ -22,9 +22,11 @@ public interface SearchController<T> {
 			@PathVariable String key);
 
 	@RequestMapping(value = "/startLike/{string}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	Iterable<Map<String, Object>> getAllStartingWith(
+	SearchResult getAllStartingWith(
 			@PathVariable String string,
-			@RequestParam Integer limit);
+			@RequestParam Integer limit,
+			@RequestParam Integer startAt
+	);
 
 	@RequestMapping(value ="/count", method = RequestMethod.GET)
 	Long countAll();

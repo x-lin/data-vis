@@ -109,6 +109,11 @@ a, a:hover {
     font-size: 13px !important;
 }
 
+.activable:focus, .activable:hover, .activable:active {
+    color: #fff;
+    background-color: #337ab7;
+}
+
 .overflow-scroll {
     overflow-y:scroll;
     overflow-x: hidden;

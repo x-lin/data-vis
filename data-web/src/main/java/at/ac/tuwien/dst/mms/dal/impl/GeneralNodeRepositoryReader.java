@@ -163,7 +163,6 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 	@Transactional
 	public List<Map<String,Object>> getByQueryBuilder(QueryGraph graph) {
 		Iterable<Map<String, Object>> it = ((GeneralNodeRepository)this.getRepository()).findByQueryBuilder(graph.getSource(), graph.getNodes(), graph.getEdges());
-		List<Map<String, Object>> result = this.getResult(it);
-		return result;
+		return this.getResult(it);
 	}
 }

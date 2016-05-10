@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.dal.impl;
 
 import at.ac.tuwien.dst.mms.dal.DataReader;
+import at.ac.tuwien.dst.mms.dal.query.model.SearchResult;
 import at.ac.tuwien.dst.mms.dal.repo.TextIndexRepository;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import at.ac.tuwien.dst.mms.model.ModelEntity;
@@ -56,13 +57,13 @@ public abstract class AbstractRepositoryReader<T extends ModelEntity> implements
 	public abstract List<T> findMatchingByNeighborKey(String property, String keyValue, int limit);
 
 	@Override
-	public Iterable<Map<String,Object>> findAllMatching(String key) {
-		return findAllMatching(key, Config.REPO_LIMIT);
+	public SearchResult findAllMatching(String key) {
+		return findAllMatching(key, Config.REPO_LIMIT, 0);
 	}
 
 	@Override
-	public Iterable<Map<String,Object>> findAllMatching(String key, int limit) {
-		return textIndexRepository.findBySearchText(key, limit);
+	public SearchResult findAllMatching(String key, int limit, int startAt) {
+		return textIndexRepository.findBySearchText(key, limit, startAt);
 	}
 
 	@Override

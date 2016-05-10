@@ -32,10 +32,12 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 	}
 
 	@Override
-	public Iterable<Map<String, Object>> getAllStartingWith(
+	public SearchResult getAllStartingWith(
 			@PathVariable String string,
-			@RequestParam(required = false, defaultValue = Config.REPO_LIMIT_STRING) Integer limit) {
-		return reader.findAllMatching(string, limit);
+			@RequestParam(required = false, defaultValue = Config.REPO_LIMIT_STRING) Integer limit,
+			@RequestParam(required = false, defaultValue = "0") Integer startAt
+	) {
+		return reader.findAllMatching(string, limit, startAt);
 	}
 
 	@Override

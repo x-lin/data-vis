@@ -10,11 +10,13 @@ import SearchBar from "./SearchBar";
 
 const mapStateToProps = (state) => {
     return {
-        items: state.items.data,
+        data: state.items.data,
         selectedIndex: state.items.selectedIndex,
         type: state.items.type,
         value: state.items.value,
-        categories: state.items.categories
+        categories: state.items.categories,
+        searchKey: state.items.searchKey,
+        searchType: state.items.searchType
     };
 };
 
@@ -23,8 +25,8 @@ const mapDispatchProps = (dispatch) => {
         searchNeighborsStart: (category, key) => {
             dispatch(searchNeighbors(category, key));
         },
-        searchItem: (category, key) => {
-            dispatch(getItem(category, key));
+        searchItem: (category, key, startAt) => {
+            dispatch(getItem(category, key, startAt));
         },
         clearAllItems: () => {
             dispatch(clearItems());

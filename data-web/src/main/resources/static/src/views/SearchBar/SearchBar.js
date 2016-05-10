@@ -32,7 +32,8 @@ class SearchBar extends React.Component {
     }
 
     handleSubmit(event) {
-        const { items, selectedIndex } = this.props;
+        const { selectedIndex } = this.props;
+        const { items } = this.props.data;
         event.preventDefault(); // done to disable site refreshes
 
         const item = items[selectedIndex];
@@ -63,7 +64,7 @@ class SearchBar extends React.Component {
     handleKeyDown(event) {
         // down key
         if (event.keyCode === 40) {
-            if (this.props.selectedIndex + 1 < this.props.items.length) {
+            if (this.props.selectedIndex + 1 < this.props.data.items.length) {
                 this.props.setSearchSelectedIndex(this.props.selectedIndex + 1);
             }
         }
@@ -87,25 +88,80 @@ class SearchBar extends React.Component {
     }
 
     renderItems() {
-        return this.props.items.map((item, index) => {
-            const listgroupClass = `list-group-item cursor ${this.props.selectedIndex === index ? "active" : ""}`;
+        const { data } = this.props;
 
-            return (
-                <li className={listgroupClass} key={index}
-                  onClick={(event) => this.handleSubmit(event)}
-                  onMouseOver={() => this.props.setSearchSelectedIndex(index)}
-                >
+        if (data.items && data.items.length > 0) {
+            return data.items.map((item, index) => {
+                const listgroupClass = `list-group-item cursor ${this.props.selectedIndex === index ? "active" : ""}`;
+
+                return (
+                    <li className={listgroupClass} key={index}
+                        onClick={(event) => this.handleSubmit(event)}
+                        onMouseOver={() => this.props.setSearchSelectedIndex(index)}
+                    >
                     <span className="label"
-                      style={{
+                          style={{
                           backgroundColor: Constants.getColor(item.type),
                           color: Constants.getContrastColor(Constants.getColor(item.type))
                       }}
                     >
                         {item.type}</span>
-                    &nbsp; <strong>{item.name}</strong> | {item.key}
-                </li>
+                        &nbsp; <strong>{item.name}</strong> | {item.key}
+                    </li>
+                );
+            });
+        } else {
+            return null;
+        }
+    }
+
+
+
+    renderNaviButtons() {
+        const { searchItem, searchKey, searchType } = this.props;
+        const { items, startAt, count } = this.props.data;
+
+        if (items && items.length > 0) {
+
+            const endpointer = startAt + items.length;
+            const leftDisabled = startAt === 0;
+            const rightDisabled = endpointer >= count;
+
+            const enabled = { display: "table-cell", padding: "10px", };
+            const disabled = Object.assign({}, enabled, {
+                opacity: ".40",
+                cursor: "not-allowed"
+            })
+
+            return (
+                <div style={{ display: "table", width: "100%", textAlign: "center" }}>
+                    <div style={leftDisabled ? disabled : enabled} className={leftDisabled ? "" : "activable"}
+                         onClick={(event) => {
+                            event.stopPropagation();
+
+                            if (!leftDisabled) {
+                                searchItem(searchType, searchKey, startAt - 10);
+                            }
+                         }}
+                    >
+                        <span className="fa fa-chevron-left" />
+                    </div>
+                    <div style={rightDisabled ? disabled : enabled} className={rightDisabled ? "" : "activable"}
+                         onClick={(event) => {
+                            event.stopPropagation();
+
+                            if (!rightDisabled) {
+                                searchItem(searchType, searchKey, endpointer);
+                            }
+                         }}
+                    >
+                        <span className="fa fa-chevron-right" />
+                    </div>
+                </div>
             );
-        });
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -121,6 +177,7 @@ class SearchBar extends React.Component {
 
                     <SearchAutocomplete
                       items={this.renderItems()}
+                      naviButtons={this.renderNaviButtons()}
                     />
 
                 </div>
@@ -133,12 +190,14 @@ SearchBar.propTypes = {
     value: React.PropTypes.string,
     type: React.PropTypes.string,
     selectedIndex: React.PropTypes.number.isRequired,
-    items: React.PropTypes.array.isRequired,
+    data: React.PropTypes.object.isRequired,
     clearAllItems: React.PropTypes.func.isRequired,
     setSearchSelectedIndex: React.PropTypes.func.isRequired,
     setSearchInputValue: React.PropTypes.func.isRequired,
     searchNeighborsStart: React.PropTypes.func.isRequired,
-    searchItem: React.PropTypes.func.isRequired
+    searchItem: React.PropTypes.func.isRequired,
+    searchKey: React.PropTypes.string.isRequired,
+    searchType: React.PropTypes.string.isRequired
 };
 
 export default SearchBar;
