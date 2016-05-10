@@ -36,4 +36,6 @@ public interface DataReader<T> {
 	List<BugCoverage> getBugCoverage(String key);
 
 	List<Map<String, Object>> getNodesAndNeighborKeys(List<String> keys);
+
+	List<Map<String,Object>> getByQueryBuilder(QueryGraph graph);
 }

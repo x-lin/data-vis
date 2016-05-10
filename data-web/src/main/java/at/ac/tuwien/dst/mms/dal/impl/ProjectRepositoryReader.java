@@ -104,4 +104,9 @@ public class ProjectRepositoryReader extends AbstractRepositoryReader<Project> i
 	public List<Map<String, Object>> getNodesAndNeighborKeys(List keys) {
 		return null;
 	}
+
+	@Override
+	public List<Map<String,Object>> getByQueryBuilder(QueryGraph graph) {
+		return null;
+	};
 }

@@ -1,9 +1,6 @@
 package at.ac.tuwien.dst.mms.client.rest;
 
-import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
-import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
-import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+import at.ac.tuwien.dst.mms.dal.query.model.*;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,5 +68,10 @@ public interface SearchController<T> {
 	@RequestMapping(value = "/synch", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Map<String, Object>> synch(
 			@RequestParam List<String> key
+	);
+
+	@RequestMapping(value = "/builder", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Map<String, Object>> getByQueryBuilder(
+			@RequestBody QueryGraph graph
 	);
 }

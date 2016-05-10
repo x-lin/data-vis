@@ -2,13 +2,11 @@ package at.ac.tuwien.dst.mms.client.rest.impl;
 
 import at.ac.tuwien.dst.mms.client.rest.SearchController;
 import at.ac.tuwien.dst.mms.dal.DataReader;
-import at.ac.tuwien.dst.mms.dal.query.model.BugCoverage;
-import at.ac.tuwien.dst.mms.dal.query.model.NeighborType;
-import at.ac.tuwien.dst.mms.dal.query.model.Neighbors;
-import at.ac.tuwien.dst.mms.dal.query.model.TestCoverage;
+import at.ac.tuwien.dst.mms.dal.query.model.*;
 import at.ac.tuwien.dst.mms.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -98,6 +96,13 @@ public abstract class AbstractSearchController<T> implements SearchController<T>
 			@RequestParam List<String> key
 	) {
 		return reader.getNodesAndNeighborKeys(key);
+	}
+
+	@Override
+	public List<Map<String, Object>> getByQueryBuilder(
+			@RequestBody QueryGraph graph
+	) {
+		return reader.getByQueryBuilder(graph);
 	}
 
 	protected DataReader<T> getRepositoryReader() {

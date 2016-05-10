@@ -93,6 +93,25 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 	}
 
 	@Transactional
+	protected List<Map<String, Object>> getResult(Iterable<Map<String, Object>> input) {
+		List<Map<String, Object>> results = new ArrayList<>();
+
+		if (input != null) {
+			for (Map<String, Object> row : input) {
+				Map<String, Object> map = new HashMap<>();
+				for (String key : row.keySet()) {
+					GeneralNode node = neo4jOperations.convert(row.get(key), GeneralNode.class);
+					map.put(key, node);
+				}
+
+				results.add(map);
+			}
+		}
+
+		return results;
+	}
+
+	@Transactional
 	protected List<Map<String, Object>> getNodesAndNeighbors(Iterable<Map<String, Object>> nodesWithNeighbors) {
 		List<Map<String, Object>> results = new ArrayList<>();
 		//List<NodeWithNeighborKeys> res = new ArrayList<>();
@@ -138,5 +157,13 @@ public class GeneralNodeRepositoryReader extends AbstractRepositoryReader<Genera
 		}
 
 		return results;
+	}
+
+	@Override
+	@Transactional
+	public List<Map<String,Object>> getByQueryBuilder(QueryGraph graph) {
+		Iterable<Map<String, Object>> it = ((GeneralNodeRepository)this.getRepository()).findByQueryBuilder(graph.getSource(), graph.getNodes(), graph.getEdges());
+		List<Map<String, Object>> result = this.getResult(it);
+		return result;
 	}
 }
