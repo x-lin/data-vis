@@ -1,14 +1,31 @@
 import React from "react";
 import { connect } from "react-redux";
-import { MenuItem, Dropdown, ButtonGroup } from "react-bootstrap";
+import { MenuItem, Dropdown, ButtonGroup, Modal, Button } from "react-bootstrap";
 
 import { HIDE_CONTEXT, EXPAND_CONTEXT, STATS_CONTEXT,
     activateContext, deactivateContext} from "../../../actions/action-creators/ContextMenuActions";
 import { searchTestCoverage, searchRelatedBugs } from "../../../actions/aggregated/SearchTestCoverageActions";
 import { removeFromGraph } from "../../../actions/action-creators/GraphActions";
 import ContextMenuBuilder from "./ContextMenuBuilder";
+import GraphQueryBuilderContainer from "./GraphQueryBuilderContainer";
 
 class ContextMenuButtonMenu extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showModal: false
+        };
+    }
+
+    closeModal() {
+        this.setState({ showModal: false });
+    }
+
+    openModal() {
+        this.setState({ showModal: true });
+    }
+
     showTestCoverage(d) {
         this.props.searchTestCoverage(d);
     }
@@ -28,11 +45,11 @@ class ContextMenuButtonMenu extends React.Component {
             </a>
             <a type="button" className="btn btn-app" title="Remove node from panel" onClick={() => this.removeNode(d.key)}>
                 <span className="fa fa-remove" />
-                Remove
+                Hide
             </a>
-            <a type="button" className={`btn btn-app ${context === STATS_CONTEXT && "active"} disabled`} title="Statistics" onClick={() => activateContext(STATS_CONTEXT)}>
+            <a type="button" className={`btn btn-app ${context === STATS_CONTEXT && "active"}`} title="QBuilder" onClick={() => this.openModal()}>
                 <span className="fa fa-bar-chart" />
-                Stats
+                QBuilder
             </a>
 
             <Dropdown id="more-options-menu">
@@ -44,9 +61,19 @@ class ContextMenuButtonMenu extends React.Component {
                 <Dropdown.Menu>
                     <MenuItem eventKey="1" onSelect={() => this.showTestCoverage(d)}><strong>TC</strong>&nbsp; Test Coverage</MenuItem>
                     <MenuItem eventKey="2" onSelect={() => this.props.searchRelatedBugs(d)}><strong>RT</strong>&nbsp; Related Open Tickets</MenuItem>
+                    {/*<MenuItem eventKey="3" onSelect={() => {}}><strong>RF</strong>&nbsp; Related Features</MenuItem>*/}
                     {/*<MenuItem eventKey="3" onSelect={() => {}} className="disabled"><strong>RW</strong>&nbsp; Related Work Packages</MenuItem>*/}
                 </Dropdown.Menu>
             </Dropdown>
+
+            <Modal show={this.state.showModal} onHide={() => this.closeModal()} bsSize="large">
+                <Modal.Header closeButton>
+                    <Modal.Title>Query Builder</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <GraphQueryBuilderContainer node={this.props.d} />
+                </Modal.Body>
+            </Modal>
         </ButtonGroup>
     }
 }

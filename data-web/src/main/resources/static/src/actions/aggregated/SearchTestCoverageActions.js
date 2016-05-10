@@ -1,6 +1,7 @@
 import { getTestCoverage } from "./promises/GETTestCoverageActions";
 import { getRelatedBugs } from "./promises/GETRelatedBugsActions";
 import { setTestCoverageVisibility } from "../action-creators/SidebarActions";
+import { postQueryBuilder } from "./promises/POSTQueryBuilderActions";
 
 let i = 0;
 
@@ -24,6 +25,19 @@ export const searchRelatedBugs = (node) => {
         if (node.key) {
             dispatch(setTestCoverageVisibility(true));
             return dispatch(getRelatedBugs(node, index));
+        } else {
+            return dispatch(() => {});
+        }
+    };
+};
+
+export const searchByQueryBuilder = (data) => {
+    const index = i++;
+
+    return (dispatch) => {
+        if (data.source.key) {
+            dispatch(setTestCoverageVisibility(true));
+            return dispatch(postQueryBuilder(data, index));
         } else {
             return dispatch(() => {});
         }

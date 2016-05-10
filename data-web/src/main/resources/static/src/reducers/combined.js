@@ -10,6 +10,7 @@ import nodeTypeReducer from "./nodeTypeReducer";
 import layoutReducer from "./sidebarReducer";
 import contextMenuReducer from "./contextMenuReducer";
 import sidebarReducer from "./sidebarReducer";
+import queryBuilderReducer from "./queryBuilderReducer";
 
 export default combineReducers({
     settings: settingsReducer,
@@ -21,5 +22,6 @@ export default combineReducers({
     nodeTypes: nodeTypeReducer,
     layout: layoutReducer,
     contextmenu: contextMenuReducer,
-    sidebar: sidebarReducer
+    sidebar: sidebarReducer,
+    builder: queryBuilderReducer
 });

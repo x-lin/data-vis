@@ -1,4 +1,4 @@
-import { REHYDRATE } from "redux-persist/constants";
+//import { REHYDRATE } from "redux-persist/constants";
 
 import { SET_SIDEBAR_PANEL, DELETE_BOX_FROM_SIDEBAR, TOGGLE_BOX_FROM_SIDEBAR }
     from "../actions/action-creators/SidebarActions";
@@ -6,6 +6,8 @@ import { TEST_COVERAGE_FETCH_ERROR, TEST_COVERAGE_FETCH_SUCCESS, TEST_COVERAGE_F
     from "../actions/action-creators/TestCoverageActions";
 import { RELATED_BUGS_FETCH_START, RELATED_BUGS_FETCH_SUCCESS, RELATED_BUGS_FETCH_ERROR }
     from "../actions/action-creators/RelatedBugsActions";
+import { QUERY_BUILDER_FETCH_ERROR, QUERY_BUILDER_FETCH_START, QUERY_BUILDER_FETCH_SUCCESS }
+    from "../actions/action-creators/QueryBuilderActions";
 import Constants from "../config/Constants";
 
 const setSidebarVisibility = (state, action) => {
@@ -155,6 +157,64 @@ const createRelatedBugs = (state, action) => {
     }
 };
 
+const createByQueryBuilder = (state, action) => {
+    switch(action.type) {
+        case QUERY_BUILDER_FETCH_START:
+            const obj = {
+                id: action.id,
+                node: action.data.source,
+                data: [],
+                status: "START",
+                title: action.data.source.name,
+                labels: [action.data.source.type],
+                type: "Query Builder",
+                isCollapsed: false
+            };
+
+            return Object.assign({}, state, {
+                data: [obj, ...state.data]
+            });
+        case QUERY_BUILDER_FETCH_ERROR:
+            for (let i = 0; i < state.data.length; i++) {
+                if (state.data[i].id === action.id) {
+                    const obj = Object.assign({}, state.data[i]);
+                    obj.status = "ERROR";
+
+                    return Object.assign({}, state, {
+                        data: [
+                            ...state.data.slice(0, i),
+                            obj,
+                            ...state.data.slice(i+1)
+                        ]
+                    });
+                }
+            }
+
+            return state;
+        case QUERY_BUILDER_FETCH_SUCCESS:
+            for (let i = 0; i < state.data.length; i++) {
+                if (state.data[i].id === action.id) {
+                    const obj = Object.assign({}, state.data[i]);
+
+                    obj.data = action.data;
+                    obj.status = "SUCCESS";
+
+                    return Object.assign({}, state, {
+                        data: [
+                            ...state.data.slice(0, i),
+                            obj,
+                            ...state.data.slice(i+1)
+                        ]
+                    });
+                }
+            }
+
+            return state;
+        default:
+            return state;
+    }
+};
+
 export default (
     state = {
         sidebar: {
@@ -213,6 +273,10 @@ export default (
         case RELATED_BUGS_FETCH_START:
         case RELATED_BUGS_FETCH_SUCCESS:
             return createRelatedBugs(state, action);
+        case QUERY_BUILDER_FETCH_START:
+        case QUERY_BUILDER_FETCH_ERROR:
+        case QUERY_BUILDER_FETCH_SUCCESS:
+            return createByQueryBuilder(state, action);
         //case REHYDRATE:
         //    state.sidebar.sidePanels.forEach((sidePanel) => {
         //        if (action.payload.layout && action.payload.layout.sidebar.key === sidePanel.key) {

@@ -142,6 +142,11 @@ a, a:hover {
 
 .popover {
     max-width: 300px;
+    z-index: 1;
+}
+
+.popover-modal {
+    z-index: 1060;
 }
 
 .autocomplete {
@@ -475,6 +480,11 @@ a.disabled-link, a:link.disabled-link, a:hover.disabled-link, a:focus.disabled-l
     outline: none;
     cursor: inherit;
     display: block;
+}
+
+.btn-alternative.active {
+    background-color: rgb(44, 59, 65);
+    color: #FFF;
 }
 
 .box-custom {
