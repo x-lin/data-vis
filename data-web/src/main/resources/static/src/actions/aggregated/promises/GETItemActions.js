@@ -8,7 +8,7 @@ export const getItem = (category, key) => {
     return dispatch => {
         dispatch(fetchStart(category, key));
 
-        return axios.get(`/search/${endpoint}/startLike/${key}?limit=10`)
+        return axios.get(`../search/${endpoint}/startLike/${key}?limit=10`)
             .then((response) => {
                 dispatch(fetchSuccess(category, key, response.data));
             })

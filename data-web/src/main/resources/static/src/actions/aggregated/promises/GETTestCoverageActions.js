@@ -7,7 +7,7 @@ export const getTestCoverage = (node, index) => {
     return dispatch => {
         dispatch(fetchStart(node, index));
 
-        return axios.get(`/search/${getEndpoint(node.type)}/coverage/${node.key}`)
+        return axios.get(`../search/${getEndpoint(node.type)}/coverage/${node.key}`)
             .then((response) => {
                 dispatch(fetchSuccess(node.key, response.data, index));
             })

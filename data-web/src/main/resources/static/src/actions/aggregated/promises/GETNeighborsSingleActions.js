@@ -8,7 +8,7 @@ export const getNeighborsSingle = (node) => {
     return (dispatch) => {
         dispatch(fetchNeighborsSingleStart(node));
 
-        return axios.get(`/search/${getEndpoint(node.type)}/neighborsSingle/${node.key}`)
+        return axios.get(`../search/${getEndpoint(node.type)}/neighborsSingle/${node.key}`)
             .then((response) => {
                 dispatch(fetchNeighborsSingleSuccess(node, response.data));
             })

@@ -7,7 +7,7 @@ export const getNodeTypes = () => {
     return (dispatch) => {
         dispatch(fetchNodeTypeStart());
 
-        return axios.get("/search/nodeTypes")
+        return axios.get("../search/nodeTypes")
             .then((response) => {
                 dispatch(fetchNodeTypeSuccess(response.data));
             })

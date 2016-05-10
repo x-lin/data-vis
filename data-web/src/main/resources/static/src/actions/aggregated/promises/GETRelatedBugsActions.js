@@ -7,7 +7,7 @@ export const getRelatedBugs = (node, index) => {
     return dispatch => {
         dispatch(fetchStart(node, index));
 
-        return axios.get(`/search/${getEndpoint(node.type)}/bugs/${node.key}`)
+        return axios.get(`../search/${getEndpoint(node.type)}/bugs/${node.key}`)
             .then((response) => {
                 dispatch(fetchSuccess(node.key, response.data, index));
             })

@@ -8,7 +8,7 @@ export const getNeighborTypes = (node) => {
     return (dispatch) => {
         dispatch(fetchNeighborTypesStart(node));
 
-        return axios.get(`/search/${getEndpoint(node.type)}/neighborTypes/${node.key}`)
+        return axios.get(`../search/${getEndpoint(node.type)}/neighborTypes/${node.key}`)
             .then((response) => {
                 dispatch(fetchNeighborTypesSuccess(response.data));
             })

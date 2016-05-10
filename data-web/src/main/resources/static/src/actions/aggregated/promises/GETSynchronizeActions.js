@@ -10,7 +10,7 @@ export const synchronize = (nodes) => {
             return `${string}key=${entry.key}&`;
         }, "");
 
-        return axios.get(`/search/generalNodes/synch?${params}`)
+        return axios.get(`../search/generalNodes/synch?${params}`)
             .then((response) => {
                 dispatch(fetchSuccess(response.data));
             })

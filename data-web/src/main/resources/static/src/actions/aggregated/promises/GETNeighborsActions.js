@@ -13,7 +13,7 @@ export const getNeighbors = (category, key, params) => {
 
         dispatch(fetchNeighborsStart(category, key));
 
-        return axios.get(`/search/${getEndpoint(category)}/neighbors/${key}?${paramsString}`)
+        return axios.get(`../search/${getEndpoint(category)}/neighbors/${key}?${paramsString}`)
             .then((response) => {
                 dispatch(fetchNeighborsSuccess(category, key, response.data));
             })
