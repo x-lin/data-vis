@@ -15,19 +15,21 @@ class QueryBuilderTable extends React.Component {
 
         if (this.props.data.length > 0) {
             for (const key in this.props.data[0]) {
-                //TODO search doesn't work
                 const mapping = createMapping()
                     .setProperty("name")
                     .setColumnHeader(key)
                     .setContentMapping((object) => {
-                        if(object[key] != null) {
+                        if (object !== null) {
                             return <span>
-                                <Label bgColor={Constants.getColor(object[key].type)}>{object[key].type}</Label> &nbsp;
-                                <a onClick={() => this.onNameClick(object[key].key)}>{object[key].name}</a>
+                                <Label bgColor={Constants.getColor(object.type)}>{object.type}</Label> &nbsp;
+                                <a onClick={() => this.onNameClick(object.key)}>{object.name}</a>
                             </span>;
                         } else {
                             return "-";
                         }
+                    })
+                    .setDataFunction((data) => {
+                        return data[key];
                     })
                     .setSortable(true)
                     .setFilterable(true)
