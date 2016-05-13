@@ -62,3 +62,7 @@ RESTful services are used to communicate between the various components and to f
 - Java
 - Spring Boot
 - Maven for build management
+
+# Known Issues / TODOS
+- Drag-and-Drop doesn't work sometimes after dragging in the graph panel. This issue is related to [this issue](https://github.com/mbostock/d3/issues/2498) and should be fixed soon.
+- More Tests
