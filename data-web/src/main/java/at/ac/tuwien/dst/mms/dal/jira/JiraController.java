@@ -27,10 +27,13 @@ public class JiraController {
 
 	@RequestMapping(path="/tickets", method= RequestMethod.GET)
 	public void getTickets(
+			@RequestParam(value="projectKey", required=false) String projectKey,
 			@RequestParam(value="updated", required=false) String updated
 	) {
-		//extractor.extractTickets("PVCSB");
-		extractor.extractTickets("PVCSC", updated);
-		//extractor.extractTickets("PDIV");
+		if (projectKey == null) {
+			extractor.extractAll(updated);
+		} else {
+			extractor.extractTickets(projectKey, updated);
+		}
 	}
 }

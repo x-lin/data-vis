@@ -49,7 +49,6 @@ public class JamaController {
     List<Project> getAllProjects(
 //            @RequestParam("webhook") String webhook
     ) {
-		System.out.println("fetching all projects");
 		return projectExtractor.getAllProjects();
     }
 
@@ -58,21 +57,21 @@ public class JamaController {
             @RequestParam("project") Integer projectId,
             @RequestParam(value="webhook", required=false) String webhook
     ) {
-        //List<Item> items = itemExtractor.getActivities(projectId);
-
+        List<Item> items = itemExtractor.getAllItemsForProject(projectId);
+		this.getForItems(items);
         //this.writeItems(items);
 
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 
         //List<Item> pvcsb = this.getForFile("items_pvcsb.txt");
-        List<Item> pvcsc = this.getForFile("items_pvcsc.txt");
+        //List<Item> pvcsc = this.getForFile("items_pvcsc.txt");
 
         if(isWebhook) {
             //restTemplate.postForEntity(webhook, pvcsb, Object.class);
-            restTemplate.postForEntity(webhook, pvcsc, Object.class);
+            restTemplate.postForEntity(webhook, items, Object.class);
             return new ArrayList<>();
         } else {
-            return pvcsc;
+            return items;
         }
     }
 
@@ -96,6 +95,26 @@ public class JamaController {
 		return relationshipExtractor.getAllRelationshipsForItem(id);
 	}
 
+	private List<Item> getForItems(List<Item> items) {
+		List<Item> filteredItems = new ArrayList<>();
+
+		for(Item item : items) {
+			if(item.getStatus() == null ||
+					(item.getStatus() != null && !item.getStatus().equals("Deleted") && !item.getStatus().equals("Rejected"))) {
+				filteredItems.add(item);
+
+				if(item.getItemType().getKey().equals("FEAT") && (item.getKey().contains("-WP-") || item.getName().trim().startsWith("[WP]"))) {
+					logger.info("is work package");
+					item.setItemType(-1);
+				}
+
+				this.extractRelationships(item);
+			}
+		}
+
+		return filteredItems;
+	}
+
     private List<Item> getForFile(String filename) {
         List<Item> items = itemSerializer.read(filename);
 
@@ -111,7 +130,7 @@ public class JamaController {
                     item.setItemType(-1);
                 }
 
-                //this.extractRelationships(item);
+                this.extractRelationships(item);
             }
         }
 
@@ -136,8 +155,9 @@ public class JamaController {
             @RequestParam(value="webhook", required=false) String webhook
     ) {
 
-        List<Relationship> relationships = relationshipSerializer.read("relationships_pvcsc.txt");
+        //List<Relationship> relationships = relationshipSerializer.read("relationships_pvcsc.txt");
 		//List<Relationship> relationships = relationshipSerializer.read("relationships_pvcsb.txt");
+		List<Relationship> relationships = RelationshipsTempStorage.get().getAll();
 
         boolean isWebhook = (webhook != null && webhook.length() > 0);
 

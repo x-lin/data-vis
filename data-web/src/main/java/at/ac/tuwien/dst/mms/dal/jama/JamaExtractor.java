@@ -42,7 +42,7 @@ public class JamaExtractor {
 
 	//TODO remove persistent error logging
 	@Async
-	public void extractNodes() {
+	public void extractNodes(Integer id) {
 		try (Writer output = new BufferedWriter(new FileWriter("target/errors.log"))) {
 
 			long start = System.nanoTime();
@@ -51,9 +51,9 @@ public class JamaExtractor {
 
 			for (JamaProjectDTO project : projects) {
 				try {
-					if (project.getJamaId() == 27) {
+					if (project.getJamaId() == id) {
 						projectWriter.write(projects);
-						this.extractItems(project.getJamaId());
+						this.extractItems(id);
 					}
 				} catch (Exception e) {
 					logger.error("Exception occurred: ", e);

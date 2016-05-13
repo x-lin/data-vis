@@ -21,10 +21,9 @@ public class JamaController {
 	@RequestMapping(path="/nodes", method= RequestMethod.GET)
 	public void getNodes(
 			@RequestParam(value="limit", required=false) Integer limit,
-			@RequestParam(value="key", required=false) String[] keys
+			@RequestParam(value="projectId") Integer projectId
 	) {
-
-		extractor.extractNodes();
+		extractor.extractNodes(projectId);
 	}
 
 	@RequestMapping(path="/relationships", method= RequestMethod.GET)

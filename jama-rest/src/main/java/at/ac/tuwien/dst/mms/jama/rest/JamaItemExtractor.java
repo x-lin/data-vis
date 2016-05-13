@@ -29,7 +29,7 @@ public class JamaItemExtractor {
 
 	private String itemUri = Config.HOST + "/items";
 
-	public List<Item> getAllItemsForProject(Integer id) {
+	public List<Item>  getAllItemsForProject(Integer id) {
 		List<Item> items = new ArrayList<>();
 
 		ItemResponse initialResponse = this.getItemsForProject(id, 0);

@@ -37,6 +37,7 @@ public class JamaNodeDTOToGeneralNode implements DataConverter<JamaNodeDTO, Gene
 		gn.setKey(object.getKey());
 		gn.setTextIndex(addIndices(object));
 		gn.setType(typeConverter.convert(object.getType()));
+		gn.setStatus(object.getStatus());
 
 		return gn;
 	}

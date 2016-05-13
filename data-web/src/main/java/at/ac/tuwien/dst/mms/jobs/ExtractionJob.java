@@ -15,10 +15,12 @@ import java.util.Date;
  */
 @Service
 public class ExtractionJob {
-	private final int INITIAL_DELAY_MS = 10000;
+	//extracting every hour
+	private final int RATE_MS = 1000 * 60 * 60;
 
-	//extracting every 10 minutes
-	private final int RATE_MS = 1000 * 60 * 10;
+	private final int INITIAL_DELAY_MS = RATE_MS;
+
+	private final String RATE_STRING = "1h";
 
 	@Autowired
 	private JamaController jamaController;
@@ -43,9 +45,8 @@ public class ExtractionJob {
 
 		Date extractionDate = lastExtracted.getTime();
 		lastExtracted.setTime(java.util.Calendar.getInstance().getTime());
-		jamaController.update(extractionDate, null);
 
-		//TODO convert date to hour value
-		//jiraController.getTickets(extractionDate.toString());
+		jamaController.update(extractionDate, null);
+		jiraController.getTickets(null, RATE_STRING);
 	}
 }
