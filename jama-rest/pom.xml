@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jama-rest</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>jama-rest</name>
     <url>http://maven.apache.org</url>
