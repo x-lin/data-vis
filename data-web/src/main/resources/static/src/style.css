@@ -154,6 +154,10 @@ a, a:hover {
     z-index: 1060;
 }
 
+.modal-big {
+    width: 97%;
+}
+
 .autocomplete {
     background: #FFF;
     /*border: 1px solid;*/

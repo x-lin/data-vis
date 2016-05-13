@@ -7,7 +7,6 @@ import settingsReducer from "./settingsReducer";
 import graphFilterReducer from "./graphFilterReducer";
 import laneReducer from "./laneReducer";
 import nodeTypeReducer from "./nodeTypeReducer";
-import layoutReducer from "./sidebarReducer";
 import contextMenuReducer from "./contextMenuReducer";
 import sidebarReducer from "./sidebarReducer";
 import queryBuilderReducer from "./queryBuilderReducer";
@@ -20,7 +19,6 @@ export default combineReducers({
     visibilityFilters: graphFilterReducer,
     lanes: laneReducer,
     nodeTypes: nodeTypeReducer,
-    layout: layoutReducer,
     contextmenu: contextMenuReducer,
     sidebar: sidebarReducer,
     builder: queryBuilderReducer

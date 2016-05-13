@@ -1,11 +1,13 @@
 import { connect } from "react-redux";
 
-import { addNode, removeNode, setDirection, setMaxPathLength, setMinPathLength, toggleOptional, toggleOutput, reset, setNodeType }
+import { addNode, removeNode, setDirection, setMaxPathLength, setMinPathLength, toggleOptional, toggleOutput, reset,
+    setNodeType, addFilter, removeFilter, addSubFilter, removeSubFilter, updateSubFilter, updateFilterOperator,
+    updateSubFilterOperator }
     from "../../../actions/action-creators/QueryBuilderActions";
 import { searchByQueryBuilder }
     from "../../../actions/aggregated/SearchTestCoverageActions";
 
-import GraphQueryBuilder from "./GraphQueryBuilder";
+import GraphQueryBuilder from "./GraphQueryBuilder1";
 
 
 const mapStateToProps = (state) => {
@@ -47,6 +49,27 @@ const mapDispatchProps = (dispatch) => {
         },
         searchByQueryBuilder: (data) => {
             dispatch(searchByQueryBuilder(data));
+        },
+        addFilter: (nodeId) => {
+            dispatch(addFilter(nodeId));
+        },
+        removeFilter: (nodeId, filterId) => {
+            dispatch(removeFilter(nodeId, filterId));
+        },
+        addSubFilter: (nodeId, filterId) => {
+            dispatch(addSubFilter(nodeId, filterId));
+        },
+        removeSubFilter: (nodeId, filterId, subFilterId) => {
+            dispatch(removeSubFilter(nodeId, filterId, subFilterId));
+        },
+        updateSubFilter: (nodeId, filterId, subFilterId, data) => {
+            dispatch(updateSubFilter(nodeId, filterId, subFilterId, data));
+        },
+        updateSubFilterOperator: (nodeId, filterId, operator) => {
+            dispatch(updateSubFilterOperator(nodeId, filterId, operator));
+        },
+        updateFilterOperator: (nodeId, operator) => {
+            dispatch(updateFilterOperator(nodeId, operator));
         }
     };
 };

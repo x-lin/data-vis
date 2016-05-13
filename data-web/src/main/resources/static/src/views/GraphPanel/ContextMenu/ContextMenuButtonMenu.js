@@ -8,6 +8,11 @@ import { searchTestCoverage, searchRelatedBugs } from "../../../actions/aggregat
 import { removeFromGraph } from "../../../actions/action-creators/GraphActions";
 import ContextMenuBuilder from "./ContextMenuBuilder";
 import GraphQueryBuilderContainer from "./GraphQueryBuilderContainer";
+import SidebarBoxBody from "../../Sidebar/SidebarBoxBody";
+import QueryBuilderQueries, { addRootNode } from "../../../config/QueryBuilderQueries";
+import { updateQueryBuilder, reset } from "../../../actions/action-creators/QueryBuilderActions";
+import QueryBuilderContainer from "../../QueryBuilderTable/QueryBuilderTableContainer";
+import Spinner from "../../widgets/Spinner";
 
 class ContextMenuButtonMenu extends React.Component {
     constructor(props) {
@@ -66,12 +71,41 @@ class ContextMenuButtonMenu extends React.Component {
                 </Dropdown.Menu>
             </Dropdown>
 
-            <Modal show={this.state.showModal} onHide={() => this.closeModal()} bsSize="large">
+            <Modal show={this.state.showModal} onHide={() => this.closeModal()} bsSize="large" dialogClassName="modal-big" style={{ width: "95%" }} backdrop="static">
                 <Modal.Header closeButton>
                     <Modal.Title>Query Builder</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <GraphQueryBuilderContainer node={this.props.d} />
+                    <div style={{ display: "table", width: "100%" }}>
+                        <div style={{ display: "table-cell", width: "15%", paddingRight: "10px" }}>
+                            <ul className="nav nav-pills nav-stacked">
+                                {
+                                    QueryBuilderQueries().map((query, index) => {
+                                        return <li key={index}><a href="#" style={{ whiteSpace: "nowrap" }} onClick={() => {
+                                            this.props.updateQueryBuilder(addRootNode(this.props.builder.nodes[0], query.data));
+                                        }}
+                                      className="btn btn-flat">{query.name}</a></li>
+                                    })
+                                }
+                                <li className="btn bg-navy btn-flat" onClick={() => this.props.updateQueryBuilder({
+                                data: [],
+                                edges: [],
+                                nodes: [this.props.builder.nodes[0]]
+                                })}>Custom</li>
+                            </ul>
+                        </div>
+                        <GraphQueryBuilderContainer node={this.props.d} close={() => this.closeModal()} />
+                        {this.props.builder.data &&
+                        <div style={{ display: "table-cell", width: "40%", paddingLeft: "10px" }}>
+                            {this.props.builder.data.status === "SUCCESS" &&
+                            <QueryBuilderContainer data={this.props.builder.data.data}
+                                                   status={this.props.builder.data.status}/>}
+                            {this.props.builder.data.status === "ERROR" &&
+                            <span className="bg-red">An error occured!</span>}
+                            {this.props.builder.data.status === "START" && <Spinner />}
+                        </div>
+                        }
+                    </div>
                 </Modal.Body>
             </Modal>
         </ButtonGroup>
@@ -80,6 +114,7 @@ class ContextMenuButtonMenu extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
+        builder: state.builder,
         context: state.contextmenu.context
     };
 };
@@ -100,6 +135,9 @@ const mapDispatchProps = (dispatch) => {
         },
         removeFromGraph: (key) => {
             dispatch(removeFromGraph(key));
+        },
+        updateQueryBuilder: (data) => {
+            dispatch(updateQueryBuilder(data));
         }
     };
 };

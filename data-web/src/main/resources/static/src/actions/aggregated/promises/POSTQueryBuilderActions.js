@@ -5,7 +5,6 @@ import { getEndpoint } from "../../../config/Defaults";
 
 export const postQueryBuilder = (data, index) => {
     return dispatch => {
-        console.log("fetching query builder")
         dispatch(fetchStart(data, index));
 
         return axios.post(`../search/${getEndpoint(data.source.type)}/builder`, data)

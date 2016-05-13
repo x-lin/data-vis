@@ -10,7 +10,6 @@ import DOMSelector from "../../utils/DOMSelector";
 class Relations extends React.Component {
     render() {
         const height = "calc(100vh - 50px)";
-
         return (
             <div>
                 <VerticalSplitView rightWidth={500} height={height}>
@@ -31,7 +30,7 @@ Relations.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        sidebarVisible: state.layout.sidebar.visible
+        sidebarVisible: state.sidebar.sidebar.visible
     };
 };
 

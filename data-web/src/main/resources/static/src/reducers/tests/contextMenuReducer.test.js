@@ -1,4 +1,4 @@
 import { test } from "tape";
 
-import contextMenuReducer from "contextMenuReducer";
+import contextMenuReducer from "../contextMenuReducer";
 

@@ -83,7 +83,7 @@ class SearchBar extends React.Component {
             }
         }
         //right key
-        else if (event.keyCode === 39  && data.items) {
+        else if (event.keyCode === 39 && data.items) {
             const endpointer = data.startAt + data.items.length;
             if (endpointer < data.count) {
                 searchItem(searchType, searchKey, endpointer);

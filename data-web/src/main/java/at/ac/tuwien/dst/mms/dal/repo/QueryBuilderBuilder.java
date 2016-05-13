@@ -1,10 +1,13 @@
 package at.ac.tuwien.dst.mms.dal.repo;
 
 import at.ac.tuwien.dst.mms.dal.query.model.Edge;
+import at.ac.tuwien.dst.mms.dal.query.model.Filter;
 import at.ac.tuwien.dst.mms.dal.query.model.Node;
+import at.ac.tuwien.dst.mms.dal.query.model.SubFilter;
 import at.ac.tuwien.dst.mms.model.GeneralNode;
 import org.neo4j.cypherdsl.Path;
 import org.neo4j.cypherdsl.PathRelationship;
+import org.neo4j.cypherdsl.expression.BooleanExpression;
 import org.neo4j.cypherdsl.expression.Expression;
 import org.neo4j.cypherdsl.grammar.Match;
 import org.neo4j.cypherdsl.grammar.Return;
@@ -44,7 +47,11 @@ public class QueryBuilderBuilder {
 		Where match = this.buildMatch(source, startNodeVar, start);
 		Return returns = this.buildReturn(match);
 
-		return returns.toString();
+		String query = returns.toString();
+
+		System.out.println("query: " + query);
+
+		return query;
 	}
 
 	private Return buildReturn(Where match) {
@@ -95,14 +102,51 @@ public class QueryBuilderBuilder {
 						);
 			}
 
-			if(targetNode.isOptional()) {
+			if (targetNode.isOptional()) {
 				match = match.optional();
 			}
 
+			BooleanExpression exp = null;
+
+			for (Filter filter : targetNode.getFilters().getFilters()) {
+				BooleanExpression subExp = null;
+
+				for (SubFilter subFilter : filter.getFilters()) {
+					System.out.println("sub filter" + subFilter.toString());
+
+					if (subExp == null) {
+						subExp = identifier(typeVar)
+								.string("key")
+								.eq(subFilter.getValue().getKey());
+					} else {
+						if (filter.getOperator().getKey().equals("or")) {
+							subExp = subExp.or(identifier(typeVar)
+									.string("key")
+									.eq(subFilter.getValue().getKey()));
+						} else if (filter.getOperator().getKey().equals("and")) {
+							subExp = subExp.and(identifier(typeVar)
+									.string("key")
+									.eq(subFilter.getValue().getKey()));
+						}
+					}
+
+				}
+
+				if (subExp != null) {
+					if (exp == null) {
+						exp = subExp;
+					} else {
+						if (targetNode.getFilters().getOperator().getKey().equals("or")) {
+							exp = exp.or(subExp);
+						} else if (targetNode.getFilters().getOperator().getKey().equals("and")) {
+							exp = exp.and(subExp);
+						}
+					}
+				}
+			}
+
 			Where where = match.where(
-					identifier(typeVar)
-							.string("key")
-							.eq(targetNode.getKey())
+					exp
 			);
 
 			return this.buildMatch(targetNode, targetNodeVar, where);
@@ -110,6 +154,10 @@ public class QueryBuilderBuilder {
 			return whereClause;
 		}
 	}
+
+//	private BooleanExpression concatFilters(BooleanExpression oldExp, String operator, boolean isStart) {
+//
+//	}
 
 	private StartNext buildStart(String var) {
 		return start(

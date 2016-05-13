@@ -10,20 +10,19 @@ public class Node {
 	private int nodeId;
 
 	@JsonProperty
-	private String key;
-
-	@JsonProperty
 	private boolean optional;
 
 	@JsonProperty
 	private boolean isOutput;
 
+	@JsonProperty
+	private String key;
+
+	@JsonProperty
+	private Filters filters;
+
 	public int getNodeId() {
 		return nodeId;
-	}
-
-	public String getKey() {
-		return key;
 	}
 
 	public boolean isOptional() {
@@ -38,10 +37,6 @@ public class Node {
 		this.nodeId = nodeId;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
-	}
-
 	public void setOptional(boolean optional) {
 		this.optional = optional;
 	}
@@ -50,13 +45,26 @@ public class Node {
 		isOutput = output;
 	}
 
+	public String getKey() {
+		return key;
+	}
+
+	public Filters getFilters() {
+		return filters;
+	}
+
+	public void setFilters(Filters filters) {
+		this.filters = filters;
+	}
+
 	@Override
 	public String toString() {
 		return "Node{" +
 				"nodeId=" + nodeId +
-				", key='" + key + '\'' +
 				", optional=" + optional +
 				", isOutput=" + isOutput +
+				", key='" + key + '\'' +
+				", filters=" + filters +
 				'}';
 	}
 }

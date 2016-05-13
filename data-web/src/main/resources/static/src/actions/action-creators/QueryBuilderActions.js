@@ -6,6 +6,11 @@ export const BUILDER_SET_MAX_PATH_LENGTH = "BUILDER_SET_MAX_PATH_LENGTH";
 
 export const BUILDER_ADD_FILTER = "BUILDER_ADD_FILTER";
 export const BUILDER_REMOVE_FILTER = "BUILDER_REMOVE_FILTER";
+export const BUILDER_ADD_SUB_FILTER = "BUILDER_ADD_SUBFILTER";
+export const BUILDER_REMOVE_SUB_FILTER = "BUILDER_REMOVE_SUBFILTER";
+export const BUILDER_UPDATE_SUB_FILTER = "BUILDER_UPDATE_SUBFILTER";
+export const BUILDER_UPDATE_FILTER_OPERATOR = "BUILDER_UPDATE_FILTER_OPERATOR";
+export const BUILDER_UPDATE_SUB_FILTER_OPERATOR = "BUILDER_UPDATE_SUB_FILTER_OPERATOR";
 
 export const BUILDER_ADD_NODE = "BUILDER_ADD_NEW_NODE";
 export const BUILDER_REMOVE_NODE = "BUILDER_REMOVE_NODE";
@@ -15,6 +20,7 @@ export const BUILDER_TOGGLE_OUTPUT = "BUILDER_TOGGLE_OUTPUT";
 export const BUILDER_TOGGLE_OPTIONAL = "BUILDER_TOGGLE_OPTIONAL";
 
 export const BUILDER_RESET = "BUILDER_RESET";
+export const BUILDER_UPDATE = "BUILDER_UPDATE";
 
 export const QUERY_BUILDER_FETCH_START = "QUERY_BUILDER_FETCH_START";
 export const QUERY_BUILDER_FETCH_SUCCESS = "QUERY_BUILDER_FETCH_SUCCESS";
@@ -78,3 +84,43 @@ export const toggleOptional = (nodeId) => createAction(
 export const reset = () => createAction(
     BUILDER_RESET
 );
+
+export const addFilter = (nodeId) => createAction(
+    BUILDER_ADD_FILTER,
+    { nodeId }
+);
+
+export const removeFilter = (nodeId, filterId) => createAction(
+    BUILDER_REMOVE_FILTER,
+    { nodeId, filterId }
+);
+
+export const addSubFilter = (nodeId, filterId) => createAction(
+    BUILDER_ADD_SUB_FILTER,
+    { nodeId, filterId }
+);
+
+export const removeSubFilter = (nodeId, filterId, subFilterId) => createAction(
+    BUILDER_REMOVE_SUB_FILTER,
+    { nodeId, filterId, subFilterId }
+);
+
+export const updateSubFilter = (nodeId, filterId, subFilterId, data) => createAction(
+    BUILDER_UPDATE_SUB_FILTER,
+    { nodeId, filterId, subFilterId, data }
+);
+
+export const updateFilterOperator = (nodeId, operator) => createAction(
+    BUILDER_UPDATE_FILTER_OPERATOR,
+    { nodeId, operator }
+);
+
+export const updateSubFilterOperator = (nodeId, filterId, operator) => createAction(
+    BUILDER_UPDATE_SUB_FILTER_OPERATOR,
+    { nodeId, filterId, operator }
+);
+
+export const updateQueryBuilder = (data) => createAction(
+    BUILDER_UPDATE,
+    { data }
+)
