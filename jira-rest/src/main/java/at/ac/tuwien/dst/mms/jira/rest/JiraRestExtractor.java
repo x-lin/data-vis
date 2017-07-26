@@ -1,21 +1,23 @@
 package at.ac.tuwien.dst.mms.jira.rest;
 
-import at.ac.tuwien.dst.mms.jira.util.Config;
-import com.atlassian.jira.rest.client.api.AuthenticationHandler;
-import com.atlassian.jira.rest.client.api.JiraRestClient;
-import com.atlassian.jira.rest.client.api.domain.BasicProject;
-import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.SearchResult;
-import com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
-import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
-import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
-import com.atlassian.util.concurrent.Promise;
+import at.ac.tuwien.dst.mms.config.ConfigProperties;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.api.AuthenticationHandler;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.api.JiraRestClient;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.api.JiraRestClientFactory;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.api.RestClientException;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.api.domain.BasicProject;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.api.domain.Issue;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.api.domain.SearchResult;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.auth.AnonymousAuthenticationHandler;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
+import at.ac.tuwien.dst.mms.jira.rest.shaded.com.atlassian.util.concurrent.Promise;
+import com.google.common.collect.ImmutableList;
+import jersey.repackaged.com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -23,64 +25,71 @@ import java.util.concurrent.ExecutionException;
  * Extracts data from the JIRA REST API.
  */
 public class JiraRestExtractor {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+    //result size of -1 means, the JIRA REST API will return the maximum batch size allowed.
+    private static final int MAX_SIZE_ALLOWED = -1;
 
-	private JiraRestClient restClient;
+    private static final int INITIAL_START_AT_POSITION = 0;
 
-	public JiraRestExtractor() {
-		AsynchronousJiraRestClientFactory factory = new AsynchronousJiraRestClientFactory();
-		AuthenticationHandler authHandler = this.createAuthHandler();
+    private static final Logger LOG = LoggerFactory.getLogger( JiraRestExtractor.class );
 
-		restClient = factory.create(URI.create(Config.JIRA_URI), authHandler);
+    private final JiraRestClient restClient;
 
-		logger.info("rest client created");
-	}
+    public JiraRestExtractor( final JiraRestClientFactory restClientFactory ) {
+        this.restClient = restClientFactory.create( ConfigProperties.JIRA_URI, createAuthHandler() );
+        LOG.debug( "JIRA REST Client created." );
+    }
 
-	/**
-	 * Creates the authentication handler for a concrete user, if one is specified. Note, that for SSL-encrypted
-	 * websites, there may be an issue with the certification path not recognized. To resolve this issue, you may
-	 * follow the instructions from the JIRA support page:
-	 * https://confluence.atlassian.com/jira/connecting-to-ssl-services-117455.html
-	 *
-	 * @return the appropriate authentication handler
+    public List<BasicProject> getProjects() {
+        try {
+            return ImmutableList.copyOf( this.restClient.getProjectClient().getAllProjects().get() );
+        } catch ( InterruptedException | ExecutionException e ) {
+            throw new RestClientException( e );
+        }
+    }
+
+    public SearchResult getIssues( final String projectKey, final String updated ) {
+        return getIssues( projectKey, INITIAL_START_AT_POSITION, updated );
+    }
+
+    public SearchResult getIssues( final String projectKey, final int startAt, final String updated ) {
+        return getIssues( projectKey, startAt, MAX_SIZE_ALLOWED, updated );
+    }
+
+    public SearchResult getIssues( final String projectKey, final int startAt, final int resultsSize, final String updated ) {
+        String jqlQuery = "project=" + projectKey;
+        jqlQuery += Optional.ofNullable( updated ).map( u -> " AND updated > -" + u ).orElse( "" );
+        final Set<String> fields = Sets.newHashSet( "summary", "issuetype", "created", "updated", "project",
+                "status", "reporter", "assignee" );
+        final Promise<SearchResult> result = this.restClient.getSearchClient()
+                .searchJql( jqlQuery, resultsSize, startAt, fields );
+
+        try {
+            return result.get();
+        } catch ( InterruptedException | ExecutionException e ) {
+            throw new RestClientException( e );
+        }
+    }
+
+    public Issue getIssue( final String key ) {
+        try {
+            return this.restClient.getIssueClient().getIssue( key ).get();
+        } catch ( InterruptedException | ExecutionException e ) {
+            throw new RestClientException( e );
+        }
+    }
+
+    /**
+     * Creates the authentication handler for a concrete user, if one is specified. Note, that for SSL-encrypted
+     * websites, there may be an issue with the certification path not recognized. To resolve this issue, you may
+     * follow the instructions from the JIRA support page:
+     * https://confluence.atlassian.com/jira/connecting-to-ssl-services-117455.html
+     *
+     * @return the appropriate authentication handler
      */
-	private AuthenticationHandler createAuthHandler() {
-		if(Config.USERNAME != null && Config.USERNAME.length() > 0) {
-			return new BasicHttpAuthenticationHandler(Config.USERNAME, Config.PASSWORD);
-		} else {
-			return new AnonymousAuthenticationHandler();
-		}
-	}
-
-	public Iterable<BasicProject> getProjects() throws ExecutionException, InterruptedException {
-		Promise<Iterable<BasicProject>> projects = restClient.getProjectClient().getAllProjects();
-
-		return projects.get();
-	}
-
-	public SearchResult getIssues(String projectKey, String updated) throws ExecutionException, InterruptedException {
-		return this.getIssues(projectKey, 0, updated);
-	}
-
-	public SearchResult getIssues(String projectKey, int startAt, String updated) throws ExecutionException, InterruptedException {
-		//result size of -1 means, the JIRA REST API will return the maximum batch size allowed.
-		return this.getIssues(projectKey, startAt, -1, updated);
-	}
-
-	public SearchResult getIssues(String projectKey, int startAt, int resultsSize, String updated) throws ExecutionException, InterruptedException {
-		String jqlQuery = "project="+projectKey;
-
-		if (updated != null) {
-			jqlQuery += " AND updated > -" + updated;
-		}
-
-		Set<String> fields = new HashSet<>(Arrays.asList("summary", "issuetype", "created", "updated", "project", "status", "reporter", "assignee"));
-		Promise<SearchResult> result = restClient.getSearchClient().searchJql(jqlQuery, resultsSize, startAt, fields);
-
-		return result.get();
-	}
-
-	public Issue getIssue(String key) throws ExecutionException, InterruptedException {
-		return restClient.getIssueClient().getIssue(key).get();
-	}
+    private static AuthenticationHandler createAuthHandler() {
+        return ConfigProperties.USER_CREDENTIALS
+                .map( cred -> ( AuthenticationHandler )
+                        new BasicHttpAuthenticationHandler( cred.getUsername(), cred.getPassword() ) )
+                .orElseGet( AnonymousAuthenticationHandler::new );
+    }
 }

@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Created by XLin on 25.04.2016.
+ *
+ * @author XLin
  */
 @Service
 public class ItemSerializer  extends AbstractFileSerializer<List<Item>> {

@@ -3,7 +3,8 @@ package at.ac.tuwien.dst.mms.jama.serialize;
 import java.io.*;
 
 /**
- * Created by XLin on 25.04.2016.
+ *
+ * @author XLin
  */
 public abstract class AbstractFileSerializer<T> implements FileSerializer {
 

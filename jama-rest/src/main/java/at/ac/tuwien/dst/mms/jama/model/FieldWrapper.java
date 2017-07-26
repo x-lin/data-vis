@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 /**
- * Created by XLin on 03.03.2016.
+ *
+ * @author XLin
  */
 public class FieldWrapper implements Serializable {
 	private String name;
@@ -21,10 +22,6 @@ public class FieldWrapper implements Serializable {
 
 	public String getName() {
 		return name;
-	}
-
-	public void setStatus(Integer statusId) {
-		status = StatusLookupRegistry.get().getStatusById(statusId);
 	}
 
 	public String getStatus() {

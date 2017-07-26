@@ -99,3 +99,7 @@ fabric.properties
 target/
 
 app.db
+*.pem
+*.zip
+settings.xml
+cacerts

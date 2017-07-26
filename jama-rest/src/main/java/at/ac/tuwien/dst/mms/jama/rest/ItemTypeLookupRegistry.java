@@ -1,9 +1,12 @@
 package at.ac.tuwien.dst.mms.jama.rest;
 
 import at.ac.tuwien.dst.mms.jama.model.ItemType;
+import at.ac.tuwien.dst.mms.jama.util.Config;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,10 +21,11 @@ public class ItemTypeLookupRegistry {
 
     private final Map<Integer, ItemType> itemTypes;
 
-    public ItemTypeLookupRegistry(JamaItemTypesExtractor extractor) {
+    public ItemTypeLookupRegistry(JamaListExtractor extractor) {
         itemTypes = new HashMap<>();
 
-        for(ItemType itemType : extractor.getAllItemTypes()) {
+        URI uri = URI.create(Config.HOST + "/itemtypes");
+        for(ItemType itemType : extractor.<ItemType>getList(uri)) {
             itemTypes.put(itemType.getJamaId(), itemType);
         }
 

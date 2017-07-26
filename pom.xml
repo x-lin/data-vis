@@ -11,7 +11,11 @@
         <module>jira-rest</module>
         <module>data-web</module>
         <module>jama-rest</module>
+        <module>rest-config</module>
         <module>model</module>
+        <module>model-service</module>
+        <!--<module>db-service</module>-->
+        <!--<module>jira-rest-client-shaded</module>-->
     </modules>
     <packaging>pom</packaging>
 

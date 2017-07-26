@@ -32,24 +32,9 @@ public class Activity {
 		return objectType;
 	}
 
-	public void setItemId(Long itemId) {
-		this.itemId = itemId;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public void setObjectType(ObjectType objectType) {
-		this.objectType = objectType;
-	}
 
 	public EventType getEventType() {
 		return eventType;
-	}
-
-	public void setEventType(EventType eventType) {
-		this.eventType = eventType;
 	}
 
 	@Override

@@ -7,7 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 /**
- * Created by XLin on 02.03.2016.
+ *
+ * @author XLin
  */
 public class Item implements Serializable {
 

@@ -16,25 +16,14 @@ public class JiraIssue implements Serializable {
 		return key;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public JiraUser getUser() {
 		return user;
 	}
 
-	public void setUser(JiraUser user) {
-		this.user = user;
-	}
 
 	@Override
 	public String toString() {
