@@ -1,63 +1,31 @@
 package at.ac.tuwien.dst.mms.jama.rest;
 
-import at.ac.tuwien.dst.mms.jama.rest.model.Status;
-import at.ac.tuwien.dst.mms.jama.util.Config;
+import at.ac.tuwien.dst.mms.jama.extract.rest.JamaRestClient;
+import at.ac.tuwien.dst.mms.jama.extract.rest.message.model.Status;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author XLin
  */
+@Service
 public class StatusLookupRegistry {
-	private final Map<Integer, String> statusMap;
+    private final Map<Integer, String> statusCache = Maps.newConcurrentMap();
 
-	private JamaListExtractor extractor;
+    private final JamaRestClient jamaRestClient;
 
+    @Autowired
+    public StatusLookupRegistry( final JamaRestClient jamaRestClient ) {
+        this.jamaRestClient = jamaRestClient;
+    }
 
-	public StatusLookupRegistry(JamaListExtractor extractor) {
-		statusMap = new HashMap<>();
-		this.extractor = extractor;
-	}
-
-	public synchronized String getStatusById(Integer id) {
-		String status = this.statusMap.get(id);
-
-		if(status == null) {
-			String result;
-
-			//TODO Doesn't return response when multiple projects are extracting concurrently!!!
-
-			synchronized (extractor) {
-				String statusUri = Config.HOST + "/picklistoptions";
-				URI uri = UriComponentsBuilder
-                        .fromHttpUrl(statusUri)
-                        .path("/" + id)
-                        .build().encode().toUri();
-
-				Status status1 = extractor.get(uri);
-				result = status1.getName();
-			}
-			status = result;
-			this.statusMap.put(id, status);
-		}
-
-		return status;
-	}
-
-	private static StatusLookupRegistry instance;
-
-	public static void set(StatusLookupRegistry registry) {
-		if(instance == null) {
-			instance = registry;
-		}
-	}
-
-	public static StatusLookupRegistry get() {
-		return instance;
-	}
+    public String getStatusById( final int statusId ) {
+        return this.statusCache.computeIfAbsent( statusId, id -> {
+            final Status status = this.jamaRestClient.getStatus( statusId );
+            return status.getName();
+        } );
+    }
 }

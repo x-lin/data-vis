@@ -1,6 +1,7 @@
 package at.ac.tuwien.dst.mms.jama;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -9,26 +10,29 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Executor;
 
 /**
- * Configures thread pool, so we don't run into memory problems, when trying to run
- * asynchronous tasks.
+ * Configures thread pool for asynchronous tasks.
  */
 @Configuration
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
+    private static final int MIN_POOL_SIZE = 4;
 
-	@Override
-	public Executor getAsyncExecutor() {
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(100);
-		executor.setMaxPoolSize(200);
-		executor.setQueueCapacity(10000);
-		executor.setThreadNamePrefix("AsyncExecutor-");
-		executor.initialize();
-		return executor;
-	}
+    private static final int MAX_POOL_SIZE = 32;
 
-	@Override
-	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-		return null;
-	}
+    private static final int QUEUE_CAPACITY = 1000;
+
+    @Override
+    public Executor getAsyncExecutor() {
+        final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize( MIN_POOL_SIZE );
+        executor.setMaxPoolSize( MAX_POOL_SIZE );
+        executor.setQueueCapacity( QUEUE_CAPACITY );
+        executor.initialize();
+        return executor;
+    }
+
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return new SimpleAsyncUncaughtExceptionHandler();
+    }
 }
